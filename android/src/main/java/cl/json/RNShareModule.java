@@ -14,7 +14,7 @@ public class RNShareModule extends ReactContextBaseJavaModule {
 
   ReactApplicationContext reactContext;
 
-  public RNMailModule(ReactApplicationContext reactContext) {
+  public RNShareModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.reactContext = reactContext;
   }
@@ -27,7 +27,7 @@ public class RNShareModule extends ReactContextBaseJavaModule {
   public void open(ReadableMap options, Callback callback) {
     Intent share = new Intent(android.content.Intent.ACTION_SEND);
     share.setType("text/plain");
-    share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+    //share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
     if (options.hasKey("share_text") && !options.isNull("share_text")) {
       share.putExtra(Intent.EXTRA_SUBJECT, options.getString("share_text"));
     }
@@ -39,7 +39,9 @@ public class RNShareModule extends ReactContextBaseJavaModule {
       title = options.getString("title");
     }
     try {
-      this.reactContext.startActivity(Intent.createChooser(share, title));
+      Intent chooser = Intent.createChooser(share, title);
+      chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      this.reactContext.startActivity(chooser);
       callback.invoke("OK");
     } catch (ActivityNotFoundException ex) {
       callback.invoke("not_available");
