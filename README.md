@@ -59,6 +59,13 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
 }
 ```
 
+* Add it to your iOS project
+
+Run `npm install react-native-share --save`
+Open your project in XCode, right click on Libraries and click Add Files to "Your Project Name".
+Add libRNShare.a to Build Phases -> Link Binary With Libraries.
+
+
 
 ## Example
 ```javascript
