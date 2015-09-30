@@ -65,7 +65,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
 var React = require('react-native');
 var Share = require('react-native-share');
 var TouchableHighlight = require('TouchableHighlight');
-var MailExampleApp = React.createClass({
+var example = React.createClass({
   onShare: function() {
     Share.open({
       share_text: "Hola mundo",
