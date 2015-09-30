@@ -102,3 +102,7 @@ var styles = StyleSheet.create({
 });
 AppRegistry.registerComponent('example', () => example);
 ```
+
+
+## how it looks:
+![Demo](https://github.com/EstebanFuentealba/react-native-share/blob/master/assets/screenshot.png)
