@@ -81,6 +81,14 @@ var example = React.createClass({
     },function(e) {
       console.log(e);
     });
+    /*
+    // in iOS without callback
+    Share.open({
+      share_text: "Hola mundo",
+      share_URL: "http://google.cl",
+      title: "Share Link"
+    });
+    */
   },  
   render: function() {
     return (
