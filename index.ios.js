@@ -4,7 +4,7 @@
  */
 'use strict';
 
-var NativeRNShare = require('NativeModules').RNShare;
+var NativeRNShare = require('react-native').NativeModules.RNShare;
 var invariant = require('invariant');
 
 /**
