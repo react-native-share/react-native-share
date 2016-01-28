@@ -6,7 +6,6 @@
 
 var { NativeModules } = require('react-native');
 var NativeRNShare = NativeModules.RNShare;
-var invariant = require('invariant');
 
 /**
  * High-level docs for the RNShare iOS API can be written here.
