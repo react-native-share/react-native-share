@@ -17,8 +17,5 @@
     "email": "efuentealba@json.cl"
   },
   "license": "MIT",
-  "readmeFilename": "README.md",
-  "dependencies": {
-    "invariant": "^2.2.0"
-  }
+  "readmeFilename": "README.md"
 }
