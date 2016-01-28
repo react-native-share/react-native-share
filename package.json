@@ -17,9 +17,6 @@
     "email": "efuentealba@json.cl"
   },
   "license": "MIT",
-  "peerDependencies": {
-    "react-native": ">= 0.13.0"
-  },
   "readmeFilename": "README.md",
   "dependencies": {
     "invariant": "^2.2.0"
