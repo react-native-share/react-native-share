@@ -12,7 +12,7 @@ import com.facebook.react.bridge.Callback;
 
 public class RNShareModule extends ReactContextBaseJavaModule {
 
-  ReactApplicationContext reactContext;
+  private final ReactApplicationContext reactContext;
 
   public RNShareModule(ReactApplicationContext reactContext) {
     super(reactContext);
