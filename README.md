@@ -12,7 +12,7 @@ Share Social , Sending Simple Data to Other Apps
 
 #### iOS
 
-1. `npm install rreact-native-share --save`
+1. `npm install react-native-share --save`
 2. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
 3. Go to `node_modules` ➜ `react-native-share` and add `RNShare.xcodeproj`
 4. In XCode, in the project navigator, select your project. Add `libRNShare.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
