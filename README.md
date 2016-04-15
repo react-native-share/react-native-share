@@ -13,7 +13,7 @@ npm i --save react-native-share
 ```gradle
 ...
 include ':react-native-share', ':app'
-project(':react-native-share').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-share/android')
+project(':react-native-share').projectDir = new File(rootProject.projectDir, '../node_modules/react-native/Libraries/react-native-share/android')
 ```
 
 * In `android/app/build.gradle`
@@ -106,4 +106,5 @@ AppRegistry.registerComponent('example', () => example);
 
 
 ## how it looks:
-![Demo](https://github.com/EstebanFuentealba/react-native-share/blob/master/assets/screenshot.png)
+![Demo Android](https://github.com/EstebanFuentealba/react-native-share/blob/master/assets/android.png)
+![Demo iOS](https://github.com/EstebanFuentealba/react-native-share/blob/master/assets/ios.png)
