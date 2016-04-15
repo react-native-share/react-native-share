@@ -13,7 +13,7 @@ RCT_EXPORT_METHOD(test)
 {
   // Your implementation here
 }
-RCT_EXPORT_METHOD(open:(NSDictionary *)options)
+RCT_EXPORT_METHOD(open:(NSDictionary *)options :(RCTResponseSenderBlock)callback)
 {
     // Your implementation here
     NSString *shareText = [RCTConvert NSString:options[@"share_text"]];

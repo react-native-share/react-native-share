@@ -1,7 +1,7 @@
 {
   "name": "react-native-share",
   "description": "Social Share, Sending Simple Data to Other Apps",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/EstebanFuentealba/react-native-share.git"
@@ -18,14 +18,5 @@
     "email": "efuentealba@json.cl"
   },
   "license": "MIT",
-  "readmeFilename": "README.md",
-  "gitHead": "3d7b133218944ecf5956eb4396440fce603b30f2",
-  "bugs": {
-    "url": "https://github.com/EstebanFuentealba/react-native-share/issues"
-  },
-  "homepage": "https://github.com/EstebanFuentealba/react-native-share#readme",
-  "_id": "react-native-share@1.0.4",
-  "scripts": {},
-  "_shasum": "cfc76fed2487dc7b4e0269c52ba0c46d47cd0c05",
-  "_from": "react-native-share@*"
+  "readmeFilename": "README.md"
 }
