@@ -34,6 +34,11 @@ Share Social , Sending Simple Data to Other Apps
     	```
         compile project(':react-native-share')
     	```
+#### Windows
+
+1. `npm install react-native-share --save`
+2. TODO
+
 
 ## Usage
 
