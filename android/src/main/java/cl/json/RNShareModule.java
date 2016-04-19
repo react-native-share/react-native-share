@@ -23,28 +23,66 @@ public class RNShareModule extends ReactContextBaseJavaModule {
   public String getName() {
     return "RNShare";
   }
+
   @ReactMethod
   public void open(ReadableMap options, Callback callback) {
-    Intent share = new Intent(android.content.Intent.ACTION_SEND);
-    share.setType("text/plain");
-    //share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-    if (options.hasKey("share_text") && !options.isNull("share_text")) {
-      share.putExtra(Intent.EXTRA_SUBJECT, options.getString("share_text"));
-    }
-    if (options.hasKey("share_URL") && !options.isNull("share_URL")) {
-      share.putExtra(Intent.EXTRA_TEXT, options.getString("share_URL"));
-    }
-    String title = "Share";
-    if (options.hasKey("title") && !options.isNull("title")) {
-      title = options.getString("title");
-    }
+    Intent shareIntent = createShareIntent(options);
+    Intent intentChooser = createIntentChooser(options, shareIntent);
+
     try {
-      Intent chooser = Intent.createChooser(share, title);
-      chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      this.reactContext.startActivity(chooser);
+      this.reactContext.startActivity(intentChooser);
       callback.invoke("OK");
     } catch (ActivityNotFoundException ex) {
       callback.invoke("not_available");
     }
   }
+
+  /**
+   * Creates an {@link Intent} to be shared from a set of {@link ReadableMap} options
+   * @param {@link ReadableMap} options
+   * @return {@link Intent} intent
+   */
+  private Intent createShareIntent(ReadableMap options) {
+    Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+    intent.setType("text/plain");
+
+    if (hasValidKey("share_text", options)) {
+      intent.putExtra(Intent.EXTRA_SUBJECT, options.getString("share_text"));
+    }
+
+    if (hasValidKey("share_URL", options)) {
+      intent.putExtra(Intent.EXTRA_TEXT, options.getString("share_URL"));
+    }
+
+    return intent;
+  }
+
+  /**
+   * Creates an {@link Intent} representing an intent chooser
+   * @param {@link ReadableMap} options
+   * @param {@link Intent} intent to share
+   * @return {@link Intent} intent
+   */
+  private Intent createIntentChooser(ReadableMap options, Intent intent) {
+    String title = "Share";
+    if (hasValidKey("title", options)) {
+      title = options.getString("title");
+    }
+
+    Intent chooser = Intent.createChooser(intent, title);
+    chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+    return chooser;
+  }
+
+  /**
+   * Checks if a given key is valid
+   * @param @{link String} key
+   * @param @{link ReadableMap} options
+   * @return boolean representing whether the key exists and has a value
+   */
+  private boolean hasValidKey(String key, ReadableMap options) {
+    return options.hasKey(key) && !options.isNull(key);
+  }
+
 }
