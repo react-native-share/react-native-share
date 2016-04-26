@@ -34,6 +34,16 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options)
                                          UIActivityTypePostToTencentWeibo,
                                          UIActivityTypeAirDrop];*/
     UIViewController *root = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-    [root presentViewController:activityVC animated:YES completion:nil];
+    
+    //if iPhone
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        [root presentViewController:activityVC animated:YES completion:nil];
+    }
+    //if iPad
+    else {
+        // Change Rect to position Popover
+        UIPopoverController *popup = [[UIPopoverController alloc] initWithContentViewController:controller];
+        [popup presentPopoverFromRect:CGRectMake(self.view.frame.size.width/2, root.view.frame.size.height/4, 0, 0)inView:root.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    }
 }
 @end
