@@ -1,99 +1,104 @@
-# react-native-share
+# react-native-share [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
 Share Social , Sending Simple Data to Other Apps
 
-### Installation
-```bash
-npm i --save react-native-share
-```
+## Getting started
 
-### Add  to your Android project
+### Mostly automatic install
+1. `npm install rnpm --global`
+2. `npm install react-native-share --save`
+3. `rnpm link react-native-share`
 
-* In `android/setting.gradle`
+### Manual install
 
-```gradle
-...
-include ':react-native-share', ':app'
-project(':react-native-share').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-share/android')
-```
+#### iOS
 
-* In `android/app/build.gradle`
+1. `npm install react-native-share --save`
+2. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
+3. Go to `node_modules` ➜ `react-native-share` and add `RNShare.xcodeproj`
+4. In XCode, in the project navigator, select your project. Add `libRNShare.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
+5. Run your project (`Cmd+R`)
 
-```gradle
-...
-dependencies {
-    ...
-    compile project(':react-native-share')
-}
-```
+#### Android
 
-* register module (in MainActivity.java)
+1. `npm install react-native-share --save`
+2. Open up `android/app/src/main/java/[...]/MainActivity.java
+  - Add `import cl.json.RNSharePackage;` to the imports at the top of the file
+  - Add `new RNSharePackage()` to the list returned by the `getPackages()` method
+3. Append the following lines to `android/settings.gradle`:
+  	```
+  	include ':react-native-share'
+  	project(':react-native-share').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-share/android')
+  	```
+4. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
 
-```java
-import cl.json.RNSharePackage;  // <--- import
+    	```
+        compile project(':react-native-share')
+    	```
 
-public class MainActivity extends ReactActivity {
-  ......
-  @Override
-  protected List<ReactPackage> getPackages() {
-    return Arrays.<ReactPackage>asList(
-      new MainReactPackage(),
-      new RNSharePackage()  // <------ add here     
-    );
-  }
-  ......
+#### Windows
+[Read it!](https://github.com/ReactWindows/react-native)
 
-}
-```
-
-* Add it to your iOS project
-
-Run `npm install react-native-share --save`
-Open your project in XCode, right click on Libraries and click Add Files to "Your Project Name".
-Add libRNShare.a to Build Phases -> Link Binary With Libraries.
+1. `npm install react-native-share --save`
+2. TODO
 
 
+## Usage
 
-## Example
 ```javascript
-var React = require('react-native');
-var Share = require('react-native-share');
-var TouchableHighlight = require('TouchableHighlight');
-var example = React.createClass({
-  onShare: function() {
+import React, {
+  AppRegistry,
+  Component,
+  StyleSheet,
+  Text,
+  View,
+  TouchableHighlight
+} from 'react-native';
+import Share from 'react-native-share';
+
+class Example extends Component {
+  onShare() {
     Share.open({
       share_text: "Hola mundo",
       share_URL: "http://google.cl",
       title: "Share Link"
-    },function(e) {
+    },(e) => {
       console.log(e);
     });
-    /*
-    // in iOS without callback
-    Share.open({
-      share_text: "Hola mundo",
-      share_URL: "http://google.cl",
-      title: "Share Link"
-    });
-    */
-  },  
-  render: function() {
+  }
+  render() {
     return (
       <View style={styles.container}>
+        <Text style={styles.welcome}>
+          Welcome to React Native!
+        </Text>
+        <Text style={styles.instructions}>
+          To get started, edit index.ios.js
+        </Text>
+        <Text style={styles.instructions}>
+          Press Cmd+R to reload,{'\n'}
+          Cmd+D or shake for dev menu
+        </Text>
         <TouchableHighlight onPress={this.onShare}>
-          <Text  style={styles.instructions}>
-            Share
+          <Text style={styles.instructions}>
+            Social Share
           </Text>
         </TouchableHighlight>
       </View>
     );
   }
-});
-var styles = StyleSheet.create({
+}
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
   },
   instructions: {
     textAlign: 'center',
@@ -101,9 +106,10 @@ var styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
-AppRegistry.registerComponent('example', () => example);
+
+AppRegistry.registerComponent('Example', () => Example);
 ```
 
-
 ## how it looks:
-![Demo](https://github.com/EstebanFuentealba/react-native-share/blob/master/assets/screenshot.png)
+![Demo Android](https://github.com/EstebanFuentealba/react-native-share/blob/master/assets/android.png)
+![Demo iOS](https://github.com/EstebanFuentealba/react-native-share/blob/master/assets/ios.png)
