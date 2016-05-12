@@ -46,6 +46,12 @@ public class RNShareModule extends ReactContextBaseJavaModule {
     Intent intent = new Intent(android.content.Intent.ACTION_SEND);
     intent.setType("text/plain");
 
+    if (hasValidKey("share_image", options)) {
+        Uri bmpUri = getBitmapUri(options.getString("share_image"));
+        intent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+        intent.setType("image/*");
+    }
+
     if (hasValidKey("share_text", options)) {
       intent.putExtra(Intent.EXTRA_SUBJECT, options.getString("share_text"));
     }
@@ -73,6 +79,26 @@ public class RNShareModule extends ReactContextBaseJavaModule {
     chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
     return chooser;
+  }
+
+  private Uri getBitmapUri(String base64String) {
+      // Convert Base64 to Bitmap
+      byte[] decodedString = Base64.decode(base64String.getBytes(), Base64.DEFAULT);
+      Bitmap bmp = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+      // Store image to default external storage directory
+      Uri bmpUri = null;
+      try {
+          File file = new File(Environment.getExternalStoragePublicDirectory(
+                  Environment.DIRECTORY_DOWNLOADS), System.currentTimeMillis() + ".png");
+          file.getParentFile().mkdirs();
+          FileOutputStream out = new FileOutputStream(file);
+          bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+          out.close();
+          bmpUri = Uri.fromFile(file);
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
+      return bmpUri;
   }
 
   /**
