@@ -1,4 +1,4 @@
-# react-native-share [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
+﻿# react-native-share [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
 Share Social , Sending Simple Data to Other Apps
 
 ## Getting started
@@ -111,5 +111,6 @@ AppRegistry.registerComponent('Example', () => Example);
 ```
 
 ## how it looks:
-![Demo Android](https://github.com/EstebanFuentealba/react-native-share/blob/master/assets/android.png)
-![Demo iOS](https://github.com/EstebanFuentealba/react-native-share/blob/master/assets/ios.png)
+![Demo Android](/assets/android.png)
+![Demo iOS](/assets/ios.png)
+![Demo Windows](/assets/windows.png)
