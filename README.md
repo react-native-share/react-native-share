@@ -21,7 +21,7 @@ Share Social , Sending Simple Data to Other Apps
 #### Android
 
 1. `npm install react-native-share --save`
-2. Open up `android/app/src/main/java/[...]/MainActivity.java
+2. Open up `android/app/src/main/java/[...]/MainActivity.java`
   - Add `import cl.json.RNSharePackage;` to the imports at the top of the file
   - Add `new RNSharePackage()` to the list returned by the `getPackages()` method
 3. Append the following lines to `android/settings.gradle`:
@@ -36,10 +36,13 @@ Share Social , Sending Simple Data to Other Apps
     	```
 
 #### Windows
-[Read it!](https://github.com/ReactWindows/react-native)
+[Read it! :D](https://github.com/ReactWindows/react-native)
 
 1. `npm install react-native-share --save`
-2. TODO
+2. In Visual Studio add the `RNShare.sln` in `node_modules/react-native-share/windows/RNShare.sln` folder to their solution, reference from their app.
+2. Open up your `MainPage.cs` app
+  - Add `using Cl.Json.RNShare;` to the usings at the top of the file
+  - Add `new RNSharePackage()` to the `List<IReactPackage>` returned by the `Packages` method
 
 
 ## Usage
