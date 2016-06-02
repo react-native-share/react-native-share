@@ -1,10 +1,10 @@
 using Newtonsoft.Json.Linq;
 using ReactNative.Bridge;
 using System;
+using System.Collections.Generic;
 using Windows.ApplicationModel.Core;
-using Windows.Foundation;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.UI.Core;
-using DataTransfer = Windows.ApplicationModel.DataTransfer;
 
 namespace Cl.Json.RNShare
 {
@@ -13,18 +13,18 @@ namespace Cl.Json.RNShare
     /// </summary>
     class RNShareModule : NativeModuleBase
     {
-        private DataTransfer.DataTransferManager _dataTransferManager;
-
-        private string _title;
-        private string _text;
-        private string _url;
+        private readonly DataTransferManager _dataTransferManager;
+        private readonly Queue<RequestData> _queue;
 
         /// <summary>
         /// Instantiates the <see cref="RNShareModule"/>.
         /// </summary>
         internal RNShareModule()
         {
-            _dataTransferManager = DataTransfer.DataTransferManager.GetForCurrentView();
+            _dataTransferManager = DataTransferManager.GetForCurrentView();
+            _dataTransferManager.DataRequested += DataRequested;
+
+            _queue = new Queue<RequestData>();
         }
 
         /// <summary>
@@ -43,51 +43,76 @@ namespace Cl.Json.RNShare
         /// </summary>
         /// <param name="options"></param>
         [ReactMethod]
-        public void open(JObject options)
+        public void open(JObject options, ICallback callback)
         {
             if (options != null)
             {
-                _title = options.Value<string>("title");
-                _text = options.Value<string>("share_text");  
-                _url = options.Value<string>("share_URL");
+                var requestData = new RequestData
+                {
+                    Title = options.Value<string>("title"),
+                    Text = options.Value<string>("share_text"),
+                    Url = options.Value<string>("share_URL"),
+                };
 
-                if (_text == null && _title == null && _url == null) return;
+                if (requestData.Text == null && requestData.Title == null && requestData.Url == null)
+                {
+                    return;
+                }
 
                 RunOnDispatcher(() =>
                 {
-                    _dataTransferManager.DataRequested += new TypedEventHandler<DataTransfer.DataTransferManager, 
-                        DataTransfer.DataRequestedEventArgs>(this.DataRequested);
+                    lock (_queue)
+                    {
+                        _queue.Enqueue(requestData);
+                    }
 
-                    DataTransfer.DataTransferManager.ShowShareUI();
+                    try
+                    {
+                        DataTransferManager.ShowShareUI();
+                        callback.Invoke("OK");
+                    }
+                    catch
+                    {
+                        callback.Invoke("not_available");
+                    }
                 });
-            } 
+            }
         }
 
-        private void DataRequested(DataTransfer.DataTransferManager sender, DataTransfer.DataRequestedEventArgs e)
+        private void DataRequested(DataTransferManager sender, DataRequestedEventArgs e)
         {
-            if (_title != null)
+            var requestData = default(RequestData);
+            lock (_queue)
             {
-                e.Request.Data.Properties.Title = _title;
-            }
-            if (_text != null)
-            {
-                e.Request.Data.SetText(_text);
-            }
-            if (_url != null)
-            {
-                e.Request.Data.SetUri(new Uri(_url));
+                requestData = _queue.Dequeue();
             }
 
-            _dataTransferManager.DataRequested -= DataRequested;
+            if (requestData.Title != null)
+            {
+                e.Request.Data.Properties.Title = requestData.Title;
+            }
+
+            if (requestData.Text != null)
+            {
+                e.Request.Data.SetText(requestData.Text);
+            }
+
+            if (requestData.Url != null)
+            {
+                e.Request.Data.SetUri(new Uri(requestData.Url));
+            }
         }
 
-        /// <summary>
-        /// Run action on UI thread.
-        /// </summary>
-        /// <param name="action">The action.</param>
         private static async void RunOnDispatcher(DispatchedHandler action)
         {
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, action);
+        }
+
+        private struct RequestData
+        {
+            public string Title;
+            public string Text;
+            public string Url;
         }
     }
 }
