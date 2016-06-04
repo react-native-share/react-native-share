@@ -63,7 +63,8 @@ class Example extends Component {
     Share.open({
       share_text: "Hola mundo",
       share_URL: "http://google.cl",
-      title: "Share Link"
+      title: "Share Link",
+      share_image: "here your Base64 string",
     },(e) => {
       console.log(e);
     });
