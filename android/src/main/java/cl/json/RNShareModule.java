@@ -1,5 +1,9 @@
 package cl.json;
 
+import java.io.File;
+
+import android.net.Uri;
+import android.webkit.MimeTypeMap;
 import android.content.Intent;
 import android.content.ActivityNotFoundException;
 
@@ -44,14 +48,27 @@ public class RNShareModule extends ReactContextBaseJavaModule {
    */
   private Intent createShareIntent(ReadableMap options) {
     Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-    intent.setType("text/plain");
 
     if (hasValidKey("share_text", options)) {
+      intent.setType("text/plain");
       intent.putExtra(Intent.EXTRA_SUBJECT, options.getString("share_text"));
     }
 
     if (hasValidKey("share_URL", options)) {
+      intent.setType("text/plain");
       intent.putExtra(Intent.EXTRA_TEXT, options.getString("share_URL"));
+    }
+
+    if (hasValidKey("share_file", options)) {
+      // Create the Uri from the media
+      File file = new File(options.getString("share_file"));
+      Uri uri = Uri.fromFile(file);
+      // Set the MIME type
+      String extension = MimeTypeMap.getFileExtensionFromUrl(file.getName());
+      String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+      intent.setType(type);
+      // Add the Uri to the Intent.
+      intent.putExtra(Intent.EXTRA_STREAM, uri);
     }
 
     return intent;
