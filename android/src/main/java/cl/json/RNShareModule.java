@@ -46,14 +46,17 @@ public class RNShareModule extends ReactContextBaseJavaModule {
     Intent intent = new Intent(android.content.Intent.ACTION_SEND);
     intent.setType("text/plain");
 
-    if (hasValidKey("share_text", options)) {
-      intent.putExtra(Intent.EXTRA_SUBJECT, options.getString("share_text"));
+    if (hasValidKey("share_subject", options) ) {
+      intent.putExtra(Intent.EXTRA_SUBJECT, options.getString("share_subject"));
     }
 
-    if (hasValidKey("share_URL", options)) {
+    if (hasValidKey("share_text", options) && hasValidKey("share_URL", options)) {
+      intent.putExtra(Intent.EXTRA_TEXT, options.getString("share_text") + " " + options.getString("share_URL"));
+    } else if (hasValidKey("share_URL", options)) {
       intent.putExtra(Intent.EXTRA_TEXT, options.getString("share_URL"));
+    } else if (hasValidKey("share_text", options) ) {
+      intent.putExtra(Intent.EXTRA_TEXT, options.getString("share_text"));
     }
-
     return intent;
   }
 
