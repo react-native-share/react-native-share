@@ -52,7 +52,7 @@ Option | Description
 title | Android only
 share_text | Text to share
 share_URL | Url to share
-share_File | Path of file to share or open (android & iOS only)
+share_file | Path of file to share or open (android & iOS only)
 
 ## Usage
 
