@@ -44,6 +44,15 @@ Share Social , Sending Simple Data to Other Apps
   - Add `using Cl.Json.RNShare;` to the usings at the top of the file
   - Add `new RNSharePackage()` to the `List<IReactPackage>` returned by the `Packages` method
 
+## Options
+Share.open() accepts the following options.
+
+Option | Description
+------ | -----------
+title | Android only
+share_text | Text to share
+share_URL | Url to share
+share_file | Path of file to share or open (android & iOS only)
 
 ## Usage
 
