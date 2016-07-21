@@ -18,6 +18,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options :(RCTResponseSenderBlock)callback
     // Your implementation here
     NSString *shareText = [RCTConvert NSString:options[@"share_text"]];
     NSString *shareUrl = [RCTConvert NSString:options[@"share_URL"]];
+    NSString *shareSubject = [RCTConvert NSString:options[@"share_subject"]];
     //some app extension need a NSURL or UIImage Object to share
     NSURL *cardUrl = [NSURL URLWithString:shareUrl];
 
@@ -35,6 +36,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options :(RCTResponseSenderBlock)callback
                                          UIActivityTypePostToVimeo,
                                          UIActivityTypePostToTencentWeibo,
                                          UIActivityTypeAirDrop];*/
+    [activityVC setValue:shareSubject forKey:@"subject"];
     UIViewController *root = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
     
     //if iPhone

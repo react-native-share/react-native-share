@@ -61,6 +61,7 @@ import Share from 'react-native-share';
 class Example extends Component {
   onShare() {
     Share.open({
+      share_subject: "email subject",
       share_text: "Hola mundo",
       share_URL: "http://google.cl",
       title: "Share Link"
@@ -112,6 +113,8 @@ const styles = StyleSheet.create({
 
 AppRegistry.registerComponent('Example', () => Example);
 ```
+
+NOTE: If both share_text and share_url are provided share_url will be concatenated to the end of share_text to form the body of the message. If only one is provided it will be used
 
 ## how it looks:
 ![Demo Android](/assets/android.png)
