@@ -21,7 +21,7 @@ Share Social , Sending Simple Data to Other Apps
 #### Android
 
 1. `npm install react-native-share --save`
-2. Open up `android/app/src/main/java/[...]/MainActivity.java`
+2. Open up `android/app/src/main/java/[...]/MainApplication.java`
   - Add `import cl.json.RNSharePackage;` to the imports at the top of the file
   - Add `new RNSharePackage()` to the list returned by the `getPackages()` method
 3. Append the following lines to `android/settings.gradle`:
@@ -43,6 +43,15 @@ Share Social , Sending Simple Data to Other Apps
 2. Open up your `MainPage.cs` app
   - Add `using Cl.Json.RNShare;` to the usings at the top of the file
   - Add `new RNSharePackage()` to the `List<IReactPackage>` returned by the `Packages` method
+
+
+
+
+- url (string) - a URL to share
+- message (string) - a message to share
+- subject (optional) (string) - a subject for the message
+- excludedActivityTypes (optional) (array) - the activites to exclude from the ActionSheet
+
 
 
 ## Usage
