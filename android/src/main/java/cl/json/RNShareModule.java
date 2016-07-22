@@ -5,19 +5,13 @@ import android.content.Intent;
 import android.content.ActivityNotFoundException;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Environment;
-import android.util.Base64;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.Callback;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URI;
 
 public class RNShareModule extends ReactContextBaseJavaModule {
@@ -69,16 +63,13 @@ public class RNShareModule extends ReactContextBaseJavaModule {
     }
     //isPackageInstalled("com.whatsapp", this.reactContext);
     if (hasValidKey("message", options) && hasValidKey("url", options)) {
-      FileBase64 fileShare = new FileBase64(options.getString("url"));
+      ShareFile fileShare = new ShareFile(options.getString("url"), this.reactContext);
       if(fileShare.isFile()) {
         Uri uriFile = fileShare.getURI();
         intent.setType(fileShare.getType());
-        System.out.println("es base 64 file");
-        System.out.printf(options.getString("url"));
         intent.putExtra(Intent.EXTRA_STREAM, uriFile);
         intent.putExtra(Intent.EXTRA_TEXT, options.getString("message"));
       } else {
-        System.out.println("no es base 64 file");
         intent.putExtra(Intent.EXTRA_TEXT, options.getString("message") + " " + options.getString("url"));
       }
     } else if (hasValidKey("url", options)) {

@@ -1,10 +1,16 @@
 package cl.json;
 
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.database.Cursor;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.webkit.MimeTypeMap;
+
+import com.facebook.react.bridge.ReactApplicationContext;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,17 +21,20 @@ import java.net.URI;
 /**
  * Created by disenodosbbcl on 22-07-16.
  */
-public class FileBase64 {
+public class ShareFile {
+
+    private final ReactApplicationContext reactContext;
     private String url;
-    private URI uri;
+    private Uri uri;
     private String type = "*/*";
     private String extension = "";
 
-    public FileBase64(String url){
+    public ShareFile(String url, ReactApplicationContext reactContext){
         this.url = url;
-        this.uri = URI.create(this.url);
+        this.uri = Uri.parse(this.url);
+        this.reactContext = reactContext;
     }
-    private static String getMimeType(String url) {
+    private String getMimeType(String url) {
         String type = "*/*";
         String extension = MimeTypeMap.getFileExtensionFromUrl(url);
         if (extension != null) {
@@ -34,13 +43,20 @@ public class FileBase64 {
         return type;
     }
     public boolean isFile() {
-        return this.isBase64File();
+        return this.isBase64File() || this.isLocalFile();
     }
     public boolean isBase64File() {
         if(uri.getScheme().equals("data")) {
             this.type = this.uri.getSchemeSpecificPart().substring(0, this.uri.getSchemeSpecificPart().indexOf(";"));
-            final MimeTypeMap mime = MimeTypeMap.getSingleton();
-            this.extension = mime.getExtensionFromMimeType(this.type);
+            return true;
+        }
+        return false;
+    }
+    public boolean isLocalFile() {
+        if(uri.getScheme().equals("content") || uri.getScheme().equals("file")) {
+            String realPath = this.getRealPathFromURI(uri);
+            this.type = this.getMimeType(realPath);
+
             return true;
         }
         return false;
@@ -48,13 +64,25 @@ public class FileBase64 {
     public String getType() {
         return this.type;
     }
+    private String getRealPathFromURI(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        CursorLoader loader = new CursorLoader(this.reactContext, contentUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
+    }
     public Uri getURI() {
+
+        final MimeTypeMap mime = MimeTypeMap.getSingleton();
+        this.extension = mime.getExtensionFromMimeType(this.type);
         if(this.isBase64File()) {
             String encodedImg = this.uri.getSchemeSpecificPart().substring(this.uri.getSchemeSpecificPart().indexOf(";base64,") + 8);
             try {
                 File dir = new File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_DOWNLOADS );
-                if (!dir.exists())
-                {
+                if (!dir.exists()) {
                     dir.mkdirs();
                 }
                 File file = new File(dir, System.currentTimeMillis() + "." + this.extension);
@@ -67,6 +95,10 @@ public class FileBase64 {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else if(this.isLocalFile()) {
+            Uri uri = Uri.parse(this.url);
+
+            return uri;
         }
 
         return null;
