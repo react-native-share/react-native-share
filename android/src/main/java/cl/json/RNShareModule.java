@@ -35,46 +35,11 @@ public class RNShareModule extends ReactContextBaseJavaModule {
   public void open(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
     Intent shareIntent = createShareIntent(options);
     Intent intentChooser = createIntentChooser(options, shareIntent);
-    boolean foundPackage = true;
-    if (hasValidKey("package", options)) {
-      foundPackage = false;
-      for (ResolveInfo info : this.reactContext.getPackageManager().queryIntentActivities(shareIntent, 0)) {
-        System.out.println(info.activityInfo.packageName);
-        if (info.activityInfo.packageName.toLowerCase().startsWith(options.getString("package"))) {
-          foundPackage = true;
-          shareIntent.setPackage(info.activityInfo.packageName);
-        }
-      }
-    }
-    if(!foundPackage) {
-      String url = "";
-      if (hasValidKey("notFoundPackage", options)) {
-        try{
-          url = options.getString("notFoundPackage")
-                .replace("{url}", URLEncoder.encode( options.getString("url") , "UTF-8" ) )
-                .replace("{message}", URLEncoder.encode( options.getString("message") , "UTF-8" ));
-        } catch(IOException ioe) {
-          failureCallback.invoke("encoding error");
-        }
-      } else if (hasValidKey("notFoundPackagePlaystore", options)) {
-        url = options.getString("notFoundPackagePlaystore");
-      }
-      try {
-        Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(url));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.reactContext.startActivity(intent);
-        successCallback.invoke("OK");
-      } catch (ActivityNotFoundException ex) {
-        failureCallback.invoke("not_available");
-      }
-
-    } else {
-      try {
+    try {
         this.reactContext.startActivity(intentChooser);
         successCallback.invoke("OK");
-      } catch (ActivityNotFoundException ex) {
+    } catch (ActivityNotFoundException ex) {
         failureCallback.invoke("not_available");
-      }
     }
 
   }
