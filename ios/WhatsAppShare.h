@@ -14,7 +14,7 @@
 #import "RCTUIManager.h"
 #import "RCTLog.h"
 #import "RCTUtils.h"
-@interface FacebookShare : NSObject <RCTBridgeModule>
+@interface WhatsAppShare : NSObject <RCTBridgeModule>
 
 - (void *) shareSingle:(NSDictionary *)options failureCallback:(RCTResponseErrorBlock)failureCallback successCallback:(RCTResponseSenderBlock)successCallback;
 @end

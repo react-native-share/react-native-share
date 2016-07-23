@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B33C22831D43F9D6006BCD98 /* FacebookShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B33C22821D43F9D6006BCD98 /* FacebookShare.m */; };
+		B33C22851D441713006BCD98 /* GenericShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B33C22841D441713006BCD98 /* GenericShare.m */; };
+		B33C22891D4419E8006BCD98 /* WhatsAppShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B33C22881D4419E8006BCD98 /* WhatsAppShare.m */; };
 		B3E7B58A1CC2AC0600A0062D /* RNShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNShare.m */; };
 /* End PBXBuildFile section */
 
@@ -25,8 +26,10 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libRNShare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNShare.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		B33C22811D43F9C5006BCD98 /* FacebookShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FacebookShare.h; sourceTree = "<group>"; };
-		B33C22821D43F9D6006BCD98 /* FacebookShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookShare.m; sourceTree = "<group>"; };
+		B33C22841D441713006BCD98 /* GenericShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenericShare.m; sourceTree = "<group>"; };
+		B33C22861D441723006BCD98 /* GenericShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GenericShare.h; sourceTree = "<group>"; };
+		B33C22871D4419DA006BCD98 /* WhatsAppShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhatsAppShare.h; sourceTree = "<group>"; };
+		B33C22881D4419E8006BCD98 /* WhatsAppShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhatsAppShare.m; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* RNShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNShare.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNShare.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -63,8 +66,10 @@
 		B33C22801D43F9B0006BCD98 /* social */ = {
 			isa = PBXGroup;
 			children = (
-				B33C22811D43F9C5006BCD98 /* FacebookShare.h */,
-				B33C22821D43F9D6006BCD98 /* FacebookShare.m */,
+				B33C22841D441713006BCD98 /* GenericShare.m */,
+				B33C22861D441723006BCD98 /* GenericShare.h */,
+				B33C22871D4419DA006BCD98 /* WhatsAppShare.h */,
+				B33C22881D4419E8006BCD98 /* WhatsAppShare.m */,
 			);
 			name = social;
 			sourceTree = "<group>";
@@ -126,7 +131,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3E7B58A1CC2AC0600A0062D /* RNShare.m in Sources */,
-				B33C22831D43F9D6006BCD98 /* FacebookShare.m in Sources */,
+				B33C22891D4419E8006BCD98 /* WhatsAppShare.m in Sources */,
+				B33C22851D441713006BCD98 /* GenericShare.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,32 +6,18 @@
 //  Copyright © 2016 Facebook. All rights reserved.
 //
 
-#import "FacebookShare.h"
+#import "GenericShare.h"
 
-@implementation FacebookShare 
+@implementation GenericShare
 - (void)shareSingle:(NSDictionary *)options
-        failureCallback:(RCTResponseErrorBlock)failureCallback
-        successCallback:(RCTResponseSenderBlock)successCallback {
+    failureCallback:(RCTResponseErrorBlock)failureCallback
+    successCallback:(RCTResponseSenderBlock)successCallback
+    serviceType:(NSString*)serviceType {
     
     NSLog(@"Try open view");
     if([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
-        NSString *serviceType = SLServiceTypeFacebook;
-        SLComposeViewController *composeController = [SLComposeViewController  composeViewControllerForServiceType:serviceType];
         
-        /*
-         // TODO Fix 
-         composeController.completionHandler = ^(SLComposeViewControllerResult result) {
-            switch(result) {
-                case SLComposeViewControllerResultCancelled:
-                    failureCallback(@"cancelled");
-                    break;
-                case SLComposeViewControllerResultDone:
-                    successCallback(@"success");
-                    break;
-            }
-            
-        };
-         */
+        SLComposeViewController *composeController = [SLComposeViewController  composeViewControllerForServiceType:serviceType];
         
         NSURL *URL = [RCTConvert NSURL:options[@"url"]];
         if (URL) {
@@ -57,11 +43,12 @@
             [composeController setInitialText:text];
         }
         
-    
+        
         UIViewController *ctrl = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
         [ctrl presentViewController:composeController animated:YES completion:Nil];
     } else {
         NSLog(@"No facebook installed");
+        //  TODO: Add web url share
     }
     
     
