@@ -67,7 +67,7 @@ public class RNShareModule extends ReactContextBaseJavaModule {
                 failureCallback.invoke(ex.getMessage());
             }
         } else {
-            failureCallback.invoke("not exists social key");
+            failureCallback.invoke("no exists social key");
         }
     }
 }
