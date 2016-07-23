@@ -63,39 +63,18 @@ class RNShare {
   static shareSingle(options){
     console.log(options);
     return new Promise((resolve, reject) => {
-      NativeModules.RNShare.shareSingle(options);
-    });
-  }
-}
-/*
-const RNShare = function (options) {
-  return new Promise((resolve, reject) => {
-    if (Platform.OS === "ios") {
-      ActionSheetIOS.showShareActionSheetWithOptions(options, (error) => {
-        return reject({ error: error });
-      }, (success, activityType) => {
-        if(success) {
-          return resolve({
-            app: activityType
-          });
-        } else {
-          reject({ error: "User did not share" });
-        }
-      });
-    } else {
-      NativeModules.RNShare.open(options,(e) => {
-        console.log("RNSHARE ERROR ", e)
+      NativeModules.RNShare.shareSingle(options,(e) => {
+        console.log("RNSHARE SINGLE ERROR ", e)
         return reject({ error: e });
       },(e) => {
-        console.log("RNSHARE OK")
+        console.log("RNSHARE SINGLE OK")
         resolve({
           message: e
         });
       });
-    }
-  });
+    });
+  }
 }
-*/
 class ShareSheet extends React.Component {
   componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress',() => {
@@ -142,11 +121,9 @@ class ShareSheet extends React.Component {
                 onPress={()=>{
                   this.props.onCancel();
                   setTimeout(() => {
-                    RNShare(Object.assign(this.props.options, {
-                      package: "com.whatsapp",
-                      notFoundPackagePlaystore: "market://details?id=com.whatsapp",
-                      notFoundPackageAppstore: "https://itunes.apple.com/us/app/whatsapp-messenger/id310633997"
-                    } ))
+                    RNShare.shareSingle(Object.assign(this.props.options, {
+                      "social" : "whatsapp"
+                    }));
                   },200);
                 }}>Whatsapp</Button>
               <Button
@@ -154,10 +131,9 @@ class ShareSheet extends React.Component {
                 onPress={()=>{
                   this.props.onCancel();
                   setTimeout(() => {
-                    RNShare(Object.assign(this.props.options, {
-                      package: "com.google.android.apps.plus",
-                      notFoundPackage: "https://plus.google.com/share?url={url}"
-                    } ))
+                    RNShare.shareSingle(Object.assign(this.props.options, {
+                      "social" : "googleplus"
+                    }));
                   },200);
                 }}>Google +</Button>
               <Button
@@ -165,9 +141,9 @@ class ShareSheet extends React.Component {
                 onPress={()=>{
                   this.props.onCancel();
                   setTimeout(() => {
-                    RNShare(Object.assign(this.props.options, {
-                      package: "com.google.android.gm"
-                    } ))
+                    RNShare.shareSingle(Object.assign(this.props.options, {
+                      "social" : "email"
+                    }));
                   },200);
                 }}>Email</Button>
 
@@ -201,4 +177,7 @@ class ShareSheet extends React.Component {
 
 
 module.exports = RNShare;
+module.exports.Overlay = Overlay;
+module.exports.Sheet = Sheet;
+module.exports.Button = Button;
 module.exports.ShareSheet = ShareSheet;

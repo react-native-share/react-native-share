@@ -25,33 +25,34 @@ public abstract class ShareIntent {
     public ShareIntent(ReactApplicationContext reactContext) {
         this.reactContext = reactContext;
         this.setIntent(new Intent(android.content.Intent.ACTION_SEND));
+        this.getIntent().setType("text/plain");
     }
     public void open(ReadableMap options) throws ActivityNotFoundException {
-        if (hasValidKey("subject", options) ) {
+        if (ShareIntent.hasValidKey("subject", options) ) {
             this.getIntent().putExtra(Intent.EXTRA_SUBJECT, options.getString("subject"));
         }
 
-        if (hasValidKey("message", options) && hasValidKey("url", options)) {
+        if (ShareIntent.hasValidKey("message", options) && ShareIntent.hasValidKey("url", options)) {
             ShareFile fileShare = new ShareFile(options.getString("url"), this.reactContext);
             if(fileShare.isFile()) {
                 Uri uriFile = fileShare.getURI();
-                intent.setType(fileShare.getType());
-                intent.putExtra(Intent.EXTRA_STREAM, uriFile);
-                intent.putExtra(Intent.EXTRA_TEXT, options.getString("message"));
+                this.getIntent().setType(fileShare.getType());
+                this.getIntent().putExtra(Intent.EXTRA_STREAM, uriFile);
+                this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("message"));
             } else {
-                intent.putExtra(Intent.EXTRA_TEXT, options.getString("message") + " " + options.getString("url"));
+                this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("message") + " " + options.getString("url"));
             }
-        } else if (hasValidKey("url", options)) {
+        } else if (ShareIntent.hasValidKey("url", options)) {
             ShareFile fileShare = new ShareFile(options.getString("url"), this.reactContext);
             if(fileShare.isFile()) {
                 Uri uriFile = fileShare.getURI();
-                intent.setType(fileShare.getType());
-                intent.putExtra(Intent.EXTRA_STREAM, uriFile);
+                this.getIntent().setType(fileShare.getType());
+                this.getIntent().putExtra(Intent.EXTRA_STREAM, uriFile);
             } else {
-                intent.putExtra(Intent.EXTRA_TEXT, options.getString("url"));
+                this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("url"));
             }
-        } else if (hasValidKey("message", options) ) {
-            intent.putExtra(Intent.EXTRA_TEXT, options.getString("message"));
+        } else if (ShareIntent.hasValidKey("message", options) ) {
+            this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("message"));
         }
     }
     protected static String urlEncode(String param) {
@@ -62,7 +63,9 @@ public abstract class ShareIntent {
         }
     }
     protected void openIntentChooser() throws ActivityNotFoundException {
-        Intent chooser = Intent.createChooser(intent, this.chooserTitle);
+        System.out.println(this.getIntent());
+        System.out.println(this.getIntent().getExtras());
+        Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
         chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         this.reactContext.startActivity(chooser);
     }

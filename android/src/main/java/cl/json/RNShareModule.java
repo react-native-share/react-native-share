@@ -55,15 +55,19 @@ public class RNShareModule extends ReactContextBaseJavaModule {
         }
     }
     @ReactMethod
-    public void shareSingle(ReadableMap options) {
+    public void shareSingle(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
         System.out.println("SHARE SINGLE METHOD");
         if (ShareIntent.hasValidKey("social", options) ) {
             try{
                 this.sharesExtra.get(options.getString("social")).open(options);
+                successCallback.invoke("OK");
             }catch(ActivityNotFoundException ex) {
                 System.out.println("ERROR");
                 System.out.println(ex.getMessage());
+                failureCallback.invoke(ex.getMessage());
             }
+        } else {
+            failureCallback.invoke("not exists social key");
         }
     }
 }
