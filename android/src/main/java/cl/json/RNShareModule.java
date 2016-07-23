@@ -4,15 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ActivityNotFoundException;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
-
+import android.support.annotation.Nullable;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Callback;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 
 public class RNShareModule extends ReactContextBaseJavaModule {
 
@@ -29,16 +32,51 @@ public class RNShareModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void open(ReadableMap options, Callback callback) {
+  public void open(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
     Intent shareIntent = createShareIntent(options);
     Intent intentChooser = createIntentChooser(options, shareIntent);
-
-    try {
-      this.reactContext.startActivity(intentChooser);
-      callback.invoke("OK");
-    } catch (ActivityNotFoundException ex) {
-      callback.invoke("not_available");
+    boolean foundPackage = true;
+    if (hasValidKey("package", options)) {
+      foundPackage = false;
+      for (ResolveInfo info : this.reactContext.getPackageManager().queryIntentActivities(shareIntent, 0)) {
+        System.out.println(info.activityInfo.packageName);
+        if (info.activityInfo.packageName.toLowerCase().startsWith(options.getString("package"))) {
+          foundPackage = true;
+          shareIntent.setPackage(info.activityInfo.packageName);
+        }
+      }
     }
+    if(!foundPackage) {
+      String url = "";
+      if (hasValidKey("notFoundPackage", options)) {
+        try{
+          url = options.getString("notFoundPackage")
+                .replace("{url}", URLEncoder.encode( options.getString("url") , "UTF-8" ) )
+                .replace("{message}", URLEncoder.encode( options.getString("message") , "UTF-8" ));
+        } catch(IOException ioe) {
+          failureCallback.invoke("encoding error");
+        }
+      } else if (hasValidKey("notFoundPackagePlaystore", options)) {
+        url = options.getString("notFoundPackagePlaystore");
+      }
+      try {
+        Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(url));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        this.reactContext.startActivity(intent);
+        successCallback.invoke("OK");
+      } catch (ActivityNotFoundException ex) {
+        failureCallback.invoke("not_available");
+      }
+
+    } else {
+      try {
+        this.reactContext.startActivity(intentChooser);
+        successCallback.invoke("OK");
+      } catch (ActivityNotFoundException ex) {
+        failureCallback.invoke("not_available");
+      }
+    }
+
   }
   private boolean isPackageInstalled(String packagename, Context context) {
     PackageManager pm = context.getPackageManager();

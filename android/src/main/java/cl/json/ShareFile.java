@@ -34,6 +34,11 @@ public class ShareFile {
         this.uri = Uri.parse(this.url);
         this.reactContext = reactContext;
     }
+    /**
+     * Obtain mime type from URL
+     * @param {@link String} url
+     * @return {@link String} mime type
+     */
     private String getMimeType(String url) {
         String type = "*/*";
         String extension = MimeTypeMap.getFileExtensionFromUrl(url);
@@ -42,6 +47,10 @@ public class ShareFile {
         }
         return type;
     }
+    /**
+     * Return an if the url is a file (local or base64)l
+     * @return {@link boolean}
+     */
     public boolean isFile() {
         return this.isBase64File() || this.isLocalFile();
     }

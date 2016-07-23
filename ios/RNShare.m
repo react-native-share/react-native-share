@@ -1,7 +1,6 @@
 #import <MessageUI/MessageUI.h>
 #import "RNShare.h"
 #import "RCTConvert.h"
-
 @implementation RNShare
 - (dispatch_queue_t)methodQueue
 {
@@ -13,8 +12,14 @@ RCT_EXPORT_METHOD(test)
 {
   // Your implementation here
 }
-RCT_EXPORT_METHOD(open:(NSDictionary *)options :(RCTResponseSenderBlock)callback)
+
+
+
+RCT_EXPORT_METHOD(open:(NSDictionary *)options
+                  failureCallback:(RCTResponseErrorBlock)failureCallback
+                  successCallback:(RCTResponseSenderBlock)successCallback)
 {
+
     // Your implementation here
     NSString *shareText = [RCTConvert NSString:options[@"share_text"]];
     NSString *shareUrl = [RCTConvert NSString:options[@"share_URL"]];
