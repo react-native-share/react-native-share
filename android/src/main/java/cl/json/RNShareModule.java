@@ -1,10 +1,7 @@
 package cl.json;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.ActivityNotFoundException;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -13,108 +10,60 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Callback;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URLEncoder;
+import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import cl.json.social.EmailShare;
+import cl.json.social.FacebookShare;
+import cl.json.social.GenericShare;
+import cl.json.social.GooglePlusShare;
+import cl.json.social.ShareIntent;
+import cl.json.social.TwitterShare;
+import cl.json.social.WhatsAppShare;
 
 public class RNShareModule extends ReactContextBaseJavaModule {
 
-  private final ReactApplicationContext reactContext;
+    private final ReactApplicationContext reactContext;
+    private HashMap<String, ShareIntent> sharesExtra = new HashMap<String, ShareIntent>();
+    public RNShareModule(ReactApplicationContext reactContext) {
+        super(reactContext);
+        this.reactContext = reactContext;
+        sharesExtra.put("generic", new GenericShare(this.reactContext));
+        sharesExtra.put("facebook", new FacebookShare(this.reactContext));
+        sharesExtra.put("twitter", new TwitterShare(this.reactContext));
+        sharesExtra.put("whatsapp",new WhatsAppShare(this.reactContext));
+        sharesExtra.put("googleplus",new GooglePlusShare(this.reactContext));
+        sharesExtra.put("email",new EmailShare(this.reactContext));
+        //  add more customs single intent shares here
+    }
 
-  public RNShareModule(ReactApplicationContext reactContext) {
-    super(reactContext);
-    this.reactContext = reactContext;
-  }
-
-  @Override
-  public String getName() {
+    @Override
+    public String getName() {
     return "RNShare";
-  }
-
-  @ReactMethod
-  public void open(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
-    Intent shareIntent = createShareIntent(options);
-    Intent intentChooser = createIntentChooser(options, shareIntent);
-    try {
-        this.reactContext.startActivity(intentChooser);
-        successCallback.invoke("OK");
-    } catch (ActivityNotFoundException ex) {
-        failureCallback.invoke("not_available");
     }
 
-  }
-  private boolean isPackageInstalled(String packagename, Context context) {
-    PackageManager pm = context.getPackageManager();
-    try {
-      pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
-      return true;
-    } catch (PackageManager.NameNotFoundException e) {
-      return false;
+    @ReactMethod
+    public void open(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
+        try{
+            this.sharesExtra.get("generic").open(options);
+            successCallback.invoke("OK");
+        }catch(ActivityNotFoundException ex) {
+            System.out.println("ERROR");
+            System.out.println(ex.getMessage());
+            failureCallback.invoke("not_available");
+        }
     }
-  }
-  /**
-   * Creates an {@link Intent} to be shared from a set of {@link ReadableMap} options
-   * @param {@link ReadableMap} options
-   * @return {@link Intent} intent
-   */
-  private Intent createShareIntent(ReadableMap options) {
-    Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-    intent.setType("text/plain");
-
-    if (hasValidKey("subject", options) ) {
-      intent.putExtra(Intent.EXTRA_SUBJECT, options.getString("subject"));
+    @ReactMethod
+    public void shareSingle(ReadableMap options) {
+        System.out.println("SHARE SINGLE METHOD");
+        if (ShareIntent.hasValidKey("social", options) ) {
+            try{
+                this.sharesExtra.get(options.getString("social")).open(options);
+            }catch(ActivityNotFoundException ex) {
+                System.out.println("ERROR");
+                System.out.println(ex.getMessage());
+            }
+        }
     }
-    //isPackageInstalled("com.whatsapp", this.reactContext);
-    if (hasValidKey("message", options) && hasValidKey("url", options)) {
-      ShareFile fileShare = new ShareFile(options.getString("url"), this.reactContext);
-      if(fileShare.isFile()) {
-        Uri uriFile = fileShare.getURI();
-        intent.setType(fileShare.getType());
-        intent.putExtra(Intent.EXTRA_STREAM, uriFile);
-        intent.putExtra(Intent.EXTRA_TEXT, options.getString("message"));
-      } else {
-        intent.putExtra(Intent.EXTRA_TEXT, options.getString("message") + " " + options.getString("url"));
-      }
-    } else if (hasValidKey("url", options)) {
-      URI uri = URI.create(options.getString("url"));
-      if(uri.getScheme().equals("data")) {
-        System.out.println("IS DATA FILE L");
-      } else {
-        intent.putExtra(Intent.EXTRA_TEXT, options.getString("url"));
-      }
-
-    } else if (hasValidKey("message", options) ) {
-      intent.putExtra(Intent.EXTRA_TEXT, options.getString("message"));
-    }
-    return intent;
-  }
-
-  /**
-   * Creates an {@link Intent} representing an intent chooser
-   * @param {@link ReadableMap} options
-   * @param {@link Intent} intent to share
-   * @return {@link Intent} intent
-   */
-  private Intent createIntentChooser(ReadableMap options, Intent intent) {
-    String title = "Share";
-    if (hasValidKey("title", options)) {
-      title = options.getString("title");
-    }
-
-    Intent chooser = Intent.createChooser(intent, title);
-    chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-    return chooser;
-  }
-
-  /**
-   * Checks if a given key is valid
-   * @param @{link String} key
-   * @param @{link ReadableMap} options
-   * @return boolean representing whether the key exists and has a value
-   */
-  private boolean hasValidKey(String key, ReadableMap options) {
-    return options.hasKey(key) && !options.isNull(key);
-  }
-
 }

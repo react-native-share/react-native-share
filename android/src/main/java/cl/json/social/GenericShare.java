@@ -8,22 +8,21 @@ import com.facebook.react.bridge.ReadableMap;
 /**
  * Created by disenodosbbcl on 23-07-16.
  */
-public class EmailShare extends SingleShareIntent {
-
-    private static final String PACKAGE = "com.google.android.gm";
-
-    public EmailShare(ReactApplicationContext reactContext) {
+public class GenericShare extends ShareIntent {
+    public GenericShare(ReactApplicationContext reactContext) {
         super(reactContext);
     }
+
     @Override
     public void open(ReadableMap options) throws ActivityNotFoundException {
         super.open(options);
         //  extra params here
         this.openIntentChooser();
     }
+
     @Override
     protected String getPackage() {
-        return PACKAGE;
+        return null;
     }
 
     @Override
@@ -36,4 +35,3 @@ public class EmailShare extends SingleShareIntent {
         return null;
     }
 }
-

@@ -1,71 +1,62 @@
 package cl.json.social;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableMap;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import cl.json.ShareFile;
+
 /**
  * Created by disenodosbbcl on 23-07-16.
  */
-public class SingleShareIntent {
+public abstract class SingleShareIntent extends ShareIntent {
 
-    protected static  String DEFAULT_WEB_LINK = null;
-    protected static  String PACKAGE;
-    protected static  String PLAY_STORE_LINK = null;
 
-    protected final ReactApplicationContext reactContext;
+
+
     protected String playStoreURL = null;
     protected String appStoreURL = null;
 
     public SingleShareIntent(ReactApplicationContext reactContext) {
-        this.reactContext = reactContext;
+        super(reactContext);
     }
 
-    public void open(String _url , String _message) throws ActivityNotFoundException {
-
-        Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(_url));
-
-        if(this.isPackageInstalled(PACKAGE, intent)) {
-            intent.setPackage(PACKAGE);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            this.reactContext.startActivity(intent);
+    public void open(ReadableMap options) throws ActivityNotFoundException {
+        System.out.println(getPackage());
+        //  check if package is installed
+        if(getPackage() != null || getDefaultWebLink() != null || getPlayStoreLink() != null) {
+            if(this.isPackageInstalled(getPackage(), reactContext)) {
+                System.out.println("INSTALLED");
+                this.getIntent().setPackage(getPackage());
+                //  configure default
+                super.open(options);
+            } else {
+                System.out.println("NOT INSTALLED");
+                String url = "";
+                if(getDefaultWebLink() != null) {
+                    url = getDefaultWebLink()
+                            .replace("{url}",       this.urlEncode( options.getString("url") ) )
+                            .replace("{message}",   this.urlEncode( options.getString("message") ));
+                } else if(getPlayStoreLink() != null) {
+                    url = getPlayStoreLink();
+                } else{
+                    //  TODO
+                }
+                //  open web intent
+                this.setIntent(new Intent(new Intent("android.intent.action.VIEW", Uri.parse(url))));
+            }
         } else {
-            String url = "";
-            if(DEFAULT_WEB_LINK != null) {
-                url = DEFAULT_WEB_LINK
-                        .replace("{url}",       this.urlEncode( _url ) )
-                        .replace("{message}",   this.urlEncode( _message ));
-            } else if(PLAY_STORE_LINK != null) {
-                url = PLAY_STORE_LINK;
-            } else{
-                //  TODO
-            }
-            intent = new Intent("android.intent.action.VIEW", Uri.parse(url));
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            this.reactContext.startActivity(intent);
+            //  configure default
+            super.open(options);
         }
-    }
-    protected static String urlEncode(String param) {
-        try {
-            return URLEncoder.encode( param , "UTF-8" );
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("URLEncoder.encode() failed for " + param);
-        }
-    }
-    protected boolean isPackageInstalled(String packageName, Intent shareIntent) {
-        boolean foundPackage = false;
-        for (ResolveInfo info : this.reactContext.getPackageManager().queryIntentActivities(shareIntent, 0)) {
-            System.out.println(info.activityInfo.packageName);
-            if (info.activityInfo.packageName.toLowerCase().startsWith(packageName)) {
-                foundPackage = true;
-            }
-        }
-        return foundPackage;
     }
 }
