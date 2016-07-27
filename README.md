@@ -3,7 +3,7 @@ Share Social , Sending Simple Data to Other Apps
 
 ## Getting started
 
-### Mostly automatic install 
+### Mostly automatic install
 1. `npm install rnpm --global`
 2. `npm install react-native-share --save`
 3. `rnpm link react-native-share`
@@ -75,7 +75,7 @@ Supported options:
 
 | Name  | Type     | Description |
 | :---- | :------: | :--- |
-| url | string   | URL you want to share (you can share a base64 file url only in iOS & Android ) |
+| url | string   | URL you want to share |
 | message | string   |  |
 | title | string   |  (optional) |
 | subject | string   | (optional) |
