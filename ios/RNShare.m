@@ -1,6 +1,14 @@
 #import <MessageUI/MessageUI.h>
 #import "RNShare.h"
 #import "RCTConvert.h"
+#import "RCTLog.h"
+#import "RCTUtils.h"
+#import "RCTBridge.h"
+#import "RCTUIManager.h"
+#import "GenericShare.h"
+#import "WhatsAppShare.h"
+#import "GooglePlusShare.h"
+#import "EmailShare.h"
 
 @implementation RNShare
 - (dispatch_queue_t)methodQueue
@@ -9,45 +17,40 @@
 }
 RCT_EXPORT_MODULE()
 
-RCT_EXPORT_METHOD(test)
+RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
+                  failureCallback:(RCTResponseErrorBlock)failureCallback
+                  successCallback:(RCTResponseSenderBlock)successCallback)
 {
-  // Your implementation here
-}
-RCT_EXPORT_METHOD(open:(NSDictionary *)options :(RCTResponseSenderBlock)callback)
-{
-    // Your implementation here
-    NSString *shareText = [RCTConvert NSString:options[@"share_text"]];
-    NSString *shareUrl = [RCTConvert NSString:options[@"share_URL"]];
-    NSString *shareSubject = [RCTConvert NSString:options[@"share_subject"]];
-    //some app extension need a NSURL or UIImage Object to share
-    NSURL *cardUrl = [NSURL URLWithString:shareUrl];
-
-    NSArray *itemsToShare = @[shareText, shareUrl,cardUrl];
-    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
-    /*activityVC.excludedActivityTypes = @[UIActivityTypePostToWeibo,
-                                         UIActivityTypeMessage,
-                                         UIActivityTypeMail,
-                                         UIActivityTypePrint,
-                                         UIActivityTypeCopyToPasteboard,
-                                         UIActivityTypeAssignToContact,
-                                         UIActivityTypeSaveToCameraRoll,
-                                         UIActivityTypeAddToReadingList,
-                                         UIActivityTypePostToFlickr,
-                                         UIActivityTypePostToVimeo,
-                                         UIActivityTypePostToTencentWeibo,
-                                         UIActivityTypeAirDrop];*/
-    [activityVC setValue:shareSubject forKey:@"subject"];
-    UIViewController *root = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
     
-    //if iPhone
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        [root presentViewController:activityVC animated:YES completion:nil];
-    }
-    //if iPad
-    else {
-        // Change Rect to position Popover
-        UIPopoverController *popup = [[UIPopoverController alloc] initWithContentViewController:activityVC];
-        [popup presentPopoverFromRect:CGRectMake(root.view.frame.size.width/2, root.view.frame.size.height/4, 0, 0)inView:root.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    NSString *social = [RCTConvert NSString:options[@"social"]];
+    if (social) {
+        NSLog(social);
+        if([social isEqualToString:@"facebook"]) {
+            NSLog(@"TRY OPEN FACEBOOK");
+            GenericShare *shareCtl = [[GenericShare alloc] init];
+            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback serviceType: SLServiceTypeFacebook];
+        } else if([social isEqualToString:@"twitter"]) {
+            NSLog(@"TRY OPEN Twitter");
+            GenericShare *shareCtl = [[GenericShare alloc] init];
+            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback serviceType: SLServiceTypeTwitter];
+        } else if([social isEqualToString:@"googleplus"]) {
+            NSLog(@"TRY OPEN google plus");
+            GooglePlusShare *shareCtl = [[GooglePlusShare alloc] init];
+            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+        } else if([social isEqualToString:@"whatsapp"]) {
+            NSLog(@"TRY OPEN whatsapp");
+            
+            WhatsAppShare *shareCtl = [[WhatsAppShare alloc] init];
+            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+        } else if([social isEqualToString:@"email"]) {
+            NSLog(@"TRY OPEN email");
+            EmailShare *shareCtl = [[EmailShare alloc] init];
+            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+        }
+    } else {
+        RCTLogError(@"No exists social key");
+        return;
     }
 }
+
 @end
