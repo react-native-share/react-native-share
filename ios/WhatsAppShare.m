@@ -17,10 +17,6 @@
     
     if ([options objectForKey:@"message"] && [options objectForKey:@"message"] != [NSNull null]) {
         NSString *text = [RCTConvert NSString:options[@"message"]];
-        
-        NSURL *URL = [RCTConvert NSURL:options[@"url"]];
-
-        
         NSString * urlWhats = [NSString stringWithFormat:@"whatsapp://send?text=%@", [text stringByAppendingString: [@" " stringByAppendingString: options[@"url"]] ]];
         NSURL * whatsappURL = [NSURL URLWithString:[urlWhats stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
         
@@ -30,9 +26,6 @@
             // Cannot open whatsapp
         }
     }
-    
-    
-    
     
 }
 

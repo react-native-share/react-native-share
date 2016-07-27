@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B33C22851D441713006BCD98 /* GenericShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B33C22841D441713006BCD98 /* GenericShare.m */; };
 		B33C22891D4419E8006BCD98 /* WhatsAppShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B33C22881D4419E8006BCD98 /* WhatsAppShare.m */; };
+		B33C228B1D442577006BCD98 /* EmailShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B33C228A1D442576006BCD98 /* EmailShare.m */; };
 		B3E7B58A1CC2AC0600A0062D /* RNShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNShare.m */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +31,8 @@
 		B33C22861D441723006BCD98 /* GenericShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GenericShare.h; sourceTree = "<group>"; };
 		B33C22871D4419DA006BCD98 /* WhatsAppShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhatsAppShare.h; sourceTree = "<group>"; };
 		B33C22881D4419E8006BCD98 /* WhatsAppShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhatsAppShare.m; sourceTree = "<group>"; };
+		B33C228A1D442576006BCD98 /* EmailShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmailShare.m; sourceTree = "<group>"; };
+		B33C228C1D442583006BCD98 /* EmailShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmailShare.h; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* RNShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNShare.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNShare.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,6 +73,8 @@
 				B33C22861D441723006BCD98 /* GenericShare.h */,
 				B33C22871D4419DA006BCD98 /* WhatsAppShare.h */,
 				B33C22881D4419E8006BCD98 /* WhatsAppShare.m */,
+				B33C228A1D442576006BCD98 /* EmailShare.m */,
+				B33C228C1D442583006BCD98 /* EmailShare.h */,
 			);
 			name = social;
 			sourceTree = "<group>";
@@ -132,6 +137,7 @@
 			files = (
 				B3E7B58A1CC2AC0600A0062D /* RNShare.m in Sources */,
 				B33C22891D4419E8006BCD98 /* WhatsAppShare.m in Sources */,
+				B33C228B1D442577006BCD98 /* EmailShare.m in Sources */,
 				B33C22851D441713006BCD98 /* GenericShare.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

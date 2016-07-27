@@ -7,6 +7,7 @@
 #import "RCTUIManager.h"
 #import "GenericShare.h"
 #import "WhatsAppShare.h"
+#import "EmailShare.h"
 
 @implementation RNShare
 - (dispatch_queue_t)methodQueue
@@ -25,19 +26,24 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
         NSLog(social);
         if([social isEqualToString:@"facebook"]) {
             NSLog(@"TRY OPEN FACEBOOK");
-            GenericShare *shareCtl = [GenericShare new];
+            GenericShare *shareCtl = [[GenericShare alloc] init];
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback serviceType: SLServiceTypeFacebook];
         } else if([social isEqualToString:@"twitter"]) {
             NSLog(@"TRY OPEN Twitter");
-            GenericShare *shareCtl = [GenericShare new];
+            GenericShare *shareCtl = [[GenericShare alloc] init];
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback serviceType: SLServiceTypeTwitter];
         } else if([social isEqualToString:@"googleplus"]) {
             NSLog(@"TRY OPEN google plus");
-            GenericShare *shareCtl = [GenericShare new];
+            GenericShare *shareCtl = [[GenericShare alloc] init];
             //[shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback serviceType: SLServiceType];
         } else if([social isEqualToString:@"whatsapp"]) {
-            NSLog(@"TRY OPEN google whatsapp");
-            WhatsAppShare *shareCtl = [WhatsAppShare new];
+            NSLog(@"TRY OPEN whatsapp");
+            
+            WhatsAppShare *shareCtl = [[WhatsAppShare alloc] init];
+            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+        } else if([social isEqualToString:@"email"]) {
+            NSLog(@"TRY OPEN email");
+            EmailShare *shareCtl = [[EmailShare alloc] init];
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         }
     } else {
