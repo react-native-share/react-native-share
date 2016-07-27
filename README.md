@@ -3,7 +3,7 @@ Share Social , Sending Simple Data to Other Apps
 
 ## Getting started
 
-### Mostly automatic install
+### Mostly automatic install 
 1. `npm install rnpm --global`
 2. `npm install react-native-share --save`
 3. `rnpm link react-native-share`
@@ -16,7 +16,13 @@ Share Social , Sending Simple Data to Other Apps
 2. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
 3. Go to `node_modules` ➜ `react-native-share` and add `RNShare.xcodeproj`
 4. In XCode, in the project navigator, select your project. Add `libRNShare.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
-5. Run your project (`Cmd+R`)
+5. In XCode, in the project navigator, select your project. Add `Social.framework` and `MessageUI.framework` to your project's `General` ➜ `Linked Frameworks and Libraries`
+6. In file Info.plist, add `<key>LSApplicationQueriesSchemes</key>
+<array>
+  <string>whatsapp</string>
+  <string>mailto</string>
+</array>`
+6. Run your project (`Cmd+R`)
 
 #### Android
 
@@ -81,8 +87,8 @@ Supported options:
 
 |          | Android  | IOS      | Windows  |
 | -------- | -------- | -------- | -------- |
-| Simple Share | ![Demo Android](/assets/android.png)   | ![Demo iOS](/assets/ios.png)   | ![Demo Windows](/assets/windows.png) |
-| UI Component   | ![Demo Android UI Component](/assets/android-component.gif)   | ![Demo Android UI Component](/assets/ios-component.gif) |  TODO |
+| Simple Share | ![Demo Android](/assets/android-250x.png)   | ![Demo iOS](/assets/ios-250x.png)   | ![Demo Windows](/assets/windows-250x.png) |
+| UI Component   | ![Demo Android UI Component](/assets/android-component-250x.gif)   | ![Demo Android UI Component](/assets/ios-component-250x.gif) |  TODO |
 
 ## Usage
 
