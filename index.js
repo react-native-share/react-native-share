@@ -8,8 +8,6 @@ import {
   NativeModules,
   Platform,
   ActionSheetIOS,
-  Clipboard,
-  ToastAndroid
 } from 'react-native';
 
 import Overlay from './components/Overlay';
@@ -49,10 +47,8 @@ class RNShare {
         });
       } else {
         NativeModules.RNShare.open(options,(e) => {
-          console.log("RNSHARE ERROR ", e)
           return reject({ error: e });
         },(e) => {
-          console.log("RNSHARE OK")
           resolve({
             message: e
           });
@@ -61,18 +57,19 @@ class RNShare {
     });
   }
   static shareSingle(options){
-    console.log(options);
-    return new Promise((resolve, reject) => {
-      NativeModules.RNShare.shareSingle(options,(e) => {
-        console.log("RNSHARE SINGLE ERROR ", e)
-        return reject({ error: e });
-      },(e) => {
-        console.log("RNSHARE SINGLE OK")
-        resolve({
-          message: e
+    if (Platform.OS === "ios" || Platform.OS === "android") {
+      return new Promise((resolve, reject) => {
+        NativeModules.RNShare.shareSingle(options,(e) => {
+          return reject({ error: e });
+        },(e) => {
+          return resolve({
+            message: e
+          });
         });
       });
-    });
+    } else {
+      throw new Exception("not implemented");
+    }
   }
 }
 class ShareSheet extends React.Component {
@@ -92,83 +89,12 @@ class ShareSheet extends React.Component {
           <TouchableOpacity
               style={{flex:1}}
               onPress={this.props.onCancel}>
-
           </TouchableOpacity>
           <Sheet visible={this.props.visible}>
             <View style={styles.buttonContainer}>
-              <Button
-                iconSrc={require("./assets/ic_share_twitter.png")}
-                onPress={()=>{
-                  this.props.onCancel();
-                  setTimeout(() => {
-                    RNShare.shareSingle(Object.assign(this.props.options, {
-                      "social": "twitter"
-                    }));
-                  },200);
-                }}>Twitter</Button>
-              <Button
-                iconSrc={require("./assets/ic_share_facebook.png")}
-                onPress={()=>{
-                  this.props.onCancel();
-                  setTimeout(() => {
-                    RNShare.shareSingle(Object.assign(this.props.options, {
-                      "social" : "facebook"
-                    }));
-                  },200);
-                }}>Facebook</Button>
-              <Button
-                iconSrc={require("./assets/ic_share_whatsapp.png")}
-                onPress={()=>{
-                  this.props.onCancel();
-                  setTimeout(() => {
-                    RNShare.shareSingle(Object.assign(this.props.options, {
-                      "social" : "whatsapp"
-                    }));
-                  },200);
-                }}>Whatsapp</Button>
-              <Button
-                iconSrc={require("./assets/ic_share_google.png")}
-                onPress={()=>{
-                  this.props.onCancel();
-                  setTimeout(() => {
-                    RNShare.shareSingle(Object.assign(this.props.options, {
-                      "social" : "googleplus"
-                    }));
-                  },200);
-                }}>Google +</Button>
-              <Button
-                iconSrc={require("./assets/ic_share_correo.png")}
-                onPress={()=>{
-                  this.props.onCancel();
-                  setTimeout(() => {
-                    RNShare.shareSingle(Object.assign(this.props.options, {
-                      "social" : "email"
-                    }));
-                  },200);
-                }}>Email</Button>
-
-              <Button
-                iconSrc={require("./assets/ic_share_copiar_link.png")}
-                onPress={()=>{
-                  this.props.onCancel();
-                  setTimeout(() => {
-                    if(typeof this.props.options["url"] !== undefined) {
-                      Clipboard.setString(this.props.options.url);
-                      ToastAndroid.show('Link copiado al portapapeles', ToastAndroid.SHORT);
-                    }
-                  },200);
-                }}>Copy Link</Button>
-                {}
-              <Button iconSrc={require("./assets/ic_share_mas.png")}
-                onPress={()=>{
-                  this.props.onCancel();
-                  setTimeout(() => {
-                    RNShare.open(this.props.options)
-                  },200);
-                }}>More</Button>
+              {this.props.children}
             </View>
           </Sheet>
-
         </View>
       </Overlay>
     )

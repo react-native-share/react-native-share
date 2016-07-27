@@ -1,5 +1,5 @@
 //
-//  FacebookShare.h
+//  EmailShare.h
 //  RNShare
 //
 //  Created by Diseño Uno BBCL on 23-07-16.
@@ -7,7 +7,6 @@
 //
 
 
-#import <Social/Social.h>
 #import <UIKit/UIKit.h>
 #import "RCTConvert.h"
 #import "RCTBridge.h"

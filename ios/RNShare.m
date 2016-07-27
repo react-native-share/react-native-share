@@ -7,6 +7,7 @@
 #import "RCTUIManager.h"
 #import "GenericShare.h"
 #import "WhatsAppShare.h"
+#import "GooglePlusShare.h"
 #import "EmailShare.h"
 
 @implementation RNShare
@@ -34,8 +35,8 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback serviceType: SLServiceTypeTwitter];
         } else if([social isEqualToString:@"googleplus"]) {
             NSLog(@"TRY OPEN google plus");
-            GenericShare *shareCtl = [[GenericShare alloc] init];
-            //[shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback serviceType: SLServiceType];
+            GooglePlusShare *shareCtl = [[GooglePlusShare alloc] init];
+            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         } else if([social isEqualToString:@"whatsapp"]) {
             NSLog(@"TRY OPEN whatsapp");
             

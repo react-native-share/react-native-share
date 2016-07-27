@@ -1,5 +1,5 @@
 //
-//  FacebookShare.m
+//  GenericShare.m
 //  RNShare
 //
 //  Created by Diseño Uno BBCL on 23-07-16.
@@ -13,12 +13,12 @@
     failureCallback:(RCTResponseErrorBlock)failureCallback
     successCallback:(RCTResponseSenderBlock)successCallback
     serviceType:(NSString*)serviceType {
-    
+
     NSLog(@"Try open view");
     if([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
-        
+
         SLComposeViewController *composeController = [SLComposeViewController  composeViewControllerForServiceType:serviceType];
-        
+
         NSURL *URL = [RCTConvert NSURL:options[@"url"]];
         if (URL) {
             if (URL.fileURL || [URL.scheme.lowercaseString isEqualToString:@"data"]) {
@@ -32,26 +32,26 @@
                 }
                 UIImage *image = [UIImage imageWithData: data];
                 [composeController addImage:image];
-                
+
             } else {
                 [composeController addURL:URL];
             }
         }
-        
+
         if ([options objectForKey:@"message"] && [options objectForKey:@"message"] != [NSNull null]) {
             NSString *text = [RCTConvert NSString:options[@"message"]];
             [composeController setInitialText:text];
         }
-        
-        
+
+
         UIViewController *ctrl = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
         [ctrl presentViewController:composeController animated:YES completion:Nil];
     } else {
-        NSLog(@"No facebook installed");
+        NSLog(@"No installed");
         //  TODO: Add web url share
     }
-    
-    
+
+
 }
 
 
