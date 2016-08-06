@@ -62,7 +62,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options :(RCTResponseSenderBlock)callback
         
         UIViewController *ctrl = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
         
-        if (![self.documentController presentOpenInMenuFromRect:ctrl.view.bounds inView:ctrl.view animated:YES]) {
+        if (![self.documentController presentOptionsMenuFromRect:ctrl.view.bounds inView:ctrl.view animated:YES]) {
             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:nil message:@"There are no installed apps that can open this file." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             [alertView show];
         }
