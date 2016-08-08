@@ -15,7 +15,7 @@
     serviceType:(NSString*)serviceType {
 
     NSLog(@"Try open view");
-    if([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
+    if([SLComposeViewController isAvailableForServiceType:serviceType]) {
 
         SLComposeViewController *composeController = [SLComposeViewController  composeViewControllerForServiceType:serviceType];
 
