@@ -5,8 +5,7 @@ Share Social , Sending Simple Data to Other Apps
 
 ### Mostly automatic install
 1. `npm install rnpm --global`
-2. `npm install react-native-share --save`
-3. `rnpm link react-native-share`
+2. `rnpm install react-native-share`
 
 ### Manual install
 
