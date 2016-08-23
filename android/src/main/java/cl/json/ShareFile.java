@@ -40,7 +40,7 @@ public class ShareFile {
      * @return {@link String} mime type
      */
     private String getMimeType(String url) {
-        String type = "*/*";
+        String type = null;
         String extension = MimeTypeMap.getFileExtensionFromUrl(url);
         if (extension != null) {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
@@ -63,8 +63,18 @@ public class ShareFile {
     }
     public boolean isLocalFile() {
         if(uri.getScheme().equals("content") || uri.getScheme().equals("file")) {
-            String realPath = this.getRealPathFromURI(uri);
-            this.type = this.getMimeType(realPath);
+            // try to get mimetype from uri
+            this.type = this.getMimeType(uri.toString());
+
+            // try resolving the file and get the mimetype
+            if(this.type == null) {
+              String realPath = this.getRealPathFromURI(uri);
+              this.type = this.getMimeType(realPath);
+            }
+
+            if(this.type == null) {
+              this.type = "*/*";
+            }
 
             return true;
         }

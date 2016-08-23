@@ -39,6 +39,7 @@ public abstract class ShareIntent {
                 this.getIntent().setType(fileShare.getType());
                 this.getIntent().putExtra(Intent.EXTRA_STREAM, uriFile);
                 this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("message"));
+                this.getIntent().addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             } else {
                 this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("message") + " " + options.getString("url"));
             }
@@ -48,6 +49,7 @@ public abstract class ShareIntent {
                 Uri uriFile = fileShare.getURI();
                 this.getIntent().setType(fileShare.getType());
                 this.getIntent().putExtra(Intent.EXTRA_STREAM, uriFile);
+                this.getIntent().addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             } else {
                 this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("url"));
             }
