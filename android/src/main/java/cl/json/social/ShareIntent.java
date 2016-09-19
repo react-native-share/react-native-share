@@ -33,7 +33,7 @@ public abstract class ShareIntent {
         }
 
         if (ShareIntent.hasValidKey("message", options) && ShareIntent.hasValidKey("url", options)) {
-            ShareFile fileShare = new ShareFile(options.getString("url"), this.reactContext);
+            ShareFile fileShare = getFileShare(options);
             if(fileShare.isFile()) {
                 Uri uriFile = fileShare.getURI();
                 this.getIntent().setType(fileShare.getType());
@@ -44,7 +44,7 @@ public abstract class ShareIntent {
                 this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("message") + " " + options.getString("url"));
             }
         } else if (ShareIntent.hasValidKey("url", options)) {
-            ShareFile fileShare = new ShareFile(options.getString("url"), this.reactContext);
+            ShareFile fileShare = getFileShare(options);
             if(fileShare.isFile()) {
                 Uri uriFile = fileShare.getURI();
                 this.getIntent().setType(fileShare.getType());
@@ -55,6 +55,13 @@ public abstract class ShareIntent {
             }
         } else if (ShareIntent.hasValidKey("message", options) ) {
             this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("message"));
+        }
+    }
+    protected ShareFile getFileShare(ReadableMap options) {
+        if (ShareIntent.hasValidKey("type", options)) {
+            return new ShareFile(options.getString("url"), options.getString("type"), this.reactContext);
+        } else {
+            return new ShareFile(options.getString("url"), this.reactContext);
         }
     }
     protected static String urlEncode(String param) {

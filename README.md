@@ -61,6 +61,7 @@ Supported options:
 | Name  | Type     | Description |
 | :---- | :------: | :--- |
 | url | string   | URL you want to share (you can share a base64 file url only in iOS & Android ) |
+| type | string   | File mime type (optional) |
 | message | string   |  |
 | title | string   |  (optional) |
 | subject | string   | (optional) |
@@ -75,6 +76,7 @@ Supported options:
 | Name  | Type     | Description |
 | :---- | :------: | :--- |
 | url | string   | URL you want to share |
+| type | string   | File mime type (optional) |
 | message | string   |  |
 | title | string   |  (optional) |
 | subject | string   | (optional) |
