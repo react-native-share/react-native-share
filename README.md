@@ -78,7 +78,7 @@ Supported options:
 | message | string   |  |
 | title | string   |  (optional) |
 | subject | string   | (optional) |
-| social | string   | supported social apps: twitter, facebook, whatsapp, gplus, email |
+| social | string   | supported social apps: twitter, facebook, whatsapp, googleplus, email |
 
 ***NOTE: If both `message` and `url` are provided `url` will be concatenated to the end of `message` to form the body of the message. If only one is provided it will be used***
 
@@ -196,7 +196,7 @@ class TestShare extends Component {
               this.onCancel();
               setTimeout(() => {
                 Share.shareSingle(Object.assign(shareOptions, {
-                  "social": "gplus"
+                  "social": "googleplus"
                 }));
               },300);
             }}>Google +</Button>
