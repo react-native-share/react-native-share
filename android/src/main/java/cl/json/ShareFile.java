@@ -60,14 +60,18 @@ public class ShareFile {
         return this.isBase64File() || this.isLocalFile();
     }
     public boolean isBase64File() {
-        if(uri.getScheme().equals("data")) {
+        String scheme = uri.getScheme();
+
+        if (scheme != null && scheme.equals("data")) {
             this.type = this.uri.getSchemeSpecificPart().substring(0, this.uri.getSchemeSpecificPart().indexOf(";"));
             return true;
         }
         return false;
     }
     public boolean isLocalFile() {
-        if(uri.getScheme().equals("content") || uri.getScheme().equals("file")) {
+        String scheme = uri.getScheme();
+
+        if (scheme != null && (scheme.equals("content") || scheme.equals("file"))) {
             // type is already set
             if (this.type != null) {
                 return true;
