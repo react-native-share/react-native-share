@@ -47,8 +47,13 @@
         UIViewController *ctrl = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
         [ctrl presentViewController:composeController animated:YES completion:Nil];
     } else {
-        NSLog(@"No installed");
-        //  TODO: Add web url share
+      NSString *errorMessage = @"Not installed";
+      NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
+      NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
+
+      NSLog(errorMessage);
+      failureCallback(error);
+      //  TODO: Add web url share
     }
 
 
