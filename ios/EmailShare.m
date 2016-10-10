@@ -39,10 +39,10 @@
 
         if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
             [[UIApplication sharedApplication] openURL: whatsappURL];
+            successCallback(@[]);
         } else {
             // Cannot open email
             NSLog(@"Cannot open email");
-            
         }
     }
 
