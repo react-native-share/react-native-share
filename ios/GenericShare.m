@@ -46,6 +46,7 @@
 
         UIViewController *ctrl = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
         [ctrl presentViewController:composeController animated:YES completion:Nil];
+        successCallback(@[]);
     } else {
       NSString *errorMessage = @"Not installed";
       NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};

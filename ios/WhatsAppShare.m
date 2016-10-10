@@ -22,6 +22,7 @@
 
         if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
             [[UIApplication sharedApplication] openURL: whatsappURL];
+            successCallback(@[]);
         } else {
           // Cannot open whatsapp
           NSString *stringURL = @"http://itunes.apple.com/en/app/whatsapp-messenger/id310633997";
