@@ -1,4 +1,4 @@
-﻿# react-native-share [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
+# react-native-share [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
 Share Social , Sending Simple Data to Other Apps
 
 ## Getting started
@@ -56,6 +56,12 @@ Share Social , Sending Simple Data to Other Apps
 
 Open Simple share dialog
 
+Returns a promise that fulfills or rejects as soon as user successfully open the share action sheet or cancelled/failed to do so. As a result you might need to further handle the rejection while necessary. e.g.
+
+```javascript
+Share.open(options).catch((err) => { err && console.log(err); })
+```
+
 Supported options:
 
 | Name  | Type     | Description |
@@ -70,6 +76,8 @@ Supported options:
 #### shareSingle(options) (in iOS & Android)
 
 Open share dialog with specific application
+
+*This returns a promise too.*
 
 Supported options:
 
