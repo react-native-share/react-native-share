@@ -47,18 +47,37 @@
         UIViewController *ctrl = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
         [ctrl presentViewController:composeController animated:YES completion:Nil];
         successCallback(@[]);
-    } else {
-      NSString *errorMessage = @"Not installed";
-      NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
-      NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
+      } else {
+        NSString *errorMessage = @"Not installed";
+        NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
+        NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
 
-      NSLog(errorMessage);
-      failureCallback(error);
-      //  TODO: Add web url share
-    }
+        NSLog(errorMessage);
+        failureCallback(error);
 
+        NSString *escapedString = [options[@"message"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 
-}
+        if ([options[@"social"] isEqualToString:@"twitter"]) {
+          NSString *URL = [NSString stringWithFormat:@"https://twitter.com/intent/tweet?message=%@&url=%@", escapedString, options[@"url"]];
+          [self openScheme:URL];
+        }
 
+        if ([options[@"social"] isEqualToString:@"facebook"]) {
+          NSString *URL = [NSString stringWithFormat:@"https://www.facebook.com/sharer/sharer.php?u=%@", options[@"url"]];
+          [self openScheme:URL];
+        }
 
-@end
+      }
+  }
+  - (void)openScheme:(NSString *)scheme {
+      UIApplication *application = [UIApplication sharedApplication];
+      NSURL *schemeURL = [NSURL URLWithString:scheme];
+
+      if ([application respondsToSelector:@selector(openURL:options:completionHandler:)]) {
+          [application openURL:schemeURL options:@{} completionHandler:nil];
+          NSLog(@"Open %@: %d", schemeURL);
+      }
+
+  }
+
+  @end
