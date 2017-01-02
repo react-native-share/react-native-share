@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   BackAndroid,
+  Dimensions,
   NativeModules,
   Platform,
   ActionSheetIOS,
@@ -85,7 +86,10 @@ class ShareSheet extends React.Component {
   render(){
     return (
       <Overlay visible={this.props.visible} {...this.props}>
-        <View style={styles.actionSheetContainer}>
+        <View style={[styles.actionSheetContainer, 
+        {
+          height: this.props.visible ? Dimensions.get('window').height : 0
+        }]}>
           <TouchableOpacity
               style={{flex:1}}
               onPress={this.props.onCancel}>
