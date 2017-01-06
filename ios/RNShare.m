@@ -1,5 +1,5 @@
 #import <MessageUI/MessageUI.h>
-#import <React/RNShare.h>
+#import "RNShare.h"
 #import <React/RCTConvert.h>
 #import <React/RCTLog.h>
 #import <React/RCTUtils.h>
