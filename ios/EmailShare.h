@@ -8,11 +8,11 @@
 
 
 #import <UIKit/UIKit.h>
-#import "RCTConvert.h"
-#import "RCTBridge.h"
-#import "RCTUIManager.h"
-#import "RCTLog.h"
-#import "RCTUtils.h"
+#import <React/RCTConvert.h>
+#import <React/RCTBridge.h>
+#import <React/RCTUIManager.h>
+#import <React/RCTLog.h>
+#import <React/RCTUtils.h>
 #import <MessageUI/MessageUI.h>
 @interface EmailShare : NSObject <MFMailComposeViewControllerDelegate>
 
