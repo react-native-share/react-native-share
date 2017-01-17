@@ -1,6 +1,8 @@
 # react-native-share [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
 Share Social , Sending Simple Data to Other Apps
 
+***NOTE: React Native now implements share functionality [Read more](https://facebook.github.io/react-native/docs/share.html)***
+
 ## Getting started
 
 ### Mostly automatic install
