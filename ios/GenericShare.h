@@ -9,11 +9,11 @@
 
 #import <Social/Social.h>
 #import <UIKit/UIKit.h>
-#import "RCTConvert.h"
-#import "RCTBridge.h"
-#import "RCTUIManager.h"
-#import "RCTLog.h"
-#import "RCTUtils.h"
+#import <React/RCTConvert.h>
+#import <React/RCTBridge.h>
+#import <React/RCTUIManager.h>
+#import <React/RCTLog.h>
+#import <React/RCTUtils.h>
 @interface GenericShare : NSObject <RCTBridgeModule>
 
 - (void *) shareSingle:(NSDictionary *)options failureCallback:(RCTResponseErrorBlock)failureCallback successCallback:(RCTResponseSenderBlock)successCallback serviceType:(NSString*)serviceType;
