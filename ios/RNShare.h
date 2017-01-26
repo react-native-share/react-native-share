@@ -7,7 +7,6 @@
 #else
 #import "React/RCTBridgeModule.h"   // Required when used as a Pod in a Swift project
 #endif
-#import <React/RCTBridgeModule.h>
 
 @interface RNShare : NSObject <RCTBridgeModule>
 
