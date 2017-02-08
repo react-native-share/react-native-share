@@ -94,6 +94,41 @@ Supported options:
 
 ***NOTE: If both `message` and `url` are provided `url` will be concatenated to the end of `message` to form the body of the message. If only one is provided it will be used***
 
+#### Url format when sharing a file
+
+##### Share base 64 file
+
+When share a base 64 file, please follow the format below:
+
+```
+url: "data:<data_type>/<file_extension>;base64,<base64_data>"
+```
+For example, when share a base 64 `mp3` file, the `url` should be:
+
+```
+url: "data:audio/mp3;base64,<base64_data>"
+```
+
+When share a base 64 image file with `png` file extension, the `url` should be:
+
+```
+url: "data:image/png;base64,<base64_data>"
+```
+
+##### Share file directly
+
+When share a local file directly, please follow the format below:
+
+```
+url: "file://<file_path>",
+```
+
+For example, when share a `pdf` file from: `/storage/emulated/0/demo/test.pdf`, the `url` should be:
+
+```
+url: "file:///storage/emulated/0/demo/test.pdf"
+```
+
 ## how it looks:
 
 |          | Android  | IOS      | Windows  |
