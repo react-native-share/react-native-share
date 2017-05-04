@@ -21,6 +21,22 @@ static UIDocumentInteractionController *documentInteractionController;
         NSString *text = [RCTConvert NSString:options[@"message"]];
         text = [text stringByAppendingString: [@" " stringByAppendingString: options[@"url"]] ];
 
+        if ([[UIApplication sharedApplication] canOpenURL: [NSURL URLWithString:@"whatsapp://app"]]) {
+            NSLog(@"WhatsApp installed");
+        } else {
+            // Cannot open whatsapp
+            NSString *stringURL = @"http://itunes.apple.com/app/whatsapp-messenger/id310633997";
+            NSURL *url = [NSURL URLWithString:stringURL];
+            [[UIApplication sharedApplication] openURL:url];
+
+            NSString *errorMessage = @"Not installed";
+            NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
+            NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
+
+            NSLog(errorMessage);
+            return failureCallback(error);
+        }
+
         if ([options[@"url"] rangeOfString:@"wam"].location != NSNotFound) {
             NSLog(@"Sending whatsapp movie");
             documentInteractionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:options[@"url"]]];
@@ -39,18 +55,6 @@ static UIDocumentInteractionController *documentInteractionController;
             if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
                 [[UIApplication sharedApplication] openURL: whatsappURL];
                 successCallback(@[]);
-            } else {
-                // Cannot open whatsapp
-                NSString *stringURL = @"http://itunes.apple.com/en/app/whatsapp-messenger/id310633997";
-                NSURL *url = [NSURL URLWithString:stringURL];
-                [[UIApplication sharedApplication] openURL:url];
-
-                NSString *errorMessage = @"Not installed";
-                NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
-                NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
-
-                NSLog(errorMessage);
-                failureCallback(error);
             }
         }
     }
