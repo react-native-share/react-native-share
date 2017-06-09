@@ -77,6 +77,7 @@ public abstract class ShareIntent {
         Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
         chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         this.reactContext.startActivity(chooser);
+        this.setIntent(null);
     }
     protected boolean isPackageInstalled(String packagename, Context context) {
         PackageManager pm = context.getPackageManager();
@@ -88,6 +89,9 @@ public abstract class ShareIntent {
         }
     }
     protected Intent getIntent(){
+        if (this.intent == null) {
+          this.setIntent(new Intent(android.content.Intent.ACTION_SEND));
+        }
         return this.intent;
     }
     protected void setIntent(Intent intent) {
