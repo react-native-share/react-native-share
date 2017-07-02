@@ -83,7 +83,7 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         }
     } else {
-        RCTLogError(@"No exists social key");
+        RCTLogError(@"key 'social' missing in options");
         return;
     }
 }
