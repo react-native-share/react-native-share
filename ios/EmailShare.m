@@ -23,6 +23,11 @@
 
         NSString *subject = @"";
         NSString *message = @"";
+        NSString *email = @"";
+        if ([options objectForKey:@"email"] && [options objectForKey:@"email"] != [NSNull null]) {
+            email = [RCTConvert NSString:options[@"email"]];
+        }
+
         if ([options objectForKey:@"subject"] && [options objectForKey:@"subject"] != [NSNull null]) {
             subject = [RCTConvert NSString:options[@"subject"]];
         }
@@ -34,7 +39,7 @@
             message = [message stringByAppendingString: [@" " stringByAppendingString: options[@"url"]] ];
         }
 
-        NSString * urlWhats = [NSString stringWithFormat:@"mailto:?subject=%@&body=%@", subject, message ];
+        NSString * urlWhats = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", email, subject, message ];
         NSURL * whatsappURL = [NSURL URLWithString:[urlWhats stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 
         if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
