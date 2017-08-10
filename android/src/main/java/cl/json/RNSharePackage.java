@@ -15,7 +15,7 @@ public class RNSharePackage implements ReactPackage {
       return Arrays.<NativeModule>asList(new RNShareModule(reactContext));
     }
 
-    @Override
+    // Deprecated in React Native .47
     public List<Class<? extends JavaScriptModule>> createJSModules() {
       return Collections.emptyList();
     }
