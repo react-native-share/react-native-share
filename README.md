@@ -15,14 +15,18 @@ Share Social , Sending Simple Data to Other Apps
 
 1. `npm install react-native-share --save`
 2. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-3. Go to `node_modules` ➜ `react-native-share` and add `RNShare.xcodeproj`
+3. Go to `node_modules` ➜ `react-native-share` ➜ `ios` and add `RNShare.xcodeproj`
 4. In XCode, in the project navigator, select your project. Add `libRNShare.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 5. In XCode, in the project navigator, select your project. Add `Social.framework` and `MessageUI.framework` to your project's `General` ➜ `Linked Frameworks and Libraries`
-6. In file Info.plist, add `<key>LSApplicationQueriesSchemes</key>
-<array>
-  <string>whatsapp</string>
-  <string>mailto</string>
-</array>`
+6. In file Info.plist, add
+    ```xml
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>whatsapp</string>
+      <string>mailto</string>
+    </array>
+    ```
+
 6. Run your project (`Cmd+R`)
 
 #### Android
