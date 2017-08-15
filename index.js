@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  BackAndroid,
+  BackAndroid as DeprecatedBackAndroid, BackHandler as ModernBackHandler,
   NativeModules,
   Platform,
   ActionSheetIOS,
@@ -14,6 +14,7 @@ import Overlay from './components/Overlay';
 import Sheet from './components/Sheet';
 import Button from './components/Button';
 
+const BackHandler = ModernBackHandler || DeprecatedBackAndroid;
 const styles = StyleSheet.create({
     actionSheetContainer: {
       flex: 1,
@@ -74,7 +75,7 @@ class RNShare {
 }
 class ShareSheet extends React.Component {
   componentDidMount() {
-    BackAndroid.addEventListener('hardwareBackPress',() => {
+     BackHandler.addEventListener('hardwareBackPress',() => {
       if (this.props.visible) {
         this.props.onCancel();
         return true;
