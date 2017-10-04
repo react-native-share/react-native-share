@@ -61,7 +61,7 @@ public class ShareFile {
     }
     public boolean isBase64File() {
         String scheme = uri.getScheme();
-        if(scheme && uri.getScheme().equals("data")) {
+        if((scheme != null) && uri.getScheme().equals("data")) {
             this.type = this.uri.getSchemeSpecificPart().substring(0, this.uri.getSchemeSpecificPart().indexOf(";"));
             return true;
         }
@@ -69,7 +69,7 @@ public class ShareFile {
     }
     public boolean isLocalFile() {
         String scheme = uri.getScheme();
-        if(scheme && (uri.getScheme().equals("content") || uri.getScheme().equals("file"))) {
+        if((scheme != null) && (uri.getScheme().equals("content") || uri.getScheme().equals("file"))) {
             // type is already set
             if (this.type != null) {
                 return true;
