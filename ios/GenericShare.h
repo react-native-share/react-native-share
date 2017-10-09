@@ -50,6 +50,6 @@
 #import "React/RCTUtils.h"   // Required when used as a Pod in a Swift project
 #endif
 @interface GenericShare : NSObject <RCTBridgeModule>
-
-- (void *) shareSingle:(NSDictionary *)options failureCallback:(RCTResponseErrorBlock)failureCallback successCallback:(RCTResponseSenderBlock)successCallback serviceType:(NSString*)serviceType;
-@end
+    
+- (void *) shareSingle:(NSDictionary *)options failureCallback:(RCTResponseErrorBlock)failureCallback successCallback:(RCTResponseSenderBlock)successCallback serviceType:(NSString*)serviceType shouldOpenInWeb: (BOOL) openInWeb;
+    @end
