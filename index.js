@@ -34,17 +34,33 @@ class RNShare {
   static open(options) {
     return new Promise((resolve, reject) => {
       if (Platform.OS === "ios") {
-        ActionSheetIOS.showShareActionSheetWithOptions(options, (error) => {
-          return reject({ error: error });
-        }, (success, activityType) => {
-          if(success) {
-            return resolve({
-              app: activityType
-            });
-          } else {
-            reject({ error: "User did not share" });
-          }
-        });
+				if (options.urls) {
+					console.log('-> there are multiple urls');
+					NativeModules.RNShare.open(options, (error) => {
+	          return reject({ error: error });
+	        }, (success, activityType) => {
+	          if(success) {
+	            return resolve({
+	              app: activityType
+	            });
+	          } else {
+	            reject({ error: "User did not share" });
+	          }
+	        });
+				} else {
+					console.log('-> there is only one url');
+					ActionSheetIOS.showShareActionSheetWithOptions(options, (error) => {
+	          return reject({ error: error });
+	        }, (success, activityType) => {
+	          if(success) {
+	            return resolve({
+	              app: activityType
+	            });
+	          } else {
+	            reject({ error: "User did not share" });
+	          }
+	        });
+				}
       } else {
         NativeModules.RNShare.open(options,(e) => {
           return reject({ error: e });
