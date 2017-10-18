@@ -138,9 +138,7 @@ public class ShareFile {
         } else if(this.isLocalFile()) {
             Uri uri = Uri.parse(this.url);
 
-            FileProvider.getUriForFile(reactContext, "com.nubank.android.ghostflame.fileprovider", new File(this.url));
-
-            return uri;
+            return FileProvider.getUriForFile(reactContext, "com.nubank.android.ghostflame.fileprovider", new File(uri.getPath()));
         }
 
         return null;
