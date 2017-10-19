@@ -1,6 +1,6 @@
 package cl.json;
 
-interface ShareApplication {
+public interface ShareApplication {
 
     public String getFileProviderAuthority();
 
