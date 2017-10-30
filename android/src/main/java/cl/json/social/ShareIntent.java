@@ -22,10 +22,13 @@ public abstract class ShareIntent {
     protected final ReactApplicationContext reactContext;
     protected Intent intent;
     protected String chooserTitle = "Share";
+	private String authority;
     public ShareIntent(ReactApplicationContext reactContext) {
         this.reactContext = reactContext;
         this.setIntent(new Intent(android.content.Intent.ACTION_SEND));
         this.getIntent().setType("text/plain");
+		final String packageName = reactContext.getApplicationContext().getPackageName();
+		authority = new StringBuilder(packageName).append(".provider").toString();
     }
     public void open(ReadableMap options) throws ActivityNotFoundException {
         if (ShareIntent.hasValidKey("subject", options) ) {
@@ -36,8 +39,9 @@ public abstract class ShareIntent {
             ShareFile fileShare = getFileShare(options);
             if(fileShare.isFile()) {
                 Uri uriFile = fileShare.getURI();
+				Uri uri = FileProvider.getUriForFile(reactContext, authority, fileShare.getFile());
                 this.getIntent().setType(fileShare.getType());
-                this.getIntent().putExtra(Intent.EXTRA_STREAM, uriFile);
+                this.getIntent().putExtra(Intent.EXTRA_STREAM, uri);
                 this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("message"));
                 this.getIntent().addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             } else {
@@ -47,8 +51,9 @@ public abstract class ShareIntent {
             ShareFile fileShare = getFileShare(options);
             if(fileShare.isFile()) {
                 Uri uriFile = fileShare.getURI();
+				Uri uri = FileProvider.getUriForFile(reactContext, authority, fileShare.getFile());
                 this.getIntent().setType(fileShare.getType());
-                this.getIntent().putExtra(Intent.EXTRA_STREAM, uriFile);
+                this.getIntent().putExtra(Intent.EXTRA_STREAM, uri);
                 this.getIntent().addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             } else {
                 this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("url"));

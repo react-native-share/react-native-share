@@ -113,6 +113,10 @@ public class ShareFile {
         }
         return result;
     }
+	public File getFile() {
+		return file;
+	}
+
     public Uri getURI() {
 
         final MimeTypeMap mime = MimeTypeMap.getSingleton();
