@@ -37,7 +37,7 @@ static UIDocumentInteractionController *documentInteractionController;
             return failureCallback(error);
         }
 
-        if ([options[@"url"] rangeOfString:@"wam"].location != NSNotFound) {
+        if ([options[@"url"] rangeOfString:@"wam"].location != NSNotFound || [options[@"url"] rangeOfString:@"mp4"].location != NSNotFound) {
             NSLog(@"Sending whatsapp movie");
             documentInteractionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:options[@"url"]]];
             documentInteractionController.UTI = @"net.whatsapp.movie";
