@@ -15,7 +15,6 @@ public class RNSharePackage implements ReactPackage {
       return Arrays.<NativeModule>asList(new RNShareModule(reactContext));
     }
 
-    @Override
     public List<Class<? extends JavaScriptModule>> createJSModules() {
       return Collections.emptyList();
     }
