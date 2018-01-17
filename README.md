@@ -48,6 +48,7 @@ Share Social , Sending Simple Data to Other Apps
 5. Follow this [guide](https://developer.android.com/training/secure-file-sharing/setup-sharing.html)
 Example:
 Put this in `AndroidManifest.xml` where `applicationId` is something that you have defined in `android/app/build.gradle`.
+```xml
   <applicaiton>
     <provider
         android:name="android.support.v4.content.FileProvider"
@@ -56,11 +57,12 @@ Put this in `AndroidManifest.xml` where `applicationId` is something that you ha
         android:exported="false">
     </provider>
   </application>
+```
 6. Make your `Application` class implements `ShareApplication`
  - Make `getFileProviderAuthority` function return the `android:authorities` that was added on AndroidManifest file
 
 Example: `applicationId` is defined in `android/app/build.gradle`
-```
+```java
 import cl.json.ShareApplication
 
 class MyApplication extends Application implements ShareApplication, ReactApplication {
