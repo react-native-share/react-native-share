@@ -66,7 +66,8 @@ import cl.json.ShareApplication
 class MyApplication extends Application implements ShareApplication, ReactApplication {
 
 ...
-`
+{
+
      @Override
      public String getFileProviderAuthority() {
             return "${applicationId}.provider"
