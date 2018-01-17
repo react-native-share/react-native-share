@@ -47,7 +47,7 @@ Share Social , Sending Simple Data to Other Apps
     ```
 5. Follow this [guide]{https://developer.android.com/training/secure-file-sharing/setup-sharing.html}
 6. Make your `Application` class implements `ShareApplication`
-    - Make `getFileProviderAuthority` function return the `profiles -> android:authorities` in the AndroidManifest 
+ - Make `getFileProviderAuthority` function return the `android:authorities` that was added on AndroidManifest file
 
 
 #### Windows
