@@ -49,6 +49,20 @@ Share Social , Sending Simple Data to Other Apps
 6. Make your `Application` class implements `ShareApplication`
  - Make `getFileProviderAuthority` function return the `android:authorities` that was added on AndroidManifest file
 
+Example: 
+```
+class MyApplication extends Application implements ShareApplication, ReactApplication {
+
+...
+
+     @override
+     String getFileProviderAuthority() {
+            return <File provider authority>
+     }
+
+}
+```
+
 
 #### Windows
 [Read it! :D](https://github.com/ReactWindows/react-native)
