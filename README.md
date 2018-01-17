@@ -45,6 +45,26 @@ Share Social , Sending Simple Data to Other Apps
     ```
       compile project(':react-native-share')
     ```
+5. Follow this [guide](https://developer.android.com/training/secure-file-sharing/setup-sharing.html)
+6. Make your `Application` class implements `ShareApplication`
+ - Make `getFileProviderAuthority` function return the `android:authorities` that was added on AndroidManifest file
+
+Example: 
+```
+import cl.json.ShareApplication
+
+class MyApplication extends Application implements ShareApplication, ReactApplication {
+
+...
+
+     @override
+     String getFileProviderAuthority() {
+            return <File provider authority>
+     }
+
+}
+```
+
 
 #### Windows
 [Read it! :D](https://github.com/ReactWindows/react-native)
