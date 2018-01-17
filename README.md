@@ -46,20 +46,30 @@ Share Social , Sending Simple Data to Other Apps
       compile project(':react-native-share')
     ```
 5. Follow this [guide](https://developer.android.com/training/secure-file-sharing/setup-sharing.html)
+Example:
+Put this in `AndroidManifest.xml` where `applicationId` is something that you have defined in `android/app/build.gradle`.
+  <applicaiton>
+    <provider
+        android:name="android.support.v4.content.FileProvider"
+        android:authorities="${applicationId}.provider"
+        android:grantUriPermissions="true"
+        android:exported="false">
+    </provider>
+  </application>
 6. Make your `Application` class implements `ShareApplication`
  - Make `getFileProviderAuthority` function return the `android:authorities` that was added on AndroidManifest file
 
-Example: 
+Example: `applicationId` is defined in `android/app/build.gradle`
 ```
 import cl.json.ShareApplication
 
 class MyApplication extends Application implements ShareApplication, ReactApplication {
 
 ...
-
-     @override
-     String getFileProviderAuthority() {
-            return <File provider authority>
+`
+     @Override
+     public String getFileProviderAuthority() {
+            return "${applicationId}.provider"
      }
 
 }
