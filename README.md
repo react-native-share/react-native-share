@@ -51,6 +51,8 @@ Share Social , Sending Simple Data to Other Apps
 
 Example: 
 ```
+import cl.json.ShareApplication
+
 class MyApplication extends Application implements ShareApplication, ReactApplication {
 
 ...
