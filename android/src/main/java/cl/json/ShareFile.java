@@ -123,7 +123,7 @@ public class ShareFile {
         if(this.isBase64File()) {
             String encodedImg = this.uri.getSchemeSpecificPart().substring(this.uri.getSchemeSpecificPart().indexOf(";base64,") + 8);
             try {
-                File dir = new File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_DOWNLOADS );
+                File dir = new File(this.reactContext.getFilesDir(), "images");
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }
