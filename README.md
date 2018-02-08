@@ -1,4 +1,4 @@
-# react-native-share [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
+﻿# react-native-share [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
 Share Social , Sending Simple Data to Other Apps
 
 ***NOTE: React Native now implements share functionality [Read more](https://facebook.github.io/react-native/docs/share.html)***
@@ -49,7 +49,7 @@ Share Social , Sending Simple Data to Other Apps
 Example:
 Put this in `AndroidManifest.xml` where `applicationId` is something that you have defined in `android/app/build.gradle`.
     ```xml
-      <applicaiton>
+      <application>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -71,7 +71,7 @@ Put this in `AndroidManifest.xml` where `applicationId` is something that you ha
 
          @Override
          public String getFileProviderAuthority() {
-                return "${applicationId}.provider"
+                return "${applicationId}.provider";
          }
 
     }
