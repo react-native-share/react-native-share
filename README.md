@@ -60,7 +60,7 @@ Put this in `AndroidManifest.xml` where `applicationId` is something that you ha
     ```
 6. Make your `Application` class implements `ShareApplication`
   - Make `getFileProviderAuthority` function return the `android:authorities` that was added on AndroidManifest file
-  - Example: `applicationId` is defined in `android/app/build.gradle`.
+  - Example: `applicationId` is defined in `android/app/build.gradle` and referenced with `BuildConfig.APPLICATION_ID`
 
     ```
     import cl.json.ShareApplication
@@ -71,7 +71,7 @@ Put this in `AndroidManifest.xml` where `applicationId` is something that you ha
 
          @Override
          public String getFileProviderAuthority() {
-                return "${applicationId}.provider";
+                return BuildConfig.APPLICATION_ID + ".provider";
          }
 
     }
