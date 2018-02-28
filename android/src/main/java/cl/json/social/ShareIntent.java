@@ -27,7 +27,7 @@ public abstract class ShareIntent {
         this.setIntent(new Intent(android.content.Intent.ACTION_SEND));
         this.getIntent().setType("text/plain");
     }
-    public void open(ReadableMap options) throws ActivityNotFoundException {
+    public String open(ReadableMap options) throws ActivityNotFoundException {
         if (ShareIntent.hasValidKey("subject", options) ) {
             this.getIntent().putExtra(Intent.EXTRA_SUBJECT, options.getString("subject"));
         }
@@ -56,6 +56,8 @@ public abstract class ShareIntent {
         } else if (ShareIntent.hasValidKey("message", options) ) {
             this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("message"));
         }
+
+        return "RETURN_VALUE_NOT_USED";
     }
     protected ShareFile getFileShare(ReadableMap options) {
         if (ShareIntent.hasValidKey("type", options)) {

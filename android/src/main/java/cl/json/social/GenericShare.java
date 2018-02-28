@@ -14,10 +14,12 @@ public class GenericShare extends ShareIntent {
     }
 
     @Override
-    public void open(ReadableMap options) throws ActivityNotFoundException {
-        super.open(options);
+    public String open(ReadableMap options) throws ActivityNotFoundException {
+        String shareResult = super.open(options);
         //  extra params here
         this.openIntentChooser();
+
+        return shareResult;
     }
 
     @Override

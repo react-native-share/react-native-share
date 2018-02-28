@@ -18,10 +18,12 @@ public class FacebookShare extends SingleShareIntent {
 
     }
     @Override
-    public void open(ReadableMap options) throws ActivityNotFoundException {
-        super.open(options);
+    public String open(ReadableMap options) throws ActivityNotFoundException {
+        String shareResult = super.open(options);
         //  MORE DATA
         this.openIntentChooser();
+
+        return shareResult;
     }
     @Override
     protected String getPackage() {

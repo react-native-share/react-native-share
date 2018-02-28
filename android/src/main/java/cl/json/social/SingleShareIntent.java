@@ -30,7 +30,7 @@ public abstract class SingleShareIntent extends ShareIntent {
         super(reactContext);
     }
 
-    public void open(ReadableMap options) throws ActivityNotFoundException {
+    public String open(ReadableMap options) throws ActivityNotFoundException {
         System.out.println(getPackage());
         //  check if package is installed
         if(getPackage() != null || getDefaultWebLink() != null || getPlayStoreLink() != null) {
@@ -53,10 +53,13 @@ public abstract class SingleShareIntent extends ShareIntent {
                 }
                 //  open web intent
                 this.setIntent(new Intent(new Intent("android.intent.action.VIEW", Uri.parse(url))));
+                return "NOT_INSTALLED";
             }
         } else {
             //  configure default
             super.open(options);
         }
+
+        return "OK";
     }
 }
