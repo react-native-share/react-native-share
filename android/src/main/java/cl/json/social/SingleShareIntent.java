@@ -43,6 +43,9 @@ public abstract class SingleShareIntent extends ShareIntent {
                 System.out.println("NOT INSTALLED");
                 String url = "";
                 if(getDefaultWebLink() != null) {
+                    if (!options.getString("url").startsWith("http")) {
+                        return "NOT_INSTALLED";
+                    }
                     url = getDefaultWebLink()
                             .replace("{url}",       this.urlEncode( options.getString("url") ) )
                             .replace("{message}",   this.urlEncode( options.getString("message") ));
