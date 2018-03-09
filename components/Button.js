@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: 'white',
     padding: 10,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   icon: {
     width: 28,
