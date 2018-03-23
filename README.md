@@ -77,12 +77,13 @@ Share Social , Sending Simple Data to Other Apps
       </paths>
     ```
 
-6. Make your `Application` class implements `ShareApplication`
-  - Make `getFileProviderAuthority` function return the `android:authorities`
-    that was added on AndroidManifest file
-  - Example: Replace `com.example.yourappidhere` with the `applicationId` that
-    is defined in your `android/app/build.gradle`. It must be [hard-coded here
-    to work
+6. Edit your `MainApplication` class to implement `ShareApplication`
+  - Also add the `getFileProviderAuthority` method to your MainApplication class,
+    and have it return the `android:authorities` that was added in
+    AndroidManifest file.
+  - For example: Replace the `com.example.yourappidhere` below with the
+    `applicationId` that is defined in your `android/app/build.gradle`. It must
+    be [hard-coded here to work
     properly](https://github.com/EstebanFuentealba/react-native-share/issues/200#issuecomment-361938532).
 
     ```
@@ -91,6 +92,8 @@ Share Social , Sending Simple Data to Other Apps
     class MyApplication extends Application implements ShareApplication, ReactApplication {
 
     {
+
+         //...
 
          @Override
          public String getFileProviderAuthority() {
