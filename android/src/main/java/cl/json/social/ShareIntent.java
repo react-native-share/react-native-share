@@ -131,7 +131,7 @@ public abstract class ShareIntent {
         this.intent = intent;
     }
     public static boolean hasValidKey(String key, ReadableMap options) {
-        return options.hasKey(key) && !options.isNull(key);
+        return options != null && options.hasKey(key) && !options.isNull(key);
     }
     protected abstract String getPackage();
     protected abstract String getDefaultWebLink();
