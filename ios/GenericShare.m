@@ -70,14 +70,23 @@
       }
   }
   - (void)openScheme:(NSString *)scheme {
-      UIApplication *application = [UIApplication sharedApplication];
       NSURL *schemeURL = [NSURL URLWithString:scheme];
 
-      if ([application respondsToSelector:@selector(openURL:options:completionHandler:)]) {
-          [application openURL:schemeURL options:@{} completionHandler:nil];
-          NSLog(@"Open %@: %d", schemeURL);
+      UIViewController *rootViewController = [[[UIApplication sharedApplication] delegate] window].rootViewController;
+      while(rootViewController.presentedViewController) {
+          rootViewController = rootViewController.presentedViewController;
       }
 
+      SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:schemeURL];
+      UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:safariViewController];
+
+      [navigationController setNavigationBarHidden:YES animated:NO];
+
+      dispatch_async(dispatch_get_main_queue(), ^{
+          [rootViewController presentViewController:navigationController animated:YES completion:^{
+//              [self.bridge.eventDispatcher sendDeviceEventWithName:@"SFSafariViewControllerDidLoad" body:nil];
+          }];
+      });
   }
 
   @end

@@ -9,6 +9,7 @@
 
 #import <Social/Social.h>
 #import <UIKit/UIKit.h>
+#import <SafariServices/SafariServices.h>
 // import RCTConvert
 #if __has_include(<React/RCTConvert.h>)
 #import <React/RCTConvert.h>
