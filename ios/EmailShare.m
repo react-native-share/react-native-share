@@ -34,18 +34,52 @@
             message = [message stringByAppendingString: [@" " stringByAppendingString: options[@"url"]] ];
         }
 
-        NSString * urlWhats = [NSString stringWithFormat:@"mailto:?subject=%@&body=%@", subject, message ];
-        NSURL * whatsappURL = [NSURL URLWithString:[urlWhats stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        NSString * url = [NSString stringWithFormat:@"mailto:?subject=%@&body=%@", subject, message ];
+        NSURL * emailURL = [NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 
-        if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
-            [[UIApplication sharedApplication] openURL: whatsappURL];
+        if ([MFMailComposeViewController canSendMail]) {
+            // device is configured to send mail
+            [[UIApplication sharedApplication] openURL: emailURL];
             successCallback(@[]);
         } else {
             // Cannot open email
+            UIViewController *rootViewController = [[[UIApplication sharedApplication] delegate] window].rootViewController;
+            while(rootViewController.presentedViewController) {
+                rootViewController = rootViewController.presentedViewController;
+            }
+
+            UIAlertController * alert=[UIAlertController alertControllerWithTitle:@"Message!"
+                                                                          message:@"Email is not configured!"
+                                                                   preferredStyle:UIAlertControllerStyleAlert];
+
+            UIAlertAction* okButton = [UIAlertAction actionWithTitle:@"Ok"
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:^(UIAlertAction * action)
+            {
+                NSLog(@"you pressed Ok button");
+            }];
+
+            UIAlertAction* settingsButton = [UIAlertAction actionWithTitle:@"Settings"
+                                                                     style:UIAlertActionStyleDefault
+                                                                   handler:^(UIAlertAction * action)
+            {
+                NSLog(@"you pressed settings button");
+                [[UIApplication sharedApplication] openURL: emailURL];
+            }];
+
+            [alert addAction:okButton];
+            [alert addAction:settingsButton];
+
+            [rootViewController presentViewController:alert animated:YES completion:nil];
+
             NSLog(@"Cannot open email");
+            NSString *errorMessage = @"Email is not configured!";
+            NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
+            NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
+            NSLog(@"%@", errorMessage);
+            failureCallback(error);
         }
     }
-
 }
 
 @end

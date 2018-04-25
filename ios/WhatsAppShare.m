@@ -9,6 +9,7 @@
 #import "WhatsAppShare.h"
 
 @implementation WhatsAppShare
+
 - (void)shareSingle:(NSDictionary *)options
     failureCallback:(RCTResponseErrorBlock)failureCallback
     successCallback:(RCTResponseSenderBlock)successCallback {
@@ -27,21 +28,42 @@
             [[UIApplication sharedApplication] openURL: whatsappURL];
             successCallback(@[]);
         } else {
-          // Cannot open whatsapp
-          NSString *stringURL = @"http://itunes.apple.com/en/app/whatsapp-messenger/id310633997";
-          NSURL *url = [NSURL URLWithString:stringURL];
-          [[UIApplication sharedApplication] openURL:url];
+            // Cannot open whatsapp
+            UIViewController *rootViewController = [[[UIApplication sharedApplication] delegate] window].rootViewController;
+            while(rootViewController.presentedViewController) {
+                rootViewController = rootViewController.presentedViewController;
+            }
 
-          NSString *errorMessage = @"Not installed";
-          NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
-          NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
+            UIAlertController * alert=[UIAlertController alertControllerWithTitle:@"Message!"
+                                                                          message:@"Whatsapp is not installed!"
+                                                                   preferredStyle:UIAlertControllerStyleAlert];
 
-          NSLog(errorMessage);
-          failureCallback(error);
+            UIAlertAction* okButton = [UIAlertAction actionWithTitle:@"Ok"
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:nil];
+
+            UIAlertAction* appStoreButton = [UIAlertAction actionWithTitle:@"App Store"
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:^(UIAlertAction * action)
+            {
+                NSLog(@"you pressed App store button");
+                NSString *stringURL = @"http://itunes.apple.com/en/app/whatsapp-messenger/id310633997";
+                NSURL *url = [NSURL URLWithString:stringURL];
+                [[UIApplication sharedApplication] openURL:url];
+            }];
+
+            [alert addAction:okButton];
+            [alert addAction:appStoreButton];
+
+            [rootViewController presentViewController:alert animated:YES completion:nil];
+
+            NSString *errorMessage = @"Not installed";
+            NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
+            NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
+            NSLog(@"%@", errorMessage);
+            failureCallback(error);
         }
     }
-
 }
-
 
 @end

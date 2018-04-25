@@ -9,10 +9,11 @@
 #import "GenericShare.h"
 
 @implementation GenericShare
+
 - (void)shareSingle:(NSDictionary *)options
     failureCallback:(RCTResponseErrorBlock)failureCallback
     successCallback:(RCTResponseSenderBlock)successCallback
-    serviceType:(NSString*)serviceType {
+        serviceType:(NSString*)serviceType {
 
     NSLog(@"Try open view");
     if([SLComposeViewController isAvailableForServiceType:serviceType]) {
@@ -43,50 +44,49 @@
             [composeController setInitialText:text];
         }
 
-
         UIViewController *ctrl = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
         [ctrl presentViewController:composeController animated:YES completion:Nil];
         successCallback(@[]);
-      } else {
+    } else {
         NSString *errorMessage = @"Not installed";
         NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
         NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
 
-        NSLog(errorMessage);
+        NSLog(@"%@", errorMessage);
         failureCallback(error);
 
         NSString *escapedString = [options[@"message"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 
         if ([options[@"social"] isEqualToString:@"twitter"]) {
-          NSString *URL = [NSString stringWithFormat:@"https://twitter.com/intent/tweet?message=%@&url=%@", escapedString, options[@"url"]];
-          [self openScheme:URL];
+            NSString *URL = [NSString stringWithFormat:@"https://twitter.com/intent/tweet?message=%@&url=%@", escapedString, options[@"url"]];
+            [self openScheme:URL];
         }
 
         if ([options[@"social"] isEqualToString:@"facebook"]) {
-          NSString *URL = [NSString stringWithFormat:@"https://www.facebook.com/sharer/sharer.php?u=%@", options[@"url"]];
-          [self openScheme:URL];
+            NSString *URL = [NSString stringWithFormat:@"https://www.facebook.com/sharer/sharer.php?u=%@", options[@"url"]];
+            [self openScheme:URL];
         }
+    }
+}
 
-      }
-  }
-  - (void)openScheme:(NSString *)scheme {
-      NSURL *schemeURL = [NSURL URLWithString:scheme];
+- (void)openScheme:(NSString *)scheme {
+    NSURL *schemeURL = [NSURL URLWithString:scheme];
 
-      UIViewController *rootViewController = [[[UIApplication sharedApplication] delegate] window].rootViewController;
-      while(rootViewController.presentedViewController) {
-          rootViewController = rootViewController.presentedViewController;
-      }
+    UIViewController *rootViewController = [[[UIApplication sharedApplication] delegate] window].rootViewController;
+    while(rootViewController.presentedViewController) {
+        rootViewController = rootViewController.presentedViewController;
+    }
 
-      SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:schemeURL];
-      UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:safariViewController];
+    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:schemeURL];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:safariViewController];
 
-      [navigationController setNavigationBarHidden:YES animated:NO];
+    [navigationController setNavigationBarHidden:YES animated:NO];
 
-      dispatch_async(dispatch_get_main_queue(), ^{
-          [rootViewController presentViewController:navigationController animated:YES completion:^{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [rootViewController presentViewController:navigationController animated:YES completion:^{
 //              [self.bridge.eventDispatcher sendDeviceEventWithName:@"SFSafariViewControllerDidLoad" body:nil];
-          }];
-      });
-  }
+        }];
+    });
+}
 
-  @end
+@end
