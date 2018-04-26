@@ -136,7 +136,7 @@ Supported options:
 | title | string   |  (optional) |
 | subject | string   | (optional) |
 | excludedActivityTypes | string   | (optional) |
-| failOnCancel | boolean | (defaults to true) on iOS, specifies whether promise should reject if user cancels share dialog (optional) |
+| failOnCancel | boolean | (defaults to true) On iOS, specifies whether promise should reject if user cancels share dialog (optional) |
 
 #### shareSingle(options) (in iOS & Android)
 
