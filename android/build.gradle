@@ -3,7 +3,8 @@ apply plugin: 'com.android.library'
 def DEFAULT_COMPILE_SDK_VERSION             = 25
 def DEFAULT_BUILD_TOOLS_VERSION             = "25.0.3"
 def DEFAULT_TARGET_SDK_VERSION              = 25
-
+def DEFAULT_SUPPORT_LIB_VERSION             = "25.0.0"
+ 
 android {
     compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
     buildToolsVersion rootProject.hasProperty('buildToolsVersion') ? rootProject.buildToolsVersion : DEFAULT_BUILD_TOOLS_VERSION
@@ -30,5 +31,5 @@ allprojects {
 
 dependencies {
     compile 'com.facebook.react:react-native:+'
-    compile "com.android.support:appcompat-v7:25.0.0"
+    compile "com.android.support:appcompat-v7: rootProject.hasProperty('buildToolsVersion') ? rootProject.buildToolsVersion : DEFAULT_SUPPORT_LIB_VERSION"
 }
