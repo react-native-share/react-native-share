@@ -142,6 +142,7 @@ Supported options:
 | title | string   |  (optional) |
 | subject | string   | (optional) |
 | excludedActivityTypes | string   | (optional) |
+| showAppsToView | boolean | (optional) only android| 
 
 #### shareSingle(options) (in iOS & Android)
 
