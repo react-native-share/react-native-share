@@ -43,7 +43,7 @@ namespace Cl.Json.RNShare
         /// </summary>
         /// <param name="options"></param>
         [ReactMethod]
-        public void open(JObject options, ICallback callback)
+        public void open(JObject options, ICallback errorCallback, ICallback successCallback)
         {
             if (options != null)
             {
@@ -69,11 +69,11 @@ namespace Cl.Json.RNShare
                     try
                     {
                         DataTransferManager.ShowShareUI();
-                        callback.Invoke("OK");
+                        successCallback.Invoke("OK");
                     }
                     catch
                     {
-                        callback.Invoke("not_available");
+                        errorCallback.Invoke("not_available");
                     }
                 });
             }
