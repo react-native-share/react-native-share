@@ -1,20 +1,23 @@
 package cl.json.social;
 
 import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import java.io.File;
+import android.os.Environment;
+import android.net.Uri;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 
 /**
- * Created by disenodosbbcl on 23-07-16.
+ * Created by Ralf Nieuwenhuizen on 10-04-17.
  */
-public class GooglePlusShare extends SingleShareIntent {
+public class InstagramShare extends SingleShareIntent {
 
-    private static final String PACKAGE = "com.google.android.apps.plus";
-    private static final String DEFAULT_WEB_LINK = "https://plus.google.com/share?url={url}";
-    private static final String PLAY_STORE_LINK = "market://details?id=com.google.android.apps.plus";
+    private static final String PACKAGE = "com.instagram.android";
+    private static final String PLAY_STORE_LINK = "market://details?id=com.instagram.android";
 
-    public GooglePlusShare(ReactApplicationContext reactContext) {
+    public InstagramShare(ReactApplicationContext reactContext) {
         super(reactContext);
     }
 
@@ -32,7 +35,7 @@ public class GooglePlusShare extends SingleShareIntent {
 
     @Override
     protected String getDefaultWebLink() {
-        return DEFAULT_WEB_LINK;
+        return null;
     }
 
     @Override
