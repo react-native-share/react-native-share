@@ -144,7 +144,6 @@ Supported options:
 | excludedActivityTypes | string   | (optional) |
 | failOnCancel | boolean | (defaults to true) On iOS, specifies whether promise should reject if user cancels share dialog (optional) |
 | showAppsToView | boolean | (optional) only android|
->>>>>>> upstream/master
 
 #### shareSingle(options) (in iOS & Android)
 
