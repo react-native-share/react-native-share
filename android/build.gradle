@@ -30,6 +30,8 @@ allprojects {
 }
 
 dependencies {
+    def supportLibVersion = rootProject.hasProperty('supportLibVersion')  ? rootProject.supportLibVersion : DEFAULT_SUPPORT_LIB_VERSION
+
     compile 'com.facebook.react:react-native:+'
-    compile "com.android.support:appcompat-v7: rootProject.hasProperty('buildToolsVersion') ? rootProject.buildToolsVersion : DEFAULT_SUPPORT_LIB_VERSION"
+    compile "com.android.support:appcompat-v7:$supportLibVersion"
 }
