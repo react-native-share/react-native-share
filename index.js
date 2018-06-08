@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  BackAndroid,
+  BackHandler,
   NativeModules,
   Platform,
   ActionSheetIOS,
@@ -15,56 +15,56 @@ import Sheet from './components/Sheet';
 import Button from './components/Button';
 
 const styles = StyleSheet.create({
-    actionSheetContainer: {
-      flex: 1,
-      paddingTop: 10,
-      paddingBottom: 0,
-      justifyContent: "flex-end",
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    buttonContainer: {
-      overflow: 'hidden',
-      backgroundColor: 'white',
-      paddingBottom: 5,
-      paddingTop: 5
-    }
+  actionSheetContainer: {
+    flex: 1,
+    paddingTop: 10,
+    paddingBottom: 0,
+    justifyContent: "flex-end",
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  buttonContainer: {
+    overflow: 'hidden',
+    backgroundColor: 'white',
+    paddingBottom: 5,
+    paddingTop: 5
+  }
 });
 
 class RNShare {
   static open(options) {
     return new Promise((resolve, reject) => {
       if (Platform.OS === "ios") {
-				if (options.urls) {
-					console.log('-> there are multiple urls');
-					NativeModules.RNShare.open(options, (error) => {
-	          return reject({ error: error });
-	        }, (success, activityType) => {
-	          if(success) {
-	            return resolve({
-	              app: activityType
-	            });
-	          } else {
-	            reject({ error: "User did not share" });
-	          }
-	        });
-				} else {
-					console.log('-> there is only one url');
-					ActionSheetIOS.showShareActionSheetWithOptions(options, (error) => {
-	          return reject({ error: error });
-	        }, (success, activityType) => {
-	          if(success) {
-	            return resolve({
-	              app: activityType
-	            });
-	          } else {
-	            reject({ error: "User did not share" });
-	          }
-	        });
-				}
+        if (options.urls) {
+          console.log('-> there are multiple urls');
+          NativeModules.RNShare.open(options, (error) => {
+            return reject({error: error});
+          }, (success, activityType) => {
+            if (success) {
+              return resolve({
+                app: activityType
+              });
+            } else {
+              reject({error: "User did not share"});
+            }
+          });
+        } else {
+          console.log('-> there is only one url');
+          ActionSheetIOS.showShareActionSheetWithOptions(options, (error) => {
+            return reject({error: error});
+          }, (success, activityType) => {
+            if (success) {
+              return resolve({
+                app: activityType
+              });
+            } else {
+              reject({error: "User did not share"});
+            }
+          });
+        }
       } else {
-        NativeModules.RNShare.open(options,(e) => {
-          return reject({ error: e });
-        },(e) => {
+        NativeModules.RNShare.open(options, (e) => {
+          return reject({error: e});
+        }, (e) => {
           resolve({
             message: e
           });
@@ -72,12 +72,13 @@ class RNShare {
       }
     });
   }
-  static shareSingle(options){
+
+  static shareSingle(options) {
     if (Platform.OS === "ios" || Platform.OS === "android") {
       return new Promise((resolve, reject) => {
-        NativeModules.RNShare.shareSingle(options,(e) => {
-          return reject({ error: e });
-        },(e) => {
+        NativeModules.RNShare.shareSingle(options, (e) => {
+          return reject({error: e});
+        }, (e) => {
           return resolve({
             message: e
           });
@@ -88,23 +89,32 @@ class RNShare {
     }
   }
 }
+
 class ShareSheet extends React.Component {
   componentDidMount() {
-    BackAndroid.addEventListener('hardwareBackPress',() => {
-      if (this.props.visible) {
-        this.props.onCancel();
-        return true;
-      }
-      return false;
-    });
+    this.backButtonHandler = this.backButtonHandler.bind(this);
+    BackHandler.addEventListener('backPress', this.backButtonHandler);
   }
-  render(){
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('backPress', this.backButtonHandler);
+  }
+
+  backButtonHandler() {
+    if (this.props.visible) {
+      this.props.onCancel();
+      return true;
+    }
+    return false;
+  }
+
+  render() {
     return (
       <Overlay visible={this.props.visible} {...this.props}>
         <View style={styles.actionSheetContainer}>
           <TouchableOpacity
-              style={{flex:1}}
-              onPress={this.props.onCancel}>
+            style={{flex: 1}}
+            onPress={this.props.onCancel}>
           </TouchableOpacity>
           <Sheet visible={this.props.visible}>
             <View style={styles.buttonContainer}>
