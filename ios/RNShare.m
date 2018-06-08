@@ -42,6 +42,7 @@
 #endif
 #import "GenericShare.h"
 #import "WhatsAppShare.h"
+#import "InstagramShare.h"
 #import "GooglePlusShare.h"
 #import "EmailShare.h"
 
@@ -86,8 +87,11 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         } else if([social isEqualToString:@"whatsapp"]) {
             NSLog(@"TRY OPEN whatsapp");
-            
             WhatsAppShare *shareCtl = [[WhatsAppShare alloc] init];
+            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+        } else if([social isEqualToString:@"instagram"]) {
+            NSLog(@"TRY OPEN instagram");
+            InstagramShare *shareCtl = [[InstagramShare alloc] init];
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         } else if([social isEqualToString:@"email"]) {
             NSLog(@"TRY OPEN email");
@@ -95,7 +99,7 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         }
     } else {
-        RCTLogError(@"No exists social key");
+        RCTLogError(@"key 'social' missing in options");
         return;
     }
 }

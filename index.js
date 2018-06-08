@@ -15,19 +15,19 @@ import Sheet from './components/Sheet';
 import Button from './components/Button';
 
 const styles = StyleSheet.create({
-  actionSheetContainer: {
-    flex: 1,
-    paddingTop: 10,
-    paddingBottom: 0,
-    justifyContent: "flex-end",
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  buttonContainer: {
-    overflow: 'hidden',
-    backgroundColor: 'white',
-    paddingBottom: 5,
-    paddingTop: 5
-  }
+    actionSheetContainer: {
+      flex: 1,
+      paddingTop: 10,
+      paddingBottom: 0,
+      justifyContent: "flex-end",
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    buttonContainer: {
+      overflow: 'hidden',
+      backgroundColor: 'white',
+      paddingBottom: 5,
+      paddingTop: 5
+    }
 });
 
 class RNShare {
