@@ -37,7 +37,6 @@ public abstract class ShareIntent {
     }
     public void open(ReadableMap options) throws ActivityNotFoundException {
         this.options = options;
-        this.fileShare = getFileShare(options);
 
         if (ShareIntent.hasValidKey("subject", options) ) {
             this.getIntent().putExtra(Intent.EXTRA_SUBJECT, options.getString("subject"));
@@ -71,6 +70,7 @@ public abstract class ShareIntent {
                 }
             }
         } else if (ShareIntent.hasValidKey("url", options)) {
+            this.fileShare = getFileShare(options);
             if(this.fileShare.isFile()) {
                 Uri uriFile = this.fileShare.getURI();
                 this.getIntent().setType(this.fileShare.getType());
@@ -134,7 +134,7 @@ public abstract class ShareIntent {
         Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
         chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        if (ShareIntent.hasValidKey("showAppsToView", options) && !ShareIntent.hasValidKey("urls", options)) {
+        if (ShareIntent.hasValidKey("showAppsToView", options) && ShareIntent.hasValidKey("url", options)) {
             Intent viewIntent = new Intent(Intent.ACTION_VIEW);
             viewIntent.setType(this.fileShare.getType());
 
