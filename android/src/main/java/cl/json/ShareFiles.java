@@ -73,10 +73,13 @@ public class ShareFiles
     }
 
     private boolean isBase64File(Uri uri) {
-        if(uri.getScheme().equals("data")) {
+        String scheme = uri.getScheme();
+        if((scheme != null) && uri.getScheme().equals("data")) {
             String type = uri.getSchemeSpecificPart().substring(0, uri.getSchemeSpecificPart().indexOf(";"));
             if (this.intentType == null) {
                 this.intentType = type;
+            } else if (type != null && !this.intentType.equalsIgnoreCase(type) && this.intentType.split("/")[0].equalsIgnoreCase((type.split("/"))[0])) {
+                this.intentType = (this.intentType.split("/")[0]).concat("/*");
             } else if (!this.intentType.equalsIgnoreCase(type)) {
                 this.intentType = "*/*";
             }
@@ -85,7 +88,8 @@ public class ShareFiles
         return false;
     }
     private boolean isLocalFile(Uri uri) {
-        if(uri.getScheme().equals("content") || uri.getScheme().equals("file")) {
+        String scheme = uri.getScheme();
+        if((scheme != null) && uri.getScheme().equals("content") || uri.getScheme().equals("file")) {
 //            // type is already set
 //            if (this.type != null) {
 //                return true;
@@ -104,6 +108,8 @@ public class ShareFiles
 
             if (this.intentType == null) {
                 this.intentType = type;
+            } else if (type != null && !this.intentType.equalsIgnoreCase(type) && this.intentType.split("/")[0].equalsIgnoreCase((type.split("/"))[0])) {
+                this.intentType = (this.intentType.split("/")[0]).concat("/*");
             } else if (!this.intentType.equalsIgnoreCase(type)) {
                 this.intentType = "*/*";
             }
@@ -112,12 +118,14 @@ public class ShareFiles
         }
         return false;
     }
+
     public String getType() {
         if (this.intentType == null) {
             return "*/*";
         }
         return this.intentType;
     }
+
     private String getRealPathFromURI(Uri contentUri) {
         String[] proj = { MediaStore.Images.Media.DATA };
         CursorLoader loader = new CursorLoader(this.reactContext, contentUri, proj, null, null, null);
@@ -128,9 +136,12 @@ public class ShareFiles
         cursor.close();
         return result;
     }
+
     public ArrayList<Uri> getURI() {
         final MimeTypeMap mime = MimeTypeMap.getSingleton();
         ArrayList<Uri> finalUris = new ArrayList<>();
+        final String authority = ((ShareApplication) reactContext.getApplicationContext()).getFileProviderAuthority();
+
         for (Uri uri : this.uris) {
             String extension = mime.getExtensionFromMimeType(getMimeType(uri.toString()));
             if(this.isBase64File(uri)) {
@@ -145,13 +156,12 @@ public class ShareFiles
                     fos.write(Base64.decode(encodedImg, Base64.DEFAULT));
                     fos.flush();
                     fos.close();
-                    finalUris.add(Uri.fromFile(file));
-
+                    finalUris.add(FileProvider.getUriForFile(reactContext, authority, file));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else if(this.isLocalFile(uri)) {
-                finalUris.add(uri);
+                finalUris.add(FileProvider.getUriForFile(reactContext, authority, new File(uri.getPath())));
             }
         }
 
