@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.util.Base64;
 import android.webkit.MimeTypeMap;
 
@@ -164,7 +165,6 @@ public class ShareFiles
                 finalUris.add(FileProvider.getUriForFile(reactContext, authority, new File(uri.getPath())));
             }
         }
-
 
         return finalUris;
     }
