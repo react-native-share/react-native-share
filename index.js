@@ -35,7 +35,7 @@ class RNShare {
     return new Promise((resolve, reject) => {
       if (Platform.OS === "ios") {
         if (options.urls) {
-          console.log('-> there are multiple urls');
+          // Handle for multiple file share
           NativeModules.RNShare.open(options, (error) => {
             return reject({error: error});
           }, (success, activityType) => {
@@ -48,7 +48,7 @@ class RNShare {
             }
           });
         } else {
-          console.log('-> there is only one url');
+          // Handle for single file share
           ActionSheetIOS.showShareActionSheetWithOptions(options, (error) => {
             return reject({error: error});
           }, (success, activityType) => {
