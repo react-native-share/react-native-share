@@ -37,9 +37,13 @@ class RNShare {
         ActionSheetIOS.showShareActionSheetWithOptions(options, (error) => {
           return reject({ error: error });
         }, (success, activityType) => {
-          if(success) {
+          if (success) {
             return resolve({
               app: activityType
+            });
+          } else if (options.failOnCancel === false) {
+            return resolve({
+              dismissedAction: true,
             });
           } else {
             reject({ error: "User did not share" });
