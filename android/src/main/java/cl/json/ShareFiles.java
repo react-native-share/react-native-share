@@ -144,8 +144,9 @@ public class ShareFiles
         final String authority = ((ShareApplication) reactContext.getApplicationContext()).getFileProviderAuthority();
 
         for (Uri uri : this.uris) {
-            String extension = mime.getExtensionFromMimeType(getMimeType(uri.toString()));
             if(this.isBase64File(uri)) {
+                String type = uri.getSchemeSpecificPart().substring(0, uri.getSchemeSpecificPart().indexOf(";"));
+                String extension = mime.getExtensionFromMimeType(type);
                 String encodedImg = uri.getSchemeSpecificPart().substring(uri.getSchemeSpecificPart().indexOf(";base64,") + 8);
                 try {
                     File dir = new File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_DOWNLOADS );
