@@ -43,21 +43,29 @@ class RNShare {
               return resolve({
                 app: activityType
               });
+            } else if (options.failOnCancel === false) {
+              return resolve({
+                dismissedAction: true,
+              });
             } else {
-              reject({error: "User did not share"});
+              reject({ error: "User did not share" });
             }
           });
         } else {
           // Handle for single file share
           ActionSheetIOS.showShareActionSheetWithOptions(options, (error) => {
-            return reject({error: error});
+            return reject({ error: error });
           }, (success, activityType) => {
             if (success) {
               return resolve({
                 app: activityType
               });
+            } else if (options.failOnCancel === false) {
+              return resolve({
+                dismissedAction: true,
+              });
             } else {
-              reject({error: "User did not share"});
+              reject({ error: "User did not share" });
             }
           });
         }
