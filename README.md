@@ -137,7 +137,9 @@ Open Simple share dialog
 Returns a promise that fulfills or rejects as soon as user successfully open the share action sheet or cancelled/failed to do so. As a result you might need to further handle the rejection while necessary. e.g.
 
 ```javascript
-Share.open(options).catch((err) => { err && console.log(err); })
+  Share.open(options)
+    .then((res) => { console.log(res))
+    .catch((err) => { err && console.log(err); });
 ```
 
 Supported options:
