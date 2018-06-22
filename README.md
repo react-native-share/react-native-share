@@ -91,7 +91,7 @@ Share Social , Sending Simple Data to Other Apps
     and have it return the `android:authorities` that was added in
     AndroidManifest file.
   - For example: Replace the `com.example.yourappidhere` below with the
-    `applicationId` that is defined in your `android/app/build.gradle`. .
+    `applicationId` that is defined in your `android/app/build.gradle`.
 
     ```
     import cl.json.ShareApplication
@@ -110,7 +110,7 @@ Share Social , Sending Simple Data to Other Apps
 
          @Override
          public String getFileProviderAuthority() {
-                return context.getPackageName();
+                return context.getPackageName() + ".provider";
          }
 
     }
