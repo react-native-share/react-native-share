@@ -406,3 +406,67 @@ For example, when share a `pdf` file from: `/storage/emulated/0/demo/test.pdf`, 
 ```
 url: "file:///storage/emulated/0/demo/test.pdf"
 ```
+
+### Troubleshooting
+
+#### Share Remote PDF File with Gmail & WhatsApp (iOS)
+
+When sharing a pdf file with base64, there are two current problems.
+
+1. On WhatsApp base64 wont be recognized => nothing to share
+2. In the GmailApp the file extension is wrong (.dat). 
+
+Therefore we use this "workaround" in order to handle pdf sharing for iOS Apps to mentioned Apps
+
+1. Install react-native-fetch-blob
+2. Set a specific path in the RNFetchBlob configurations
+3. Download the PDF file to temp device storage
+4. Share the response's path() of the donwloaded file directly
+
+Code: 
+
+```
+static sharePDFWithIOS(fileUrl, type) {
+  let filePath = null;
+  let file_url_length = fileUrl.length;
+  const configOptions = {
+    fileCache: true,
+    path:
+      DIRS.DocumentDir + (type === 'application/pdf' ? '/SomeFileName.pdf' : '/SomeFileName.png') // no difference when using jpeg / jpg / png /
+  };
+  RNFetchBlob.config(configOptions)
+    .fetch('GET', fileUrl)
+    .then(async resp => {
+      filePath = resp.path();
+      let options = {
+        type: type,
+        url: filePath // (Platform.OS === 'android' ? 'file://' + filePath)
+      };
+      await Share.open(options);
+      // remove the image or pdf from device's storage
+      await RNFS.unlink(filePath);
+    });
+}
+```
+
+Nothing to do on Android. You can share the pdf file with base64
+
+```
+static sharePDFWithAndroid(fileUrl, type) {
+  let filePath = null;
+  let file_url_length = fileUrl.length;
+  const configOptions = { fileCache: true };
+  RNFetchBlob.config(configOptions)
+    .fetch('GET', fileUrl)
+    .then(resp => {
+      filePath = resp.path();
+      return resp.readFile('base64');
+    })
+    .then(async base64Data => {
+      base64Data = `data:${type};base64,` + base64Data;
+      await Share.open({ url: base64Data });
+      // remove the image or pdf from device's storage
+      await RNFS.unlink(filePath);
+    });
+}
+```
