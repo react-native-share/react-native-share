@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  BackAndroid,
+  BackHandler,
   NativeModules,
   Platform,
   ActionSheetIOS,
@@ -37,9 +37,13 @@ class RNShare {
         ActionSheetIOS.showShareActionSheetWithOptions(options, (error) => {
           return reject({ error: error });
         }, (success, activityType) => {
-          if(success) {
+          if (success) {
             return resolve({
               app: activityType
+            });
+          } else if (options.failOnCancel === false) {
+            return resolve({
+              dismissedAction: true,
             });
           } else {
             reject({ error: "User did not share" });
@@ -74,7 +78,7 @@ class RNShare {
 }
 class ShareSheet extends React.Component {
   componentDidMount() {
-    BackAndroid.addEventListener('hardwareBackPress',() => {
+    BackHandler.addEventListener('hardwareBackPress',() => {
       if (this.props.visible) {
         this.props.onCancel();
         return true;

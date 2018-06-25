@@ -21,6 +21,7 @@ import cl.json.social.GooglePlusShare;
 import cl.json.social.ShareIntent;
 import cl.json.social.TwitterShare;
 import cl.json.social.WhatsAppShare;
+import cl.json.social.InstagramShare;
 
 public class RNShareModule extends ReactContextBaseJavaModule {
 
@@ -33,6 +34,7 @@ public class RNShareModule extends ReactContextBaseJavaModule {
         sharesExtra.put("facebook", new FacebookShare(this.reactContext));
         sharesExtra.put("twitter", new TwitterShare(this.reactContext));
         sharesExtra.put("whatsapp",new WhatsAppShare(this.reactContext));
+        sharesExtra.put("instagram",new InstagramShare(this.reactContext));
         sharesExtra.put("googleplus",new GooglePlusShare(this.reactContext));
         sharesExtra.put("email",new EmailShare(this.reactContext));
         //  add more customs single intent shares here
@@ -68,7 +70,7 @@ public class RNShareModule extends ReactContextBaseJavaModule {
                 failureCallback.invoke(ex.getMessage());
             }
         } else {
-            failureCallback.invoke("no exists social key");
+            failureCallback.invoke("key 'social' missing in options");
         }
     }
 }

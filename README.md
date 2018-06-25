@@ -1,4 +1,4 @@
-# react-native-share [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
+﻿# react-native-share [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
 Share Social , Sending Simple Data to Other Apps
 
 ***NOTE: React Native now implements share functionality [Read more](https://facebook.github.io/react-native/docs/share.html)***
@@ -11,38 +11,115 @@ Share Social , Sending Simple Data to Other Apps
 
 ### Manual install
 
-#### iOS
+`npm install react-native-share --save`
+
+- [iOS](https://github.com/react-native-community/react-native-share#iOS-Install)
+
+- [Android](https://github.com/react-native-community/react-native-share#Android-Install)
+
+- [Windows](https://github.com/react-native-community/react-native-share#Windows-Install)
+
+
+#### iOS Install
 
 1. `npm install react-native-share --save`
 2. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-3. Go to `node_modules` ➜ `react-native-share` and add `RNShare.xcodeproj`
+3. Go to `node_modules` ➜ `react-native-share` ➜ `ios` and add `RNShare.xcodeproj`
 4. In XCode, in the project navigator, select your project. Add `libRNShare.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 5. In XCode, in the project navigator, select your project. Add `Social.framework` and `MessageUI.framework` to your project's `General` ➜ `Linked Frameworks and Libraries`
-6. In file Info.plist, add `<key>LSApplicationQueriesSchemes</key>
-<array>
-  <string>whatsapp</string>
-  <string>mailto</string>
-</array>`
+6. In file Info.plist, add
+    ```xml
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>whatsapp</string>
+      <string>mailto</string>
+    </array>
+    ```
+
 6. Run your project (`Cmd+R`)
 
-#### Android
+#### Android Install
 
 1. `npm install react-native-share --save`
 2. Open up `android/app/src/main/java/[...]/MainApplication.java`
   - Add `import cl.json.RNSharePackage;` to the imports at the top of the file
-  - Add `new RNSharePackage()` to the list returned by the `getPackages()` method
+  - Add `new RNSharePackage()` to the list returned by the `getPackages()`
+    method
 3. Append the following lines to `android/settings.gradle`:
   	```
   	include ':react-native-share'
   	project(':react-native-share').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-share/android')
   	```
-4. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
+4. Insert the following lines inside the dependencies block in
+   `android/app/build.gradle`:
 
     ```
       compile project(':react-native-share')
     ```
+5. Follow this
+   [guide](https://developer.android.com/training/secure-file-sharing/setup-sharing.html).
+   For example:
+  - Put this in `AndroidManifest.xml` where `applicationId` is something that
+    you have defined in `android/app/build.gradle`:
 
-#### Windows
+    ```xml
+      <application>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+      </application>
+    ```
+
+  - Create a `filepaths.xml` under this directory:
+    `android/app/src/main/res/xml`. In this file, add the following contents:
+
+    ```xml
+      <?xml version="1.0" encoding="utf-8"?>
+      <paths xmlns:android="http://schemas.android.com/apk/res/android">
+          <external-path name="myexternalimages" path="Download/" />
+      </paths>
+    ```
+
+6. Edit your `MainApplication` class to implement `ShareApplication`
+  - Also add the `getFileProviderAuthority` method to your MainApplication class,
+    and have it return the `android:authorities` that was added in
+    AndroidManifest file.
+  - For example: Replace the `com.example.yourappidhere` below with the
+    `applicationId` that is defined in your `android/app/build.gradle`. It must
+    be [hard-coded here to work
+    properly](https://github.com/EstebanFuentealba/react-native-share/issues/200#issuecomment-361938532).
+
+    ```
+    import cl.json.ShareApplication
+
+    class MyApplication extends Application implements ShareApplication, ReactApplication {
+
+    {
+
+         //...
+
+         @Override
+         public String getFileProviderAuthority() {
+                return "com.example.yourappidhere.provider";
+         }
+
+    }
+    ```
+7. When using targetSdkVersion 23 or greater, you might need to explicitly ask for permission otherwise sharing a base64 image will fail :
+  ```
+  const allowedStorage = await PermissionsAndroid.request(
+    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+  );
+  ```
+  
+#### Windows Install
+    
 [Read it! :D](https://github.com/ReactWindows/react-native)
 
 1. `npm install react-native-share --save`
@@ -61,7 +138,9 @@ Open Simple share dialog
 Returns a promise that fulfills or rejects as soon as user successfully open the share action sheet or cancelled/failed to do so. As a result you might need to further handle the rejection while necessary. e.g.
 
 ```javascript
-Share.open(options).catch((err) => { err && console.log(err); })
+  Share.open(options)
+    .then((res) => { console.log(res))
+    .catch((err) => { err && console.log(err); });
 ```
 
 Supported options:
@@ -74,6 +153,8 @@ Supported options:
 | title | string   |  (optional) |
 | subject | string   | (optional) |
 | excludedActivityTypes | string   | (optional) |
+| failOnCancel | boolean | (defaults to true) On iOS, specifies whether promise should reject if user cancels share dialog (optional) |
+| showAppsToView | boolean | (optional) only android|
 
 #### shareSingle(options) (in iOS & Android)
 
