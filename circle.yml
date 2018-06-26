@@ -26,7 +26,8 @@ jobs:
           name: Run Checks
           command: |
             cd android
-            chmod +x ./gradlew && ./gradlew check
+            chmod +x ./gradlew
+            ./gradlew clean && ./gradlew && ./gradlew check
       - save_cache:
           key: v1-npm
           paths:
