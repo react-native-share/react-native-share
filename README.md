@@ -1,4 +1,4 @@
-﻿# react-native-share [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
+﻿# react-native-share [![CircleCI](https://circleci.com/gh/react-native-community/react-native-share/tree/master.svg?style=svg&circle-token=0c6860240abba4e16bd07df0ea805a72b67b8d41)](https://circleci.com/gh/react-native-community/react-native-share/tree/master) [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
 Share Social , Sending Simple Data to Other Apps
 
 ***NOTE: React Native now implements share functionality [Read more](https://facebook.github.io/react-native/docs/share.html)***
@@ -10,8 +10,17 @@ Share Social , Sending Simple Data to Other Apps
 2. `react-native link`
 
 ### Manual install
-<details>
-<summary> iOS</summary>
+
+`npm install react-native-share --save`
+
+- [iOS](https://github.com/react-native-community/react-native-share#iOS-Install)
+
+- [Android](https://github.com/react-native-community/react-native-share#Android-Install)
+
+- [Windows](https://github.com/react-native-community/react-native-share#Windows-Install)
+
+
+#### iOS Install
 
 1. `npm install react-native-share --save`
 2. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
@@ -29,10 +38,7 @@ Share Social , Sending Simple Data to Other Apps
 
 6. Run your project (`Cmd+R`)
 
-</details>
-
-<details>
-<summary> Android</summary>
+#### Android Install
 
 1. `npm install react-native-share --save`
 2. Open up `android/app/src/main/java/[...]/MainApplication.java`
@@ -111,11 +117,8 @@ Share Social , Sending Simple Data to Other Apps
     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
   );
   ```
-
-</details>
-
-<details>
-<summary> Windows</summary>
+  
+#### Windows Install
     
 [Read it! :D](https://github.com/ReactWindows/react-native)
 
@@ -126,8 +129,6 @@ Share Social , Sending Simple Data to Other Apps
   - Add `new RNSharePackage()` to the `List<IReactPackage>` returned by the `Packages` method
 
 
-</details>
-
 ### Methods
 
 #### open(options)
@@ -137,7 +138,9 @@ Open Simple share dialog
 Returns a promise that fulfills or rejects as soon as user successfully open the share action sheet or cancelled/failed to do so. As a result you might need to further handle the rejection while necessary. e.g.
 
 ```javascript
-Share.open(options).catch((err) => { err && console.log(err); })
+  Share.open(options)
+    .then((res) => { console.log(res))
+    .catch((err) => { err && console.log(err); });
 ```
 
 Supported options:
@@ -403,4 +406,68 @@ For example, when share a `pdf` file from: `/storage/emulated/0/demo/test.pdf`, 
 
 ```
 url: "file:///storage/emulated/0/demo/test.pdf"
+```
+
+### Troubleshooting
+
+#### Share Remote PDF File with Gmail & WhatsApp (iOS)
+
+When sharing a pdf file with base64, there are two current problems.
+
+1. On WhatsApp base64 wont be recognized => nothing to share
+2. In the GmailApp the file extension is wrong (.dat). 
+
+Therefore we use this "workaround" in order to handle pdf sharing for iOS Apps to mentioned Apps
+
+1. Install react-native-fetch-blob
+2. Set a specific path in the RNFetchBlob configurations
+3. Download the PDF file to temp device storage
+4. Share the response's path() of the donwloaded file directly
+
+Code: 
+
+```
+static sharePDFWithIOS(fileUrl, type) {
+  let filePath = null;
+  let file_url_length = fileUrl.length;
+  const configOptions = {
+    fileCache: true,
+    path:
+      DIRS.DocumentDir + (type === 'application/pdf' ? '/SomeFileName.pdf' : '/SomeFileName.png') // no difference when using jpeg / jpg / png /
+  };
+  RNFetchBlob.config(configOptions)
+    .fetch('GET', fileUrl)
+    .then(async resp => {
+      filePath = resp.path();
+      let options = {
+        type: type,
+        url: filePath // (Platform.OS === 'android' ? 'file://' + filePath)
+      };
+      await Share.open(options);
+      // remove the image or pdf from device's storage
+      await RNFS.unlink(filePath);
+    });
+}
+```
+
+Nothing to do on Android. You can share the pdf file with base64
+
+```
+static sharePDFWithAndroid(fileUrl, type) {
+  let filePath = null;
+  let file_url_length = fileUrl.length;
+  const configOptions = { fileCache: true };
+  RNFetchBlob.config(configOptions)
+    .fetch('GET', fileUrl)
+    .then(resp => {
+      filePath = resp.path();
+      return resp.readFile('base64');
+    })
+    .then(async base64Data => {
+      base64Data = `data:${type};base64,` + base64Data;
+      await Share.open({ url: base64Data });
+      // remove the image or pdf from device's storage
+      await RNFS.unlink(filePath);
+    });
+}
 ```
