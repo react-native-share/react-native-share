@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.content.pm.ResolveInfo;
 import android.content.ComponentName;
 
@@ -14,8 +15,10 @@ import com.facebook.react.bridge.ReadableMap;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 import cl.json.ShareFile;
+import cl.json.ShareFiles;
 
 /**
  * Created by disenodosbbcl on 23-07-16.
@@ -34,37 +37,57 @@ public abstract class ShareIntent {
     }
     public void open(ReadableMap options) throws ActivityNotFoundException {
         this.options = options;
-        this.fileShare = getFileShare(options);
 
         if (ShareIntent.hasValidKey("subject", options) ) {
             this.getIntent().putExtra(Intent.EXTRA_SUBJECT, options.getString("subject"));
         }
-        
+
         if (ShareIntent.hasValidKey("title", options) ) {
             this.chooserTitle = options.getString("title");
         }
 
-        if (ShareIntent.hasValidKey("message", options) && ShareIntent.hasValidKey("url", options)) {
-            if(this.fileShare.isFile()) {
-                Uri uriFile = this.fileShare.getURI();
-                this.getIntent().setType(this.fileShare.getType());
-                this.getIntent().putExtra(Intent.EXTRA_STREAM, uriFile);
-                this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("message"));
+        String message = "";
+        if (ShareIntent.hasValidKey("message", options)) {
+            message = options.getString("message");
+        }
+        if (ShareIntent.hasValidKey("urls", options)) {
+
+            ShareFiles fileShare = getFileShares(options);
+            if(fileShare.isFile()) {
+                ArrayList<Uri> uriFile = fileShare.getURI();
+                this.getIntent().setAction(Intent.ACTION_SEND_MULTIPLE);
+                this.getIntent().setType(fileShare.getType());
+                this.getIntent().putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriFile);
                 this.getIntent().addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                if (!TextUtils.isEmpty(message)) {
+                    this.getIntent().putExtra(Intent.EXTRA_TEXT, message);
+                }
             } else {
-                this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("message") + " " + options.getString("url"));
+                if (!TextUtils.isEmpty(message)) {
+                    this.getIntent().putExtra(Intent.EXTRA_TEXT, message + " " + options.getArray("urls").toString());
+                } else {
+                    this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getArray("urls").toString());
+                }
             }
         } else if (ShareIntent.hasValidKey("url", options)) {
+            this.fileShare = getFileShare(options);
             if(this.fileShare.isFile()) {
                 Uri uriFile = this.fileShare.getURI();
                 this.getIntent().setType(this.fileShare.getType());
                 this.getIntent().putExtra(Intent.EXTRA_STREAM, uriFile);
                 this.getIntent().addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                if (!TextUtils.isEmpty(message)) {
+                    this.getIntent().putExtra(Intent.EXTRA_TEXT, message);
+                }
             } else {
-                this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("url"));
+                if (!TextUtils.isEmpty(message)) {
+                    this.getIntent().putExtra(Intent.EXTRA_TEXT, message + " " + options.getString("url"));
+                } else {
+                    this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("url"));
+                }
             }
-        } else if (ShareIntent.hasValidKey("message", options) ) {
-            this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("message"));
+        } else if (!TextUtils.isEmpty(message)) {
+            this.getIntent().putExtra(Intent.EXTRA_TEXT, message);
         }
     }
     protected ShareFile getFileShare(ReadableMap options) {
@@ -72,6 +95,13 @@ public abstract class ShareIntent {
             return new ShareFile(options.getString("url"), options.getString("type"), this.reactContext);
         } else {
             return new ShareFile(options.getString("url"), this.reactContext);
+        }
+    }
+    protected ShareFiles getFileShares(ReadableMap options) {
+        if (ShareIntent.hasValidKey("type", options)) {
+            return new ShareFiles(options.getArray("urls"), options.getString("type"), this.reactContext);
+        } else {
+            return new ShareFiles(options.getArray("urls"), this.reactContext);
         }
     }
     protected static String urlEncode(String param) {
@@ -104,7 +134,7 @@ public abstract class ShareIntent {
         Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
         chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        if (ShareIntent.hasValidKey("showAppsToView", options)) {
+        if (ShareIntent.hasValidKey("showAppsToView", options) && ShareIntent.hasValidKey("url", options)) {
             Intent viewIntent = new Intent(Intent.ACTION_VIEW);
             viewIntent.setType(this.fileShare.getType());
 

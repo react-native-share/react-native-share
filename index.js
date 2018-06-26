@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
 
 type Options = {
   url: string,
+  urls: Array<string>,
   type: string,
   message: string,
   title?: string,
@@ -46,25 +47,49 @@ class RNShare {
   static open(options: Options) {
     return new Promise((resolve, reject) => {
       if (Platform.OS === 'ios') {
-        ActionSheetIOS.showShareActionSheetWithOptions(
-          options,
-          error => {
-            return reject({ error: error });
-          },
-          (success, activityType) => {
-            if (success) {
-              return resolve({
-                app: activityType,
-              });
-            } else if (options.failOnCancel === false) {
-              return resolve({
-                dismissedAction: true,
-              });
-            } else {
-              reject({ error: 'User did not share' });
-            }
-          },
-        );
+        if (options.urls) {
+          // Handle for multiple file share
+          NativeModules.RNShare.open(
+            options,
+            error => {
+              return reject({ error: error });
+            },
+            (success, activityType) => {
+              if (success) {
+                return resolve({
+                  app: activityType,
+                });
+              } else if (options.failOnCancel === false) {
+                return resolve({
+                  dismissedAction: true,
+                });
+              } else {
+                reject({ error: 'User did not share' });
+              }
+            },
+          );
+        } else {
+          // Handle for single file share
+          ActionSheetIOS.showShareActionSheetWithOptions(
+            options,
+            error => {
+              return reject({ error: error });
+            },
+            (success, activityType) => {
+              if (success) {
+                return resolve({
+                  app: activityType,
+                });
+              } else if (options.failOnCancel === false) {
+                return resolve({
+                  dismissedAction: true,
+                });
+              } else {
+                reject({ error: 'User did not share' });
+              }
+            },
+          );
+        }
       } else {
         NativeModules.RNShare.open(
           options,
@@ -109,13 +134,20 @@ type Props = {
 
 class ShareSheet extends React.Component<Props> {
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      if (this.props.visible) {
-        this.props.onCancel();
-        return true;
-      }
-      return false;
-    });
+    this.backButtonHandler = this.backButtonHandler.bind(this);
+    BackHandler.addEventListener('backPress', this.backButtonHandler);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('backPress', this.backButtonHandler);
+  }
+
+  backButtonHandler() {
+    if (this.props.visible) {
+      this.props.onCancel();
+      return true;
+    }
+    return false;
   }
   render() {
     return (
