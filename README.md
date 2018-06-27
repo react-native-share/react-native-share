@@ -70,7 +70,7 @@ Share Social , Sending Simple Data to Other Apps
     }
     ````
 
-    File: `AndroidManifest.xml
+    File: `AndroidManifest.xml`
     ```xml
       <application>
         <provider
