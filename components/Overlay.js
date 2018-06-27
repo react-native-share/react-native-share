@@ -1,54 +1,64 @@
+// @flow
+
 import React from 'react';
-import {
-  Animated,
-  StyleSheet,
-  View,
-  Dimensions,
-  TouchableHighlight
-} from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 
 const DEFAULT_ANIMATE_TIME = 300;
 const styles = StyleSheet.create({
-    fullOverlay: {
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'transparent',
-        position: 'absolute'
-    },
-    emptyOverlay: {
-        backgroundColor: 'transparent',
-        position: 'absolute'
-    }
+  fullOverlay: {
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'transparent',
+    position: 'absolute',
+  },
+  emptyOverlay: {
+    width: 0,
+    height: 0,
+    backgroundColor: 'transparent',
+    position: 'absolute',
+  },
 });
-export default class Overlay extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      fadeAnim: new Animated.Value(0),
-      overlayStyle: styles.emptyOverlay
-    }
-  }
+
+type Props = {
+  visible: boolean,
+  onCancel: () => void,
+  children: React.Node,
+};
+
+type State = {
+  fadeAnim: Object,
+  overlayStyle: Object,
+};
+
+class Overlay extends React.Component<Props, State> {
+  state = {
+    fadeAnim: new Animated.Value(0),
+    overlayStyle: styles.emptyOverlay,
+  };
+
   onAnimatedEnd() {
-    if(!this.props.visible) {
-        this.setState({overlayStyle:styles.emptyOverlay});
+    if (!this.props.visible) {
+      this.setState({ overlayStyle: styles.emptyOverlay });
     }
   }
-  componentWillReceiveProps(newProps) {
-    if(newProps.visible){
-      this.setState({overlayStyle: styles.fullOverlay});
+  UNSAFE_componentWillReceiveProps(newProps: Props) {
+    if (newProps.visible) {
+      this.setState({ overlayStyle: styles.fullOverlay });
     }
     return Animated.timing(this.state.fadeAnim, {
-        toValue: newProps.visible ? 1 : 0,
-        duration: DEFAULT_ANIMATE_TIME
+      toValue: newProps.visible ? 1 : 0,
+      duration: DEFAULT_ANIMATE_TIME,
     }).start(this.onAnimatedEnd.bind(this));
   }
   render() {
     return (
-      <Animated.View style={[this.state.overlayStyle, {opacity: this.state.fadeAnim}]}>
-          {this.props.children}
+      <Animated.View style={[this.state.overlayStyle, { opacity: this.state.fadeAnim }]}>
+        {this.props.children}
       </Animated.View>
     );
   }
 }
+
+export default Overlay;

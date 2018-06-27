@@ -10,7 +10,7 @@ import com.facebook.react.bridge.ReadableMap;
  */
 public class TwitterShare extends SingleShareIntent {
 
-    private static final String PACKAGE = "com.twitter";
+    private static final String PACKAGE = "com.twitter.android";
     private static final String DEFAULT_WEB_LINK = "https://twitter.com/intent/tweet?text={message}&url={url}";
 
     public TwitterShare(ReactApplicationContext reactContext) {

@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.summary      = "Social Share, Sending Simple Data to Other Apps"
   s.homepage     = "https://github.com/EstebanFuentealba/react-native-share"
   s.license      = "MIT"
-  s.author             = { "Esteban Fuentealba" => "fuentealba@json.cl" }
+  s.author             = { "Esteban Fuentealba" => "efuentealba@json.cl" }
   s.platform     = :ios, "8.0"
   s.source       = { :git => "https://github.com/EstebanFuentealba/react-native-share.git", :tag => "#{s.version}" }
 

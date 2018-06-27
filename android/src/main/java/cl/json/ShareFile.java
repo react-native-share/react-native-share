@@ -7,6 +7,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.util.Base64;
 import android.webkit.MimeTypeMap;
 
@@ -60,14 +61,16 @@ public class ShareFile {
         return this.isBase64File() || this.isLocalFile();
     }
     public boolean isBase64File() {
-        if(uri.getScheme().equals("data")) {
+        String scheme = uri.getScheme();
+        if((scheme != null) && uri.getScheme().equals("data")) {
             this.type = this.uri.getSchemeSpecificPart().substring(0, this.uri.getSchemeSpecificPart().indexOf(";"));
             return true;
         }
         return false;
     }
     public boolean isLocalFile() {
-        if(uri.getScheme().equals("content") || uri.getScheme().equals("file")) {
+        String scheme = uri.getScheme();
+        if((scheme != null) && (uri.getScheme().equals("content") || uri.getScheme().equals("file"))) {
             // type is already set
             if (this.type != null) {
                 return true;
@@ -78,7 +81,11 @@ public class ShareFile {
             // try resolving the file and get the mimetype
             if(this.type == null) {
               String realPath = this.getRealPathFromURI(uri);
-              this.type = this.getMimeType(realPath);
+              if (realPath != null) {
+                  this.type = this.getMimeType(realPath);
+              } else {
+                  return false;
+              }
             }
 
             if(this.type == null) {
@@ -99,16 +106,20 @@ public class ShareFile {
         String[] proj = { MediaStore.Images.Media.DATA };
         CursorLoader loader = new CursorLoader(this.reactContext, contentUri, proj, null, null, null);
         Cursor cursor = loader.loadInBackground();
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String result = cursor.getString(column_index);
-        cursor.close();
+        String result = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            result = cursor.getString(column_index);
+            cursor.close();
+        }
         return result;
     }
     public Uri getURI() {
 
         final MimeTypeMap mime = MimeTypeMap.getSingleton();
         this.extension = mime.getExtensionFromMimeType(getType());
+        final String authority = ((ShareApplication) reactContext.getApplicationContext()).getFileProviderAuthority();
+
         if(this.isBase64File()) {
             String encodedImg = this.uri.getSchemeSpecificPart().substring(this.uri.getSchemeSpecificPart().indexOf(";base64,") + 8);
             try {
@@ -121,7 +132,7 @@ public class ShareFile {
                 fos.write(Base64.decode(encodedImg, Base64.DEFAULT));
                 fos.flush();
                 fos.close();
-                return Uri.fromFile(file);
+                return FileProvider.getUriForFile(reactContext, authority, file);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -129,7 +140,7 @@ public class ShareFile {
         } else if(this.isLocalFile()) {
             Uri uri = Uri.parse(this.url);
 
-            return uri;
+            return FileProvider.getUriForFile(reactContext, authority, new File(uri.getPath()));
         }
 
         return null;
