@@ -59,8 +59,7 @@ Share Social , Sending Simple Data to Other Apps
 5. Follow this
    [guide](https://developer.android.com/training/secure-file-sharing/setup-sharing.html).
    For example:
-  - Put this in `AndroidManifest.xml` where `applicationId` is something that
-    you have defined in `android/app/build.gradle`:
+  - `applicationId` should be defined in the `defaultConfig` section in your `android/app/build.gradle`:
     
     File: `android/app/build.gradle`
     ````  
@@ -69,7 +68,8 @@ Share Social , Sending Simple Data to Other Apps
         ...
     }
     ````
-
+  - Add this `<provider>` section to your `AndroidManifest.xml`
+  
     File: `AndroidManifest.xml`
     ```xml
       <application>
@@ -86,8 +86,11 @@ Share Social , Sending Simple Data to Other Apps
     ```
     
   - Create a `filepaths.xml` under this directory:
-    `android/app/src/main/res/xml`. In this file, add the following contents:
-
+    `android/app/src/main/res/xml`. 
+    
+    In this file, add the following contents:
+    
+    File: `android/app/src/main/res/filepaths.xml`
     ```xml
       <?xml version="1.0" encoding="utf-8"?>
       <paths xmlns:android="http://schemas.android.com/apk/res/android">
@@ -95,14 +98,14 @@ Share Social , Sending Simple Data to Other Apps
       </paths>
     ```
     
-6. Edit your `Application` class to implement `ShareApplication`    
-  - Make `getFileProviderAuthority` function return the `android:authorities` that was added on AndroidManifest file
-  - `applicationId` is defined in the `defaultConfig` section in your `android/app/build.gradle` and referenced with `BuildConfig.APPLICATION_ID`
+6. Edit your `MainApplication.java` class to add `implements ShareApplication` and `getFileProviderAuthority`
+  - The `getFileProviderAuthority` function returns the `android:authorities` value added in the `AndroidManifest.xml` file
+  - `applicationId` is defined in the `defaultConfig` section of your `android/app/build.gradle` and referenced using `BuildConfig.APPLICATION_ID`
 
     ```
     import cl.json.ShareApplication
-
-    class MyApplication extends Application implements ShareApplication, ReactApplication {
+    public class MainApplication extends Application implements ShareApplication, ReactApplication {
+    class MainApplication extends Application implements ShareApplication, ReactApplication {
 
     {
 
