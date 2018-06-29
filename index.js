@@ -32,6 +32,45 @@ const styles = StyleSheet.create({
   },
 });
 
+type Props = {
+  visible: boolean,
+  onCancel: () => void,
+  children: React.Node,
+};
+
+class ShareSheet extends React.Component<Props> {
+  backButtonHandler: () => boolean;
+
+  componentDidMount() {
+    this.backButtonHandler = this.backButtonHandler.bind(this);
+    BackHandler.addEventListener('backPress', this.backButtonHandler);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('backPress', this.backButtonHandler);
+  }
+
+  backButtonHandler() {
+    if (this.props.visible) {
+      this.props.onCancel();
+      return true;
+    }
+    return false;
+  }
+  render() {
+    return (
+      <Overlay visible={this.props.visible} {...this.props}>
+        <View style={styles.actionSheetContainer}>
+          <TouchableOpacity style={{ flex: 1 }} onPress={this.props.onCancel} />
+          <Sheet visible={this.props.visible}>
+            <View style={styles.buttonContainer}>{this.props.children}</View>
+          </Sheet>
+        </View>
+      </Overlay>
+    );
+  }
+}
+
 type Options = {
   url: string,
   urls: Array<string>,
@@ -55,11 +94,11 @@ const requireAndAskPermissions = (options: Options): Promise<any> => {
           return new Promise((res, rej) => {
             NativeModules.RNShare.isBase64File(
               url,
-              isBase64 => {
-                res(isBase64);
-              },
               e => {
                 rej(e);
+              },
+              isBase64 => {
+                res(isBase64);
               },
             );
           });
@@ -82,7 +121,7 @@ const requireAndAskPermissions = (options: Options): Promise<any> => {
           if (result === PermissionsAndroid.RESULTS.GRANTED) {
             return resolve();
           }
-          return Promise.reject(new Error('Permission Denied'));
+          return Promise.reject(new Error('Write Permission not available'));
         })
         .catch(e => reject(e));
     });
@@ -180,50 +219,10 @@ class RNShare {
       throw new Error('Not implemented');
     }
   }
-
-  static ShareSheet = ShareSheet;
-  static Button = Button;
-  static Sheet = Sheet;
-  static Overlay = Overlay;
-}
-
-type Props = {
-  visible: boolean,
-  onCancel: () => void,
-  children: React.Node,
-};
-
-class ShareSheet extends React.Component<Props> {
-  backButtonHandler: Function;
-
-  componentDidMount() {
-    this.backButtonHandler = this.backButtonHandler.bind(this);
-    BackHandler.addEventListener('backPress', this.backButtonHandler);
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener('backPress', this.backButtonHandler);
-  }
-
-  backButtonHandler() {
-    if (this.props.visible) {
-      this.props.onCancel();
-      return true;
-    }
-    return false;
-  }
-  render() {
-    return (
-      <Overlay visible={this.props.visible} {...this.props}>
-        <View style={styles.actionSheetContainer}>
-          <TouchableOpacity style={{ flex: 1 }} onPress={this.props.onCancel} />
-          <Sheet visible={this.props.visible}>
-            <View style={styles.buttonContainer}>{this.props.children}</View>
-          </Sheet>
-        </View>
-      </Overlay>
-    );
-  }
 }
 
 module.exports = RNShare;
+module.exports.ShareSheet = ShareSheet;
+module.exports.Button = Button;
+module.exports.Sheet = Sheet;
+module.exports.Overlay = Overlay;
