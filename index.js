@@ -85,48 +85,49 @@ type Options = {
 type OpenReturn = { app?: string, dismissedAction?: boolean };
 type ShareSingleReturn = { message: string };
 
-const requireAndAskPermissions = (options: Options): Promise<any> => {
+const requireAndAskPermissions = async (options: Options): Promise<any> => {
   if ((options.url || options.urls) && Platform.OS === 'android') {
-    return new Promise((resolve, reject) => {
+    try {
       const urls = options.urls || [options.url];
-      Promise.all(
-        urls.map(url => {
-          return new Promise((res, rej) => {
-            NativeModules.RNShare.isBase64File(
-              url,
-              e => {
-                rej(e);
-              },
-              isBase64 => {
-                res(isBase64);
-              },
-            );
-          });
-        }),
-      )
-        .then(resultArr => {
-          const requirePermission = resultArr.includes(true);
-          if (!requirePermission) {
-            return Promise.resolve(true);
-          }
-          return PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
-        })
-        .then(hasPermission => {
-          if (hasPermission) {
-            return Promise.resolve(PermissionsAndroid.RESULTS.GRANTED);
-          }
-          return PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
-        })
-        .then(result => {
-          if (result === PermissionsAndroid.RESULTS.GRANTED) {
-            return resolve();
-          }
-          return Promise.reject(new Error('Write Permission not available'));
-        })
-        .catch(e => reject(e));
-    });
+      const resultArr = await Promise.all(
+        urls.map(
+          url =>
+            new Promise((res, rej) => {
+              NativeModules.RNShare.isBase64File(
+                url,
+                e => {
+                  rej(e);
+                },
+                isBase64 => {
+                  res(isBase64);
+                },
+              );
+            }),
+        ),
+      );
+
+      const requirePermission = resultArr.includes(true);
+      if (!requirePermission) {
+        return Promise.resolve(true);
+      }
+      const hasPermission = await PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      );
+      if (hasPermission) {
+        return Promise.resolve(true);
+      }
+      const result = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      );
+      if (result === PermissionsAndroid.RESULTS.GRANTED) {
+        return Promise.resolve();
+      }
+      throw new Error('Write Permission not available');
+    } catch (e) {
+      return Promise.reject(e);
+    }
   }
-  return Promise.resolve();
+  return Promise.resolve(true);
 };
 
 class RNShare {
