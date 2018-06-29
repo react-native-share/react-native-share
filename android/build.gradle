@@ -1,9 +1,9 @@
 buildscript {
   repositories {
     jcenter()
-    google()
     maven {
-      url 'https://maven.google.com'
+      url 'https://maven.google.com/'
+      name 'Google'
     }
   }
 
@@ -40,7 +40,8 @@ android {
 repositories {
   mavenCentral()
   maven {
-   url 'https://maven.google.com'
+   url 'https://maven.google.com/'
+   name 'Google'
   }
   maven {
     // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
@@ -51,6 +52,6 @@ repositories {
 dependencies {
     def supportLibVersion = rootProject.hasProperty('supportLibVersion')  ? rootProject.supportLibVersion : DEFAULT_SUPPORT_LIBRARY_VERSION
 
-    compileOnly 'com.facebook.react:react-native:+'
+    compile 'com.facebook.react:react-native:+'
     compile "com.android.support:appcompat-v7:$supportLibVersion"
 }
