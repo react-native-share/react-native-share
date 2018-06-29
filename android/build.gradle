@@ -6,10 +6,6 @@ buildscript {
       name 'Google'
     }
   }
-
-  dependencies {
-    classpath 'com.android.tools.build:gradle:3.0.0'
-  }
 }
 
 apply plugin: 'com.android.library'
