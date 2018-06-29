@@ -222,7 +222,7 @@ class RNShare {
 }
 
 module.exports = RNShare;
-module.exports.ShareSheet = ShareSheet;
-module.exports.Button = Button;
-module.exports.Sheet = Sheet;
 module.exports.Overlay = Overlay;
+module.exports.Sheet = Sheet;
+module.exports.Button = Button;
+module.exports.ShareSheet = ShareSheet;
