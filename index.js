@@ -9,6 +9,7 @@ import {
   NativeModules,
   Platform,
   ActionSheetIOS,
+  PermissionsAndroid,
 } from 'react-native';
 
 import Overlay from './components/Overlay';
@@ -42,88 +43,148 @@ type Options = {
   failOnCancel?: boolean,
   showAppsToView?: boolean,
 };
+type OpenReturn = { app?: string, dismissedAction?: boolean };
+type ShareSingleReturn = { message: string };
 
-class RNShare {
-  static open(options: Options) {
+const requireAndAskPermissions = (options: Options): Promise<any> => {
+  if ((options.url || options.urls) && Platform.OS === 'android') {
     return new Promise((resolve, reject) => {
-      if (Platform.OS === 'ios') {
-        if (options.urls) {
-          // Handle for multiple file share
-          NativeModules.RNShare.open(
-            options,
-            error => {
-              return reject({ error: error });
-            },
-            (success, activityType) => {
-              if (success) {
-                return resolve({
-                  app: activityType,
-                });
-              } else if (options.failOnCancel === false) {
-                return resolve({
-                  dismissedAction: true,
-                });
-              } else {
-                reject({ error: 'User did not share' });
-              }
-            },
-          );
-        } else {
-          // Handle for single file share
-          ActionSheetIOS.showShareActionSheetWithOptions(
-            options,
-            error => {
-              return reject({ error: error });
-            },
-            (success, activityType) => {
-              if (success) {
-                return resolve({
-                  app: activityType,
-                });
-              } else if (options.failOnCancel === false) {
-                return resolve({
-                  dismissedAction: true,
-                });
-              } else {
-                reject({ error: 'User did not share' });
-              }
-            },
-          );
-        }
-      } else {
-        NativeModules.RNShare.open(
-          options,
-          e => {
-            return reject({ error: e });
-          },
-          e => {
-            resolve({
-              message: e,
-            });
-          },
-        );
-      }
+      const urls = options.urls || [options.url];
+      Promise.all(
+        urls.map(url => {
+          return new Promise((res, rej) => {
+            NativeModules.RNShare.isBase64File(
+              url,
+              isBase64 => {
+                res(isBase64);
+              },
+              e => {
+                rej(e);
+              },
+            );
+          });
+        }),
+      )
+        .then(resultArr => {
+          const requirePermission = resultArr.includes(true);
+          if (!requirePermission) {
+            return Promise.resolve(true);
+          }
+          return PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+        })
+        .then(hasPermission => {
+          if (hasPermission) {
+            return Promise.resolve(PermissionsAndroid.RESULTS.GRANTED);
+          }
+          return PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+        })
+        .then(result => {
+          if (result === PermissionsAndroid.RESULTS.GRANTED) {
+            return resolve();
+          }
+          return Promise.reject(new Error('Permission Denied'));
+        })
+        .catch(e => reject(e));
     });
   }
-  static shareSingle(options) {
+  return Promise.resolve();
+};
+
+class RNShare {
+  static open(options: Options): Promise<OpenReturn> {
+    return new Promise((resolve, reject) => {
+      requireAndAskPermissions(options)
+        .then(() => {
+          if (Platform.OS === 'ios') {
+            if (options.urls) {
+              // Handle for multiple file share
+              NativeModules.RNShare.open(
+                options,
+                error => {
+                  return reject({ error: error });
+                },
+                (success, activityType) => {
+                  if (success) {
+                    return resolve({
+                      app: activityType,
+                    });
+                  } else if (options.failOnCancel === false) {
+                    return resolve({
+                      dismissedAction: true,
+                    });
+                  } else {
+                    reject({ error: 'User did not share' });
+                  }
+                },
+              );
+            } else {
+              // Handle for single file share
+              ActionSheetIOS.showShareActionSheetWithOptions(
+                options,
+                error => {
+                  return reject({ error: error });
+                },
+                (success, activityType) => {
+                  if (success) {
+                    return resolve({
+                      app: activityType,
+                    });
+                  } else if (options.failOnCancel === false) {
+                    return resolve({
+                      dismissedAction: true,
+                    });
+                  } else {
+                    reject({ error: 'User did not share' });
+                  }
+                },
+              );
+            }
+          } else {
+            NativeModules.RNShare.open(
+              options,
+              e => {
+                return reject({ error: e });
+              },
+              e => {
+                resolve({
+                  message: e,
+                });
+              },
+            );
+          }
+        })
+        .catch(e => reject(e));
+    });
+  }
+
+  static shareSingle(options: Options): Promise<ShareSingleReturn> {
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
       return new Promise((resolve, reject) => {
-        NativeModules.RNShare.shareSingle(
-          options,
-          e => {
-            return reject({ error: e });
-          },
-          e => {
-            return resolve({
-              message: e,
-            });
-          },
-        );
+        requireAndAskPermissions(options)
+          .then(() => {
+            NativeModules.RNShare.shareSingle(
+              options,
+              e => {
+                return reject({ error: e });
+              },
+              e => {
+                return resolve({
+                  message: e,
+                });
+              },
+            );
+          })
+          .catch(e => reject(e));
       });
     } else {
       throw new Error('Not implemented');
     }
   }
+
+  static ShareSheet = ShareSheet;
+  static Button = Button;
+  static Sheet = Sheet;
+  static Overlay = Overlay;
 }
 
 type Props = {
@@ -133,6 +194,8 @@ type Props = {
 };
 
 class ShareSheet extends React.Component<Props> {
+  backButtonHandler: Function;
+
   componentDidMount() {
     this.backButtonHandler = this.backButtonHandler.bind(this);
     BackHandler.addEventListener('backPress', this.backButtonHandler);
@@ -164,7 +227,3 @@ class ShareSheet extends React.Component<Props> {
 }
 
 module.exports = RNShare;
-module.exports.Overlay = Overlay;
-module.exports.Sheet = Sheet;
-module.exports.Button = Button;
-module.exports.ShareSheet = ShareSheet;

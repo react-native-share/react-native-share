@@ -16,7 +16,6 @@ import java.util.HashMap;
 
 import cl.json.social.EmailShare;
 import cl.json.social.FacebookShare;
-import cl.json.social.FacebookPagesManagerShare;
 import cl.json.social.GenericShare;
 import cl.json.social.GooglePlusShare;
 import cl.json.social.ShareIntent;
@@ -33,7 +32,6 @@ public class RNShareModule extends ReactContextBaseJavaModule {
         this.reactContext = reactContext;
         sharesExtra.put("generic", new GenericShare(this.reactContext));
         sharesExtra.put("facebook", new FacebookShare(this.reactContext));
-        sharesExtra.put("pagesmanager", new FacebookPagesManagerShare(this.reactContext));
         sharesExtra.put("twitter", new TwitterShare(this.reactContext));
         sharesExtra.put("whatsapp",new WhatsAppShare(this.reactContext));
         sharesExtra.put("instagram",new InstagramShare(this.reactContext));
@@ -57,6 +55,10 @@ public class RNShareModule extends ReactContextBaseJavaModule {
             System.out.println("ERROR");
             System.out.println(ex.getMessage());
             failureCallback.invoke("not_available");
+        }catch (Exception e) {
+            System.out.println("ERROR");
+            System.out.println(e.getMessage());
+            failureCallback.invoke(e.getMessage());
         }
     }
     @ReactMethod
@@ -70,9 +72,30 @@ public class RNShareModule extends ReactContextBaseJavaModule {
                 System.out.println("ERROR");
                 System.out.println(ex.getMessage());
                 failureCallback.invoke(ex.getMessage());
+            }catch (Exception e) {
+                System.out.println("ERROR");
+                System.out.println(e.getMessage());
+                failureCallback.invoke(e.getMessage());
             }
         } else {
             failureCallback.invoke("key 'social' missing in options");
+        }
+    }
+
+    @ReactMethod
+    public void isBase64File(String url, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
+        try {
+            Uri uri = Uri.parse(url);
+            String scheme = uri.getScheme();
+            if((scheme != null) && scheme.equals("data")) {
+                successCallback.invoke(true);
+            } else {
+                successCallback.invoke(false);
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR");
+            System.out.println(e.getMessage());
+            failureCallback.invoke(e.getMessage());
         }
     }
 }
