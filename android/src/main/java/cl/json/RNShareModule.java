@@ -57,6 +57,10 @@ public class RNShareModule extends ReactContextBaseJavaModule {
             System.out.println("ERROR");
             System.out.println(ex.getMessage());
             failureCallback.invoke("not_available");
+        }catch (Exception e) {
+            System.out.println("ERROR");
+            System.out.println(e.getMessage());
+            failureCallback.invoke(e.getMessage());
         }
     }
     @ReactMethod
@@ -70,9 +74,30 @@ public class RNShareModule extends ReactContextBaseJavaModule {
                 System.out.println("ERROR");
                 System.out.println(ex.getMessage());
                 failureCallback.invoke(ex.getMessage());
+            }catch (Exception e) {
+                System.out.println("ERROR");
+                System.out.println(e.getMessage());
+                failureCallback.invoke(e.getMessage());
             }
         } else {
             failureCallback.invoke("key 'social' missing in options");
+        }
+    }
+
+    @ReactMethod
+    public void isBase64File(String url, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
+        try {
+            Uri uri = Uri.parse(url);
+            String scheme = uri.getScheme();
+            if((scheme != null) && scheme.equals("data")) {
+                successCallback.invoke(true);
+            } else {
+                successCallback.invoke(false);
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR");
+            System.out.println(e.getMessage());
+            failureCallback.invoke(e.getMessage());
         }
     }
 }
