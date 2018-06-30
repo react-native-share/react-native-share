@@ -9,6 +9,7 @@ import {
   NativeModules,
   Platform,
   ActionSheetIOS,
+  PermissionsAndroid,
 } from 'react-native';
 
 import Overlay from './components/Overlay';
@@ -31,101 +32,6 @@ const styles = StyleSheet.create({
   },
 });
 
-type Options = {
-  url: string,
-  urls: Array<string>,
-  type: string,
-  message: string,
-  title?: string,
-  subject?: string,
-  excludedActivityTypes?: string,
-  failOnCancel?: boolean,
-  showAppsToView?: boolean,
-};
-
-class RNShare {
-  static open(options: Options) {
-    return new Promise((resolve, reject) => {
-      if (Platform.OS === 'ios') {
-        if (options.urls) {
-          // Handle for multiple file share
-          NativeModules.RNShare.open(
-            options,
-            error => {
-              return reject({ error: error });
-            },
-            (success, activityType) => {
-              if (success) {
-                return resolve({
-                  app: activityType,
-                });
-              } else if (options.failOnCancel === false) {
-                return resolve({
-                  dismissedAction: true,
-                });
-              } else {
-                reject({ error: 'User did not share' });
-              }
-            },
-          );
-        } else {
-          // Handle for single file share
-          ActionSheetIOS.showShareActionSheetWithOptions(
-            options,
-            error => {
-              return reject({ error: error });
-            },
-            (success, activityType) => {
-              if (success) {
-                return resolve({
-                  app: activityType,
-                });
-              } else if (options.failOnCancel === false) {
-                return resolve({
-                  dismissedAction: true,
-                });
-              } else {
-                reject({ error: 'User did not share' });
-              }
-            },
-          );
-        }
-      } else {
-        NativeModules.RNShare.open(
-          options,
-          e => {
-            return reject({ error: e });
-          },
-          e => {
-            resolve({
-              message: e,
-            });
-          },
-        );
-      }
-    });
-  }
-  static shareSingle(options) {
-    if (Platform.OS === 'ios' || Platform.OS === 'android') {
-      return new Promise((resolve, reject) => {
-        NativeModules.RNShare.shareSingle(
-          options,
-          e => {
-            return reject({ error: e });
-          },
-          e => {
-            return resolve({
-              message: e,
-            });
-          },
-        );
-      });
-    } else {
-      throw new Error('Not implemented');
-    }
-  }
-}
-
 type Props = {
   visible: boolean,
   onCancel: () => void,
@@ -133,6 +39,8 @@ type Props = {
 };
 
 class ShareSheet extends React.Component<Props> {
+  backButtonHandler: () => boolean;
+
   componentDidMount() {
     this.backButtonHandler = this.backButtonHandler.bind(this);
     BackHandler.addEventListener('backPress', this.backButtonHandler);
@@ -160,6 +68,157 @@ class ShareSheet extends React.Component<Props> {
         </View>
       </Overlay>
     );
+  }
+}
+
+type Options = {
+  url: string,
+  urls: Array<string>,
+  type: string,
+  message: string,
+  title?: string,
+  subject?: string,
+  excludedActivityTypes?: string,
+  failOnCancel?: boolean,
+  showAppsToView?: boolean,
+};
+type OpenReturn = { app?: string, dismissedAction?: boolean };
+type ShareSingleReturn = { message: string };
+
+const requireAndAskPermissions = async (options: Options): Promise<any> => {
+  if ((options.url || options.urls) && Platform.OS === 'android') {
+    try {
+      const urls = options.urls || [options.url];
+      const resultArr = await Promise.all(
+        urls.map(
+          url =>
+            new Promise((res, rej) => {
+              NativeModules.RNShare.isBase64File(
+                url,
+                e => {
+                  rej(e);
+                },
+                isBase64 => {
+                  res(isBase64);
+                },
+              );
+            }),
+        ),
+      );
+
+      const requirePermission = resultArr.includes(true);
+      if (!requirePermission) {
+        return Promise.resolve(true);
+      }
+      const hasPermission = await PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      );
+      if (hasPermission) {
+        return Promise.resolve(true);
+      }
+      const result = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      );
+      if (result === PermissionsAndroid.RESULTS.GRANTED) {
+        return Promise.resolve();
+      }
+      throw new Error('Write Permission not available');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+  return Promise.resolve(true);
+};
+
+class RNShare {
+  static open(options: Options): Promise<OpenReturn> {
+    return new Promise((resolve, reject) => {
+      requireAndAskPermissions(options)
+        .then(() => {
+          if (Platform.OS === 'ios') {
+            if (options.urls) {
+              // Handle for multiple file share
+              NativeModules.RNShare.open(
+                options,
+                error => {
+                  return reject({ error: error });
+                },
+                (success, activityType) => {
+                  if (success) {
+                    return resolve({
+                      app: activityType,
+                    });
+                  } else if (options.failOnCancel === false) {
+                    return resolve({
+                      dismissedAction: true,
+                    });
+                  } else {
+                    reject({ error: 'User did not share' });
+                  }
+                },
+              );
+            } else {
+              // Handle for single file share
+              ActionSheetIOS.showShareActionSheetWithOptions(
+                options,
+                error => {
+                  return reject({ error: error });
+                },
+                (success, activityType) => {
+                  if (success) {
+                    return resolve({
+                      app: activityType,
+                    });
+                  } else if (options.failOnCancel === false) {
+                    return resolve({
+                      dismissedAction: true,
+                    });
+                  } else {
+                    reject({ error: 'User did not share' });
+                  }
+                },
+              );
+            }
+          } else {
+            NativeModules.RNShare.open(
+              options,
+              e => {
+                return reject({ error: e });
+              },
+              e => {
+                resolve({
+                  message: e,
+                });
+              },
+            );
+          }
+        })
+        .catch(e => reject(e));
+    });
+  }
+
+  static shareSingle(options: Options): Promise<ShareSingleReturn> {
+    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+      return new Promise((resolve, reject) => {
+        requireAndAskPermissions(options)
+          .then(() => {
+            NativeModules.RNShare.shareSingle(
+              options,
+              e => {
+                return reject({ error: e });
+              },
+              e => {
+                return resolve({
+                  message: e,
+                });
+              },
+            );
+          })
+          .catch(e => reject(e));
+      });
+    } else {
+      throw new Error('Not implemented');
+    }
   }
 }
 
