@@ -133,7 +133,7 @@ Returns a promise that fulfills or rejects as soon as user successfully open the
 
 ```javascript
   Share.open(options)
-    .then((res) => { console.log(res))
+    .then((res) => { console.log(res) })
     .catch((err) => { err && console.log(err); });
 ```
 
