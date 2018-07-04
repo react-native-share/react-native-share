@@ -170,6 +170,29 @@ Supported options:
 
 ***NOTE: If both `message` and `url` are provided `url` will be concatenated to the end of `message` to form the body of the message. If only one is provided it will be used***
 
+### Static Values for social
+
+These can be assessed using Share.Social property  
+For eg.
+```javascript
+import Share from 'react-native-share';
+
+const shareOptions = {
+    title: 'Share via',
+    url: 'some share url',
+    social: Share.Social.WHATSAPP
+};
+Share.shareSingle(shareOptions);
+```
+
+| Name  | Android     | iOS | Windows |
+| :---- | :------: | :--- | :---
+| **FACEBOOK** | yes   | yes | no |
+| **PAGESMANAGER** | yes   | no | no |
+| **WHATSAPP** | yes   | yes | no |
+| **INSTAGRAM** | yes   | yes | no |
+| **GOOGLEPLUS** | yes   | yes | no |
+| **EMAIL** | yes   | yes | no |
 
 ## how it looks:
 
