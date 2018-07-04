@@ -131,6 +131,16 @@ const requireAndAskPermissions = async (options: Options): Promise<any> => {
 };
 
 class RNShare {
+  static Social = {
+    FACEBOOK: NativeModules.RNShare.FACEBOOK || 'facebook',
+    PAGESMANAGER: NativeModules.RNShare.PAGESMANAGER || 'pagesmanager',
+    TWITTER: NativeModules.RNShare.TWITTER || 'twitter',
+    WHATSAPP: NativeModules.RNShare.WHATSAPP || 'whatsapp',
+    INSTAGRAM: NativeModules.RNShare.INSTAGRAM || 'instagram',
+    GOOGLEPLUS: NativeModules.RNShare.GOOGLEPLUS || 'googleplus',
+    EMAIL: NativeModules.RNShare.EMAIL || 'email',
+  }
+
   static open(options: Options): Promise<OpenReturn> {
     return new Promise((resolve, reject) => {
       requireAndAskPermissions(options)
