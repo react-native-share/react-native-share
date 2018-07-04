@@ -72,10 +72,10 @@ class ShareSheet extends React.Component<Props> {
 }
 
 type Options = {
-  url: string,
-  urls: Array<string>,
-  type: string,
-  message: string,
+  url?: string,
+  urls?: Array<string>,
+  type?: string,
+  message?: string,
   title?: string,
   subject?: string,
   excludedActivityTypes?: string,
@@ -87,8 +87,8 @@ type ShareSingleReturn = { message: string };
 
 const requireAndAskPermissions = async (options: Options): Promise<any> => {
   if ((options.url || options.urls) && Platform.OS === 'android') {
+    const urls = options.urls || [options.url];
     try {
-      const urls = options.urls || [options.url];
       const resultArr = await Promise.all(
         urls.map(
           url =>
@@ -139,7 +139,7 @@ class RNShare {
     INSTAGRAM: NativeModules.RNShare.INSTAGRAM || 'instagram',
     GOOGLEPLUS: NativeModules.RNShare.GOOGLEPLUS || 'googleplus',
     EMAIL: NativeModules.RNShare.EMAIL || 'email',
-  }
+  };
 
   static open(options: Options): Promise<OpenReturn> {
     return new Promise((resolve, reject) => {
