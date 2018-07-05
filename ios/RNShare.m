@@ -65,11 +65,23 @@
 
 RCT_EXPORT_MODULE()
 
+- (NSDictionary *)constantsToExport
+{
+  return @{
+    @"FACEBOOK": @"facebook",
+    @"TWITTER": @"twitter",
+    @"GOOGLEPLUS": @"googleplus",
+    @"WHATSAPP": @"whatsapp",
+    @"INSTAGRAM": @"instagram",
+    @"EMAIL": @"email",
+  };
+}
+
 RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
                   failureCallback:(RCTResponseErrorBlock)failureCallback
                   successCallback:(RCTResponseSenderBlock)successCallback)
 {
-    
+
     NSString *social = [RCTConvert NSString:options[@"social"]];
     if (social) {
         NSLog(social);
@@ -112,7 +124,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
         RCTLogError(@"Unable to show action sheet from app extension");
         return;
     }
-    
+
     NSMutableArray<id> *items = [NSMutableArray array];
     NSString *message = [RCTConvert NSString:options[@"message"]];
     if (message) {
@@ -137,25 +149,25 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
             }
         }
     }
-    
-    
+
+
     if (items.count == 0) {
         RCTLogError(@"No `url` or `message` to share");
         return;
     }
-    
+
     UIActivityViewController *shareController = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];
-    
+
     NSString *subject = [RCTConvert NSString:options[@"subject"]];
     if (subject) {
         [shareController setValue:subject forKey:@"subject"];
     }
-    
+
     NSArray *excludedActivityTypes = [RCTConvert NSStringArray:options[@"excludedActivityTypes"]];
     if (excludedActivityTypes) {
         shareController.excludedActivityTypes = excludedActivityTypes;
     }
-    
+
     UIViewController *controller = RCTPresentedViewController();
     shareController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, __unused NSArray *returnedItems, NSError *activityError) {
         if (activityError) {
@@ -164,7 +176,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
             successCallback(@[@(completed), RCTNullIfNil(activityType)]);
         }
     };
-    
+
     shareController.modalPresentationStyle = UIModalPresentationPopover;
     NSNumber *anchorViewTag = [RCTConvert NSNumber:options[@"anchor"]];
     if (!anchorViewTag) {
@@ -172,9 +184,9 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
     }
     shareController.popoverPresentationController.sourceView = controller.view;
     shareController.popoverPresentationController.sourceRect = [self sourceRectInView:controller.view anchorViewTag:anchorViewTag];
-    
+
     [controller presentViewController:shareController animated:YES completion:nil];
-    
+
     shareController.view.tintColor = [RCTConvert UIColor:options[@"tintColor"]];
 }
 
