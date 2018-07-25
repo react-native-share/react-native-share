@@ -1,35 +1,58 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:+'
+    }
+}
+
 apply plugin: 'com.android.library'
 
-def DEFAULT_COMPILE_SDK_VERSION             = 25
-def DEFAULT_BUILD_TOOLS_VERSION             = "25.0.3"
-def DEFAULT_TARGET_SDK_VERSION              = 25
-def DEFAULT_SUPPORT_LIB_VERSION             = "25.0.0"
- 
+def DEFAULT_COMPILE_SDK_VERSION = 26
+def DEFAULT_BUILD_TOOLS_VERSION = "26.0.2"
+def DEFAULT_TARGET_SDK_VERSION = 26
+def DEFAULT_GOOGLE_PLAY_SERVICES_VERSION = "12.0.1"
+def DEFAULT_SUPPORT_LIBRARY_VERSION = "27.1.0"
+
 android {
     compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
     buildToolsVersion rootProject.hasProperty('buildToolsVersion') ? rootProject.buildToolsVersion : DEFAULT_BUILD_TOOLS_VERSION
-    
+
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion rootProject.hasProperty('targetSdkVersion') ? rootProject.targetSdkVersion : DEFAULT_TARGET_SDK_VERSION
+
         versionCode 1
-        versionName "1.0"
-        ndk {
-            abiFilters "armeabi-v7a", "x86"
-        }
+        versionName "1.0.0"
     }
     lintOptions {
-       warning 'InvalidPackage'
+        abortOnError false
+        warning 'InvalidPackage'
     }
 }
 
-allprojects {
-    repositories {
-        jcenter()
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://maven.google.com/'
+        name 'Google'
     }
+    maven {
+        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+        url "$rootDir/../node_modules/react-native/android"
+    }
+    jcenter()
 }
 
 dependencies {
+    def supportLibVersion = rootProject.hasProperty('supportLibVersion') ? rootProject.supportLibVersion : DEFAULT_SUPPORT_LIBRARY_VERSION
+
     compile 'com.facebook.react:react-native:+'
-    compile "com.android.support:appcompat-v7: rootProject.hasProperty('buildToolsVersion') ? rootProject.buildToolsVersion : DEFAULT_SUPPORT_LIB_VERSION"
+    compile "com.android.support:appcompat-v7:$supportLibVersion"
 }
