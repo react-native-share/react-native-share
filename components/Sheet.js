@@ -7,7 +7,7 @@ const DEFAULT_BOTTOM = -300;
 const DEFAULT_ANIMATE_TIME = 300;
 
 type Props = {
-  children: typeof React.Children,
+  children: React.Node,
   visible: boolean,
 };
 

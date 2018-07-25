@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 type Props = {
   visible: boolean,
   onCancel: () => void,
-  children: typeof React.Children,
+  children: React.Node,
 };
 
 type State = {

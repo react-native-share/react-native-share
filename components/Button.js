@@ -30,7 +30,7 @@ type Props = {
   onPress: () => void,
   iconSrc: string,
   textStyle: Object,
-  children: typeof React.Children,
+  children: React.Node,
 };
 
 export default ({ buttonStyle, onPress, iconSrc, textStyle, children }: Props) => (
