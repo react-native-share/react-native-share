@@ -1,4 +1,4 @@
-#### true (2018-07-25)
+#### 1.1.0 (2018-07-25)
 
 ##### Build System / Dependencies
 
