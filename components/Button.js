@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -25,8 +25,15 @@ const styles = StyleSheet.create({
   },
 });
 
-// TODO - improve flow
-export default ({ buttonStyle, onPress, iconSrc, textStyle, children }: any) => (
+type Props = {
+  buttonStyle: Object,
+  onPress: () => void,
+  iconSrc: string,
+  textStyle: Object,
+  children: typeof React.Children,
+};
+
+export default ({ buttonStyle, onPress, iconSrc, textStyle, children }: Props) => (
   <TouchableOpacity activeOpacity={0.5} style={[styles.button, buttonStyle]} onPress={onPress}>
     <Image style={styles.icon} source={iconSrc} />
     <Text style={[styles.buttonText, textStyle]}>{children}</Text>

@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import { Animated, StyleSheet } from 'react-native';
 
 const DEFAULT_ANIMATE_TIME = 300;
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 type Props = {
   visible: boolean,
   onCancel: () => void,
-  children: React.Node,
+  children: typeof React.Children,
 };
 
 type State = {
