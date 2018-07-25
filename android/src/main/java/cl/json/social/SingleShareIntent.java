@@ -46,13 +46,13 @@ public abstract class SingleShareIntent extends ShareIntent {
                             .replace("{message}",   this.urlEncode( options.getString("message") ));
                 } else if(getPlayStoreLink() != null) {
                     url = getPlayStoreLink();
-                } else{
+                } else {
                     //  TODO
                 }
                 //  open web intent
                 this.setIntent(new Intent(new Intent("android.intent.action.VIEW", Uri.parse(url))));
             }
-        } else{
+        } else {
             //  configure default
             super.open(options);   
         }      
