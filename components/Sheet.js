@@ -1,12 +1,13 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import { Animated } from 'react-native';
 
 const DEFAULT_BOTTOM = -300;
 const DEFAULT_ANIMATE_TIME = 300;
 
 type Props = {
+  children: typeof React.Children,
   visible: boolean,
 };
 
