@@ -73,22 +73,34 @@ class ShareSheet extends React.Component<Props> {
 
 type Options = {
   url: string,
-  urls: Array<string>,
-  type: string,
-  message: string,
+  urls?: Array<string>,
+  type?: string,
+  message?: string,
   title?: string,
   subject?: string,
   excludedActivityTypes?: string,
   failOnCancel?: boolean,
   showAppsToView?: boolean,
 };
+type MultipleOptions = {
+  url?: string,
+  urls: Array<string>,
+  type?: string,
+  message?: string,
+  title?: string,
+  subject?: string,
+  excludedActivityTypes?: string,
+  failOnCancel?: boolean,
+  showAppsToView?: boolean,
+};
+
 type OpenReturn = { app?: string, dismissedAction?: boolean };
 type ShareSingleReturn = { message: string };
 
-const requireAndAskPermissions = async (options: Options): Promise<any> => {
+const requireAndAskPermissions = async (options: Options | MultipleOptions): Promise<any> => {
   if ((options.url || options.urls) && Platform.OS === 'android') {
+    const urls: Array<string> = options.urls || [options.url];
     try {
-      const urls = options.urls || [options.url];
       const resultArr = await Promise.all(
         urls.map(
           url =>
@@ -131,7 +143,21 @@ const requireAndAskPermissions = async (options: Options): Promise<any> => {
 };
 
 class RNShare {
-  static open(options: Options): Promise<OpenReturn> {
+  static Button: any;
+  static ShareSheet: React.createElement;
+  static Overlay: any;
+  static Sheet: any;
+  static Social = {
+    FACEBOOK: NativeModules.RNShare.FACEBOOK || 'facebook',
+    PAGESMANAGER: NativeModules.RNShare.PAGESMANAGER || 'pagesmanager',
+    TWITTER: NativeModules.RNShare.TWITTER || 'twitter',
+    WHATSAPP: NativeModules.RNShare.WHATSAPP || 'whatsapp',
+    INSTAGRAM: NativeModules.RNShare.INSTAGRAM || 'instagram',
+    GOOGLEPLUS: NativeModules.RNShare.GOOGLEPLUS || 'googleplus',
+    EMAIL: NativeModules.RNShare.EMAIL || 'email',
+  };
+
+  static open(options: Options | MultipleOptions): Promise<OpenReturn> {
     return new Promise((resolve, reject) => {
       requireAndAskPermissions(options)
         .then(() => {

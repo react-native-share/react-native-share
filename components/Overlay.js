@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import { Animated, StyleSheet } from 'react-native';
 
 const DEFAULT_ANIMATE_TIME = 300;
