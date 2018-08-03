@@ -1,5 +1,7 @@
-import React from 'react';
-import {Animated, StyleSheet, TouchableHighlight} from 'react-native';
+// @flow
+
+import * as React from 'react';
+import { Animated, StyleSheet } from 'react-native';
 
 const DEFAULT_ANIMATE_TIME = 300;
 const styles = StyleSheet.create({
@@ -9,42 +11,54 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: 'transparent',
-    position: 'absolute'
+    position: 'absolute',
   },
   emptyOverlay: {
     width: 0,
     height: 0,
     backgroundColor: 'transparent',
-    position: 'absolute'
-  }
+    position: 'absolute',
+  },
 });
 
-export default class extends React.Component {
+type Props = {
+  visible: boolean,
+  onCancel: () => void,
+  children: React.Node,
+};
+
+type State = {
+  fadeAnim: Object,
+  overlayStyle: Object,
+};
+
+class Overlay extends React.Component<Props, State> {
   state = {
     fadeAnim: new Animated.Value(0),
-    overlayStyle: styles.emptyOverlay
+    overlayStyle: styles.emptyOverlay,
   };
 
   onAnimatedEnd() {
     if (!this.props.visible) {
-      this.setState({overlayStyle: styles.emptyOverlay});
+      this.setState({ overlayStyle: styles.emptyOverlay });
     }
   }
-  componentWillReceiveProps(newProps) {
+  UNSAFE_componentWillReceiveProps(newProps: Props) {
     if (newProps.visible) {
-      this.setState({overlayStyle: styles.fullOverlay});
+      this.setState({ overlayStyle: styles.fullOverlay });
     }
     return Animated.timing(this.state.fadeAnim, {
       toValue: newProps.visible ? 1 : 0,
-      duration: DEFAULT_ANIMATE_TIME
+      duration: DEFAULT_ANIMATE_TIME,
     }).start(this.onAnimatedEnd.bind(this));
   }
   render() {
     return (
-      <Animated.View
-        style={[this.state.overlayStyle, {opacity: this.state.fadeAnim}]}>
+      <Animated.View style={[this.state.overlayStyle, { opacity: this.state.fadeAnim }]}>
         {this.props.children}
       </Animated.View>
     );
   }
 }
+
+export default Overlay;
