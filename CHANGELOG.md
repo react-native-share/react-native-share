@@ -1,3 +1,9 @@
+#### 1.1.1-1 (2018-08-07)
+
+##### New Features
+
+* **issue-template:**  add issue template ([fde759f8](https://github.com/react-native-community/react-native-share/commit/fde759f8412687d7a70a1fca1a848839fb57df51))
+
 #### 1.1.0 (2018-07-25)
 
 ##### Build System / Dependencies
