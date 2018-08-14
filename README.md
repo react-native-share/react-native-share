@@ -42,7 +42,7 @@ Share Social , Sending Simple Data to Other Apps
 
 1. `npm install react-native-share --save`
 2. Open up `android/app/src/main/java/[...]/MainApplication.java`
-  - Add `import cl.json.RNSharePackage;` to the imports at the top of the file
+  - Add `import cl.json.RNSharePackage;` and `import cl.json.ShareApplication;` to the imports at the top of the file
   - Add `new RNSharePackage()` to the list returned by the `getPackages()`
     method
 3. Append the following lines to `android/settings.gradle`:
