@@ -20,9 +20,6 @@ import cl.json.ShareFile;
  */
 public abstract class SingleShareIntent extends ShareIntent {
 
-
-
-
     protected String playStoreURL = null;
     protected String appStoreURL = null;
 
@@ -52,9 +49,8 @@ public abstract class SingleShareIntent extends ShareIntent {
                 //  open web intent
                 this.setIntent(new Intent(new Intent("android.intent.action.VIEW", Uri.parse(url))));
             }
-        } else {
-            //  configure default
-            super.open(options);   
-        }      
+        }
+        //  configure default
+        super.open(options);
     }
 }
