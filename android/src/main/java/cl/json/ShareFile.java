@@ -127,7 +127,7 @@ public class ShareFile {
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }
-                File file = new File(dir, System.currentTimeMillis() + "." + this.extension);
+                File file = new File(dir, System.nanoTime() + "." + this.extension);
                 final FileOutputStream fos = new FileOutputStream(file);
                 fos.write(Base64.decode(encodedImg, Base64.DEFAULT));
                 fos.flush();
