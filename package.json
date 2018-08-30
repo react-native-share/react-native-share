@@ -61,5 +61,10 @@
     "release:minor": "node ./changelog --minor && npm version minor && git push origin && git push origin --follow-tags",
     "release:patch": "node ./changelog --patch && npm version patch && git push origin && git push origin --follow-tags",
     "release:version": "node ./changelog --version $VERSION && git push origin && git push origin --follow-tags"
+  },
+  "dependencies": {
+    "docz": "^0.10.3",
+    "docz-theme-default": "^0.10.3",
+    "react-dom": "^16.4.2"
   }
 }
