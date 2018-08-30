@@ -4114,6 +4114,12 @@ docz-core@^0.10.3:
     ws "^6.0.0"
     yargs "^12.0.1"
 
+docz-plugin-netlify@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/docz-plugin-netlify/-/docz-plugin-netlify-1.1.3.tgz#96b280cbff1398426aa3f3a4020b53972559aeb4"
+  dependencies:
+    docz-core "^0.10.3"
+
 docz-theme-default@^0.10.3:
   version "0.10.3"
   resolved "https://registry.yarnpkg.com/docz-theme-default/-/docz-theme-default-0.10.3.tgz#f94e514c120429a3beab5622cf5504fb74026c00"
