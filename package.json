@@ -10,11 +10,14 @@
     "@commitlint/cli": "^6.1.0",
     "@commitlint/config-conventional": "^6.1.0",
     "babel-eslint": "^8.2.1",
+    "docz": "^0.10.3",
+    "docz-plugin-github-page": "^1.0.4",
+    "docz-theme-default": "^0.10.3",
     "eslint": "^4.17.0",
     "eslint-plugin-flowtype": "^2.46.2",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-react": "^7.6.1",
-    "eslint-plugin-react-native": "^3.2.0",
+    "eslint-plugin-react-native": "^3.2.1",
     "flow-bin": "^0.77.0",
     "generate-changelog": "1.7.0",
     "husky": "^0.14.3",
@@ -60,12 +63,10 @@
     "release:major": "node ./changelog --major && npm version major && git push origin && git push origin --follow-tags",
     "release:minor": "node ./changelog --minor && npm version minor && git push origin && git push origin --follow-tags",
     "release:patch": "node ./changelog --patch && npm version patch && git push origin && git push origin --follow-tags",
-    "release:version": "node ./changelog --version $VERSION && git push origin && git push origin --follow-tags"
+    "release:version": "node ./changelog --version $VERSION && git push origin && git push origin --follow-tags",
+    "release:docz": "rm -rf docs && yarn docz build"
   },
   "dependencies": {
-    "docz": "^0.10.3",
-    "docz-plugin-netlify": "^1.1.4",
-    "docz-theme-default": "^0.10.3",
     "react-dom": "^16.4.2"
   }
 }

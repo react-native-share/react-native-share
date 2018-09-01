@@ -1,5 +1,5 @@
-const doczPluginNetlify = require('docz-plugin-netlify');
+const doczPluginGithubPage = require('docz-plugin-github-page');
 export default {
-  src: './docs',
-  plugins: [doczPluginNetlify()],
+  src: './documentation',
+  plugins: [doczPluginGithubPage()],
 };
