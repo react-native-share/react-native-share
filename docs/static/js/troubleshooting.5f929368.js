@@ -1,57 +1,43 @@
 (window.webpackJsonp = window.webpackJsonp || []).push([
-  [1],
+  [3],
   {
-    './documentation/Troubleshooting.mdx': function(e, n, a) {
+    './documentation/Troubleshooting.mdx': function(e, n, t) {
       'use strict';
-      a.r(n);
-      var t = a('./node_modules/react/index.js'),
-        o = a.n(t),
-        r = a('./node_modules/@mdx-js/tag/dist/index.js');
-      function i(e, n) {
+      t.r(n);
+      var a = t('./node_modules/react/index.js'),
+        o = t.n(a),
+        r = t('./node_modules/@mdx-js/tag/dist/index.js');
+      function l(e, n) {
         if (null == e) return {};
-        var a,
-          t,
+        var t,
+          a,
           o = (function(e, n) {
             if (null == e) return {};
-            var a,
-              t,
+            var t,
+              a,
               o = {},
               r = Object.keys(e);
-            for (t = 0; t < r.length; t++) (a = r[t]), n.indexOf(a) >= 0 || (o[a] = e[a]);
+            for (a = 0; a < r.length; a++) (t = r[a]), n.indexOf(t) >= 0 || (o[t] = e[t]);
             return o;
           })(e, n);
         if (Object.getOwnPropertySymbols) {
           var r = Object.getOwnPropertySymbols(e);
-          for (t = 0; t < r.length; t++)
-            (a = r[t]),
-              n.indexOf(a) >= 0 ||
-                (Object.prototype.propertyIsEnumerable.call(e, a) && (o[a] = e[a]));
+          for (a = 0; a < r.length; a++)
+            (t = r[a]),
+              n.indexOf(t) >= 0 ||
+                (Object.prototype.propertyIsEnumerable.call(e, t) && (o[t] = e[t]));
         }
         return o;
       }
       n.default = function(e) {
         var n = e.components;
-        i(e, ['components']);
+        l(e, ['components']);
         return o.a.createElement(
           r.MDXTag,
           { name: 'wrapper', components: n },
           o.a.createElement(
             r.MDXTag,
             { name: 'h1', components: n, props: { id: 'troubleshooting' } },
-            o.a.createElement(
-              r.MDXTag,
-              {
-                name: 'a',
-                components: n,
-                parentName: 'h1',
-                props: { 'aria-hidden': !0, href: '#troubleshooting' },
-              },
-              o.a.createElement(
-                r.MDXTag,
-                { name: 'span', components: n, parentName: 'a', props: { className: 'icon-link' } },
-                '#',
-              ),
-            ),
             'Troubleshooting',
           ),
           o.a.createElement(
@@ -61,23 +47,6 @@
               components: n,
               props: { id: 'share-remote-pdf-file-with-gmail--whatsapp-ios' },
             },
-            o.a.createElement(
-              r.MDXTag,
-              {
-                name: 'a',
-                components: n,
-                parentName: 'h2',
-                props: {
-                  'aria-hidden': !0,
-                  href: '#share-remote-pdf-file-with-gmail--whatsapp-ios',
-                },
-              },
-              o.a.createElement(
-                r.MDXTag,
-                { name: 'span', components: n, parentName: 'a', props: { className: 'icon-link' } },
-                '#',
-              ),
-            ),
             'Share Remote PDF File with Gmail & WhatsApp (iOS)',
           ),
           o.a.createElement(

@@ -4,4 +4,4 @@ Share Social , Sending Simple Data to Other Apps
 
 **_NOTE: React Native now implements share functionality [Read more](https://facebook.github.io/react-native/docs/share.html)_**
 
-Access we documention ->
+Access we [Documentation](https://react-native-community.github.io/react-native-share/)

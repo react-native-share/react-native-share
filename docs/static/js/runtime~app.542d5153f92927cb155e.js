@@ -44,10 +44,10 @@
             return (
               u.p +
               'static/js/' +
-              ({ 1: 'troubleshooting', 2: 'install', 3: 'usage', 4: 'welcome', 5: 'method' }[e] ||
+              ({ 1: 'install', 2: 'method', 3: 'troubleshooting', 4: 'usage', 5: 'welcome' }[e] ||
                 e) +
               '.' +
-              { 1: '41e10a7a', 2: '6fb7760a', 3: 'f1be578c', 4: '41abe453', 5: 'dd019ef4' }[e] +
+              { 1: '43f7b4a7', 2: '774b7c72', 3: '5f929368', 4: 'b80720ec', 5: 'f9340b45' }[e] +
               '.js'
             );
           })(e)),
@@ -116,7 +116,7 @@
     (u.o = function(e, t) {
       return Object.prototype.hasOwnProperty.call(e, t);
     }),
-    (u.p = '/'),
+    (u.p = '/react-native-share/'),
     (u.oe = function(e) {
       throw (console.error(e), e);
     });

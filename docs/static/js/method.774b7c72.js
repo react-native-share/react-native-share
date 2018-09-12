@@ -1,5 +1,5 @@
 (window.webpackJsonp = window.webpackJsonp || []).push([
-  [5],
+  [2],
   {
     './assets/android-250x.png': function(e, a, t) {
       e.exports = t.p + 'static/img/android-250x.25e1e8d0.png';
@@ -16,7 +16,7 @@
     './assets/windows-250x.png': function(e, a, t) {
       e.exports = t.p + 'static/img/windows-250x.2042e18b.png';
     },
-    './documentation/method.mdx': function(e, a, t) {
+    './documentation/Method.mdx': function(e, a, t) {
       'use strict';
       t.r(a);
       var n = t('./node_modules/react/index.js'),
@@ -53,39 +53,11 @@
           r.a.createElement(
             m.MDXTag,
             { name: 'h1', components: a, props: { id: 'methods' } },
-            r.a.createElement(
-              m.MDXTag,
-              {
-                name: 'a',
-                components: a,
-                parentName: 'h1',
-                props: { 'aria-hidden': !0, href: '#methods' },
-              },
-              r.a.createElement(
-                m.MDXTag,
-                { name: 'span', components: a, parentName: 'a', props: { className: 'icon-link' } },
-                '#',
-              ),
-            ),
             'Methods',
           ),
           r.a.createElement(
             m.MDXTag,
             { name: 'h2', components: a, props: { id: 'open-simple-share-dialog' } },
-            r.a.createElement(
-              m.MDXTag,
-              {
-                name: 'a',
-                components: a,
-                parentName: 'h2',
-                props: { 'aria-hidden': !0, href: '#open-simple-share-dialog' },
-              },
-              r.a.createElement(
-                m.MDXTag,
-                { name: 'span', components: a, parentName: 'a', props: { className: 'icon-link' } },
-                '#',
-              ),
-            ),
             'Open Simple share dialog',
           ),
           r.a.createElement(
@@ -110,20 +82,6 @@
           r.a.createElement(
             m.MDXTag,
             { name: 'h2', components: a, props: { id: 'supported-options' } },
-            r.a.createElement(
-              m.MDXTag,
-              {
-                name: 'a',
-                components: a,
-                parentName: 'h2',
-                props: { 'aria-hidden': !0, href: '#supported-options' },
-              },
-              r.a.createElement(
-                m.MDXTag,
-                { name: 'span', components: a, parentName: 'a', props: { className: 'icon-link' } },
-                '#',
-              ),
-            ),
             'Supported options:',
           ),
           r.a.createElement(
@@ -333,20 +291,6 @@
           r.a.createElement(
             m.MDXTag,
             { name: 'h2', components: a, props: { id: 'sharesingle-options-in-ios--android' } },
-            r.a.createElement(
-              m.MDXTag,
-              {
-                name: 'a',
-                components: a,
-                parentName: 'h2',
-                props: { 'aria-hidden': !0, href: '#sharesingle-options-in-ios--android' },
-              },
-              r.a.createElement(
-                m.MDXTag,
-                { name: 'span', components: a, parentName: 'a', props: { className: 'icon-link' } },
-                '#',
-              ),
-            ),
             'shareSingle options (in iOS & Android)',
           ),
           r.a.createElement(
@@ -560,20 +504,6 @@
           r.a.createElement(
             m.MDXTag,
             { name: 'h2', components: a, props: { id: 'static-values-for-social' } },
-            r.a.createElement(
-              m.MDXTag,
-              {
-                name: 'a',
-                components: a,
-                parentName: 'h2',
-                props: { 'aria-hidden': !0, href: '#static-values-for-social' },
-              },
-              r.a.createElement(
-                m.MDXTag,
-                { name: 'span', components: a, parentName: 'a', props: { className: 'icon-link' } },
-                '#',
-              ),
-            ),
             'Static Values for social',
           ),
           r.a.createElement(
@@ -804,20 +734,6 @@
           r.a.createElement(
             m.MDXTag,
             { name: 'h2', components: a, props: { id: 'how-it-looks' } },
-            r.a.createElement(
-              m.MDXTag,
-              {
-                name: 'a',
-                components: a,
-                parentName: 'h2',
-                props: { 'aria-hidden': !0, href: '#how-it-looks' },
-              },
-              r.a.createElement(
-                m.MDXTag,
-                { name: 'span', components: a, parentName: 'a', props: { className: 'icon-link' } },
-                '#',
-              ),
-            ),
             'how it looks:',
           ),
           r.a.createElement(

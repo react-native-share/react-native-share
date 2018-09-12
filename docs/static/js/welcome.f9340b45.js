@@ -1,67 +1,53 @@
 (window.webpackJsonp = window.webpackJsonp || []).push([
-  [4],
+  [5],
   {
-    './documentation/Welcome.mdx': function(e, a, t) {
+    './documentation/Welcome.mdx': function(e, t, a) {
       'use strict';
-      t.r(a);
-      var n = t('./node_modules/react/index.js'),
-        r = t.n(n),
-        o = t('./node_modules/@mdx-js/tag/dist/index.js');
-      function m(e, a) {
+      a.r(t);
+      var n = a('./node_modules/react/index.js'),
+        r = a.n(n),
+        o = a('./node_modules/@mdx-js/tag/dist/index.js');
+      function c(e, t) {
         if (null == e) return {};
-        var t,
+        var a,
           n,
-          r = (function(e, a) {
+          r = (function(e, t) {
             if (null == e) return {};
-            var t,
+            var a,
               n,
               r = {},
               o = Object.keys(e);
-            for (n = 0; n < o.length; n++) (t = o[n]), a.indexOf(t) >= 0 || (r[t] = e[t]);
+            for (n = 0; n < o.length; n++) (a = o[n]), t.indexOf(a) >= 0 || (r[a] = e[a]);
             return r;
-          })(e, a);
+          })(e, t);
         if (Object.getOwnPropertySymbols) {
           var o = Object.getOwnPropertySymbols(e);
           for (n = 0; n < o.length; n++)
-            (t = o[n]),
-              a.indexOf(t) >= 0 ||
-                (Object.prototype.propertyIsEnumerable.call(e, t) && (r[t] = e[t]));
+            (a = o[n]),
+              t.indexOf(a) >= 0 ||
+                (Object.prototype.propertyIsEnumerable.call(e, a) && (r[a] = e[a]));
         }
         return r;
       }
-      a.default = function(e) {
-        var a = e.components;
-        m(e, ['components']);
+      t.default = function(e) {
+        var t = e.components;
+        c(e, ['components']);
         return r.a.createElement(
           o.MDXTag,
-          { name: 'wrapper', components: a },
+          { name: 'wrapper', components: t },
           r.a.createElement(
             o.MDXTag,
-            { name: 'h1', components: a, props: { id: 'welcome-to-react-native-share' } },
-            r.a.createElement(
-              o.MDXTag,
-              {
-                name: 'a',
-                components: a,
-                parentName: 'h1',
-                props: { 'aria-hidden': !0, href: '#welcome-to-react-native-share' },
-              },
-              r.a.createElement(
-                o.MDXTag,
-                { name: 'span', components: a, parentName: 'a', props: { className: 'icon-link' } },
-                '#',
-              ),
-            ),
+            { name: 'h1', components: t, props: { id: 'welcome-to-react-native-share' } },
             'Welcome to React Native Share',
           ),
           r.a.createElement(
             o.MDXTag,
-            { name: 'p', components: a },
+            { name: 'p', components: t },
             r.a.createElement(
               o.MDXTag,
               {
                 name: 'a',
-                components: a,
+                components: t,
                 parentName: 'p',
                 props: {
                   href:
@@ -70,7 +56,7 @@
               },
               r.a.createElement(o.MDXTag, {
                 name: 'img',
-                components: a,
+                components: t,
                 parentName: 'a',
                 props: {
                   src:
@@ -84,13 +70,13 @@
               o.MDXTag,
               {
                 name: 'a',
-                components: a,
+                components: t,
                 parentName: 'p',
                 props: { href: 'http://badge.fury.io/js/react-native-share' },
               },
               r.a.createElement(o.MDXTag, {
                 name: 'img',
-                components: a,
+                components: t,
                 parentName: 'a',
                 props: {
                   src: 'https://badge.fury.io/js/react-native-share.svg',
@@ -102,19 +88,19 @@
           ),
           r.a.createElement(
             o.MDXTag,
-            { name: 'p', components: a },
+            { name: 'p', components: t },
             r.a.createElement(
               o.MDXTag,
-              { name: 'strong', components: a, parentName: 'p' },
+              { name: 'strong', components: t, parentName: 'p' },
               r.a.createElement(
                 o.MDXTag,
-                { name: 'em', components: a, parentName: 'strong' },
+                { name: 'em', components: t, parentName: 'strong' },
                 'NOTE: React Native now implements share functionality ',
                 r.a.createElement(
                   o.MDXTag,
                   {
                     name: 'a',
-                    components: a,
+                    components: t,
                     parentName: 'em',
                     props: { href: 'https://facebook.github.io/react-native/docs/share.html' },
                   },
