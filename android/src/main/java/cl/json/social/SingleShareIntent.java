@@ -54,4 +54,8 @@ public abstract class SingleShareIntent extends ShareIntent {
         //  configure default
         super.open(options);
     }
+    protected void openIntentChooser() throws ActivityNotFoundException {
+        this.getIntent().setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        this.reactContext.startActivity(this.getIntent());
+    }
 }
