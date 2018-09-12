@@ -34,6 +34,7 @@ public abstract class SingleShareIntent extends ShareIntent {
             if(this.isPackageInstalled(getPackage(), reactContext)) {
                 System.out.println("INSTALLED");
                 this.getIntent().setPackage(getPackage());
+                super.open(options);
             } else {
                 System.out.println("NOT INSTALLED");
                 String url = "";
