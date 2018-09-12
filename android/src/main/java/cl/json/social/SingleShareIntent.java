@@ -34,6 +34,7 @@ public abstract class SingleShareIntent extends ShareIntent {
             if(this.isPackageInstalled(getPackage(), reactContext)) {
                 System.out.println("INSTALLED");
                 this.getIntent().setPackage(getPackage());
+                super.open(options);
             } else {
                 System.out.println("NOT INSTALLED");
                 String url = "";
@@ -52,5 +53,9 @@ public abstract class SingleShareIntent extends ShareIntent {
         }
         //  configure default
         super.open(options);
+    }
+    protected void openIntentChooser() throws ActivityNotFoundException {
+        this.getIntent().setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        this.reactContext.startActivity(this.getIntent());
     }
 }
