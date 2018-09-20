@@ -35,7 +35,7 @@ Share Social , Sending Simple Data to Other Apps
       <string>mailto</string>
     </array>
     ```
-7. (Optional) If you are going to allow users to save photo to Photos update info.plist file with;
+7. (Optional) Also following lines allows users to save photos, add them in `info.plist`
     ```xml
     <key>NSPhotoLibraryAddUsageDescription</key>
     <string>$(PRODUCT_NAME) wants to save photos</string>
