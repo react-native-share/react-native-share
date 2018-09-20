@@ -9,6 +9,7 @@
 #import <AVFoundation/AVFoundation.h>
 
 @implementation InstagramShare
+    RCT_EXPORT_MODULE();
 - (void)shareSingle:(NSDictionary *)options
     failureCallback:(RCTResponseErrorBlock)failureCallback
     successCallback:(RCTResponseSenderBlock)successCallback {
