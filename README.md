@@ -35,8 +35,12 @@ Share Social , Sending Simple Data to Other Apps
       <string>mailto</string>
     </array>
     ```
-
-6. Run your project (`Cmd+R`)
+7. (Optional) Also following lines allows users to save photos, add them in `info.plist`
+    ```xml
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>$(PRODUCT_NAME) wants to save photos</string>
+    ```
+8. Run your project (`Cmd+R`)
 
 #### Android Install
 
