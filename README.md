@@ -35,8 +35,12 @@ Share Social , Sending Simple Data to Other Apps
       <string>mailto</string>
     </array>
     ```
-
-6. Run your project (`Cmd+R`)
+7. (Optional) If you are going to allow users to save photo to Photos update info.plist file with;
+    ```xml
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>$(PRODUCT_NAME) only to Save Photo</string>
+    ```
+8. Run your project (`Cmd+R`)
 
 #### Android Install
 
