@@ -38,7 +38,7 @@ Share Social , Sending Simple Data to Other Apps
 7. (Optional) If you are going to allow users to save photo to Photos update info.plist file with;
     ```xml
     <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>$(PRODUCT_NAME) only to Save Photo</string>
+    <string>$(PRODUCT_NAME) wants to save photos</string>
     ```
 8. Run your project (`Cmd+R`)
 
