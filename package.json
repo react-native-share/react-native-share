@@ -26,6 +26,7 @@
     "pre-commit": "^1.2.2",
     "prettier": "^1.12.0",
     "react": "16.3.1",
+    "react-dom": "^16.5.2",
     "react-native": "0.55.2",
     "simple-git": "1.89.0"
   },
@@ -65,7 +66,5 @@
     "release:version": "node ./changelog --version $VERSION && git push origin && git push origin --follow-tags",
     "release:docz": "rm -rf docs && yarn docz build"
   },
-  "dependencies": {
-    "react-dom": "^16.4.2"
-  }
+  "dependencies": {}
 }
