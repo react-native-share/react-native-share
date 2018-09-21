@@ -7,3 +7,7 @@ jsconfig.json
 commitlint.config.js
 assets/*
 example/*
+
+# Docz
+.docz
+docs
