@@ -155,6 +155,7 @@ class RNShare {
     INSTAGRAM: NativeModules.RNShare.INSTAGRAM || 'instagram',
     GOOGLEPLUS: NativeModules.RNShare.GOOGLEPLUS || 'googleplus',
     EMAIL: NativeModules.RNShare.EMAIL || 'email',
+    PINTEREST: NativeModules.RNShare.PINTEREST || 'pinterest',
   };
 
   static open(options: Options | MultipleOptions): Promise<OpenReturn> {
