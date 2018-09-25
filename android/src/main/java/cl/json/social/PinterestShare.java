@@ -10,7 +10,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 
 /**
- * Created by Ralf DEATHART on 25-09-18.
+ * Created by Deathart on 25-09-18.
  */
 public class PinterestShare extends SingleShareIntent {
 
