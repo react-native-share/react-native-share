@@ -16,6 +16,7 @@ public class PinterestShare extends SingleShareIntent {
 
     private static final String PACKAGE = "com.pinterest";
     private static final String PLAY_STORE_LINK = "market://details?id=com.pinterest";
+    private static final String DEFAULT_WEB_LINK = "https://pinterest.com/pin/create/button/?url={url}&media=$media&description={message}";
 
     public PinterestShare(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -35,7 +36,7 @@ public class PinterestShare extends SingleShareIntent {
 
     @Override
     protected String getDefaultWebLink() {
-        return null;
+        return DEFAULT_WEB_LINK;
     }
 
     @Override
