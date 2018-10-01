@@ -1,10 +1,10 @@
 package cl.json;
 
-import android.content.CursorLoader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.FileProvider;
 import android.util.Base64;
 import android.webkit.MimeTypeMap;
@@ -24,7 +24,6 @@ import java.util.ArrayList;
 public class ShareFiles
 {
     private final ReactApplicationContext reactContext;
-    private ReadableArray urls;
     private ArrayList<Uri> uris;
     private String intentType;
 
@@ -34,8 +33,7 @@ public class ShareFiles
     }
 
     public ShareFiles(ReadableArray urls, ReactApplicationContext reactContext){
-        this.urls = urls;
-        this.uris = new ArrayList();
+        this.uris = new ArrayList<>();
         for (int i = 0; i < urls.size(); i++) {
             String url = urls.getString(i);
             if (url != null) {
@@ -47,7 +45,7 @@ public class ShareFiles
     }
     /**
      * Obtain mime type from URL
-     * @param {@link String} url
+     * @param url {@link String}
      * @return {@link String} mime type
      */
     private String getMimeType(String url) {
@@ -79,7 +77,7 @@ public class ShareFiles
             String type = uri.getSchemeSpecificPart().substring(0, uri.getSchemeSpecificPart().indexOf(";"));
             if (this.intentType == null) {
                 this.intentType = type;
-            } else if (type != null && !this.intentType.equalsIgnoreCase(type) && this.intentType.split("/")[0].equalsIgnoreCase((type.split("/"))[0])) {
+            } else if (!this.intentType.equalsIgnoreCase(type) && this.intentType.split("/")[0].equalsIgnoreCase((type.split("/"))[0])) {
                 this.intentType = (this.intentType.split("/")[0]).concat("/*");
             } else if (!this.intentType.equalsIgnoreCase(type)) {
                 this.intentType = "*/*";
@@ -90,7 +88,7 @@ public class ShareFiles
     }
     private boolean isLocalFile(Uri uri) {
         String scheme = uri.getScheme();
-        if((scheme != null) && uri.getScheme().equals("content") || uri.getScheme().equals("file")) {
+        if((scheme != null) && uri.getScheme().equals("content") || "file".equals(uri.getScheme())) {
 //            // type is already set
 //            if (this.type != null) {
 //                return true;
@@ -109,7 +107,7 @@ public class ShareFiles
 
             if (this.intentType == null) {
                 this.intentType = type;
-            } else if (type != null && !this.intentType.equalsIgnoreCase(type) && this.intentType.split("/")[0].equalsIgnoreCase((type.split("/"))[0])) {
+            } else if (!this.intentType.equalsIgnoreCase(type) && this.intentType.split("/")[0].equalsIgnoreCase((type.split("/"))[0])) {
                 this.intentType = (this.intentType.split("/")[0]).concat("/*");
             } else if (!this.intentType.equalsIgnoreCase(type)) {
                 this.intentType = "*/*";
@@ -131,6 +129,9 @@ public class ShareFiles
         String[] proj = { MediaStore.Images.Media.DATA };
         CursorLoader loader = new CursorLoader(this.reactContext, contentUri, proj, null, null, null);
         Cursor cursor = loader.loadInBackground();
+        if (cursor == null) {
+            return "";
+        }
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
         String result = cursor.getString(column_index);
@@ -150,8 +151,8 @@ public class ShareFiles
                 String encodedImg = uri.getSchemeSpecificPart().substring(uri.getSchemeSpecificPart().indexOf(";base64,") + 8);
                 try {
                     File dir = new File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_DOWNLOADS );
-                    if (!dir.exists()) {
-                        dir.mkdirs();
+                    if (!dir.exists() && !dir.mkdirs()) {
+                        throw new IOException("mkdirs failed on " + dir.getAbsolutePath());
                     }
                     File file = new File(dir, System.currentTimeMillis() + "." + extension);
                     final FileOutputStream fos = new FileOutputStream(file);
@@ -163,7 +164,9 @@ public class ShareFiles
                     e.printStackTrace();
                 }
             } else if(this.isLocalFile(uri)) {
-                finalUris.add(FileProvider.getUriForFile(reactContext, authority, new File(uri.getPath())));
+                if (uri.getPath() != null) {
+                    finalUris.add(FileProvider.getUriForFile(reactContext, authority, new File(uri.getPath())));
+                }
             }
         }
 
