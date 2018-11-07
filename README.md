@@ -147,7 +147,7 @@ Supported options:
 | :---- | :------: | :--- |
 | url | string   | URL you want to share (you can share a base64 file url only in iOS & Android ) |
 | urls | Array[string]   | URL's you want to share, Only for iOS and Android (you can share a base64 file url only in iOS & Android ) |
-| type | string   | File mime type (optional) |
+| type | string   | File mime type (optional).The support types are as follows, and must be shared when sharing files. |
 | message | string   |  |
 | title | string   |  (optional) |
 | subject | string   | (optional) |
@@ -166,11 +166,19 @@ Supported options:
 | Name  | Type     | Description |
 | :---- | :------: | :--- |
 | url | string   | URL you want to share |
-| type | string   | File mime type (optional) |
+| type | string   | File mime type (optional). The support types are as follows, and must be shared when sharing files. |
 | message | string   |  |
 | title | string   |  (optional) |
 | subject | string   | (optional) |
 | social | string   | supported social apps: [List](#static-values-for-social)  |
+
+
+#### File mime type
+| Name  | Type     | Description |
+| :---- | :------: | :--- |
+| type: 'application/pdf' | string   | pdf file |
+| type: 'audio/mp3' | string   | mp3 file |
+| type: 'image/png' | string   | png file |
 
 ***NOTE: If both `message` and `url` are provided `url` will be concatenated to the end of `message` to form the body of the message. If only one is provided it will be used***
 
