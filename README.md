@@ -99,7 +99,7 @@ Share Social , Sending Simple Data to Other Apps
     be [hard-coded here to work
     properly](https://github.com/EstebanFuentealba/react-native-share/issues/200#issuecomment-361938532).
 
-    ```
+    ```java
     import cl.json.ShareApplication
 
     class MyApplication extends Application implements ShareApplication, ReactApplication {
@@ -135,7 +135,7 @@ Open Simple share dialog
 
 Returns a promise that fulfills or rejects as soon as user successfully open the share action sheet or cancelled/failed to do so. As a result you might need to further handle the rejection while necessary. e.g.
 
-```javascript
+```jsx
   Share.open(options)
     .then((res) => { console.log(res) })
     .catch((err) => { err && console.log(err); });
@@ -199,7 +199,7 @@ Share.shareSingle(shareOptions);
 | **EMAIL** | yes   | yes | no |
 | **PINTEREST** | yes   | no | no |
 
-## how it looks:
+## How it looks:
 
 |          | Android  | IOS      | Windows  |
 | -------- | -------- | -------- | -------- |
@@ -460,7 +460,7 @@ Therefore we use this "workaround" in order to handle pdf sharing for iOS Apps t
 
 Code:
 
-```
+```jsx
 static sharePDFWithIOS(fileUrl, type) {
   let filePath = null;
   let file_url_length = fileUrl.length;
@@ -486,7 +486,7 @@ static sharePDFWithIOS(fileUrl, type) {
 
 Nothing to do on Android. You can share the pdf file with base64
 
-```
+```jsx
 static sharePDFWithAndroid(fileUrl, type) {
   let filePath = null;
   let file_url_length = fileUrl.length;
