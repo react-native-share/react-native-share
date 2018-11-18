@@ -145,7 +145,7 @@ public abstract class ShareIntent {
 
         this.reactContext.startActivity(chooser);
     }
-    protected boolean isPackageInstalled(String packagename, Context context) {
+    public static boolean isPackageInstalled(String packagename, Context context) {
         PackageManager pm = context.getPackageManager();
         try {
             pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
