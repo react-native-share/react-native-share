@@ -10,7 +10,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Button
+  Button,
+  Alert
 } from 'react-native';
 import Share from 'react-native-share';
 import images from './src/imageBase64';
