@@ -182,6 +182,19 @@ Supported options:
 
 ***NOTE: If both `message` and `url` are provided `url` will be concatenated to the end of `message` to form the body of the message. If only one is provided it will be used***
 
+#### isPackageInstalled (in Android)
+It's a method that checks if an app (package) is installed on Android. 
+It returns a promise with `isInstalled`. e.g.
+
+Checking if Instagram is installed on Android.
+```jsx
+Share.isPackageInstalled('com.instagram.android')
+  .then(({ isInstalled }) => console.log(isInstalled))
+```
+
+***NOTE: in iOS you can use `Linking.canOpenURL(url)`***
+
+
 ### Static Values for social
 
 These can be assessed using Share.Social property

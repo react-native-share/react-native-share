@@ -10,7 +10,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Button
+  Button,
+  Alert
 } from 'react-native';
 import Share from 'react-native-share';
 import images from './src/imageBase64';
@@ -41,6 +42,10 @@ export default class App extends Component<Props> {
     return Share.open(shareOptions);
   }
 
+  isPackageInstalled() {
+    return Share.isPackageInstalled('com.xxx.xxx');
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -49,6 +54,12 @@ export default class App extends Component<Props> {
         </Text>
         <Button title="Share 2 images" onPress={() => this.onShare()}/>
         <Button title="Share single image" onPress={() => this.onShare2()}/>
+        <Button
+          title="Check package installed"
+          onPress={() =>
+            this.isPackageInstalled().then(({ isInstalled }) => Alert.alert(`isInstalled = ${isInstalled}`))
+          }
+        />
       </View>
     );
   }

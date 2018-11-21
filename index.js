@@ -247,6 +247,26 @@ class RNShare {
       throw new Error('Not implemented');
     }
   }
+
+  static isPackageInstalled (packageName): Promise<ShareSingleReturn> {
+    if (Platform.OS === 'android') {
+      return new Promise((resolve, reject) => {
+        NativeModules.RNShare.isPackageInstalled(
+          packageName,
+          e => {
+            return reject({ error: e });
+          },
+          isInstalled => {
+            return resolve({
+              isInstalled: isInstalled,
+            });
+          },
+        )
+      });
+    } else {
+      throw new Error('Not implemented');
+    }
+  }
 }
 
 module.exports = RNShare;

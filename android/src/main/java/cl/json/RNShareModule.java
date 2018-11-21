@@ -131,6 +131,18 @@ public class RNShareModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void isPackageInstalled(String packagename, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
+        try{
+            boolean res = ShareIntent.isPackageInstalled(packagename, this.reactContext);
+            successCallback.invoke(res);
+        }
+        catch (Exception e){
+            System.out.println("Error: " + e.getMessage());
+            failureCallback.invoke(e.getMessage());
+        }
+    }
+
+    @ReactMethod
     public void isBase64File(String url, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
         try {
             Uri uri = Uri.parse(url);
