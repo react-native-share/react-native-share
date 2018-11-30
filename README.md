@@ -204,6 +204,7 @@ import Share from 'react-native-share';
 
 const shareOptions = {
     title: 'Share via',
+    message: 'some message',
     url: 'some share url',
     social: Share.Social.WHATSAPP
 };
