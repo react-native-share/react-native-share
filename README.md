@@ -35,7 +35,8 @@ This gives you the power to prioritize our work and support the project contribu
 3. Go to `node_modules` ➜ `react-native-share` ➜ `ios` and add `RNShare.xcodeproj`
 4. In XCode, in the project navigator, select your project. Add `libRNShare.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 5. In XCode, in the project navigator, select your project. Add `Social.framework` and `MessageUI.framework` to your project's `General` ➜ `Linked Frameworks and Libraries`
-6. In file Info.plist, add
+6. In iOS 9 or higher, You should add app list that you will share.
+If you want to share Whatsapp and Mailto, you should write `LSApplicationQueriesSchemes` in info.plist  
     ```xml
     <key>LSApplicationQueriesSchemes</key>
     <array>
