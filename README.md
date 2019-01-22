@@ -95,9 +95,9 @@ If you want to share Whatsapp and Mailto, you should write `LSApplicationQueries
     ```xml
       <?xml version="1.0" encoding="utf-8"?>
       <paths xmlns:android="http://schemas.android.com/apk/res/android">
-          <-- For files shared using base64 URLs. Required WRITE_EXTERNAL_STORAGE permission -->
+          <-- For files shared using base64 URLs. Requires WRITE_EXTERNAL_STORAGE permission -->
           <external-path name="myexternalimages" path="Download/" />
-          <-- For files in internal storage under myInternalDir -->
+          <-- For files in internal storage "myInternalDir" (replace with your path) -->
           <files-path path="myInternalDir/" name="myInternalImages" />
       </paths>
     ```
