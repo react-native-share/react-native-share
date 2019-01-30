@@ -180,6 +180,7 @@ Supported options:
 | title | string   |  (optional) |
 | subject | string   | (optional) |
 | social | string   | supported social apps: [List](#static-values-for-social)  |
+| forceDialog | boolean | (optional) only android. Avoid showing dialog with buttons Just Once / Always. Useful for Instagram to always ask user if share as Story or Feed |
 
 ***NOTE: If both `message` and `url` are provided `url` will be concatenated to the end of `message` to form the body of the message. If only one is provided it will be used***
 
