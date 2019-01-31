@@ -55,7 +55,13 @@ public abstract class SingleShareIntent extends ShareIntent {
         super.open(options);
     }
     protected void openIntentChooser() throws ActivityNotFoundException {
-        this.getIntent().setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.reactContext.startActivity(this.getIntent());
+        if(this.options.hasKey("forceDialog") && this.options.getBoolean("forceDialog")){
+             Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
+             chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+             this.reactContext.startActivity(chooser);
+        }else{
+             this.getIntent().setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+             this.reactContext.startActivity(this.getIntent());
+        }
     }
 }
