@@ -20,9 +20,6 @@ import cl.json.ShareFile;
  */
 public abstract class SingleShareIntent extends ShareIntent {
 
-
-
-
     protected String playStoreURL = null;
     protected String appStoreURL = null;
 
@@ -37,6 +34,7 @@ public abstract class SingleShareIntent extends ShareIntent {
             if(this.isPackageInstalled(getPackage(), reactContext)) {
                 System.out.println("INSTALLED");
                 this.getIntent().setPackage(getPackage());
+                super.open(options);
             } else {
                 System.out.println("NOT INSTALLED");
                 String url = "";
@@ -46,7 +44,7 @@ public abstract class SingleShareIntent extends ShareIntent {
                             .replace("{message}",   this.urlEncode( options.getString("message") ));
                 } else if(getPlayStoreLink() != null) {
                     url = getPlayStoreLink();
-                } else{
+                } else {
                     //  TODO
                 }
                 //  open web intent
@@ -54,6 +52,16 @@ public abstract class SingleShareIntent extends ShareIntent {
             }
         }
         //  configure default
-        super.open(options);        
+        super.open(options);
+    }
+    protected void openIntentChooser() throws ActivityNotFoundException {
+        if(this.options.hasKey("forceDialog") && this.options.getBoolean("forceDialog")){
+             Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
+             chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+             this.reactContext.startActivity(chooser);
+        }else{
+             this.getIntent().setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+             this.reactContext.startActivity(this.getIntent());
+        }
     }
 }

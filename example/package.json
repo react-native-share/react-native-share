@@ -9,7 +9,7 @@
   "dependencies": {
     "react": "16.3.1",
     "react-native": "0.55.4",
-    "react-native-share": "git+https://github.com/kkbhav/react-native-share.git"
+    "react-native-share": "git+https://github.com/react-native-community/react-native-share.git"
   },
   "devDependencies": {
     "babel-jest": "23.0.1",
