@@ -72,9 +72,18 @@ If you want to share Whatsapp and Mailto, you should write `LSApplicationQueries
 5. Follow this
    [guide](https://developer.android.com/training/secure-file-sharing/setup-sharing.html).
    For example:
-  - Put this in `AndroidManifest.xml` where `applicationId` is something that
-    you have defined in `android/app/build.gradle`:
-
+  - `applicationId` should be defined in the `defaultConfig` section in your `android/app/build.gradle`:
+    
+    File: `android/app/build.gradle`
+    ````  
+      defaultConfig {
+        applicationId "com.yourcompany.yourappname"
+        ...
+    }
+    ````
+  - Add this `<provider>` section to your `AndroidManifest.xml`
+  
+    File: `AndroidManifest.xml`
     ```xml
       <application>
         <provider
@@ -88,30 +97,28 @@ If you want to share Whatsapp and Mailto, you should write `LSApplicationQueries
         </provider>
       </application>
     ```
-
+    
   - Create a `filepaths.xml` under this directory:
-    `android/app/src/main/res/xml`. In this file, add the following contents:
-
+    `android/app/src/main/res/xml`. 
+    
+    In this file, add the following contents:
+    
+    File: `android/app/src/main/res/filepaths.xml`
     ```xml
       <?xml version="1.0" encoding="utf-8"?>
       <paths xmlns:android="http://schemas.android.com/apk/res/android">
           <external-path name="myexternalimages" path="Download/" />
       </paths>
     ```
-
-6. Edit your `MainApplication` class to implement `ShareApplication`
-  - Also add the `getFileProviderAuthority` method to your MainApplication class,
-    and have it return the `android:authorities` that was added in
-    AndroidManifest file.
-  - For example: Replace the `com.example.yourappidhere` below with the
-    `applicationId` that is defined in your `android/app/build.gradle`. It must
-    be [hard-coded here to work
-    properly](https://github.com/EstebanFuentealba/react-native-share/issues/200#issuecomment-361938532).
+    
+6. Edit your `MainApplication.java` class to add `implements ShareApplication` and `getFileProviderAuthority`
+  - The `getFileProviderAuthority` function returns the `android:authorities` value added in the `AndroidManifest.xml` file
+  - `applicationId` is defined in the `defaultConfig` section of your `android/app/build.gradle` and referenced using `BuildConfig.APPLICATION_ID`
 
     ```java
     import cl.json.ShareApplication
-
-    class MyApplication extends Application implements ShareApplication, ReactApplication {
+    public class MainApplication extends Application implements ShareApplication, ReactApplication {
+    class MainApplication extends Application implements ShareApplication, ReactApplication {
 
     {
 
@@ -119,7 +126,7 @@ If you want to share Whatsapp and Mailto, you should write `LSApplicationQueries
 
          @Override
          public String getFileProviderAuthority() {
-                return "com.example.yourappidhere.provider";
+                return BuildConfig.APPLICATION_ID + ".provider";
          }
 
     }
