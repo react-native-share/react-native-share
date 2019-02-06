@@ -9,7 +9,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: 'transparent',
-    position: 'absolute'
+    position: 'absolute',
+    zIndex: 2
   },
   emptyOverlay: {
     width: 0,
