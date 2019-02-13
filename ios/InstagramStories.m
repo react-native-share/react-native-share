@@ -2,8 +2,8 @@
 //  InstagramStories.m
 //  RNShare
 //
-//  Created by Nikita on 13.02.2019.
-//  Copyright © 2019 Facebook. All rights reserved.
+//  Created by Nikita Logachev on 13.02.2019.
+//  link: https://github.com/loga4
 //
 
 // import RCTLog
