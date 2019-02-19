@@ -6,15 +6,6 @@
 //  link: https://github.com/loga4
 //
 
-// import RCTLog
-#if __has_include(<React/RCTLog.h>)
-#import <React/RCTLog.h>
-#elif __has_include("RCTLog.h")
-#import "RCTLog.h"
-#else
-#import "React/RCTLog.h"   // Required when used as a Pod in a Swift project
-#endif
-
 #import "InstagramStories.h"
 
 @implementation InstagramStories

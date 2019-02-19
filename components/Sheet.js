@@ -20,6 +20,7 @@ export default class extends React.Component<Props, State> {
     bottom: new Animated.Value(DEFAULT_BOTTOM),
   };
 
+  // TODO - change to componentDidUpdate
   UNSAFE_componentWillReceiveProps(newProps: Props) {
     return Animated.timing(this.state.bottom, {
       toValue: newProps.visible ? 0 : DEFAULT_BOTTOM,

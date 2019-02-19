@@ -44,6 +44,8 @@ class Overlay extends React.Component<Props, State> {
       this.setState({ overlayStyle: styles.emptyOverlay });
     }
   }
+
+  // TODO - change to componentDidUpdate
   UNSAFE_componentWillReceiveProps(newProps: Props) {
     if (newProps.visible) {
       this.setState({ overlayStyle: styles.fullOverlay });
@@ -53,6 +55,7 @@ class Overlay extends React.Component<Props, State> {
       duration: DEFAULT_ANIMATE_TIME,
     }).start(this.onAnimatedEnd.bind(this));
   }
+
   render() {
     return (
       <Animated.View style={[this.state.overlayStyle, { opacity: this.state.fadeAnim }]}>
