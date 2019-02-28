@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.provider.Telephony;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
@@ -22,6 +23,7 @@ public abstract class SingleShareIntent extends ShareIntent {
 
     protected String playStoreURL = null;
     protected String appStoreURL = null;
+    protected String defaultApplication = "DEFAULT";
 
     public SingleShareIntent(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -31,9 +33,16 @@ public abstract class SingleShareIntent extends ShareIntent {
         System.out.println(getPackage());
         //  check if package is installed
         if(getPackage() != null || getDefaultWebLink() != null || getPlayStoreLink() != null) {
-            if(this.isPackageInstalled(getPackage(), reactContext)) {
+
+            String packageName = getPackage();
+
+            if(packageName == defaultApplication) {
+                packageName = Telephony.Sms.getDefaultSmsPackage(reactContext);
+            }
+
+            if(this.isPackageInstalled(packageName, reactContext)) {
                 System.out.println("INSTALLED");
-                this.getIntent().setPackage(getPackage());
+                this.getIntent().setPackage(packageName);
                 super.open(options);
             } else {
                 System.out.println("NOT INSTALLED");

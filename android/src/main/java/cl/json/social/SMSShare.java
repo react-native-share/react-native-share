@@ -14,8 +14,8 @@ import com.facebook.react.bridge.ReadableMap;
  */
 public class SMSShare extends SingleShareIntent {
 
-    private static final String PACKAGE = "com.google.android.apps.messaging";
-    private static final String PLAY_STORE_LINK = "market://details?id=com.google.android.apps.messaging";
+    private static final String PACKAGE = "DEFAULT" ;
+    private static final String PLAY_STORE_LINK = null;
 
     public SMSShare(ReactApplicationContext reactContext) {
         super(reactContext);
