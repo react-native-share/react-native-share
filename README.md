@@ -569,10 +569,11 @@ Supported options for INSTAGRAM_STORIES:
 | backgroundBottomColor | string   |  (optional) default #837DF4 |
 | backgroundTopColor | string   | (optional) default #906df4 |
 | attributionURL | string   | (optional) facebook beta-test |
-
+| backgroundVideo | File   | URI you want to share |
 ### Instagram stories method list
 | Name  | Required options    |
 | :---- | :------: |
 | **SHARE_BACKGROUND_IMAGE** | backgroundImage   |
+| **SHARE_BACKGROUND_VIDEO** | backgroundVideo   |
 | **SHARE_STICKER_IMAGE** | stickerImage   |
 | **SHARE_BACKGROUND_AND_STICKER_IMAGE** | backgroundImage, stickerImage   |

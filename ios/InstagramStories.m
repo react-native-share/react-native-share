@@ -111,7 +111,6 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
     }
     
     NSString *method = [RCTConvert NSString:options[@"method"]];
-       RCTLog(@"method method is");
     if (method) {
         if([method isEqualToString:@"shareBackgroundImage"]) {
             
@@ -154,7 +153,6 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
             } else {
                 UIImage *backgroundImage = [UIImage imageWithData: [NSData dataWithContentsOfURL:backgroundURL]];
                 UIImage *stickerImage = [UIImage imageWithData: [NSData dataWithContentsOfURL:sticketURL]];
-                
                 [self backgroundImage:UIImagePNGRepresentation(backgroundImage) stickerImage:UIImagePNGRepresentation(stickerImage) attributionURL:attrURL];
             }
         }else if([method isEqualToString:@"shareBackgroundVideo"]) {
@@ -164,7 +162,6 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
                 RCTLogError(@"key 'backgroundVideo' missing in options");
             } else {
                 NSData *backgroundVideo = [[NSFileManager defaultManager] contentsAtPath: URL];
-                
                 [self backgroundVideo: backgroundVideo];
             }
         }
