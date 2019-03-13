@@ -35,6 +35,11 @@ public class PinterestShare extends SingleShareIntent {
     }
 
     @Override
+    protected String getComponentClass() {
+        return null;
+    }
+
+    @Override
     protected String getDefaultWebLink() {
         return DEFAULT_WEB_LINK;
     }

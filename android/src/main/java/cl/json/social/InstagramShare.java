@@ -34,6 +34,11 @@ public class InstagramShare extends SingleShareIntent {
     }
 
     @Override
+    protected String getComponentClass() {
+        return null;
+    }
+
+    @Override
     protected String getDefaultWebLink() {
         return null;
     }
