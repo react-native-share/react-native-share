@@ -122,8 +122,9 @@ If you want to share Whatsapp and Mailto, you should write `LSApplicationQueries
          @Override
          public String getFileProviderAuthority() {
                 return BuildConfig.APPLICATION_ID + ".provider";
+         }
 
-         //...
+         // ...
 
     }
     ```
