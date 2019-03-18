@@ -118,16 +118,12 @@ If you want to share Whatsapp and Mailto, you should write `LSApplicationQueries
     ```java
     import cl.json.ShareApplication
     public class MainApplication extends Application implements ShareApplication, ReactApplication {
-    class MainApplication extends Application implements ShareApplication, ReactApplication {
-
-    {
-
-         //...
-
+    
          @Override
          public String getFileProviderAuthority() {
                 return BuildConfig.APPLICATION_ID + ".provider";
-         }
+
+         //...
 
     }
     ```
