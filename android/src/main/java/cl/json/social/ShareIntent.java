@@ -195,7 +195,9 @@ public abstract class ShareIntent {
 
     protected abstract String getPackage();
 
-    protected abstract String getComponentClass();
+    protected String getComponentClass() {
+        return null;
+    }
 
     protected abstract String getDefaultWebLink();
 
