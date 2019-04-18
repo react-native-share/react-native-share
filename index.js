@@ -163,7 +163,7 @@ class RNShare {
     SHARE_BACKGROUND_IMAGE: NativeModules.RNShare.SHARE_BACKGROUND_IMAGE || 'shareBackgroundImage',
     SHARE_STICKER_IMAGE: NativeModules.RNShare.SHARE_STICKER_IMAGE || 'shareStickerImage',
     SHARE_BACKGROUND_AND_STICKER_IMAGE: NativeModules.RNShare.SHARE_BACKGROUND_AND_STICKER_IMAGE || 'shareBackgroundAndStickerImage',
-  }
+  };
 
   static open(options: Options | MultipleOptions): Promise<OpenReturn> {
     return new Promise((resolve, reject) => {
@@ -255,7 +255,7 @@ class RNShare {
     }
   }
 
-  static isPackageInstalled (packageName): Promise<ShareSingleReturn> {
+  static isPackageInstalled(packageName: string): Promise<ShareSingleReturn> {
     if (Platform.OS === 'android') {
       return new Promise((resolve, reject) => {
         NativeModules.RNShare.isPackageInstalled(
@@ -266,9 +266,10 @@ class RNShare {
           isInstalled => {
             return resolve({
               isInstalled: isInstalled,
+              message: 'Package is Installed',
             });
           },
-        )
+        );
       });
     } else {
       throw new Error('Not implemented');
