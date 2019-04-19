@@ -38,6 +38,8 @@ type Props = {
   children: React.Node,
 };
 
+const shareSheetStyle = { flex: 1 };
+
 class ShareSheet extends React.Component<Props> {
   backButtonHandler: () => boolean;
 
@@ -61,7 +63,7 @@ class ShareSheet extends React.Component<Props> {
     return (
       <Overlay visible={this.props.visible} {...this.props}>
         <View style={styles.actionSheetContainer}>
-          <TouchableOpacity style={{ flex: 1 }} onPress={this.props.onCancel} />
+          <TouchableOpacity style={shareSheetStyle} onPress={this.props.onCancel} />
           <Sheet visible={this.props.visible}>
             <View style={styles.buttonContainer}>{this.props.children}</View>
           </Sheet>
@@ -162,7 +164,8 @@ class RNShare {
   static InstagramStories = {
     SHARE_BACKGROUND_IMAGE: NativeModules.RNShare.SHARE_BACKGROUND_IMAGE || 'shareBackgroundImage',
     SHARE_STICKER_IMAGE: NativeModules.RNShare.SHARE_STICKER_IMAGE || 'shareStickerImage',
-    SHARE_BACKGROUND_AND_STICKER_IMAGE: NativeModules.RNShare.SHARE_BACKGROUND_AND_STICKER_IMAGE || 'shareBackgroundAndStickerImage',
+    SHARE_BACKGROUND_AND_STICKER_IMAGE:
+      NativeModules.RNShare.SHARE_BACKGROUND_AND_STICKER_IMAGE || 'shareBackgroundAndStickerImage',
   };
 
   static open(options: Options | MultipleOptions): Promise<OpenReturn> {
