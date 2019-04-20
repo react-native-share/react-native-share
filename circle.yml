@@ -19,6 +19,9 @@ jobs:
           name: Lint
           command: yarn lint
       - run:
+          name: Flow-Check
+          command: yarn flow-check
+      - run:
           name: Run Checks
           command: |
             cd android
