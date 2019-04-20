@@ -16,6 +16,7 @@
     "eslint-plugin-react": "^7.6.1",
     "eslint-plugin-react-native": "^3.2.0",
     "flow-bin": "^0.77.0",
+    "flow-typed": "^2.5.1",
     "generate-changelog": "1.7.0",
     "husky": "^0.14.3",
     "idx": "^2.4.0",
@@ -54,6 +55,7 @@
   "readmeFilename": "README.md",
   "scripts": {
     "commitmsg": "commitlint -e $GIT_PARAMS",
+    "flow-check": "flow check",
     "lint": "eslint src --max-warnings=0",
     "lint:staged": "lint-staged",
     "prettier": "prettier --write --single-quote true --trailing-comma all --print-width 100",
