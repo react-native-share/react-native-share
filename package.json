@@ -9,11 +9,13 @@
   "devDependencies": {
     "@commitlint/cli": "^6.1.0",
     "@commitlint/config-conventional": "^6.1.0",
+    "@react-native-community/eslint-config": "^0.0.4",
     "babel-eslint": "^8.2.1",
     "eslint": "^4.17.0",
     "eslint-plugin-flowtype": "^2.46.2",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-react": "^7.6.1",
+    "eslint-plugin-prettier": "2.6.2",
     "eslint-plugin-react-native": "^3.2.0",
     "flow-bin": "^0.77.0",
     "generate-changelog": "1.7.0",
@@ -54,7 +56,7 @@
   "readmeFilename": "README.md",
   "scripts": {
     "commitmsg": "commitlint -e $GIT_PARAMS",
-    "lint": "eslint src --max-warnings=0",
+    "lint": "eslint index.js --max-warnings=0",
     "lint:staged": "lint-staged",
     "prettier": "prettier --write --single-quote true --trailing-comma all --print-width 100",
     "release:major": "node ./changelog --major && npm version major && git push origin && git push origin --follow-tags",
