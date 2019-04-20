@@ -144,7 +144,7 @@ const requireAndAskPermissions = async (options: Options | MultipleOptions): Pro
 
 class RNShare {
   static Button: any;
-  static ShareSheet: React.Element<*>;
+  static ShareSheet: any;
   static Overlay: any;
   static Sheet: any;
   static Social = {
