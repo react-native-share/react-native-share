@@ -67,7 +67,9 @@ declare module 'eslint-plugin-react-native/lib/rules/no-unused-styles.js' {
   declare module.exports: $Exports<'eslint-plugin-react-native/lib/rules/no-unused-styles'>;
 }
 declare module 'eslint-plugin-react-native/lib/rules/split-platform-components.js' {
-  declare module.exports: $Exports<'eslint-plugin-react-native/lib/rules/split-platform-components'>;
+  declare module.exports: $Exports<
+    'eslint-plugin-react-native/lib/rules/split-platform-components',
+  >;
 }
 declare module 'eslint-plugin-react-native/lib/util/Components.js' {
   declare module.exports: $Exports<'eslint-plugin-react-native/lib/util/Components'>;

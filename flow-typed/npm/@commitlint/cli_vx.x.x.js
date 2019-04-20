@@ -105,7 +105,9 @@ declare module '@commitlint/cli/fixtures/inner-scope/commitlint.config.js' {
   declare module.exports: $Exports<'@commitlint/cli/fixtures/inner-scope/commitlint.config'>;
 }
 declare module '@commitlint/cli/fixtures/inner-scope/inner-scope/commitlint.config.js' {
-  declare module.exports: $Exports<'@commitlint/cli/fixtures/inner-scope/inner-scope/commitlint.config'>;
+  declare module.exports: $Exports<
+    '@commitlint/cli/fixtures/inner-scope/inner-scope/commitlint.config',
+  >;
 }
 declare module '@commitlint/cli/fixtures/issue-prefixes/commitlint.config.js' {
   declare module.exports: $Exports<'@commitlint/cli/fixtures/issue-prefixes/commitlint.config'>;
@@ -126,10 +128,14 @@ declare module '@commitlint/cli/fixtures/simple/commitlint.config.js' {
   declare module.exports: $Exports<'@commitlint/cli/fixtures/simple/commitlint.config'>;
 }
 declare module '@commitlint/cli/fixtures/specify-config-file/commitlint.config.js' {
-  declare module.exports: $Exports<'@commitlint/cli/fixtures/specify-config-file/commitlint.config'>;
+  declare module.exports: $Exports<
+    '@commitlint/cli/fixtures/specify-config-file/commitlint.config',
+  >;
 }
 declare module '@commitlint/cli/fixtures/specify-config-file/config/commitlint.config.js' {
-  declare module.exports: $Exports<'@commitlint/cli/fixtures/specify-config-file/config/commitlint.config'>;
+  declare module.exports: $Exports<
+    '@commitlint/cli/fixtures/specify-config-file/config/commitlint.config',
+  >;
 }
 declare module '@commitlint/cli/index' {
   declare module.exports: $Exports<'@commitlint/cli'>;

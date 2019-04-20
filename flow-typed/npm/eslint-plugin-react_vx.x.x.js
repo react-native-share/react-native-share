@@ -537,7 +537,9 @@ declare module 'eslint-plugin-react/lib/rules/no-multi-comp.js' {
   declare module.exports: $Exports<'eslint-plugin-react/lib/rules/no-multi-comp'>;
 }
 declare module 'eslint-plugin-react/lib/rules/no-redundant-should-component-update.js' {
-  declare module.exports: $Exports<'eslint-plugin-react/lib/rules/no-redundant-should-component-update'>;
+  declare module.exports: $Exports<
+    'eslint-plugin-react/lib/rules/no-redundant-should-component-update',
+  >;
 }
 declare module 'eslint-plugin-react/lib/rules/no-render-return-value.js' {
   declare module.exports: $Exports<'eslint-plugin-react/lib/rules/no-render-return-value'>;

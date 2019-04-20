@@ -10,12 +10,12 @@ declare module 'minimist' {
     stopEarly?: boolean,
     // TODO: Strings as keys don't work...
     // '--'? boolean,
-    unknown?: (param: string) => boolean
+    unknown?: (param: string) => boolean,
   };
 
   declare type minimistOutput = {
     _: Array<string>,
-    [flag: string]: string | boolean
+    [flag: string]: string | boolean,
   };
 
   declare module.exports: (argv: Array<string>, opts?: minimistOptions) => minimistOutput;

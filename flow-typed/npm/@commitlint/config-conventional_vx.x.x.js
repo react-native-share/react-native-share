@@ -23,7 +23,6 @@ declare module '@commitlint/config-conventional' {
  * needed.
  */
 
-
 // Filename aliases
 declare module '@commitlint/config-conventional/index' {
   declare module.exports: $Exports<'@commitlint/config-conventional'>;

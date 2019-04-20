@@ -2565,10 +2565,14 @@ declare module 'react-native/Libraries/Animated/src/animations/DecayAnimation.js
   declare module.exports: $Exports<'react-native/Libraries/Animated/src/animations/DecayAnimation'>;
 }
 declare module 'react-native/Libraries/Animated/src/animations/SpringAnimation.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Animated/src/animations/SpringAnimation'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Animated/src/animations/SpringAnimation',
+  >;
 }
 declare module 'react-native/Libraries/Animated/src/animations/TimingAnimation.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Animated/src/animations/TimingAnimation'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Animated/src/animations/TimingAnimation',
+  >;
 }
 declare module 'react-native/Libraries/Animated/src/bezier.js' {
   declare module.exports: $Exports<'react-native/Libraries/Animated/src/bezier'>;
@@ -2592,13 +2596,17 @@ declare module 'react-native/Libraries/Animated/src/nodes/AnimatedDivision.js' {
   declare module.exports: $Exports<'react-native/Libraries/Animated/src/nodes/AnimatedDivision'>;
 }
 declare module 'react-native/Libraries/Animated/src/nodes/AnimatedInterpolation.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Animated/src/nodes/AnimatedInterpolation'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Animated/src/nodes/AnimatedInterpolation',
+  >;
 }
 declare module 'react-native/Libraries/Animated/src/nodes/AnimatedModulo.js' {
   declare module.exports: $Exports<'react-native/Libraries/Animated/src/nodes/AnimatedModulo'>;
 }
 declare module 'react-native/Libraries/Animated/src/nodes/AnimatedMultiplication.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Animated/src/nodes/AnimatedMultiplication'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Animated/src/nodes/AnimatedMultiplication',
+  >;
 }
 declare module 'react-native/Libraries/Animated/src/nodes/AnimatedNode.js' {
   declare module.exports: $Exports<'react-native/Libraries/Animated/src/nodes/AnimatedNode'>;
@@ -2622,13 +2630,17 @@ declare module 'react-native/Libraries/Animated/src/nodes/AnimatedValueXY.js' {
   declare module.exports: $Exports<'react-native/Libraries/Animated/src/nodes/AnimatedValueXY'>;
 }
 declare module 'react-native/Libraries/Animated/src/nodes/AnimatedWithChildren.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Animated/src/nodes/AnimatedWithChildren'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Animated/src/nodes/AnimatedWithChildren',
+  >;
 }
 declare module 'react-native/Libraries/Animated/src/polyfills/flattenStyle.js' {
   declare module.exports: $Exports<'react-native/Libraries/Animated/src/polyfills/flattenStyle'>;
 }
 declare module 'react-native/Libraries/Animated/src/polyfills/InteractionManager.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Animated/src/polyfills/InteractionManager'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Animated/src/polyfills/InteractionManager',
+  >;
 }
 declare module 'react-native/Libraries/Animated/src/polyfills/Set.js' {
   declare module.exports: $Exports<'react-native/Libraries/Animated/src/polyfills/Set'>;
@@ -2646,10 +2658,14 @@ declare module 'react-native/Libraries/ART/ReactNativeART.js' {
   declare module.exports: $Exports<'react-native/Libraries/ART/ReactNativeART'>;
 }
 declare module 'react-native/Libraries/BatchedBridge/__mocks__/MessageQueueTestConfig.js' {
-  declare module.exports: $Exports<'react-native/Libraries/BatchedBridge/__mocks__/MessageQueueTestConfig'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/BatchedBridge/__mocks__/MessageQueueTestConfig',
+  >;
 }
 declare module 'react-native/Libraries/BatchedBridge/__mocks__/MessageQueueTestModule.js' {
-  declare module.exports: $Exports<'react-native/Libraries/BatchedBridge/__mocks__/MessageQueueTestModule'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/BatchedBridge/__mocks__/MessageQueueTestModule',
+  >;
 }
 declare module 'react-native/Libraries/BatchedBridge/BatchedBridge.js' {
   declare module.exports: $Exports<'react-native/Libraries/BatchedBridge/BatchedBridge'>;
@@ -2703,13 +2719,19 @@ declare module 'react-native/Libraries/CameraRoll/ImagePickerIOS.js' {
   declare module.exports: $Exports<'react-native/Libraries/CameraRoll/ImagePickerIOS'>;
 }
 declare module 'react-native/Libraries/Components/AccessibilityInfo/AccessibilityInfo.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/AccessibilityInfo/AccessibilityInfo.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/AccessibilityInfo/AccessibilityInfo.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/AccessibilityInfo/AccessibilityInfo.ios.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/AccessibilityInfo/AccessibilityInfo.ios'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/AccessibilityInfo/AccessibilityInfo.ios',
+  >;
 }
 declare module 'react-native/Libraries/Components/ActivityIndicator/ActivityIndicator.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/ActivityIndicator/ActivityIndicator'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/ActivityIndicator/ActivityIndicator',
+  >;
 }
 declare module 'react-native/Libraries/Components/AppleTV/TVEventHandler.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/AppleTV/TVEventHandler'>;
@@ -2730,40 +2752,60 @@ declare module 'react-native/Libraries/Components/Clipboard/Clipboard.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/Clipboard/Clipboard'>;
 }
 declare module 'react-native/Libraries/Components/DatePicker/DatePickerIOS.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/DatePicker/DatePickerIOS.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/DatePicker/DatePickerIOS.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/DatePicker/DatePickerIOS.ios.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/DatePicker/DatePickerIOS.ios'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/DatePicker/DatePickerIOS.ios',
+  >;
 }
 declare module 'react-native/Libraries/Components/DatePickerAndroid/DatePickerAndroid.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/DatePickerAndroid/DatePickerAndroid.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/DatePickerAndroid/DatePickerAndroid.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/DatePickerAndroid/DatePickerAndroid.ios.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/DatePickerAndroid/DatePickerAndroid.ios'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/DatePickerAndroid/DatePickerAndroid.ios',
+  >;
 }
 declare module 'react-native/Libraries/Components/DrawerAndroid/DrawerLayoutAndroid.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/DrawerAndroid/DrawerLayoutAndroid.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/DrawerAndroid/DrawerLayoutAndroid.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/DrawerAndroid/DrawerLayoutAndroid.ios.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/DrawerAndroid/DrawerLayoutAndroid.ios'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/DrawerAndroid/DrawerLayoutAndroid.ios',
+  >;
 }
 declare module 'react-native/Libraries/Components/Keyboard/Keyboard.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/Keyboard/Keyboard'>;
 }
 declare module 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView',
+  >;
 }
 declare module 'react-native/Libraries/Components/LazyRenderer.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/LazyRenderer'>;
 }
 declare module 'react-native/Libraries/Components/MaskedView/MaskedViewIOS.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/MaskedView/MaskedViewIOS.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/MaskedView/MaskedViewIOS.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/MaskedView/MaskedViewIOS.ios.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/MaskedView/MaskedViewIOS.ios'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/MaskedView/MaskedViewIOS.ios',
+  >;
 }
 declare module 'react-native/Libraries/Components/Navigation/NavigatorIOS.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/Navigation/NavigatorIOS.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/Navigation/NavigatorIOS.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/Navigation/NavigatorIOS.ios.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/Navigation/NavigatorIOS.ios'>;
@@ -2772,7 +2814,9 @@ declare module 'react-native/Libraries/Components/Picker/Picker.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/Picker/Picker'>;
 }
 declare module 'react-native/Libraries/Components/Picker/PickerAndroid.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/Picker/PickerAndroid.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/Picker/PickerAndroid.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/Picker/PickerAndroid.ios.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/Picker/PickerAndroid.ios'>;
@@ -2784,49 +2828,75 @@ declare module 'react-native/Libraries/Components/Picker/PickerIOS.ios.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/Picker/PickerIOS.ios'>;
 }
 declare module 'react-native/Libraries/Components/ProgressBarAndroid/ProgressBarAndroid.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/ProgressBarAndroid/ProgressBarAndroid.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/ProgressBarAndroid/ProgressBarAndroid.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/ProgressBarAndroid/ProgressBarAndroid.ios.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/ProgressBarAndroid/ProgressBarAndroid.ios'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/ProgressBarAndroid/ProgressBarAndroid.ios',
+  >;
 }
 declare module 'react-native/Libraries/Components/ProgressViewIOS/ProgressViewIOS.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/ProgressViewIOS/ProgressViewIOS.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/ProgressViewIOS/ProgressViewIOS.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/ProgressViewIOS/ProgressViewIOS.ios.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/ProgressViewIOS/ProgressViewIOS.ios'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/ProgressViewIOS/ProgressViewIOS.ios',
+  >;
 }
 declare module 'react-native/Libraries/Components/RefreshControl/__mocks__/RefreshControlMock.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/RefreshControl/__mocks__/RefreshControlMock'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/RefreshControl/__mocks__/RefreshControlMock',
+  >;
 }
 declare module 'react-native/Libraries/Components/RefreshControl/RefreshControl.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/RefreshControl/RefreshControl'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/RefreshControl/RefreshControl',
+  >;
 }
 declare module 'react-native/Libraries/Components/SafeAreaView/SafeAreaView.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/SafeAreaView/SafeAreaView.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/SafeAreaView/SafeAreaView.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/SafeAreaView/SafeAreaView.ios.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/SafeAreaView/SafeAreaView.ios'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/SafeAreaView/SafeAreaView.ios',
+  >;
 }
 declare module 'react-native/Libraries/Components/ScrollResponder.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/ScrollResponder'>;
 }
 declare module 'react-native/Libraries/Components/ScrollView/__mocks__/ScrollViewMock.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/ScrollView/__mocks__/ScrollViewMock'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/ScrollView/__mocks__/ScrollViewMock',
+  >;
 }
 declare module 'react-native/Libraries/Components/ScrollView/processDecelerationRate.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/ScrollView/processDecelerationRate'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/ScrollView/processDecelerationRate',
+  >;
 }
 declare module 'react-native/Libraries/Components/ScrollView/ScrollView.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/ScrollView/ScrollView'>;
 }
 declare module 'react-native/Libraries/Components/ScrollView/ScrollViewStickyHeader.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/ScrollView/ScrollViewStickyHeader'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/ScrollView/ScrollViewStickyHeader',
+  >;
 }
 declare module 'react-native/Libraries/Components/SegmentedControlIOS/SegmentedControlIOS.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/SegmentedControlIOS/SegmentedControlIOS.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/SegmentedControlIOS/SegmentedControlIOS.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/SegmentedControlIOS/SegmentedControlIOS.ios.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/SegmentedControlIOS/SegmentedControlIOS.ios'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/SegmentedControlIOS/SegmentedControlIOS.ios',
+  >;
 }
 declare module 'react-native/Libraries/Components/Slider/Slider.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/Slider/Slider'>;
@@ -2841,7 +2911,9 @@ declare module 'react-native/Libraries/Components/StatusBar/StatusBar.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/StatusBar/StatusBar'>;
 }
 declare module 'react-native/Libraries/Components/StatusBar/StatusBarIOS.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/StatusBar/StatusBarIOS.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/StatusBar/StatusBarIOS.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/StatusBar/StatusBarIOS.ios.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/StatusBar/StatusBarIOS.ios'>;
@@ -2859,13 +2931,17 @@ declare module 'react-native/Libraries/Components/TabBarIOS/TabBarIOS.ios.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/TabBarIOS/TabBarIOS.ios'>;
 }
 declare module 'react-native/Libraries/Components/TabBarIOS/TabBarItemIOS.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/TabBarIOS/TabBarItemIOS.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/TabBarIOS/TabBarItemIOS.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/TabBarIOS/TabBarItemIOS.ios.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/TabBarIOS/TabBarItemIOS.ios'>;
 }
 declare module 'react-native/Libraries/Components/TextInput/InputAccessoryView.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/TextInput/InputAccessoryView'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/TextInput/InputAccessoryView',
+  >;
 }
 declare module 'react-native/Libraries/Components/TextInput/TextInput.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/TextInput/TextInput'>;
@@ -2874,34 +2950,54 @@ declare module 'react-native/Libraries/Components/TextInput/TextInputState.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/TextInput/TextInputState'>;
 }
 declare module 'react-native/Libraries/Components/TimePickerAndroid/TimePickerAndroid.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/TimePickerAndroid/TimePickerAndroid.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/TimePickerAndroid/TimePickerAndroid.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/TimePickerAndroid/TimePickerAndroid.ios.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/TimePickerAndroid/TimePickerAndroid.ios'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/TimePickerAndroid/TimePickerAndroid.ios',
+  >;
 }
 declare module 'react-native/Libraries/Components/ToastAndroid/ToastAndroid.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/ToastAndroid/ToastAndroid.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/ToastAndroid/ToastAndroid.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/ToastAndroid/ToastAndroid.ios.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/ToastAndroid/ToastAndroid.ios'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/ToastAndroid/ToastAndroid.ios',
+  >;
 }
 declare module 'react-native/Libraries/Components/ToolbarAndroid/ToolbarAndroid.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/ToolbarAndroid/ToolbarAndroid.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/ToolbarAndroid/ToolbarAndroid.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/ToolbarAndroid/ToolbarAndroid.ios.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/ToolbarAndroid/ToolbarAndroid.ios'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/ToolbarAndroid/ToolbarAndroid.ios',
+  >;
 }
 declare module 'react-native/Libraries/Components/Touchable/__mocks__/ensureComponentIsNative.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/Touchable/__mocks__/ensureComponentIsNative'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/Touchable/__mocks__/ensureComponentIsNative',
+  >;
 }
 declare module 'react-native/Libraries/Components/Touchable/BoundingDimensions.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/Touchable/BoundingDimensions'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/Touchable/BoundingDimensions',
+  >;
 }
 declare module 'react-native/Libraries/Components/Touchable/ensureComponentIsNative.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/Touchable/ensureComponentIsNative'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/Touchable/ensureComponentIsNative',
+  >;
 }
 declare module 'react-native/Libraries/Components/Touchable/ensurePositiveDelayProps.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/Touchable/ensurePositiveDelayProps'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/Touchable/ensurePositiveDelayProps',
+  >;
 }
 declare module 'react-native/Libraries/Components/Touchable/PooledClass.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/Touchable/PooledClass'>;
@@ -2916,22 +3012,32 @@ declare module 'react-native/Libraries/Components/Touchable/TouchableBounce.js' 
   declare module.exports: $Exports<'react-native/Libraries/Components/Touchable/TouchableBounce'>;
 }
 declare module 'react-native/Libraries/Components/Touchable/TouchableHighlight.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/Touchable/TouchableHighlight'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/Touchable/TouchableHighlight',
+  >;
 }
 declare module 'react-native/Libraries/Components/Touchable/TouchableNativeFeedback.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/Touchable/TouchableNativeFeedback.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/Touchable/TouchableNativeFeedback.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/Touchable/TouchableNativeFeedback.ios.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/Touchable/TouchableNativeFeedback.ios'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/Touchable/TouchableNativeFeedback.ios',
+  >;
 }
 declare module 'react-native/Libraries/Components/Touchable/TouchableOpacity.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/Touchable/TouchableOpacity'>;
 }
 declare module 'react-native/Libraries/Components/Touchable/TouchableWithoutFeedback.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/Touchable/TouchableWithoutFeedback'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/Touchable/TouchableWithoutFeedback',
+  >;
 }
 declare module 'react-native/Libraries/Components/UnimplementedViews/UnimplementedView.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/UnimplementedViews/UnimplementedView'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/UnimplementedViews/UnimplementedView',
+  >;
 }
 declare module 'react-native/Libraries/Components/View/FabricView.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/View/FabricView'>;
@@ -2940,10 +3046,14 @@ declare module 'react-native/Libraries/Components/View/PlatformViewPropTypes.js'
   declare module.exports: $Exports<'react-native/Libraries/Components/View/PlatformViewPropTypes'>;
 }
 declare module 'react-native/Libraries/Components/View/ReactNativeStyleAttributes.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/View/ReactNativeStyleAttributes'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/View/ReactNativeStyleAttributes',
+  >;
 }
 declare module 'react-native/Libraries/Components/View/ReactNativeViewAttributes.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/View/ReactNativeViewAttributes'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/View/ReactNativeViewAttributes',
+  >;
 }
 declare module 'react-native/Libraries/Components/View/ShadowPropTypesIOS.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/View/ShadowPropTypesIOS'>;
@@ -2964,10 +3074,14 @@ declare module 'react-native/Libraries/Components/View/ViewStylePropTypes.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/View/ViewStylePropTypes'>;
 }
 declare module 'react-native/Libraries/Components/ViewPager/ViewPagerAndroid.android.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/ViewPager/ViewPagerAndroid.android'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/ViewPager/ViewPagerAndroid.android',
+  >;
 }
 declare module 'react-native/Libraries/Components/ViewPager/ViewPagerAndroid.ios.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Components/ViewPager/ViewPagerAndroid.ios'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Components/ViewPager/ViewPagerAndroid.ios',
+  >;
 }
 declare module 'react-native/Libraries/Components/WebView/WebView.android.js' {
   declare module.exports: $Exports<'react-native/Libraries/Components/WebView/WebView.android'>;
@@ -3009,10 +3123,14 @@ declare module 'react-native/Libraries/Core/Timers/JSTimers.js' {
   declare module.exports: $Exports<'react-native/Libraries/Core/Timers/JSTimers'>;
 }
 declare module 'react-native/Libraries/EventEmitter/__mocks__/NativeEventEmitter.js' {
-  declare module.exports: $Exports<'react-native/Libraries/EventEmitter/__mocks__/NativeEventEmitter'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/EventEmitter/__mocks__/NativeEventEmitter',
+  >;
 }
 declare module 'react-native/Libraries/EventEmitter/MissingNativeEventEmitterShim.js' {
-  declare module.exports: $Exports<'react-native/Libraries/EventEmitter/MissingNativeEventEmitterShim'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/EventEmitter/MissingNativeEventEmitterShim',
+  >;
 }
 declare module 'react-native/Libraries/EventEmitter/NativeEventEmitter.js' {
   declare module.exports: $Exports<'react-native/Libraries/EventEmitter/NativeEventEmitter'>;
@@ -3039,19 +3157,29 @@ declare module 'react-native/Libraries/Experimental/IncrementalPresenter.js' {
   declare module.exports: $Exports<'react-native/Libraries/Experimental/IncrementalPresenter'>;
 }
 declare module 'react-native/Libraries/Experimental/SwipeableRow/SwipeableFlatList.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Experimental/SwipeableRow/SwipeableFlatList'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Experimental/SwipeableRow/SwipeableFlatList',
+  >;
 }
 declare module 'react-native/Libraries/Experimental/SwipeableRow/SwipeableListView.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Experimental/SwipeableRow/SwipeableListView'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Experimental/SwipeableRow/SwipeableListView',
+  >;
 }
 declare module 'react-native/Libraries/Experimental/SwipeableRow/SwipeableListViewDataSource.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Experimental/SwipeableRow/SwipeableListViewDataSource'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Experimental/SwipeableRow/SwipeableListViewDataSource',
+  >;
 }
 declare module 'react-native/Libraries/Experimental/SwipeableRow/SwipeableQuickActionButton.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Experimental/SwipeableRow/SwipeableQuickActionButton'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Experimental/SwipeableRow/SwipeableQuickActionButton',
+  >;
 }
 declare module 'react-native/Libraries/Experimental/SwipeableRow/SwipeableQuickActions.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Experimental/SwipeableRow/SwipeableQuickActions'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Experimental/SwipeableRow/SwipeableQuickActions',
+  >;
 }
 declare module 'react-native/Libraries/Experimental/SwipeableRow/SwipeableRow.js' {
   declare module.exports: $Exports<'react-native/Libraries/Experimental/SwipeableRow/SwipeableRow'>;
@@ -3186,7 +3314,9 @@ declare module 'react-native/Libraries/Lists/__flowtests__/FlatList-flowtest.js'
   declare module.exports: $Exports<'react-native/Libraries/Lists/__flowtests__/FlatList-flowtest'>;
 }
 declare module 'react-native/Libraries/Lists/__flowtests__/SectionList-flowtest.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Lists/__flowtests__/SectionList-flowtest'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Lists/__flowtests__/SectionList-flowtest',
+  >;
 }
 declare module 'react-native/Libraries/Lists/FillRateHelper.js' {
   declare module.exports: $Exports<'react-native/Libraries/Lists/FillRateHelper'>;
@@ -3294,7 +3424,9 @@ declare module 'react-native/Libraries/promiseRejectionIsError.js' {
   declare module.exports: $Exports<'react-native/Libraries/promiseRejectionIsError'>;
 }
 declare module 'react-native/Libraries/PushNotificationIOS/PushNotificationIOS.js' {
-  declare module.exports: $Exports<'react-native/Libraries/PushNotificationIOS/PushNotificationIOS'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/PushNotificationIOS/PushNotificationIOS',
+  >;
 }
 declare module 'react-native/Libraries/RCTTest/SnapshotViewIOS.android.js' {
   declare module.exports: $Exports<'react-native/Libraries/RCTTest/SnapshotViewIOS.android'>;
@@ -3303,7 +3435,9 @@ declare module 'react-native/Libraries/RCTTest/SnapshotViewIOS.ios.js' {
   declare module.exports: $Exports<'react-native/Libraries/RCTTest/SnapshotViewIOS.ios'>;
 }
 declare module 'react-native/Libraries/react-native/react-native-implementation.js' {
-  declare module.exports: $Exports<'react-native/Libraries/react-native/react-native-implementation'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/react-native/react-native-implementation',
+  >;
 }
 declare module 'react-native/Libraries/react-native/react-native-interface.js' {
   declare module.exports: $Exports<'react-native/Libraries/react-native/react-native-interface'>;
@@ -3363,7 +3497,9 @@ declare module 'react-native/Libraries/Renderer/ReactNativeRenderer-prod.js' {
   declare module.exports: $Exports<'react-native/Libraries/Renderer/ReactNativeRenderer-prod'>;
 }
 declare module 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Renderer/shims/createReactNativeComponentClass'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Renderer/shims/createReactNativeComponentClass',
+  >;
 }
 declare module 'react-native/Libraries/Renderer/shims/NativeMethodsMixin.js' {
   declare module.exports: $Exports<'react-native/Libraries/Renderer/shims/NativeMethodsMixin'>;
@@ -3384,10 +3520,14 @@ declare module 'react-native/Libraries/Renderer/shims/ReactNative.js' {
   declare module.exports: $Exports<'react-native/Libraries/Renderer/shims/ReactNative'>;
 }
 declare module 'react-native/Libraries/Renderer/shims/ReactNativeBridgeEventPlugin.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Renderer/shims/ReactNativeBridgeEventPlugin'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Renderer/shims/ReactNativeBridgeEventPlugin',
+  >;
 }
 declare module 'react-native/Libraries/Renderer/shims/ReactNativeComponentTree.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Renderer/shims/ReactNativeComponentTree'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Renderer/shims/ReactNativeComponentTree',
+  >;
 }
 declare module 'react-native/Libraries/Renderer/shims/ReactNativePropRegistry.js' {
   declare module.exports: $Exports<'react-native/Libraries/Renderer/shims/ReactNativePropRegistry'>;
@@ -3516,7 +3656,9 @@ declare module 'react-native/Libraries/Utilities/createStrictShapeTypeChecker.js
   declare module.exports: $Exports<'react-native/Libraries/Utilities/createStrictShapeTypeChecker'>;
 }
 declare module 'react-native/Libraries/Utilities/deepFreezeAndThrowOnMutationInDev.js' {
-  declare module.exports: $Exports<'react-native/Libraries/Utilities/deepFreezeAndThrowOnMutationInDev'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/Utilities/deepFreezeAndThrowOnMutationInDev',
+  >;
 }
 declare module 'react-native/Libraries/Utilities/defineLazyObjectProperty.js' {
   declare module.exports: $Exports<'react-native/Libraries/Utilities/defineLazyObjectProperty'>;
@@ -3618,7 +3760,9 @@ declare module 'react-native/Libraries/Utilities/truncate.js' {
   declare module.exports: $Exports<'react-native/Libraries/Utilities/truncate'>;
 }
 declare module 'react-native/Libraries/vendor/core/_shouldPolyfillES6Collection.js' {
-  declare module.exports: $Exports<'react-native/Libraries/vendor/core/_shouldPolyfillES6Collection'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/vendor/core/_shouldPolyfillES6Collection',
+  >;
 }
 declare module 'react-native/Libraries/vendor/core/ErrorUtils.js' {
   declare module.exports: $Exports<'react-native/Libraries/vendor/core/ErrorUtils'>;
@@ -3651,7 +3795,9 @@ declare module 'react-native/Libraries/vendor/core/toIterator.js' {
   declare module.exports: $Exports<'react-native/Libraries/vendor/core/toIterator'>;
 }
 declare module 'react-native/Libraries/vendor/document/selection/DocumentSelectionState.js' {
-  declare module.exports: $Exports<'react-native/Libraries/vendor/document/selection/DocumentSelectionState'>;
+  declare module.exports: $Exports<
+    'react-native/Libraries/vendor/document/selection/DocumentSelectionState',
+  >;
 }
 declare module 'react-native/Libraries/vendor/emitter/EmitterSubscription.js' {
   declare module.exports: $Exports<'react-native/Libraries/vendor/emitter/EmitterSubscription'>;
@@ -3798,7 +3944,9 @@ declare module 'react-native/local-cli/eject/eject.js' {
   declare module.exports: $Exports<'react-native/local-cli/eject/eject'>;
 }
 declare module 'react-native/local-cli/generator/copyProjectTemplateAndReplace.js' {
-  declare module.exports: $Exports<'react-native/local-cli/generator/copyProjectTemplateAndReplace'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/generator/copyProjectTemplateAndReplace',
+  >;
 }
 declare module 'react-native/local-cli/generator/printRunInstructions.js' {
   declare module.exports: $Exports<'react-native/local-cli/generator/printRunInstructions'>;
@@ -3954,10 +4102,14 @@ declare module 'react-native/local-cli/link/ios/removeFromHeaderSearchPaths.js' 
   declare module.exports: $Exports<'react-native/local-cli/link/ios/removeFromHeaderSearchPaths'>;
 }
 declare module 'react-native/local-cli/link/ios/removeFromPbxItemContainerProxySection.js' {
-  declare module.exports: $Exports<'react-native/local-cli/link/ios/removeFromPbxItemContainerProxySection'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/link/ios/removeFromPbxItemContainerProxySection',
+  >;
 }
 declare module 'react-native/local-cli/link/ios/removeFromPbxReferenceProxySection.js' {
-  declare module.exports: $Exports<'react-native/local-cli/link/ios/removeFromPbxReferenceProxySection'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/link/ios/removeFromPbxReferenceProxySection',
+  >;
 }
 declare module 'react-native/local-cli/link/ios/removeFromProjectReferences.js' {
   declare module.exports: $Exports<'react-native/local-cli/link/ios/removeFromProjectReferences'>;
@@ -4059,25 +4211,35 @@ declare module 'react-native/local-cli/server/checkNodeVersion.js' {
   declare module.exports: $Exports<'react-native/local-cli/server/checkNodeVersion'>;
 }
 declare module 'react-native/local-cli/server/middleware/copyToClipBoardMiddleware.js' {
-  declare module.exports: $Exports<'react-native/local-cli/server/middleware/copyToClipBoardMiddleware'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/server/middleware/copyToClipBoardMiddleware',
+  >;
 }
 declare module 'react-native/local-cli/server/middleware/getDevToolsMiddleware.js' {
-  declare module.exports: $Exports<'react-native/local-cli/server/middleware/getDevToolsMiddleware'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/server/middleware/getDevToolsMiddleware',
+  >;
 }
 declare module 'react-native/local-cli/server/middleware/indexPage.js' {
   declare module.exports: $Exports<'react-native/local-cli/server/middleware/indexPage'>;
 }
 declare module 'react-native/local-cli/server/middleware/loadRawBodyMiddleware.js' {
-  declare module.exports: $Exports<'react-native/local-cli/server/middleware/loadRawBodyMiddleware'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/server/middleware/loadRawBodyMiddleware',
+  >;
 }
 declare module 'react-native/local-cli/server/middleware/openStackFrameInEditorMiddleware.js' {
-  declare module.exports: $Exports<'react-native/local-cli/server/middleware/openStackFrameInEditorMiddleware'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/server/middleware/openStackFrameInEditorMiddleware',
+  >;
 }
 declare module 'react-native/local-cli/server/middleware/statusPageMiddleware.js' {
   declare module.exports: $Exports<'react-native/local-cli/server/middleware/statusPageMiddleware'>;
 }
 declare module 'react-native/local-cli/server/middleware/systraceProfileMiddleware.js' {
-  declare module.exports: $Exports<'react-native/local-cli/server/middleware/systraceProfileMiddleware'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/server/middleware/systraceProfileMiddleware',
+  >;
 }
 declare module 'react-native/local-cli/server/middleware/unless.js' {
   declare module.exports: $Exports<'react-native/local-cli/server/middleware/unless'>;
@@ -4101,7 +4263,9 @@ declare module 'react-native/local-cli/server/util/debugger-ui/DeltaPatcher.js' 
   declare module.exports: $Exports<'react-native/local-cli/server/util/debugger-ui/DeltaPatcher'>;
 }
 declare module 'react-native/local-cli/server/util/debugger-ui/deltaUrlToBlobUrl.js' {
-  declare module.exports: $Exports<'react-native/local-cli/server/util/debugger-ui/deltaUrlToBlobUrl'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/server/util/debugger-ui/deltaUrlToBlobUrl',
+  >;
 }
 declare module 'react-native/local-cli/server/util/jsPackagerClient.js' {
   declare module.exports: $Exports<'react-native/local-cli/server/util/jsPackagerClient'>;
@@ -4122,31 +4286,47 @@ declare module 'react-native/local-cli/templates/HelloNavigation/App.js' {
   declare module.exports: $Exports<'react-native/local-cli/templates/HelloNavigation/App'>;
 }
 declare module 'react-native/local-cli/templates/HelloNavigation/components/KeyboardSpacer.js' {
-  declare module.exports: $Exports<'react-native/local-cli/templates/HelloNavigation/components/KeyboardSpacer'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/templates/HelloNavigation/components/KeyboardSpacer',
+  >;
 }
 declare module 'react-native/local-cli/templates/HelloNavigation/components/ListItem.js' {
-  declare module.exports: $Exports<'react-native/local-cli/templates/HelloNavigation/components/ListItem'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/templates/HelloNavigation/components/ListItem',
+  >;
 }
 declare module 'react-native/local-cli/templates/HelloNavigation/lib/Backend.js' {
   declare module.exports: $Exports<'react-native/local-cli/templates/HelloNavigation/lib/Backend'>;
 }
 declare module 'react-native/local-cli/templates/HelloNavigation/views/chat/ChatListScreen.js' {
-  declare module.exports: $Exports<'react-native/local-cli/templates/HelloNavigation/views/chat/ChatListScreen'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/templates/HelloNavigation/views/chat/ChatListScreen',
+  >;
 }
 declare module 'react-native/local-cli/templates/HelloNavigation/views/chat/ChatScreen.js' {
-  declare module.exports: $Exports<'react-native/local-cli/templates/HelloNavigation/views/chat/ChatScreen'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/templates/HelloNavigation/views/chat/ChatScreen',
+  >;
 }
 declare module 'react-native/local-cli/templates/HelloNavigation/views/HomeScreenTabNavigator.js' {
-  declare module.exports: $Exports<'react-native/local-cli/templates/HelloNavigation/views/HomeScreenTabNavigator'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/templates/HelloNavigation/views/HomeScreenTabNavigator',
+  >;
 }
 declare module 'react-native/local-cli/templates/HelloNavigation/views/welcome/WelcomeScreen.js' {
-  declare module.exports: $Exports<'react-native/local-cli/templates/HelloNavigation/views/welcome/WelcomeScreen'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/templates/HelloNavigation/views/welcome/WelcomeScreen',
+  >;
 }
 declare module 'react-native/local-cli/templates/HelloNavigation/views/welcome/WelcomeText.android.js' {
-  declare module.exports: $Exports<'react-native/local-cli/templates/HelloNavigation/views/welcome/WelcomeText.android'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/templates/HelloNavigation/views/welcome/WelcomeText.android',
+  >;
 }
 declare module 'react-native/local-cli/templates/HelloNavigation/views/welcome/WelcomeText.ios.js' {
-  declare module.exports: $Exports<'react-native/local-cli/templates/HelloNavigation/views/welcome/WelcomeText.ios'>;
+  declare module.exports: $Exports<
+    'react-native/local-cli/templates/HelloNavigation/views/welcome/WelcomeText.ios',
+  >;
 }
 declare module 'react-native/local-cli/templates/HelloWorld/App.js' {
   declare module.exports: $Exports<'react-native/local-cli/templates/HelloWorld/App'>;
@@ -4206,46 +4386,72 @@ declare module 'react-native/ReactAndroid/src/androidTest/js/Asserts.js' {
   declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/Asserts'>;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/CatalystRootViewTestModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/CatalystRootViewTestModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/CatalystRootViewTestModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/DatePickerDialogTestModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/DatePickerDialogTestModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/DatePickerDialogTestModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/InitialPropsTestApp.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/InitialPropsTestApp'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/InitialPropsTestApp',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/JSResponderTestApp.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/JSResponderTestApp'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/JSResponderTestApp',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/LayoutEventsTestApp.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/LayoutEventsTestApp'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/LayoutEventsTestApp',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/MeasureLayoutTestModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/MeasureLayoutTestModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/MeasureLayoutTestModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/MultitouchHandlingTestAppModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/MultitouchHandlingTestAppModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/MultitouchHandlingTestAppModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/NativeIdTestModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/NativeIdTestModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/NativeIdTestModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/PickerAndroidTestModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/PickerAndroidTestModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/PickerAndroidTestModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/ProgressBarTestModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/ProgressBarTestModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/ProgressBarTestModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/ScrollViewTestModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/ScrollViewTestModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/ScrollViewTestModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/ShareTestModule.js' {
   declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/ShareTestModule'>;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/SubviewsClippingTestModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/SubviewsClippingTestModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/SubviewsClippingTestModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/SwipeRefreshLayoutTestModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/SwipeRefreshLayoutTestModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/SwipeRefreshLayoutTestModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/TestBundle.js' {
   declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/TestBundle'>;
@@ -4254,31 +4460,49 @@ declare module 'react-native/ReactAndroid/src/androidTest/js/TestIdTestModule.js
   declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/TestIdTestModule'>;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/TestJavaToJSArgumentsModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/TestJavaToJSArgumentsModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/TestJavaToJSArgumentsModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/TestJavaToJSReturnValuesModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/TestJavaToJSReturnValuesModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/TestJavaToJSReturnValuesModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/TestJSLocaleModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/TestJSLocaleModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/TestJSLocaleModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/TestJSToJavaParametersModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/TestJSToJavaParametersModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/TestJSToJavaParametersModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/TextInputTestModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/TextInputTestModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/TextInputTestModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/TimePickerDialogTestModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/TimePickerDialogTestModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/TimePickerDialogTestModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/TouchBubblingTestAppModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/TouchBubblingTestAppModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/TouchBubblingTestAppModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/UIManagerTestModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/UIManagerTestModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/UIManagerTestModule',
+  >;
 }
 declare module 'react-native/ReactAndroid/src/androidTest/js/ViewRenderingTestModule.js' {
-  declare module.exports: $Exports<'react-native/ReactAndroid/src/androidTest/js/ViewRenderingTestModule'>;
+  declare module.exports: $Exports<
+    'react-native/ReactAndroid/src/androidTest/js/ViewRenderingTestModule',
+  >;
 }
 declare module 'react-native/rn-get-polyfills.js' {
   declare module.exports: $Exports<'react-native/rn-get-polyfills'>;

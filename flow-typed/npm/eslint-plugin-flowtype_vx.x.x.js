@@ -303,7 +303,9 @@ declare module 'eslint-plugin-flowtype/dist/rules/noPrimitiveConstructorTypes.js
   declare module.exports: $Exports<'eslint-plugin-flowtype/dist/rules/noPrimitiveConstructorTypes'>;
 }
 declare module 'eslint-plugin-flowtype/dist/rules/noTypesMissingFileAnnotation.js' {
-  declare module.exports: $Exports<'eslint-plugin-flowtype/dist/rules/noTypesMissingFileAnnotation'>;
+  declare module.exports: $Exports<
+    'eslint-plugin-flowtype/dist/rules/noTypesMissingFileAnnotation',
+  >;
 }
 declare module 'eslint-plugin-flowtype/dist/rules/noUnusedExpressions.js' {
   declare module.exports: $Exports<'eslint-plugin-flowtype/dist/rules/noUnusedExpressions'>;
@@ -348,25 +350,39 @@ declare module 'eslint-plugin-flowtype/dist/rules/spaceBeforeTypeColon.js' {
   declare module.exports: $Exports<'eslint-plugin-flowtype/dist/rules/spaceBeforeTypeColon'>;
 }
 declare module 'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateFunctions.js' {
-  declare module.exports: $Exports<'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateFunctions'>;
+  declare module.exports: $Exports<
+    'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateFunctions',
+  >;
 }
 declare module 'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateObjectTypeIndexer.js' {
-  declare module.exports: $Exports<'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateObjectTypeIndexer'>;
+  declare module.exports: $Exports<
+    'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateObjectTypeIndexer',
+  >;
 }
 declare module 'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateObjectTypeProperty.js' {
-  declare module.exports: $Exports<'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateObjectTypeProperty'>;
+  declare module.exports: $Exports<
+    'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateObjectTypeProperty',
+  >;
 }
 declare module 'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateReturnType.js' {
-  declare module.exports: $Exports<'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateReturnType'>;
+  declare module.exports: $Exports<
+    'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateReturnType',
+  >;
 }
 declare module 'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateTypeCastExpression.js' {
-  declare module.exports: $Exports<'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateTypeCastExpression'>;
+  declare module.exports: $Exports<
+    'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateTypeCastExpression',
+  >;
 }
 declare module 'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateTypical.js' {
-  declare module.exports: $Exports<'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateTypical'>;
+  declare module.exports: $Exports<
+    'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateTypical',
+  >;
 }
 declare module 'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateVariables.js' {
-  declare module.exports: $Exports<'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateVariables'>;
+  declare module.exports: $Exports<
+    'eslint-plugin-flowtype/dist/rules/typeColonSpacing/evaluateVariables',
+  >;
 }
 declare module 'eslint-plugin-flowtype/dist/rules/typeColonSpacing/index.js' {
   declare module.exports: $Exports<'eslint-plugin-flowtype/dist/rules/typeColonSpacing/index'>;
