@@ -5,28 +5,18 @@
  */
 
 import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Alert
-} from 'react-native';
+import { Platform, StyleSheet, Text, View, Button, Alert } from 'react-native';
 //$FlowFixMe
 import Share from 'react-native-share';
 import images from './src/imageBase64';
 
 const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
+  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
+  android: 'Double tap R on your keyboard to reload,\n' + 'Shake or press menu button for dev menu',
 });
 
 type Props = {};
 export default class App extends Component<Props> {
-
   onShare() {
     const shareOptions = {
       title: 'Share file',
@@ -50,15 +40,15 @@ export default class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Button title="Share 2 images" onPress={() => this.onShare()}/>
-        <Button title="Share single image" onPress={() => this.onShare2()}/>
+        <Text style={styles.welcome}>Welcome to React Native!</Text>
+        <Button title="Share 2 images" onPress={() => this.onShare()} />
+        <Button title="Share single image" onPress={() => this.onShare2()} />
         <Button
           title="Check package installed"
           onPress={() =>
-            this.isPackageInstalled().then(({ isInstalled }) => Alert.alert(`isInstalled = ${isInstalled}`))
+            this.isPackageInstalled().then(({ isInstalled }) =>
+              Alert.alert(`isInstalled = ${isInstalled}`),
+            )
           }
         />
       </View>
