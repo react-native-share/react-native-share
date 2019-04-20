@@ -13,6 +13,7 @@ import {
   Button,
   Alert
 } from 'react-native';
+//$FlowFixMe
 import Share from 'react-native-share';
 import images from './src/imageBase64';
 
