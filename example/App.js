@@ -26,20 +26,70 @@ const instructions = Platform.select({
 type Props = {};
 export default class App extends Component<Props> {
 
-  onShare() {
-    const shareOptions = {
-      title: 'Share file',
-      urls: [images.image1, images.image2],
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      result: '',
     };
-    return Share.open(shareOptions);
   }
 
-  onShare2() {
-    const shareOptions = {
-      title: 'Share file',
-      url: images.image1,
-    };
-    return Share.open(shareOptions);
+  getErrorString(error: any, defaultValue?: string): string {
+    let e = defaultValue || 'Something went wrong. Please try again';
+    if (typeof error === 'string') {
+      e = error;
+    } else if (error && error.message) {
+      e = error.message;
+    } else if (error && error.props) {
+      e = error.props;
+    }
+    return e;
+  }
+
+  async onShareEmail() {
+    try {
+      const shareOptions = {
+        title: 'Share file',
+        social: Share.Social.EMAIL,
+        failOnCancel: false,
+        urls: [images.image1, images.image2],
+      };
+      const result = await Share.shareSingle(shareOptions);
+      this.setState({ result: JSON.stringify(result, 0, 2) });
+    } catch (e) {
+      // Handle Error
+      console.warn(e);
+      this.setState({ result: 'error: '.concat(this.getErrorString(e)) });
+    }
+  }
+
+  async onShare() {
+    try {
+      const shareOptions = {
+        title: 'Share file',
+        failOnCancel: false,
+        urls: [images.image1, images.image2],
+      };
+      const result = await Share.open(shareOptions);
+      this.setState({ result: JSON.stringify(result, 0, 2) });
+    } catch (e) {
+      // Handle Error
+      console.warn(e);
+      this.setState({ result: 'error: '.concat(this.getErrorString(e)) });
+    }
+  }
+
+  async onShare2() {
+    try {
+      const shareOptions = {
+        title: 'Share file',
+        url: images.image1,
+      };
+      const result = await Share.open(shareOptions);
+      this.setState({ result: JSON.stringify(result, 0, 2) });
+    } catch (e) {
+      // Handle Error
+      this.setState({ result: 'error: '.concat(this.getErrorString(e)) });
+    }
   }
 
   isPackageInstalled() {
@@ -52,6 +102,7 @@ export default class App extends Component<Props> {
         <Text style={styles.welcome}>
           Welcome to React Native!
         </Text>
+        <Button title="Share via Social: EMAIL" onPress={() => this.onShareEmail()}/>
         <Button title="Share 2 images" onPress={() => this.onShare()}/>
         <Button title="Share single image" onPress={() => this.onShare2()}/>
         <Button
@@ -60,6 +111,8 @@ export default class App extends Component<Props> {
             this.isPackageInstalled().then(({ isInstalled }) => Alert.alert(`isInstalled = ${isInstalled}`))
           }
         />
+        <Text style={{ marginTop: 20, fontSize: 20 }}>Result</Text>
+        <Text style={styles.result}>{this.state.result}</Text>
       </View>
     );
   }
@@ -75,6 +128,10 @@ const styles = StyleSheet.create({
   welcome: {
     fontSize: 20,
     textAlign: 'center',
+    margin: 10,
+  },
+  result: {
+    fontSize: 14,
     margin: 10,
   },
   instructions: {

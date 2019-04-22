@@ -192,7 +192,7 @@ class RNShare {
                     dismissedAction: true,
                   });
                 } else {
-                  reject({ error: 'User did not share' });
+                  reject(new Error('User did not share'));
                 }
               },
             );
@@ -213,7 +213,7 @@ class RNShare {
                     dismissedAction: true,
                   });
                 } else {
-                  reject({ error: 'User did not share' });
+                  reject(new Error('User did not share'));
                 }
               },
             );
