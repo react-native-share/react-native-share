@@ -3,9 +3,11 @@ package cl.json.social;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
@@ -13,6 +15,8 @@ import com.facebook.react.bridge.ReadableMap;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import cl.json.BuildConfig;
+import cl.json.RNShareModule;
 import cl.json.ShareFile;
 
 /**
@@ -55,13 +59,22 @@ public abstract class SingleShareIntent extends ShareIntent {
         super.open(options);
     }
     protected void openIntentChooser() throws ActivityNotFoundException {
-        if(this.options.hasKey("forceDialog") && this.options.getBoolean("forceDialog")){
-             Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
-             chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-             this.reactContext.startActivity(chooser);
-        }else{
-             this.getIntent().setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-             this.reactContext.startActivity(this.getIntent());
+        if(this.options.hasKey("forceDialog") && this.options.getBoolean("forceDialog")) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+                IntentSender sender = TargetChosenReceiver.getSharingSenderIntent(this.reactContext);
+                Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle, sender);
+                chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                this.reactContext.getCurrentActivity().startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+            } else {
+                Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
+                chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                this.reactContext.getCurrentActivity().startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+                TargetChosenReceiver.sendCallback(true, true, "OK");
+            }
+        } else {
+            this.getIntent().setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            this.reactContext.startActivity(this.getIntent());
+            TargetChosenReceiver.sendCallback(true, true, this.getIntent().getPackage());
         }
     }
 }

@@ -1,17 +1,18 @@
 package cl.json;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+
+import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Callback;
 
-import java.sql.SQLOutput;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import cl.json.social.FacebookPagesManagerShare;
 import cl.json.social.GenericShare;
 import cl.json.social.GooglePlusShare;
 import cl.json.social.ShareIntent;
+import cl.json.social.TargetChosenReceiver;
 import cl.json.social.TwitterShare;
 import cl.json.social.WhatsAppShare;
 import cl.json.social.InstagramShare;
@@ -29,9 +31,28 @@ import cl.json.social.SnapChatShare;
 import cl.json.social.SMSShare;
 import cl.json.social.MessengerShare;
 
-public class RNShareModule extends ReactContextBaseJavaModule {
+public class RNShareModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
+    public static final int SHARE_REQUEST_CODE = 16845;
     private final ReactApplicationContext reactContext;
+
+    // removed @Override temporarily just to get it working on different versions of RN
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SHARE_REQUEST_CODE && resultCode == Activity.RESULT_CANCELED) {
+            TargetChosenReceiver.sendCallback(true, false, "CANCELED");
+        }
+    }
+
+    // removed @Override temporarily just to get it working on different versions of RN
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+        onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+
+    }
+
     private enum SHARES {
         facebook,
         generic,
@@ -82,6 +103,7 @@ public class RNShareModule extends ReactContextBaseJavaModule {
 
     public RNShareModule(ReactApplicationContext reactContext) {
         super(reactContext);
+        reactContext.addActivityEventListener(this);
         this.reactContext = reactContext;
     }
 
@@ -102,44 +124,44 @@ public class RNShareModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void open(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
+        TargetChosenReceiver.registerCallbacks(successCallback, failureCallback);
         try{
             GenericShare share = new GenericShare(this.reactContext);
             share.open(options);
-            successCallback.invoke("OK");
         }catch(ActivityNotFoundException ex) {
             System.out.println("ERROR");
             System.out.println(ex.getMessage());
-            failureCallback.invoke("not_available");
+            TargetChosenReceiver.sendCallback(false, "not_available");
         }catch (Exception e) {
             System.out.println("ERROR");
             System.out.println(e.getMessage());
-            failureCallback.invoke(e.getMessage());
+            TargetChosenReceiver.sendCallback(false, e.getMessage());
         }
     }
 
     @ReactMethod
     public void shareSingle(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
         System.out.println("SHARE SINGLE METHOD");
+        TargetChosenReceiver.registerCallbacks(successCallback, failureCallback);
         if (ShareIntent.hasValidKey("social", options) ) {
             try{
                 ShareIntent shareClass = SHARES.getShareClass(options.getString("social"), this.reactContext);
                 if (shareClass != null && shareClass instanceof ShareIntent) {
                     shareClass.open(options);
-                    successCallback.invoke("OK");
                 } else {
                     throw new ActivityNotFoundException("Invalid share activity");
                 }
             }catch(ActivityNotFoundException ex) {
                 System.out.println("ERROR");
                 System.out.println(ex.getMessage());
-                failureCallback.invoke(ex.getMessage());
+                TargetChosenReceiver.sendCallback(false, ex.getMessage());
             }catch (Exception e) {
                 System.out.println("ERROR");
                 System.out.println(e.getMessage());
-                failureCallback.invoke(e.getMessage());
+                TargetChosenReceiver.sendCallback(false, e.getMessage());
             }
         } else {
-            failureCallback.invoke("key 'social' missing in options");
+            TargetChosenReceiver.sendCallback(false, "key 'social' missing in options");
         }
     }
 

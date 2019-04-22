@@ -3,6 +3,7 @@ package cl.json.social;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import cl.json.RNShareModule;
 import cl.json.ShareFile;
 import cl.json.ShareFiles;
 
@@ -131,7 +133,14 @@ public abstract class ShareIntent {
         return extraIntents;
     }
     protected void openIntentChooser() throws ActivityNotFoundException {
-        Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
+        Intent chooser;
+        IntentSender intentSender = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+            intentSender = TargetChosenReceiver.getSharingSenderIntent(this.reactContext);
+            chooser = Intent.createChooser(this.getIntent(), this.chooserTitle, intentSender);
+        } else {
+            chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
+        }
         chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         if (ShareIntent.hasValidKey("showAppsToView", options) && ShareIntent.hasValidKey("url", options)) {
@@ -143,7 +152,10 @@ public abstract class ShareIntent {
             chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, viewIntents);
         }
 
-        this.reactContext.startActivity(chooser);
+        this.reactContext.getCurrentActivity().startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+        if (intentSender == null) {
+            TargetChosenReceiver.sendCallback(true, true, "OK");
+        }
     }
     public static boolean isPackageInstalled(String packagename, Context context) {
         PackageManager pm = context.getPackageManager();
