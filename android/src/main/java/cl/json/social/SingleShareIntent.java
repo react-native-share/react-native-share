@@ -1,23 +1,14 @@
 package cl.json.social;
 
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
-import android.os.Build;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
-import cl.json.BuildConfig;
 import cl.json.RNShareModule;
-import cl.json.ShareFile;
 
 /**
  * Created by disenodosbbcl on 23-07-16.
@@ -34,19 +25,19 @@ public abstract class SingleShareIntent extends ShareIntent {
     public void open(ReadableMap options) throws ActivityNotFoundException {
         System.out.println(getPackage());
         //  check if package is installed
-        if(getPackage() != null || getDefaultWebLink() != null || getPlayStoreLink() != null) {
-            if(this.isPackageInstalled(getPackage(), reactContext)) {
+        if (getPackage() != null || getDefaultWebLink() != null || getPlayStoreLink() != null) {
+            if (this.isPackageInstalled(getPackage(), reactContext)) {
                 System.out.println("INSTALLED");
                 this.getIntent().setPackage(getPackage());
                 super.open(options);
             } else {
                 System.out.println("NOT INSTALLED");
                 String url = "";
-                if(getDefaultWebLink() != null) {
+                if (getDefaultWebLink() != null) {
                     url = getDefaultWebLink()
-                            .replace("{url}",       this.urlEncode( options.getString("url") ) )
-                            .replace("{message}",   this.urlEncode( options.getString("message") ));
-                } else if(getPlayStoreLink() != null) {
+                            .replace("{url}", this.urlEncode(options.getString("url")))
+                            .replace("{message}", this.urlEncode(options.getString("message")));
+                } else if (getPlayStoreLink() != null) {
                     url = getPlayStoreLink();
                 } else {
                     //  TODO
@@ -58,8 +49,9 @@ public abstract class SingleShareIntent extends ShareIntent {
         //  configure default
         super.open(options);
     }
+
     protected void openIntentChooser() throws ActivityNotFoundException {
-        if(this.options.hasKey("forceDialog") && this.options.getBoolean("forceDialog")) {
+        if (this.options.hasKey("forceDialog") && this.options.getBoolean("forceDialog")) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
                 IntentSender sender = TargetChosenReceiver.getSharingSenderIntent(this.reactContext);
                 Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle, sender);

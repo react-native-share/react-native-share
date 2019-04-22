@@ -94,7 +94,7 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
                 case snapchat:
                     return new SnapChatShare(reactContext);
                 case messenger:
-                    return new  MessengerShare(reactContext);
+                    return new MessengerShare(reactContext);
                 default:
                     return null;
             }
@@ -109,14 +109,14 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
 
     @Override
     public String getName() {
-    return "RNShare";
+        return "RNShare";
     }
 
     @javax.annotation.Nullable
     @Override
     public Map<String, Object> getConstants() {
         Map<String, Object> constants = new HashMap<>();
-        for (SHARES val: SHARES.values()) {
+        for (SHARES val : SHARES.values()) {
             constants.put(val.toString().toUpperCase(), val.toString());
         }
         return constants;
@@ -125,14 +125,14 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
     @ReactMethod
     public void open(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
         TargetChosenReceiver.registerCallbacks(successCallback, failureCallback);
-        try{
+        try {
             GenericShare share = new GenericShare(this.reactContext);
             share.open(options);
-        }catch(ActivityNotFoundException ex) {
+        } catch (ActivityNotFoundException ex) {
             System.out.println("ERROR");
             System.out.println(ex.getMessage());
             TargetChosenReceiver.sendCallback(false, "not_available");
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("ERROR");
             System.out.println(e.getMessage());
             TargetChosenReceiver.sendCallback(false, e.getMessage());
@@ -143,19 +143,19 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
     public void shareSingle(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
         System.out.println("SHARE SINGLE METHOD");
         TargetChosenReceiver.registerCallbacks(successCallback, failureCallback);
-        if (ShareIntent.hasValidKey("social", options) ) {
-            try{
+        if (ShareIntent.hasValidKey("social", options)) {
+            try {
                 ShareIntent shareClass = SHARES.getShareClass(options.getString("social"), this.reactContext);
                 if (shareClass != null && shareClass instanceof ShareIntent) {
                     shareClass.open(options);
                 } else {
                     throw new ActivityNotFoundException("Invalid share activity");
                 }
-            }catch(ActivityNotFoundException ex) {
+            } catch (ActivityNotFoundException ex) {
                 System.out.println("ERROR");
                 System.out.println(ex.getMessage());
                 TargetChosenReceiver.sendCallback(false, ex.getMessage());
-            }catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("ERROR");
                 System.out.println(e.getMessage());
                 TargetChosenReceiver.sendCallback(false, e.getMessage());
@@ -167,11 +167,10 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
 
     @ReactMethod
     public void isPackageInstalled(String packagename, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
-        try{
+        try {
             boolean res = ShareIntent.isPackageInstalled(packagename, this.reactContext);
             successCallback.invoke(res);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
             failureCallback.invoke(e.getMessage());
         }
@@ -182,7 +181,7 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
         try {
             Uri uri = Uri.parse(url);
             String scheme = uri.getScheme();
-            if((scheme != null) && scheme.equals("data")) {
+            if ((scheme != null) && scheme.equals("data")) {
                 successCallback.invoke(true);
             } else {
                 successCallback.invoke(false);
