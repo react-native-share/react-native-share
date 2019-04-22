@@ -40,6 +40,8 @@ type Props = {
   overlayStyle?: {},
 };
 
+const shareSheetStyle = { flex: 1 };
+
 class ShareSheet extends React.Component<Props> {
   backButtonHandler: () => boolean;
 
@@ -64,7 +66,7 @@ class ShareSheet extends React.Component<Props> {
     return (
       <Overlay visible={this.props.visible} {...props}>
         <View style={[styles.actionSheetContainer, overlayStyle]}>
-          <TouchableOpacity style={{ flex: 1 }} onPress={this.props.onCancel} />
+          <TouchableOpacity style={shareSheetStyle} onPress={this.props.onCancel} />
           <Sheet visible={this.props.visible}>
             <View style={[styles.buttonContainer, style]}>{this.props.children}</View>
           </Sheet>
