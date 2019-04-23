@@ -142,7 +142,7 @@ public abstract class ShareIntent {
     protected void openIntentChooser() throws ActivityNotFoundException {
         Intent chooser;
         IntentSender intentSender = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+        if (TargetChosenReceiver.isSupported()) {
             intentSender = TargetChosenReceiver.getSharingSenderIntent(this.reactContext);
             chooser = Intent.createChooser(this.getIntent(), this.chooserTitle, intentSender);
         } else {

@@ -26,7 +26,7 @@ public class TargetChosenReceiver extends BroadcastReceiver {
     private static Callback successCallback;
     private static Callback failureCallback;
 
-    static boolean isSupported() {
+    public static boolean isSupported() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1;
     }
 
@@ -39,9 +39,9 @@ public class TargetChosenReceiver extends BroadcastReceiver {
     public static IntentSender getSharingSenderIntent(ReactContext reactContext) {
         synchronized (LOCK) {
             if (sTargetChosenReceiveAction == null) {
-                sTargetChosenReceiveAction = reactContext.getCurrentActivity().getPackageName() + "/" + TargetChosenReceiver.class.getName() + "_ACTION";
+                sTargetChosenReceiveAction = reactContext.getPackageName() + "/" + TargetChosenReceiver.class.getName() + "_ACTION";
             }
-            Context context = reactContext.getCurrentActivity().getApplicationContext();
+            Context context = reactContext.getApplicationContext();
             if (sLastRegisteredReceiver != null) {
                 context.unregisterReceiver(sLastRegisteredReceiver);
             }
@@ -50,9 +50,9 @@ public class TargetChosenReceiver extends BroadcastReceiver {
         }
 
         Intent intent = new Intent(sTargetChosenReceiveAction);
-        intent.setPackage(reactContext.getCurrentActivity().getPackageName());
+        intent.setPackage(reactContext.getPackageName());
         intent.putExtra(EXTRA_RECEIVER_TOKEN, sLastRegisteredReceiver.hashCode());
-        final PendingIntent callback = PendingIntent.getBroadcast(reactContext.getCurrentActivity(), 0, intent,
+        final PendingIntent callback = PendingIntent.getBroadcast(reactContext, 0, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 
         return callback.getIntentSender();

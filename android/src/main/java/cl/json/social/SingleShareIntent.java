@@ -1,5 +1,6 @@
 package cl.json.social;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -52,15 +53,20 @@ public abstract class SingleShareIntent extends ShareIntent {
 
     protected void openIntentChooser() throws ActivityNotFoundException {
         if (this.options.hasKey("forceDialog") && this.options.getBoolean("forceDialog")) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+            Activity activity = this.reactContext.getCurrentActivity();
+            if (activity == null) {
+                TargetChosenReceiver.sendCallback(false, "Something went wrong");
+                return;
+            }
+            if (TargetChosenReceiver.isSupported()) {
                 IntentSender sender = TargetChosenReceiver.getSharingSenderIntent(this.reactContext);
                 Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle, sender);
                 chooser.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                this.reactContext.getCurrentActivity().startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+                activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
             } else {
                 Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
                 chooser.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                this.reactContext.getCurrentActivity().startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+                activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
                 TargetChosenReceiver.sendCallback(true, true, "OK");
             }
         } else {
