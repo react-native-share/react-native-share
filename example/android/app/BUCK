@@ -16,22 +16,6 @@ create_aar_targets(glob(["libs/*.aar"]))
 
 create_jar_targets(glob(["libs/*.jar"]))
 
-for jarfile in glob(['libs/*.jar']):
-  name = 'jars__' + jarfile[jarfile.rindex('/') + 1: jarfile.rindex('.jar')]
-  lib_deps.append(':' + name)
-  prebuilt_jar(
-    name = name,
-    binary_jar = jarfile,
-  )
-
-for aarfile in glob(['libs/*.aar']):
-  name = 'aars__' + aarfile[aarfile.rindex('/') + 1: aarfile.rindex('.aar')]
-  lib_deps.append(':' + name)
-  android_prebuilt_aar(
-    name = name,
-    aar = aarfile,
-  )
-
 android_library(
     name = "all-libs",
     exported_deps = lib_deps,
