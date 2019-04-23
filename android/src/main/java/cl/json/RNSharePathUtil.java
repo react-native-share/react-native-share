@@ -24,11 +24,12 @@ public class RNSharePathUtil {
 
     public static void compileAuthorities(ReactContext reactContext) {
         if (authorities.size() == 0) {
-            authorities.add(reactContext.getPackageName() + ".rnshare.fileprovider");
             Application application = (Application) reactContext.getApplicationContext();
             if (application instanceof ShareApplication) {
                 authorities.add(((ShareApplication) application).getFileProviderAuthority());
             }
+
+            authorities.add(reactContext.getPackageName() + ".rnshare.fileprovider");
         }
     }
 
