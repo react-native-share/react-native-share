@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Alert, Button, TextInput, StyleSheet, Text, View } from 'react-native';
+import { Alert, Button, Platform, TextInput, StyleSheet, Text, View } from 'react-native';
 
 import Share from 'react-native-share';
 
@@ -14,6 +14,7 @@ export default class App extends Component {
   /**
    * You can use the method isPackageInstalled to find
    * if a package is insalled. It returns a { isInstalled, message }
+   * only works on Android :/
    */
   checkIfPackageIsInstalled = async () => {
     const { packageSearch } = this.state;
@@ -74,6 +75,7 @@ export default class App extends Component {
           <View style={styles.button}>
             <Button onPress={this.shareSingleImage} title="Share Single Image" />
           </View>
+          {Platform.OS === 'android' && (
           <View style={styles.searchPackageContainer}>
             <TextInput
               placeholder="Search for a Package"
@@ -85,6 +87,8 @@ export default class App extends Component {
               <Button onPress={this.checkIfPackageIsInstalled} title="Check Package" />
             </View>
           </View>
+          )
+          }
         </View>
       </View>
     );
