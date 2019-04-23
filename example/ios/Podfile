@@ -24,6 +24,9 @@ target 'example' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
+  # React-Native-Share pod
+  pod 'RNShare', :path => '../node_modules/react-native-share'
+
   target 'example-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
