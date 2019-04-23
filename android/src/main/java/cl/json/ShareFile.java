@@ -1,11 +1,7 @@
 package cl.json;
 
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.FileProvider;
 import android.util.Base64;
 import android.webkit.MimeTypeMap;
 
@@ -98,14 +94,13 @@ public class ShareFile {
         return this.type;
     }
     private String getRealPathFromURI(Uri contentUri) {
-        String result = RealPathUtil.getRealPathFromURI(this.reactContext, contentUri);
+        String result = RNSharePathUtil.getRealPathFromURI(this.reactContext, contentUri);
         return result;
     }
     public Uri getURI() {
 
         final MimeTypeMap mime = MimeTypeMap.getSingleton();
         String extension = mime.getExtensionFromMimeType(getType());
-        final String authority = ((ShareApplication) reactContext.getApplicationContext()).getFileProviderAuthority();
 
         if(this.isBase64File()) {
             String encodedImg = this.uri.getSchemeSpecificPart().substring(this.uri.getSchemeSpecificPart().indexOf(";base64,") + 8);
@@ -119,7 +114,7 @@ public class ShareFile {
                 fos.write(Base64.decode(encodedImg, Base64.DEFAULT));
                 fos.flush();
                 fos.close();
-                return FileProvider.getUriForFile(reactContext, authority, file);
+                return RNSharePathUtil.compatUriFromFile(reactContext, file);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -129,7 +124,7 @@ public class ShareFile {
             if (uri.getPath() == null) {
                 return null;
             }
-            return FileProvider.getUriForFile(reactContext, authority, new File(uri.getPath()));
+            return RNSharePathUtil.compatUriFromFile(reactContext, new File(uri.getPath()));
         }
 
         return null;

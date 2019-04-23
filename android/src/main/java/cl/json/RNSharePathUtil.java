@@ -1,5 +1,6 @@
 package cl.json;
 
+import android.app.Application;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,11 +9,46 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.content.CursorLoader;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 
-public class RealPathUtil
-{
+import com.facebook.react.bridge.ReactContext;
+
+import java.io.File;
+import java.util.ArrayList;
+
+public class RNSharePathUtil {
+    private static final ArrayList<String> authorities = new ArrayList<>();
+
+    public static void compileAuthorities(ReactContext reactContext) {
+        if (authorities.size() == 0) {
+            authorities.add(reactContext.getPackageName() + ".rnshare.fileprovider");
+            Application application = (Application) reactContext.getApplicationContext();
+            if (application instanceof ShareApplication) {
+                authorities.add(((ShareApplication) application).getFileProviderAuthority());
+            }
+        }
+    }
+
+    public static Uri compatUriFromFile(@NonNull final ReactContext context, @NonNull final File file) {
+        compileAuthorities(context);
+        Uri result = null;
+        for (int i = 0; i < authorities.size(); i++) {
+            try {
+                String authority = authorities.get(i);
+                result = FileProvider.getUriForFile(context, authority, file);
+                if (result != null) {
+                    break;
+                }
+            } catch (Exception e) {
+
+            }
+        }
+        return result;
+    }
+
     public static String getRealPathFromURI(final Context context, final Uri uri) {
 
         String filePrefix = "";
