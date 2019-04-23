@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import { Alert, Button, TextInput, StyleSheet, Text, View } from 'react-native';
 
@@ -9,23 +9,18 @@ import images from './images/imagesBase64';
 export default class App extends Component {
   state = {
     packageSearch: '',
-  }
+  };
 
   /**
    * You can use the method isPackageInstalled to find
    * if a package is insalled. It returns a { isInstalled, message }
    */
   checkIfPackageIsInstalled = async () => {
-
     const { packageSearch } = this.state;
 
     const { isInstalled } = await Share.isPackageInstalled(packageSearch);
 
-    Alert.alert(
-      `Package: ${packageSearch}`,
-      `${isInstalled ? 'Installed' : 'Not Installed'}`,
-    );
-
+    Alert.alert(`Package: ${packageSearch}`, `${isInstalled ? 'Installed' : 'Not Installed'}`);
   };
 
   setPackageSearch = packageSearch => this.setState({ packageSearch });
@@ -67,7 +62,6 @@ export default class App extends Component {
   };
 
   render() {
-
     const { packageSearch } = this.state;
 
     return (
@@ -75,16 +69,10 @@ export default class App extends Component {
         <Text style={styles.welcome}>Welcome to React Native Share Example!</Text>
         <View style={styles.optionsRow}>
           <View style={styles.button}>
-            <Button
-              onPress={this.shareMultipleImages}
-              title="Share Multiple Images"
-            />
+            <Button onPress={this.shareMultipleImages} title="Share Multiple Images" />
           </View>
           <View style={styles.button}>
-            <Button
-              onPress={this.shareSingleImage}
-              title="Share Single Image"
-            />
+            <Button onPress={this.shareSingleImage} title="Share Single Image" />
           </View>
           <View style={styles.searchPackageContainer}>
             <TextInput
@@ -94,10 +82,7 @@ export default class App extends Component {
               style={styles.textInput}
             />
             <View>
-              <Button
-                onPress={this.checkIfPackageIsInstalled}
-                title="Check Package"
-              />
+              <Button onPress={this.checkIfPackageIsInstalled} title="Check Package" />
             </View>
           </View>
         </View>
