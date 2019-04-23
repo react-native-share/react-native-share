@@ -98,15 +98,7 @@ public class ShareFile {
         return this.type;
     }
     private String getRealPathFromURI(Uri contentUri) {
-        String[] proj = { MediaStore.Images.Media.DATA };
-        CursorLoader loader = new CursorLoader(this.reactContext, contentUri, proj, null, null, null);
-        Cursor cursor = loader.loadInBackground();
-        String result = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            result = cursor.getString(column_index);
-            cursor.close();
-        }
+        String result = RealPathUtil.getRealPathFromURI(this.reactContext, contentUri);
         return result;
     }
     public Uri getURI() {
