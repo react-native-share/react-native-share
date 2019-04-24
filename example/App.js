@@ -1,85 +1,126 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Alert
-} from 'react-native';
+
+import { Alert, Button, Platform, TextInput, StyleSheet, Text, View } from 'react-native';
+
 import Share from 'react-native-share';
-import images from './src/imageBase64';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import images from './images/imagesBase64';
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component {
+  state = {
+    packageSearch: '',
+  };
 
-  onShare() {
+  /**
+   * You can use the method isPackageInstalled to find
+   * if a package is insalled. It returns a { isInstalled, message }
+   * only works on Android :/
+   */
+  checkIfPackageIsInstalled = async () => {
+    const { packageSearch } = this.state;
+
+    const { isInstalled } = await Share.isPackageInstalled(packageSearch);
+
+    Alert.alert(`Package: ${packageSearch}`, `${isInstalled ? 'Installed' : 'Not Installed'}`);
+  };
+
+  setPackageSearch = packageSearch => this.setState({ packageSearch });
+
+  /**
+   * This functions share multiple images that
+   * you send as the urls param
+   */
+  shareMultipleImages = async () => {
     const shareOptions = {
       title: 'Share file',
       urls: [images.image1, images.image2],
     };
-    return Share.open(shareOptions);
-  }
 
-  onShare2() {
+    // If you want, you can use a try catch, to parse
+    // the share response. If the user cancels, etc.
+    try {
+      const ShareResponse = await Share.open(shareOptions);
+    } catch (error) {
+      console.log('Error =>', error);
+    }
+  };
+
+  /**
+   * This functions share a image passed using the
+   * url param
+   */
+  shareSingleImage = async () => {
     const shareOptions = {
       title: 'Share file',
       url: images.image1,
     };
-    return Share.open(shareOptions);
-  }
 
-  isPackageInstalled() {
-    return Share.isPackageInstalled('com.xxx.xxx');
-  }
+    try {
+      const ShareResponse = await Share.open(shareOptions);
+    } catch (error) {
+      console.log('Error =>', error);
+    }
+  };
 
   render() {
+    const { packageSearch } = this.state;
+
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Button title="Share 2 images" onPress={() => this.onShare()}/>
-        <Button title="Share single image" onPress={() => this.onShare2()}/>
-        <Button
-          title="Check package installed"
-          onPress={() =>
-            this.isPackageInstalled().then(({ isInstalled }) => Alert.alert(`isInstalled = ${isInstalled}`))
+        <Text style={styles.welcome}>Welcome to React Native Share Example!</Text>
+        <View style={styles.optionsRow}>
+          <View style={styles.button}>
+            <Button onPress={this.shareMultipleImages} title="Share Multiple Images" />
+          </View>
+          <View style={styles.button}>
+            <Button onPress={this.shareSingleImage} title="Share Single Image" />
+          </View>
+          {Platform.OS === 'android' && (
+          <View style={styles.searchPackageContainer}>
+            <TextInput
+              placeholder="Search for a Package"
+              onChangeText={this.setPackageSearch}
+              value={packageSearch}
+              style={styles.textInput}
+            />
+            <View>
+              <Button onPress={this.checkIfPackageIsInstalled} title="Check Package" />
+            </View>
+          </View>
+          )
           }
-        />
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  button: {
+    marginBottom: 10,
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
+  textInput: {
+    borderBottomColor: '#151313',
+    borderBottomWidth: 1,
+    marginRight: 10,
+  },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  optionsRow: {
+    justifyContent: 'space-between',
+  },
+  searchPackageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
 });

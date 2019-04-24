@@ -2,9 +2,9 @@ package com.example;
 
 import android.app.Application;
 
-import cl.json.ShareApplication;
 import com.facebook.react.ReactApplication;
 import cl.json.RNSharePackage;
+import cl.json.ShareApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -25,7 +25,7 @@ public class MainApplication extends Application implements ReactApplication, Sh
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNSharePackage()
+          new RNSharePackage()
       );
     }
 
@@ -48,6 +48,7 @@ public class MainApplication extends Application implements ReactApplication, Sh
 
   @Override
   public String getFileProviderAuthority() {
-    return "com.example.fileprovider";
+        return BuildConfig.APPLICATION_ID + ".provider";
   }
+
 }
