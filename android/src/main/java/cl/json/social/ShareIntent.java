@@ -1,5 +1,6 @@
 package cl.json.social;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -140,6 +141,11 @@ public abstract class ShareIntent {
     }
 
     protected void openIntentChooser() throws ActivityNotFoundException {
+        Activity activity = this.reactContext.getCurrentActivity();
+        if (activity == null) {
+            TargetChosenReceiver.sendCallback(false, "Something went wrong");
+            return;
+        }
         Intent chooser;
         IntentSender intentSender = null;
         if (TargetChosenReceiver.isSupported()) {
@@ -159,7 +165,7 @@ public abstract class ShareIntent {
             chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, viewIntents);
         }
 
-        this.reactContext.getCurrentActivity().startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+        activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
         if (intentSender == null) {
             TargetChosenReceiver.sendCallback(true, true, "OK");
         }
