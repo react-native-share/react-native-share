@@ -27,7 +27,7 @@ export default class App extends Component {
 
   setPackageSearch = packageSearch => this.setState({ packageSearch });
 
-  getErrorString(error, defaultValue): string {
+  getErrorString(error, defaultValue) {
     let e = defaultValue || 'Something went wrong. Please try again';
     if (typeof error === 'string') {
       e = error;
