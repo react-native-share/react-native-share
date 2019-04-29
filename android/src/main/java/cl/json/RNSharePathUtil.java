@@ -36,9 +36,18 @@ public class RNSharePathUtil {
     public static Uri compatUriFromFile(@NonNull final ReactContext context, @NonNull final File file) {
         compileAuthorities(context);
         String existingAuthority = Uri.fromFile(file).getAuthority();
+
+        // Authority is already set on this uri, no need to set it again
         if (!TextUtils.isEmpty(existingAuthority) && authorities.contains(existingAuthority)) {
             return Uri.fromFile(file);
         }
+
+        // Already a content uri, cannot set authority on this
+        if (file.getAbsolutePath().startsWith("content://")) {
+            return Uri.fromFile(file);
+        }
+
+        // No authority present, getting FileProvider uri
         Uri result = null;
         for (int i = 0; i < authorities.size(); i++) {
             try {
