@@ -35,6 +35,10 @@ public class RNSharePathUtil {
 
     public static Uri compatUriFromFile(@NonNull final ReactContext context, @NonNull final File file) {
         compileAuthorities(context);
+        String existingAuthority = Uri.fromFile(file).getAuthority();
+        if (!TextUtils.isEmpty(existingAuthority) && authorities.contains(existingAuthority)) {
+            return Uri.fromFile(file);
+        }
         Uri result = null;
         for (int i = 0; i < authorities.size(); i++) {
             try {
