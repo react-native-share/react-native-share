@@ -69,7 +69,7 @@ Then run a `react-native link react-native-share`, and doing the steps 6 and 7.
 
 You can also see our example to sse how you need to setup your podfile.
 
-Btw, i also recommend reading this (amazing article)[https://shift.infinite.red/beginner-s-guide-to-using-cocoapods-with-react-native-46cb4d372995] about how pods and rn. =D
+Btw, we also recommend reading this (amazing article)[https://shift.infinite.red/beginner-s-guide-to-using-cocoapods-with-react-native-46cb4d372995] about how pods and rn. =D
 
 
 #### Android Install
