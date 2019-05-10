@@ -1,11 +1,7 @@
 package cl.json;
 
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.FileProvider;
 import android.util.Base64;
 import android.webkit.MimeTypeMap;
 
@@ -126,23 +122,13 @@ public class ShareFiles
     }
 
     private String getRealPathFromURI(Uri contentUri) {
-        String[] proj = { MediaStore.Images.Media.DATA };
-        CursorLoader loader = new CursorLoader(this.reactContext, contentUri, proj, null, null, null);
-        Cursor cursor = loader.loadInBackground();
-        if (cursor == null) {
-            return "";
-        }
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String result = cursor.getString(column_index);
-        cursor.close();
+        String result = RNSharePathUtil.getRealPathFromURI(this.reactContext, contentUri);
         return result;
     }
 
     public ArrayList<Uri> getURI() {
         final MimeTypeMap mime = MimeTypeMap.getSingleton();
         ArrayList<Uri> finalUris = new ArrayList<>();
-        final String authority = ((ShareApplication) reactContext.getApplicationContext()).getFileProviderAuthority();
 
         for (Uri uri : this.uris) {
             if(this.isBase64File(uri)) {
@@ -159,13 +145,13 @@ public class ShareFiles
                     fos.write(Base64.decode(encodedImg, Base64.DEFAULT));
                     fos.flush();
                     fos.close();
-                    finalUris.add(FileProvider.getUriForFile(reactContext, authority, file));
+                    finalUris.add(RNSharePathUtil.compatUriFromFile(reactContext, file));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else if(this.isLocalFile(uri)) {
                 if (uri.getPath() != null) {
-                    finalUris.add(FileProvider.getUriForFile(reactContext, authority, new File(uri.getPath())));
+                    finalUris.add(RNSharePathUtil.compatUriFromFile(reactContext, new File(uri.getPath())));
                 }
             }
         }
