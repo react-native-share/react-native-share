@@ -12,7 +12,7 @@ To get this project running on Android just follow these steps
 
 #IOS
 
-Since we are using cocoapods to manage our ios dependencies. After installing it, you will need to reproduce these steps:
+Since We are using cocoapods to manage our ios dependencies. After installing it, you will need to reproduce these steps:
 
 1. `yarn` or `npm i`
 2. `yarn start` or `npm start`
@@ -21,6 +21,6 @@ Since we are using cocoapods to manage our ios dependencies. After installing it
 
 You can also run `yarn install-pods` to install the ios dependencies.
 
-If you have any doubt about installing pods, you call check our README.MD on the repo to get trought this.
+If you have any doubt about installing pods, you call check our README.MD on the repo to get through this.
 
 
