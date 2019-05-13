@@ -51,6 +51,25 @@ If you want to share Whatsapp and Mailto, you should write `LSApplicationQueries
     ```
 8. Run your project (`Cmd+R`)
 
+#### iOS Install(using Pods)
+
+If you wish, you can use [cocopoads](https://cocoapods.org/) to use react-native-share.
+
+You just need to add to your Podfile the react-native-share dependency.
+
+```ruby
+  # React-Native-Share pod
+  pod 'RNShare', :path => '../node_modules/react-native-share'
+```
+
+After that, just run a `pod install` or `pod udpate` to get up and running with react-native-share. 
+
+Then run a `react-native link react-native-share`, and doing the steps 6 and 7.
+
+You can also see our example to see how you need to setup your podfile.
+
+Btw, We also recommend reading this (amazing article)[https://shift.infinite.red/beginner-s-guide-to-using-cocoapods-with-react-native-46cb4d372995] about how pods and rn work together. =D
+
 #### Android Install
 
 1. `npm install react-native-share --save`
