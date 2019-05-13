@@ -1,6 +1,5 @@
 ## Getting started
 
-
 #Android
 
 To get this project running on Android just follow these steps
