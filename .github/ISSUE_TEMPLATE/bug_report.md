@@ -1,3 +1,9 @@
+---
+name: 🐛 Report a bug
+about: Report a reproducible or regression bug.
+labels: 'bug'
+---
+
 ### Steps to reproduce
 1.
 2.
