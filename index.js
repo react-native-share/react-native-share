@@ -36,7 +36,9 @@ type Props = {
   visible: boolean,
   onCancel: () => void,
   children: React.Node,
+  // $FlowFixMe
   style?: {},
+  // $FlowFixMe
   overlayStyle?: {},
 };
 
