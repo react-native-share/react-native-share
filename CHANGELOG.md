@@ -1,3 +1,14 @@
+#### 1.1.3-3 (2018-10-23)
+
+##### Build System / Dependencies
+
+*  reverse dep order, google then jcenter ([#387](https://github.com/react-native-community/react-native-share/pull/387)) ([2c91ecce](https://github.com/react-native-community/react-native-share/commit/2c91ecceda3abe182fa500a6bcd2b09e0b5fd4e5))
+*  upgrade android dependencies, example depend on upstream ([#373](https://github.com/react-native-community/react-native-share/pull/373)) ([28e62b15](https://github.com/react-native-community/react-native-share/commit/28e62b1526b2242a474b9b7f3a4dd213d2ec3554))
+
+##### Bug Fixes
+
+* **classes-not-exported:**  fix classes not exported warning ([540aa8fe](https://github.com/react-native-community/react-native-share/commit/540aa8fe68ede1ac4bfa79698dabe78448b59cc3))
+
 #### 1.1.2-2 (2018-09-12)
 
 #### 1.1.1-1 (2018-08-07)
