@@ -14,6 +14,7 @@
 		B3E7B58A1CC2AC0600A0062D /* RNShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNShare.m */; };
 		B3EEE48E1D4844E7008422B6 /* GooglePlusShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B3EEE48D1D4844E7008422B6 /* GooglePlusShare.m */; };
 		CE0C76371E9E7DE100ED396E /* InstagramShare.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0C76361E9E7DE100ED396E /* InstagramShare.m */; };
+		FCC7BB4F221457EF00E1EA39 /* InstagramStories.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC7BB4E221457EF00E1EA39 /* InstagramStories.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -44,6 +45,8 @@
 		B3EEE48F1D4844F4008422B6 /* GooglePlusShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GooglePlusShare.h; sourceTree = "<group>"; };
 		CE0C76361E9E7DE100ED396E /* InstagramShare.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InstagramShare.m; sourceTree = "<group>"; };
 		CE0C76621E9E869300ED396E /* InstagramShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InstagramShare.h; sourceTree = "<group>"; };
+		FCC7BB4D2214566C00E1EA39 /* InstagramStories.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InstagramStories.h; sourceTree = "<group>"; };
+		FCC7BB4E221457EF00E1EA39 /* InstagramStories.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InstagramStories.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +93,8 @@
 				B3EEE48F1D4844F4008422B6 /* GooglePlusShare.h */,
 				4DA7872E2172E92200DECA05 /* LINEShare.h */,
 				4DA7872F2172E92200DECA05 /* LINEShare.m */,
+				FCC7BB4D2214566C00E1EA39 /* InstagramStories.h */,
+				FCC7BB4E221457EF00E1EA39 /* InstagramStories.m */,
 			);
 			name = social;
 			sourceTree = "<group>";
@@ -133,6 +138,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 58B511D21A9E6C8500147676;
@@ -156,6 +162,7 @@
 				4DA787302172E92200DECA05 /* LINEShare.m in Sources */,
 				B33C22891D4419E8006BCD98 /* WhatsAppShare.m in Sources */,
 				B33C228B1D442577006BCD98 /* EmailShare.m in Sources */,
+				FCC7BB4F221457EF00E1EA39 /* InstagramStories.m in Sources */,
 				B33C22851D441713006BCD98 /* GenericShare.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -196,7 +203,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -230,7 +237,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
