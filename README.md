@@ -18,7 +18,7 @@ This gives you the power to prioritize our work and support the project contribu
 
 #### How to use master branch?
 
-We recommend using the releases from npm, however you can use the master branch if you need any feature that is not available on NPM. But by doing this you end up being able to test less stable versions of the project. 
+We recommend using the releases from npm, however you can use the master branch if you need any feature that is not available on NPM. By doing this you will be able to use unreleased features, but the module may be less stable. 
 
 **yarn**: `yarn add react-native-share@git+https://git@github.com/react-native-community/react-native-share.git`
 
