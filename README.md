@@ -51,13 +51,32 @@ If you want to share Whatsapp and Mailto, you should write `LSApplicationQueries
     ```
 8. Run your project (`Cmd+R`)
 
+#### iOS Install(using Pods)
+
+If you wish, you can use [cocopoads](https://cocoapods.org/) to use react-native-share.
+
+You just need to add to your Podfile the react-native-share dependency.
+
+```ruby
+  # React-Native-Share pod
+  pod 'RNShare', :path => '../node_modules/react-native-share'
+```
+
+After that, just run a `pod install` or `pod udpate` to get up and running with react-native-share. 
+
+Then run a `react-native link react-native-share`, and doing the steps 6 and 7.
+
+You can also see our example to see how you need to setup your podfile.
+
+Btw, We also recommend reading this (amazing article)[https://shift.infinite.red/beginner-s-guide-to-using-cocoapods-with-react-native-46cb4d372995] about how pods and rn work together. =D
+
 #### Android Install
 
 1. `npm install react-native-share --save`
 2. Open up `android/app/src/main/java/[...]/MainApplication.java`
-  - Add `import cl.json.RNSharePackage;` and `import cl.json.ShareApplication;` to the imports at the top of the file
-  - Add `new RNSharePackage()` to the list returned by the `getPackages()`
-    method
+    - Add `import cl.json.RNSharePackage;` and `import cl.json.ShareApplication;` to the imports at the top of the file
+    - Add `new RNSharePackage()` to the list returned by the `getPackages()` method
+
 3. Append the following lines to `android/settings.gradle`:
   	```
   	include ':react-native-share'
@@ -69,65 +88,7 @@ If you want to share Whatsapp and Mailto, you should write `LSApplicationQueries
     ```
       compile project(':react-native-share')
     ```
-5. Follow this
-   [guide](https://developer.android.com/training/secure-file-sharing/setup-sharing.html).
-   For example:
-  - `applicationId` should be defined in the `defaultConfig` section in your `android/app/build.gradle`:
-    
-    File: `android/app/build.gradle`
-    ````  
-      defaultConfig {
-        applicationId "com.yourcompany.yourappname"
-        ...
-    }
-    ````
-  - Add this `<provider>` section to your `AndroidManifest.xml`
-  
-    File: `AndroidManifest.xml`
-    ```xml
-      <application>
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:grantUriPermissions="true"
-            android:exported="false">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
-        </provider>
-      </application>
-    ```
-    
-  - Create a `filepaths.xml` under this directory:
-    `android/app/src/main/res/xml`. 
-    
-    In this file, add the following contents:
-    
-    File: `android/app/src/main/res/filepaths.xml`
-    ```xml
-      <?xml version="1.0" encoding="utf-8"?>
-      <paths xmlns:android="http://schemas.android.com/apk/res/android">
-          <external-path name="myexternalimages" path="Download/" />
-      </paths>
-    ```
-    
-6. Edit your `MainApplication.java` class to add `implements ShareApplication` and `getFileProviderAuthority`
-  - The `getFileProviderAuthority` function returns the `android:authorities` value added in the `AndroidManifest.xml` file
-  - `applicationId` is defined in the `defaultConfig` section of your `android/app/build.gradle` and referenced using `BuildConfig.APPLICATION_ID`
-
-    ```java
-    import cl.json.ShareApplication
-    public class MainApplication extends Application implements ShareApplication, ReactApplication {
-    
-         @Override
-         public String getFileProviderAuthority() {
-                return BuildConfig.APPLICATION_ID + ".provider";
-         }
-
-         // ...
-
-    }
-    ```
+5. **(Optional)** [Follow this for implementing Provider](#adding-your-implementation-of-fileprovider)
 
 #### Windows Install
 
@@ -165,7 +126,7 @@ Supported options:
 | title | string   |  (optional) |
 | subject | string   | (optional) |
 | excludedActivityTypes | string   | (optional) |
-| failOnCancel | boolean | (defaults to true) On iOS, specifies whether promise should reject if user cancels share dialog (optional) |
+| failOnCancel | boolean | (defaults to true) Specifies whether promise should reject if user cancels share dialog (optional) |
 | showAppsToView | boolean | (optional) only android|
 
 #### shareSingle(options) (in iOS & Android)
@@ -537,7 +498,7 @@ static sharePDFWithAndroid(fileUrl, type) {
     });
 }
 ```
-### Static Values for Instagram Stories
+#### Static Values for Instagram Stories
 
 These can be assessed using Share.Social property
 For eg.
@@ -567,9 +528,72 @@ Supported options for INSTAGRAM_STORIES:
 | backgroundTopColor | string   | (optional) default #906df4 |
 | attributionURL | string   | (optional) facebook beta-test |
 
-### Instagram stories method list
+#### Instagram stories method list
 | Name  | Required options    |
 | :---- | :------: |
 | **SHARE_BACKGROUND_IMAGE** | backgroundImage   |
 | **SHARE_STICKER_IMAGE** | stickerImage   |
 | **SHARE_BACKGROUND_AND_STICKER_IMAGE** | backgroundImage, stickerImage   |
+
+#### Adding your implementation of FileProvider
+
+[Android guide](https://developer.android.com/training/secure-file-sharing/setup-sharing.html).
+   
+- `applicationId` should be defined in the `defaultConfig` section in your `android/app/build.gradle`:
+
+- File: `android/app/build.gradle`
+
+    ```
+    defaultConfig {
+        applicationId "com.yourcompany.yourappname"
+        ...
+    }
+    ```
+    
+- Add this `<provider>` section to your `AndroidManifest.xml`
+
+    File: `AndroidManifest.xml`
+    ```xml
+    <application>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+    </application>
+    ```
+
+- Create a `filepaths.xml` under this directory:
+`android/app/src/main/res/xml`. 
+
+    In this file, add the following contents:
+    
+    File: `android/app/src/main/res/filepaths.xml`
+    ```xml
+    <?xml version="1.0" encoding="utf-8"?>
+    <paths xmlns:android="http://schemas.android.com/apk/res/android">
+      <external-path name="myexternalimages" path="Download/" />
+    </paths>
+    ```
+
+- Edit your `MainApplication.java` class to add `implements ShareApplication` and `getFileProviderAuthority`
+- The `getFileProviderAuthority` function returns the `android:authorities` value added in the `AndroidManifest.xml` file
+- `applicationId` is defined in the `defaultConfig` section of your `android/app/build.gradle` and referenced using `BuildConfig.APPLICATION_ID`
+
+    ```java
+    import cl.json.ShareApplication
+    public class MainApplication extends Application implements ShareApplication, ReactApplication {
+    
+         @Override
+         public String getFileProviderAuthority() {
+                return BuildConfig.APPLICATION_ID + ".provider";
+         }
+
+         // ...Your own code
+
+    }
+    ```
