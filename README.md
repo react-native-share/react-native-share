@@ -10,12 +10,19 @@ This gives you the power to prioritize our work and support the project contribu
 
 [![issuehunt-image](https://issuehunt.io/static/embed/issuehunt-button-v1.svg)](https://issuehunt.io/repos/43406976)
 
-
 ## Getting started
 
 ### Mostly automatic install
-1. `npm install react-native-share --save`
+1. `yarn add react-native-share`
 2. `react-native link react-native-share`
+
+#### How to use master branch?
+
+We recommend using the releases from npm, however you can use the master branch if you need any feature that is not available on NPM. By doing this you will be able to use unreleased features, but the module may be less stable. 
+
+**yarn**: `yarn add react-native-share@git+https://git@github.com/react-native-community/react-native-share.git`
+
+**npm**: `npm install --save react-native-share@git+https://git@github.com/react-native-community/react-native-share.git`
 
 ### Manual install
 
