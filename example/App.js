@@ -1,33 +1,49 @@
-import React, { Component } from 'react';
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow
+ */
 
-import { Alert, Button, Platform, TextInput, StyleSheet, Text, View } from 'react-native';
+import React, {useState} from 'react';
 
+import {
+  Alert,
+  Button,
+  Platform,
+  TextInput,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+
+// eslint-disable-next-line import/default
 import Share from 'react-native-share';
 
 import images from './images/imagesBase64';
 
-export default class App extends Component {
-  state = {
-    packageSearch: '',
-    result: '',
-  };
+const App = () => {
+  // eslint-disable-next-line no-undef
+  const [packageSearch, setPackageSearch] = useState<string>('');
+  // eslint-disable-next-line no-undef
+  const [result, setResult] = useState<string>('');
 
   /**
-   * You can use the method isPackageInstalled to find
-   * if a package is insalled. It returns a { isInstalled, message }
-   * only works on Android :/
+   * You can use the method isPackageInstalled to find if a package is installed.
+   * It returns an object { isInstalled, message }.
+   * Only works on Android.
    */
-  checkIfPackageIsInstalled = async () => {
-    const { packageSearch } = this.state;
+  const checkIfPackageIsInstalled = async () => {
+    const {isInstalled} = await Share.isPackageInstalled(packageSearch);
 
-    const { isInstalled } = await Share.isPackageInstalled(packageSearch);
-
-    Alert.alert(`Package: ${packageSearch}`, `${isInstalled ? 'Installed' : 'Not Installed'}`);
+    Alert.alert(
+      `Package: ${packageSearch}`,
+      `${isInstalled ? 'Installed' : 'Not Installed'}`,
+    );
   };
 
-  setPackageSearch = packageSearch => this.setState({ packageSearch });
-
-  getErrorString(error, defaultValue) {
+  function getErrorString(error, defaultValue) {
     let e = defaultValue || 'Something went wrong. Please try again';
     if (typeof error === 'string') {
       e = error;
@@ -43,7 +59,7 @@ export default class App extends Component {
    * This functions share multiple images that
    * you send as the urls param
    */
-  shareMultipleImages = async () => {
+  const shareMultipleImages = async () => {
     const shareOptions = {
       title: 'Share file',
       failOnCancel: false,
@@ -54,10 +70,10 @@ export default class App extends Component {
     // the share response. If the user cancels, etc.
     try {
       const ShareResponse = await Share.open(shareOptions);
-      this.setState({ result: JSON.stringify(ShareResponse, 0, 2) });
+      setResult(JSON.stringify(ShareResponse, 0, 2));
     } catch (error) {
       console.log('Error =>', error);
-      this.setState({ result: 'error: '.concat(this.getErrorString(error)) });
+      setResult('error: '.concat(getErrorString(error)));
     }
   };
 
@@ -65,7 +81,7 @@ export default class App extends Component {
    * This functions share a image passed using the
    * url param
    */
-  shareEmailImage = async () => {
+  const shareEmailImage = async () => {
     const shareOptions = {
       title: 'Share file',
       social: Share.Social.EMAIL,
@@ -75,10 +91,10 @@ export default class App extends Component {
 
     try {
       const ShareResponse = await Share.open(shareOptions);
-      this.setState({ result: JSON.stringify(ShareResponse, 0, 2) });
+      setResult(JSON.stringify(ShareResponse, 0, 2));
     } catch (error) {
       console.log('Error =>', error);
-      this.setState({ result: 'error: '.concat(this.getErrorString(error)) });
+      setResult('error: '.concat(getErrorString(error)));
     }
   };
 
@@ -86,7 +102,7 @@ export default class App extends Component {
    * This functions share a image passed using the
    * url param
    */
-  shareSingleImage = async () => {
+  const shareSingleImage = async () => {
     const shareOptions = {
       title: 'Share file',
       url: images.image1,
@@ -95,50 +111,48 @@ export default class App extends Component {
 
     try {
       const ShareResponse = await Share.open(shareOptions);
-      this.setState({ result: JSON.stringify(ShareResponse, 0, 2) });
+      setResult(JSON.stringify(ShareResponse, 0, 2));
     } catch (error) {
       console.log('Error =>', error);
-      this.setState({ result: 'error: '.concat(this.getErrorString(error)) });
+      setResult('error: '.concat(getErrorString(error)));
     }
   };
 
-  render() {
-    const { packageSearch } = this.state;
-
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native Share Example!</Text>
-        <View style={styles.optionsRow}>
-          <View style={styles.button}>
-            <Button onPress={this.shareMultipleImages} title="Share Multiple Images" />
-          </View>
-          <View style={styles.button}>
-            <Button onPress={this.shareSingleImage} title="Share Single Image" />
-          </View>
-          <View style={styles.button}>
-            <Button onPress={this.shareEmailImage} title="Share Social: Email" />
-          </View>
-          {Platform.OS === 'android' && (
+  return (
+    <View style={styles.container}>
+      <Text style={styles.welcome}>Welcome to React Native Share Example!</Text>
+      <View style={styles.optionsRow}>
+        <View style={styles.button}>
+          <Button onPress={shareMultipleImages} title="Share Multiple Images" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareSingleImage} title="Share Single Image" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareEmailImage} title="Share Social: Email" />
+        </View>
+        {Platform.OS === 'android' && (
           <View style={styles.searchPackageContainer}>
             <TextInput
               placeholder="Search for a Package"
-              onChangeText={this.setPackageSearch}
+              onChangeText={setPackageSearch}
               value={packageSearch}
               style={styles.textInput}
             />
             <View>
-              <Button onPress={this.checkIfPackageIsInstalled} title="Check Package" />
+              <Button
+                onPress={checkIfPackageIsInstalled}
+                title="Check Package"
+              />
             </View>
           </View>
-          )
-          }
-          <Text style={{ marginTop: 20, fontSize: 20 }}>Result</Text>
-          <Text style={styles.result}>{this.state.result}</Text>
-        </View>
+        )}
+        <Text style={{marginTop: 20, fontSize: 20}}>Result</Text>
+        <Text style={styles.result}>{result}</Text>
       </View>
-    );
-  }
-}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   button: {
@@ -173,3 +187,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 });
+
+export default App;
