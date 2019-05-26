@@ -8,7 +8,7 @@ const argv = require('minimist')(process.argv.slice(1));
 
 git().tags((err, tags) => {
   const currentChangelog = fs.readFileSync('./CHANGELOG.md');
-  const matched = tags.latest != null ? tags.latest.match(/v\d+.\d+.\d+-(\d+)/) : 'v0.0.1-0';
+  const matched = tags.latest.match(/v\d+.\d+.\d+-(\d+)/);
   const build = (idx(matched, _ => Number(_[1])) || 0) + 1;
 
   changelog
