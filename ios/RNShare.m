@@ -43,7 +43,6 @@
 #import "GenericShare.h"
 #import "WhatsAppShare.h"
 #import "InstagramShare.h"
-#import "InstagramStories.h"
 #import "GooglePlusShare.h"
 #import "EmailShare.h"
 
@@ -79,12 +78,7 @@ RCT_EXPORT_MODULE()
     @"GOOGLEPLUS": @"googleplus",
     @"WHATSAPP": @"whatsapp",
     @"INSTAGRAM": @"instagram",
-    @"INSTAGRAM_STORIES": @"instagram-stories",
     @"EMAIL": @"email",
-    
-    @"SHARE_BACKGROUND_IMAGE": @"shareBackgroundImage",
-    @"SHARE_STICKER_IMAGE": @"shareStickerImage",
-    @"SHARE_BACKGROUND_AND_STICKER_IMAGE": @"shareBackgroundAndStickerImage",
   };
 }
 
@@ -115,10 +109,6 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
         } else if([social isEqualToString:@"instagram"]) {
             NSLog(@"TRY OPEN instagram");
             InstagramShare *shareCtl = [[InstagramShare alloc] init];
-            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
-        } else if([social isEqualToString:@"instagram-stories"]) {
-            NSLog(@"TRY OPEN instagram-stories");
-            InstagramStories *shareCtl = [[InstagramStories alloc] init];
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         } else if([social isEqualToString:@"email"]) {
             NSLog(@"TRY OPEN email");
