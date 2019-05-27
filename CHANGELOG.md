@@ -1,3 +1,22 @@
+### 1.2.0-4 (2019-05-26)
+
+##### Build System / Dependencies
+
+*  fix all deprecation and lint in ShareFile(s) ([#374](https://github.com/react-native-community/react-native-share/pull/374)) ([67fb59e9](https://github.com/react-native-community/react-native-share/commit/67fb59e9dc7ec9f98ad76f6809dbc98d240c451e))
+
+##### Chores
+
+* **npmignore:**
+  *  add .github folder to npmignore ([fc219481](https://github.com/react-native-community/react-native-share/commit/fc2194818c7dba4dd913dd5c65564113ef575a6a))
+  *  add changelog.js ([8256431b](https://github.com/react-native-community/react-native-share/commit/8256431be2526a55b625b72f4727d8dd8af20aee))
+* **changelog:**  update changelog.js ([85a91b05](https://github.com/react-native-community/react-native-share/commit/85a91b05993eaaf5e897815029bf58d0944ed3cb))
+*  Adding instructions about how use the master branch ([c1c58b87](https://github.com/react-native-community/react-native-share/commit/c1c58b876b718bce033593ad52e7fc62fdb32065))
+*  update iOS target to 9.0 to match react-native min version ([f72dbe1a](https://github.com/react-native-community/react-native-share/commit/f72dbe1a44105a0d04f3af03a7556ea123024493))
+
+##### New Features
+
+* **deps:**  update deps and prepare for release ([#501](https://github.com/react-native-community/react-native-share/pull/501)) ([05c2b6a1](https://github.com/react-native-community/react-native-share/commit/05c2b6a1aeb74853ef16265f690b3ba48cd0198f))
+
 #### 1.1.3-3 (2018-10-23)
 
 ##### Build System / Dependencies
