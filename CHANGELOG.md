@@ -1,3 +1,9 @@
+#### 1.2.1-5 (2019-05-29)
+
+##### Chores
+
+* **codeowners:**  add CODEOWNERS file ([ac67e5cd](https://github.com/react-native-community/react-native-share/commit/ac67e5cd9531e5d554b7b9ac0217c777e4d8f9c4))
+
 ### 1.2.0-4 (2019-05-26)
 
 ##### Build System / Dependencies
