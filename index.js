@@ -171,6 +171,8 @@ class RNShare {
     SHARE_STICKER_IMAGE: NativeModules.RNShare.SHARE_STICKER_IMAGE || 'shareStickerImage',
     SHARE_BACKGROUND_AND_STICKER_IMAGE:
       NativeModules.RNShare.SHARE_BACKGROUND_AND_STICKER_IMAGE || 'shareBackgroundAndStickerImage',
+    SHARE_BACKGROUND_VIDEO_AND_STICKER_IMAGE:
+      NativeModules.RNShare.SHARE_BACKGROUND_VIDEO_AND_STICKER_IMAGE || 'shareBackgroundVideoAndStickerImage',
   };
 
   static open(options: Options | MultipleOptions): Promise<OpenReturn> {
