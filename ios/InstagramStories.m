@@ -161,15 +161,15 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
             RCTLog(@"method shareBackgroundVideoAndStickerImage");
             
             NSURL *backgroundVideoURL = [RCTConvert NSURL:options[@"backgroundVideo"]];
-            NSURL *sticketURL = [RCTConvert NSURL:options[@"stickerImage"]];
+            NSURL *stickerURL = [RCTConvert NSURL:options[@"stickerImage"]];
             
             if (backgroundVideoURL == nil || sticketURL == nil) {
                 RCTLogError(@"key 'backgroundVideo' or 'stickerImage' missing in options");
             } else {
-                NSDate *backgroundVideo = [NSData dataWithContentsOfURL:backgroundVideoURL];
-                NSDate *stickerImage = [NSData dataWithContentsOfURL:sticketURL];
+                NSData *backgroundVideo = [NSData dataWithContentsOfURL:backgroundVideoURL];
+                NSData *stickerImage = [NSData dataWithContentsOfURL:stickerURL];
 
-                [self backgroundVideo:backgroundVideo stickerImage:sticketURL attributionURL:attrURL];
+                [self backgroundVideo:backgroundVideo stickerImage:stickerImage attributionURL:attrURL];
             }
         }
     } else {
