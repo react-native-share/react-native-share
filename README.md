@@ -197,6 +197,7 @@ Share.shareSingle(shareOptions);
 | **SMS** | yes   | no | no |
 | **SNAPCHAT** | yes   | no | no |
 | **MESSENGER** | yes   | no | no |
+| **LINKEDIN** | yes   | no | no |
 
 ## How it looks:
 
