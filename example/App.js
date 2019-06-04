@@ -6,17 +6,9 @@
  * @flow
  */
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {
-  Alert,
-  Button,
-  Platform,
-  TextInput,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Alert, Button, Platform, TextInput, StyleSheet, Text, View } from 'react-native';
 
 // eslint-disable-next-line import/default
 import Share from 'react-native-share';
@@ -35,12 +27,9 @@ const App = () => {
    * Only works on Android.
    */
   const checkIfPackageIsInstalled = async () => {
-    const {isInstalled} = await Share.isPackageInstalled(packageSearch);
+    const { isInstalled } = await Share.isPackageInstalled(packageSearch);
 
-    Alert.alert(
-      `Package: ${packageSearch}`,
-      `${isInstalled ? 'Installed' : 'Not Installed'}`,
-    );
+    Alert.alert(`Package: ${packageSearch}`, `${isInstalled ? 'Installed' : 'Not Installed'}`);
   };
 
   function getErrorString(error, defaultValue) {
@@ -140,14 +129,11 @@ const App = () => {
               style={styles.textInput}
             />
             <View>
-              <Button
-                onPress={checkIfPackageIsInstalled}
-                title="Check Package"
-              />
+              <Button onPress={checkIfPackageIsInstalled} title="Check Package" />
             </View>
           </View>
         )}
-        <Text style={{marginTop: 20, fontSize: 20}}>Result</Text>
+        <Text style={{ marginTop: 20, fontSize: 20 }}>Result</Text>
         <Text style={styles.result}>{result}</Text>
       </View>
     </View>
