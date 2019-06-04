@@ -24,8 +24,6 @@ module.exports = {
   },
   watchFolders: [path.resolve(__dirname, 'node_modules'), exampleRoot],
   resolver: {
-    blacklistRE: blacklist([
-      new RegExp(`${reactNativeShareRoot}/node_modules/react-native/.*`),
-    ]),
+    blacklistRE: blacklist([new RegExp(`${reactNativeShareRoot}/node_modules/react-native/.*`)]),
   },
 };
