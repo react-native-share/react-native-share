@@ -1,0 +1,58 @@
+# Uncomment the next line to define a global platform for your project
+platform :ios, '9.0'
+
+target 'example' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for example
+  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+
+  pod 'React', :path => '../node_modules/react-native', :subspecs => [
+    'Core',
+    'CxxBridge', # Include this for RN >= 0.47
+    'DevSupport', # Include this to enable In-App Devmenu if RN >= 0.43
+    'RCTText',
+    'RCTNetwork',
+    'RCTWebSocket',
+    'RCTImage',
+    'RCTActionSheet',
+    'RCTAnimation',
+    'RCTGeolocation',
+    'RCTLinkingIOS',
+    'RCTSettings',
+    'RCTVibration',
+  ]
+
+  # Third party deps podspec link
+  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
+  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+
+  target 'exampleTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  # very important to have, unless you removed React dependencies for Libraries 
+  # and you rely on Cocoapods to manage it
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      if target.name == "React"
+        target.remove_from_project
+      end
+    end
+
+    installer.pods_project.targets.each do |target|
+
+      targets_to_ignore = %w(React yoga)
+      
+      if targets_to_ignore.include? target.name
+        target.remove_from_project
+      end
+
+    end
+
+  end
+
+end
