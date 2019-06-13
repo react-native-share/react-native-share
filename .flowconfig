@@ -1,5 +1,4 @@
 [ignore]
-.*/node_modules/.*
 
 [include]
 
@@ -9,4 +8,5 @@
 
 [options]
 
-[strict]
+[untyped]
+.*/node_modules/.*
