@@ -63,7 +63,7 @@
     "release:version": "node ./changelog --version $VERSION && git push origin && git push origin --follow-tags",
     "validate": "yarn validate:prettier && yarn validate:lint && yarn validate:flow",
     "validate:flow": "yarn flow",
-    "validate:lint": "eslint --fix *js components/*.js",
+    "validate:lint": "eslint *js components/*.js --max-warnings=0",
     "validate:prettier": "prettier --write *.js components/*.js"
   }
 }

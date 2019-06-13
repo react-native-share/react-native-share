@@ -16,8 +16,8 @@ jobs:
           name: Install Dependencies
           command: yarn install
       - run:
-          name: Lint
-          command: yarn lint
+          name: Validate
+          command: yarn validate
       - run:
           name: Run Checks
           command: |
