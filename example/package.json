@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "react": "16.8.3",
-    "react-native": "0.59.999999999",
+    "react-native": "0.59.9",
     "react-native-share": "file:../../react-native-share"
   },
   "devDependencies": {
