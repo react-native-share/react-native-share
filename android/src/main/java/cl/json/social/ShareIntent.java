@@ -55,6 +55,18 @@ public abstract class ShareIntent {
         if (ShareIntent.hasValidKey("message", options)) {
             message = options.getString("message");
         }
+        
+        String socialType = options.getString("social");
+
+        if(socialType.equals("whatsapp")) {
+            String whatsAppNumber = options.getString("whatsAppNumber");
+            if(whatsAppNumber) {
+            String chatAddress = whatsAppNumber + "@s.whatsapp.net";
+            this.getIntent().putExtra("jid",chatAddress);
+            }
+        }
+
+        
         if (ShareIntent.hasValidKey("urls", options)) {
 
             ShareFiles fileShare = getFileShares(options);
