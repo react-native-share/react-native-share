@@ -68,6 +68,15 @@
     }
 }
 
+- (BOOL)isImageMimeType:(NSString *)data {
+    NSRange range = [data rangeOfString:@"data:image" options:NSCaseInsensitiveSearch];
+    if (range.location != NSNotFound) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 RCT_EXPORT_MODULE()
 
 - (NSDictionary *)constantsToExport
@@ -109,7 +118,11 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
         } else if([social isEqualToString:@"instagram"]) {
             NSLog(@"TRY OPEN instagram");
             InstagramShare *shareCtl = [[InstagramShare alloc] init];
-            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+            if([self isImageMimeType:options[@"url"]]) {// Condition to handle image
+                [shareCtl shareSingleImage:options failureCallback: failureCallback successCallback: successCallback];
+            } else {
+                [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+            }
         } else if([social isEqualToString:@"email"]) {
             NSLog(@"TRY OPEN email");
             EmailShare *shareCtl = [[EmailShare alloc] init];
