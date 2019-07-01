@@ -7,6 +7,7 @@
 
 #import "InstagramShare.h"
 #import <AVFoundation/AVFoundation.h>
+@import Photos;
 
 @implementation InstagramShare
     RCT_EXPORT_MODULE();
