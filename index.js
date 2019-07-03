@@ -41,8 +41,8 @@ type Props = {
   visible: boolean,
   onCancel: () => void,
   children: React.Node,
-  style?: {},
-  overlayStyle?: {},
+  style?: $ReadOnlyArray<View.propTypes>,
+  overlayStyle?: $ReadOnlyArray<View.propTypes>,
 };
 
 const shareSheetStyle = { flex: 1 };
