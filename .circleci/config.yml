@@ -1,0 +1,36 @@
+version: 2
+executorType: docker
+jobs:
+  build:
+    resource_class: large
+    working_directory: ~/app
+    docker:
+      - image: circleci/android:api-28-node
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum "example/yarn.lock" }}
+            - v1-yarn-cache
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile --non-interactive --cache-folder ~/.cache/yarn
+      - run:
+          name: Validate
+          command: yarn validate
+      - run:
+          name: Run Checks
+          command: |
+            cd android
+            chmod +x ./gradlew
+            ./gradlew clean && ./gradlew && ./gradlew check
+      - run:
+          name: Install dependencies of the example app
+          command: cd example && yarn install --frozen-lockfile --non-interactive --cache-folder ~/.cache/yarn
+      - run:
+          name: Check for errors in the example app using Flow
+          command: cd example && yarn flow
+      - save_cache:
+          key: v1-yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum "example/yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
