@@ -43,7 +43,7 @@ type Props = {
   onCancel: () => void,
   children: React.Node,
   style?: ViewStyleProp,
-  overlayStyle?: $ReadOnlyArray<ViewStyleProp>,
+  overlayStyle?: ViewStyleProp,
 };
 
 const shareSheetStyle = { flex: 1 };
