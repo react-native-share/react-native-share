@@ -42,7 +42,7 @@ type Props = {
   visible: boolean,
   onCancel: () => void,
   children: React.Node,
-  style?: $ReadOnlyArray<ViewStyleProp>,
+  style?: ViewStyleProp,
   overlayStyle?: $ReadOnlyArray<ViewStyleProp>,
 };
 
