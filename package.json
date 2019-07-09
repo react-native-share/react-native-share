@@ -55,7 +55,7 @@
   "readmeFilename": "README.md",
   "scripts": {
     "commitmsg": "commitlint -e $GIT_PARAMS",
-    "dev-sync": "cp -r *podspec android ios example/node_modules/react-native-share/",
+    "dev-sync": "echo 'This is not needed anymore, the example is always synced'; exit 1",
     "lint": "eslint index.js --max-warnings=0",
     "lint:staged": "lint-staged",
     "release:major": "node ./changelog --major && npm version major && git push origin && git push origin --follow-tags",

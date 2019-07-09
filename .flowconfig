@@ -8,6 +8,7 @@
 [lints]
 
 [options]
+server.max_workers=4
 
 [untyped]
 .*/node_modules/.*
