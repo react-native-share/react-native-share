@@ -1,5 +1,5 @@
 ﻿# react-native-share [![CircleCI](https://circleci.com/gh/react-native-community/react-native-share/tree/master.svg?style=svg&circle-token=0c6860240abba4e16bd07df0ea805a72b67b8d41)](https://circleci.com/gh/react-native-community/react-native-share/tree/master) [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
-Share Social , Sending Simple Data to Other Apps
+React Native Share, a simple tool for share message and file to other apps.
 
 # Sponsors
 ---
