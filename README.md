@@ -15,14 +15,24 @@ This gives you the power to prioritize our work and support the project contribu
 
 ## Automatic Way
 
-
-```sh 
+---
+``` 
 yarn add react-native-share
 react-native link react-native-share
 ```
 
+or if you're using npm
+``` 
+npm install react-native-share --save
+react-native link react-native-share
+```
+---
+
 We recommend using the releases from npm, however you can use the master branch if you need any feature that is not available on NPM. By doing this you will be able to use unreleased features, but the module may be less stable. 
-**yarn**: ```sh yarn add react-native-share@git+https://git@github.com/react-native-community/react-native-share.git```
+**yarn**: 
+``` 
+yarn add react-native-share@git+https://git@github.com/react-native-community/react-native-share.git
+```
 
 
 
@@ -31,7 +41,7 @@ We recommend using the releases from npm, however you can use the master branch 
 ### iOS Install
 
 
-1. `npm install react-native-share --save`
+1. `yarn add react-native-share`
 2. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
 3. Go to `node_modules` ➜ `react-native-share` ➜ `ios` and add `RNShare.xcodeproj`
 4. In XCode, in the project navigator, select your project. Add `libRNShare.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
@@ -76,7 +86,7 @@ Btw, We also recommend reading this (amazing article)[https://shift.infinite.red
 ### Android Install
 
 
-1. `npm install react-native-share --save`
+1. `yarn add react-native-share`
 2. Open up `android/app/src/main/java/[...]/MainApplication.java`
     - Add `import cl.json.RNSharePackage;` and `import cl.json.ShareApplication;` to the imports at the top of the file
     - Add `new RNSharePackage()` to the list returned by the `getPackages()` method
@@ -99,7 +109,7 @@ Btw, We also recommend reading this (amazing article)[https://shift.infinite.red
 
 [Read it! :D](https://github.com/ReactWindows/react-native)
 
-1. `npm install react-native-share --save`
+1. `yarn add react-native-share`
 2. In Visual Studio add the `RNShare.sln` in `node_modules/react-native-share/windows/RNShare.sln` folder to their solution, reference from their app.
 2. Open up your `MainPage.cs` app
   - Add `using Cl.Json.RNShare;` to the usings at the top of the file
