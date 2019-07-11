@@ -7,6 +7,7 @@
 
 #import "InstagramShare.h"
 #import <AVFoundation/AVFoundation.h>
+@import Photos;
 
 @implementation InstagramShare
     RCT_EXPORT_MODULE();
@@ -48,6 +49,76 @@
         NSLog(errorMessage);
         failureCallback(error);
     } 
+}
+
+- (void)shareSingleImage:(NSDictionary *)options
+         failureCallback:(RCTResponseErrorBlock)failureCallback
+         successCallback:(RCTResponseSenderBlock)successCallback {
+    
+    UIImage *image;
+    NSURL *imageURL = [RCTConvert NSURL:options[@"url"]];
+    if (imageURL) {
+        if (imageURL.fileURL || [imageURL.scheme.lowercaseString isEqualToString:@"data"]) {
+            NSError *error;
+            NSData *data = [NSData dataWithContentsOfURL:imageURL
+                                                 options:(NSDataReadingOptions)0
+                                                   error:&error];
+            if (!data) {
+                failureCallback(error);
+                return;
+            }
+            image = [UIImage imageWithData: data];
+            [self savePictureAndOpenInstagram: image
+                              failureCallback: failureCallback
+                              successCallback: successCallback];
+        }
+    } else {
+        [[UIApplication sharedApplication] openURL: [NSURL URLWithString:@"instagram://camera"]];
+        successCallback(@[]);
+    }
+}
+
+-(void)savePictureAndOpenInstagram:(UIImage *)base64Image
+                   failureCallback:(RCTResponseErrorBlock)failureCallback
+                   successCallback:(RCTResponseSenderBlock)successCallback {
+    
+    NSURL *URL = [self fileURLWithTemporaryImageData:UIImageJPEGRepresentation(base64Image, 0.9)];
+    __block PHAssetChangeRequest *_mChangeRequest = nil;
+    __block PHObjectPlaceholder *placeholder;
+    
+    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+        
+        NSData *pngData = [NSData dataWithContentsOfURL:URL];
+        UIImage *image = [UIImage imageWithData:pngData];
+        _mChangeRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
+        placeholder = _mChangeRequest.placeholderForCreatedAsset;
+    } completionHandler:^(BOOL success, NSError *error) {
+        
+        if (success) {
+            NSURL *instagramURL = [NSURL URLWithString:[NSString stringWithFormat:@"instagram://library?LocalIdentifier=\%@", [placeholder localIdentifier]]];
+            
+            if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
+                [[UIApplication sharedApplication] openURL:instagramURL options:@{} completionHandler:NULL];
+                if (successCallback != NULL) {
+                    successCallback(@[]);
+                }
+            }
+        }
+        else {
+            //Error while writing
+            if (failureCallback != NULL) {
+                failureCallback(error);
+            }
+        }
+    }];
+}
+
+- (NSURL *)fileURLWithTemporaryImageData:(NSData *)data {
+    NSString *writePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"instagram.ig"];
+    if (![data writeToFile:writePath atomically:YES]) {
+        return nil;
+    }
+    return [NSURL fileURLWithPath:writePath];
 }
 
 @end

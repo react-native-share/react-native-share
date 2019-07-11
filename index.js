@@ -16,6 +16,7 @@ import {
   ActionSheetIOS,
   PermissionsAndroid,
 } from 'react-native';
+import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import Overlay from './components/Overlay';
 import Sheet from './components/Sheet';
@@ -41,8 +42,8 @@ type Props = {
   visible: boolean,
   onCancel: () => void,
   children: React.Node,
-  style?: {},
-  overlayStyle?: {},
+  style?: ViewStyleProp,
+  overlayStyle?: ViewStyleProp,
 };
 
 const shareSheetStyle = { flex: 1 };
@@ -105,7 +106,7 @@ type MultipleOptions = {
 };
 
 type OpenReturn = { app?: string, dismissedAction?: boolean };
-type ShareSingleReturn = { message: string };
+type ShareSingleReturn = { message: string, isInstalled?: boolean };
 
 const requireAndAskPermissions = async (options: Options | MultipleOptions): Promise<any> => {
   if ((options.url || options.urls) && Platform.OS === 'android') {
