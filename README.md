@@ -35,7 +35,7 @@ cd ios && pod install && cd ../
 ```
 ___
 
-### If you are using `react-native` >= 0.60.0 please use `react-native-share` <= 1.2.1:
+### If you are using `react-native` <= 0.59.10 please use `react-native-share` <= 1.2.1:
 
 ## Automatic Way
 
