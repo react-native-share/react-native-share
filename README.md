@@ -13,6 +13,30 @@ This gives you the power to prioritize our work and support the project contribu
 # Getting started
 ---
 
+### If you are using `react-native` >= 0.60.0 please use `react-native-share` >= 2.0.0
+
+## Automatic Way
+---
+``` 
+yarn add react-native-share
+```
+
+or if you're using npm
+``` 
+npm install react-native-share --save
+```
+---
+
+#### Important:
+Linking is not needed anymore. ``react-native@0.60.0+`` supports dependencies auto linking.
+For iOS you also need additional step to install auto linked Pods (Cocoapods should be installed):
+``` 
+cd ios && pod install && cd ../
+```
+___
+
+### If you are using `react-native` >= 0.60.0 please use `react-native-share` <= 1.2.1:
+
 ## Automatic Way
 
 ---
@@ -324,7 +348,7 @@ static sharePDFWithAndroid(fileUrl, type) {
     ```xml
     <application>
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:grantUriPermissions="true"
             android:exported="false">
