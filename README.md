@@ -36,7 +36,9 @@ cd ios && pod install && cd ../
 ___
 
 ### If you are using `react-native` <= 0.59.10 please use `react-native-share` <= 1.2.1:
+If you are having any problems with this library, or need to use >= 2.0.0 please refer to: [jetifier](https://github.com/mikehardy/jetifier#to-reverse-jetify--convert-node_modules-dependencies-to-support-libraries).
 
+After installing jetifier, runs a ```npx jetify -r``` and test if this works by running a ```react-native run-android```.
 ## Automatic Way
 
 ---
