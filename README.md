@@ -42,21 +42,21 @@ After installing jetifier, runs a ```npx jetify -r``` and test if this works by 
 ## Automatic Way
 
 ---
-``` 
+```
 yarn add react-native-share
 react-native link react-native-share
 ```
 
 or if you're using npm
-``` 
+```
 npm install react-native-share --save
 react-native link react-native-share
 ```
 ---
 
-We recommend using the releases from npm, however you can use the master branch if you need any feature that is not available on NPM. By doing this you will be able to use unreleased features, but the module may be less stable. 
-**yarn**: 
-``` 
+We recommend using the releases from npm, however you can use the master branch if you need any feature that is not available on NPM. By doing this you will be able to use unreleased features, but the module may be less stable.
+**yarn**:
+```
 yarn add react-native-share@git+https://git@github.com/react-native-community/react-native-share.git
 ```
 
@@ -73,7 +73,7 @@ yarn add react-native-share@git+https://git@github.com/react-native-community/re
 4. In XCode, in the project navigator, select your project. Add `libRNShare.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 5. In XCode, in the project navigator, select your project. Add `Social.framework` and `MessageUI.framework` to your project's `General` ➜ `Linked Frameworks and Libraries`
 6. In iOS 9 or higher, You should add app list that you will share.
-If you want to share Whatsapp and Mailto, you should write `LSApplicationQueriesSchemes` in info.plist  
+If you want to share Whatsapp and Mailto, you should write `LSApplicationQueriesSchemes` in info.plist
     ```xml
     <key>LSApplicationQueriesSchemes</key>
     <array>
@@ -100,7 +100,7 @@ You just need to add to your Podfile the react-native-share dependency.
   pod 'RNShare', :path => '../node_modules/react-native-share'
 ```
 
-After that, just run a `pod install` or `pod udpate` to get up and running with react-native-share. 
+After that, just run a `pod install` or `pod udpate` to get up and running with react-native-share.
 
 Then run a `react-native link react-native-share`, and doing the steps 6 and 7.
 
@@ -185,6 +185,8 @@ When share a base 64 file, please follow the format below:
 url: "data:<data_type>/<file_extension>;base64,<base64_data>"
 ```
 
+For more details about base 64 image's handling, see ["Working with remote images"](#working-with-remote-images).
+
 ***Share file directly
 
 When share a local file directly, please follow the format below:
@@ -215,7 +217,7 @@ Supported options:
 
 ---
 ### isPackageInstalled(<app>) (in Android)
-It's a method that checks if an app (package) is installed on Android. 
+It's a method that checks if an app (package) is installed on Android.
 It returns a promise with `isInstalled`. e.g.
 
 Checking if Instagram is installed on Android.
@@ -267,7 +269,113 @@ Share.shareSingle(shareOptions);
 ---
 # Troubleshooting
 ---
-#### Share Remote PDF File with Gmail & WhatsApp (iOS)
+
+### Working with remote images
+
+To share remote images from a URL, you'll need to retrieve them, convert them to base 64 images and save them first. [`react-native-fs`](https://github.com/itinance/react-native-fs) and [`rn-fetch-blob`](https://github.com/joltup/rn-fetch-blob) are great plugins to help with that.
+
+#### Simple example
+
+Here's the simplest way to share a remote image:
+
+```javascript
+private share (imageUrl, socialRef) {
+    RNFetchBlob.fetch('GET', imageUrl)
+        .then((res) => {
+            Share.shareSingle({
+                message: 'Your message',
+                social: Share.Social[socialRef],
+                url: 'data:image/jpeg;base64,' + res.base64(),
+                type: 'image/jpeg',
+                failOnCancel: false
+            })
+            .catch(() => { /* Catch error */ });
+        })
+        .catch(() => { /* Catch error */ });
+}
+```
+
+This approach has one major drawback: **a new image will be created and saved to user's library on every function call**. It might still be useful for simple use cases though.
+
+#### More complex example
+
+The more robust way of retrieving and sharing remote images is to save the image to a specific location, check if it already exists on subsequent calls and load it from the file system if need be.
+
+Here's a good starting point:
+
+```javascript
+private getImage (filename, imageUrl, callback) {
+    const dirs = RNFetchBlob.fs.dirs;
+    const path = `${dirs.DocumentDir} / ${filename}`;
+    const readFileAndExecuteCallback = (imagePath) => {
+        RNFetchBlob.fs
+            .readFile(imagePath, 'base64')
+            .then((data) => {
+                const imageBase64 = 'data:image/jpeg;base64,' + data;
+                callback && callback(imageBase64);
+            })
+            .catch(() => { /* Catch error */ });
+    };
+
+    RNFetchBlob.fs
+        .exists(path)
+        .then((exist) => {
+            if (exist) {
+                readFileAndExecuteCallback(path);
+            } else {
+                RNFetchBlob.config({ fileCache : true, path })
+                    .fetch('GET', imageUrl)
+                    .then((res) => {
+                        readFileAndExecuteCallback(res.data);
+                    })
+                    .catch(() => { /* Catch error */ });
+            }
+        })
+        .catch(() => { /* Catch error */ });
+}
+
+private share (imageUrl, socialRef) {
+    this.getImage(imageUrl, 'your-unique-file-name.jpg', (image) => {
+        Share.shareSingle({
+            message: 'Your message',
+            social: Share.Social[socialRef],
+            url: image,
+            type: 'image/jpeg',
+            failOnCancel: false
+        })
+        .catch(() => { /* Catch error */ });
+    });
+}
+```
+
+#### Notes
+
+* The previous examples have been tested on **iOS only** at that point.
+
+* When trying to share an image via Facebook, and if the Facebook app isn't installed, the plugin will default on opening the browser. **With a base64 image, it will actually crash the Facebook website**. Therefore, when using `shareSingle()`, it is recommended to check whether the app is installed or not thanks to a plugin like [this one](https://github.com/redpandatronicsuk/react-native-check-app-install).
+
+### Prerequisites to sharing images on iOS
+
+There are two requirements to make this work:
+
+1. **Your app's `Info.plist` file must contain an `NSPhotoLibraryUsageDescription` key**, otherwise it will crash as soon as you try to share your image on a real device — not on the simulator. Whether you're downloading the image first, importing a local image64 file or reading a remote URL, you need to include this permission.
+
+2. **You need to add every scheme you intend to use to a `LSApplicationQueriesSchemes` key in the `Info.plist` file**. Here is an example for Instagram and Facebook:
+
+```
+<key>LSApplicationQueriesSchemes</key>
+<array>
+    <string>fb</string>
+    <string>fbapi</string>
+    <string>fbauth2</string>
+    <string>fbshareextension</string>
+    <string>fb-messenger-api</string>
+    <string>instagram</string>
+    <string>instagram-stories</string>
+</array>
+```
+
+### Sharing Remote PDF File with Gmail & WhatsApp (iOS)
 
 When sharing a pdf file with base64, there are two current problems.
 
@@ -329,10 +437,10 @@ static sharePDFWithAndroid(fileUrl, type) {
 }
 ```
 
-#### Adding your implementation of FileProvider
+### Adding your implementation of FileProvider
 
 [Android guide](https://developer.android.com/training/secure-file-sharing/setup-sharing.html).
-   
+
 - `applicationId` should be defined in the `defaultConfig` section in your `android/app/build.gradle`:
 
 - File: `android/app/build.gradle`
@@ -343,7 +451,7 @@ static sharePDFWithAndroid(fileUrl, type) {
         ...
     }
     ```
-    
+
 - Add this `<provider>` section to your `AndroidManifest.xml`
 
     File: `AndroidManifest.xml`
@@ -362,10 +470,10 @@ static sharePDFWithAndroid(fileUrl, type) {
     ```
 
 - Create a `filepaths.xml` under this directory:
-`android/app/src/main/res/xml`. 
+`android/app/src/main/res/xml`.
 
     In this file, add the following contents:
-    
+
     File: `android/app/src/main/res/filepaths.xml`
     ```xml
     <?xml version="1.0" encoding="utf-8"?>
@@ -381,7 +489,7 @@ static sharePDFWithAndroid(fileUrl, type) {
     ```java
     import cl.json.ShareApplication
     public class MainApplication extends Application implements ShareApplication, ReactApplication {
-    
+
          @Override
          public String getFileProviderAuthority() {
                 return BuildConfig.APPLICATION_ID + ".provider";
