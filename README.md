@@ -13,6 +13,32 @@ This gives you the power to prioritize our work and support the project contribu
 # Getting started
 ---
 
+### If you are using `react-native` >= 0.60.0 please use `react-native-share` >= 2.0.0
+
+## Automatic Way
+---
+``` 
+yarn add react-native-share
+```
+
+or if you're using npm
+``` 
+npm install react-native-share --save
+```
+---
+
+#### Important:
+Linking is not needed anymore. ``react-native@0.60.0+`` supports dependencies auto linking.
+For iOS you also need additional step to install auto linked Pods (Cocoapods should be installed):
+``` 
+cd ios && pod install && cd ../
+```
+___
+
+### If you are using `react-native` <= 0.59.10 please use `react-native-share` <= 1.2.1:
+If you are having any problems with this library, or need to use >= 2.0.0 please refer to: [jetifier](https://github.com/mikehardy/jetifier#to-reverse-jetify--convert-node_modules-dependencies-to-support-libraries).
+
+After installing jetifier, runs a ```npx jetify -r``` and test if this works by running a ```react-native run-android```.
 ## Automatic Way
 
 ---
@@ -324,7 +350,7 @@ static sharePDFWithAndroid(fileUrl, type) {
     ```xml
     <application>
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:grantUriPermissions="true"
             android:exported="false">
