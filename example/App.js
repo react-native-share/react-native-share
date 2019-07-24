@@ -70,7 +70,7 @@ const App = () => {
     // the share response. If the user cancels, etc.
     try {
       const ShareResponse = await Share.open(shareOptions);
-      setResult(JSON.stringify(ShareResponse, 0, 2));
+      setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
       setResult('error: '.concat(getErrorString(error)));
@@ -91,7 +91,7 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.open(shareOptions);
-      setResult(JSON.stringify(ShareResponse, 0, 2));
+      setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
       setResult('error: '.concat(getErrorString(error)));
@@ -111,7 +111,7 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.open(shareOptions);
-      setResult(JSON.stringify(ShareResponse, 0, 2));
+      setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
       setResult('error: '.concat(getErrorString(error)));

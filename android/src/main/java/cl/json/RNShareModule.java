@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -30,6 +30,7 @@ import cl.json.social.PinterestShare;
 import cl.json.social.SnapChatShare;
 import cl.json.social.SMSShare;
 import cl.json.social.MessengerShare;
+import cl.json.social.LinkedinShare;
 
 public class RNShareModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
@@ -65,7 +66,8 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
         pinterest,
         messenger,
         snapchat,
-        sms;
+        sms,
+        linkedin;
 
 
         public static ShareIntent getShareClass(String social, ReactApplicationContext reactContext) {
@@ -95,6 +97,8 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
                     return new SnapChatShare(reactContext);
                 case messenger:
                     return new MessengerShare(reactContext);
+                case linkedin:
+                    return new LinkedinShare(reactContext);
                 default:
                     return null;
             }

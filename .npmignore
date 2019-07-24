@@ -3,7 +3,7 @@
 .eslintrc
 .gitignore
 .github/*
-circle.yml
+.circleci/*
 jsconfig.json
 commitlint.config.js
 changelog.js

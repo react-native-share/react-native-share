@@ -14,4 +14,4 @@ To get this project running on iOS just follow these steps
 
 1. `yarn` or `npm i`
 2. `yarn start` or `npm start`
-3 `react-native run-ios`
+3. `react-native run-ios`

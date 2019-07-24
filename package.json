@@ -1,7 +1,7 @@
 {
   "name": "react-native-share",
   "description": "Social share, sending simple data to other apps.",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/react-native-community/react-native-share.git"
@@ -26,7 +26,7 @@
     "pre-commit": "1.2.2",
     "prettier": "^1.18.2",
     "react": "16.8.3",
-    "react-native": "0.59.9",
+    "react-native": "0.60.3",
     "simple-git": "1.113.0"
   },
   "keywords": [
@@ -55,6 +55,7 @@
   "readmeFilename": "README.md",
   "scripts": {
     "commitmsg": "commitlint -e $GIT_PARAMS",
+    "dev-sync": "echo 'This is not needed anymore, the example is always synced'; exit 1",
     "lint": "eslint index.js --max-warnings=0",
     "lint:staged": "lint-staged",
     "release:major": "node ./changelog --major && npm version major && git push origin && git push origin --follow-tags",

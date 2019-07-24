@@ -6,19 +6,20 @@
     "clear": "node ./node_modules/react-native/local-cli/cli.js start --reset-cache",
     "install-pods": "cd ios && pod install && cd ..",
     "start": "node ./node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "flow": "flow"
   },
   "dependencies": {
-    "react": "16.8.3",
-    "react-native": "0.59.9",
-    "react-native-share": "file:../../react-native-share"
+    "react": "16.8.6",
+    "react-native": "0.60.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/runtime": "^7.4.5",
+    "@babel/core": "^7.5.4",
+    "@babel/runtime": "^7.5.4",
     "babel-jest": "^24.8.0",
+    "flow-bin": "0.98.1",
     "jest": "^24.8.0",
-    "metro-react-native-babel-preset": "^0.53.1",
+    "metro-react-native-babel-preset": "^0.55.0",
     "react-native-testing-library": "^1.7.0",
     "react-test-renderer": "^16.8.6"
   },

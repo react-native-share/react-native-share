@@ -13,10 +13,11 @@
 - (void)shareSingle:(NSDictionary *)options
     failureCallback:(RCTResponseErrorBlock)failureCallback
     successCallback:(RCTResponseSenderBlock)successCallback
-    serviceType:(NSString*)serviceType {
+    serviceType:(NSString*)serviceType
+    inAppBaseUrl:(NSString *)inAppBaseUrl {
 
     NSLog(@"Try open view");
-    if([SLComposeViewController isAvailableForServiceType:serviceType]) {
+    if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:inAppBaseUrl]]) {
 
         SLComposeViewController *composeController = [SLComposeViewController  composeViewControllerForServiceType:serviceType];
 
@@ -45,7 +46,7 @@
         }
 
 
-        UIViewController *ctrl = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+        UIViewController *ctrl = RCTPresentedViewController();
         [ctrl presentViewController:composeController animated:YES completion:Nil];
         successCallback(@[]);
       } else {

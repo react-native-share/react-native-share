@@ -1,6 +1,7 @@
 [ignore]
 ; We fork some components by platform
 .*/*[.]android.js
+.*/*[.]ios.js
 
 ; Ignore "BUCK" generated dirs
 <PROJECT_ROOT>/\.buckd/
@@ -20,12 +21,14 @@
 .*/node_modules/metro/.*
 
 [include]
+../
 
 [libs]
 node_modules/react-native/Libraries/react-native/react-native-interface.js
 node_modules/react-native/flow/
 
 [options]
+server.max_workers=4
 emoji=true
 
 esproposal.optional_chaining=enable
@@ -65,5 +68,8 @@ suppress_comment=\\(.\\|\n\\)*\\$FlowIssue\\((\\(<VERSION>\\)? *\\(site=[a-z,_]*
 suppress_comment=\\(.\\|\n\\)*\\$FlowFixedInNextDeploy
 suppress_comment=\\(.\\|\n\\)*\\$FlowExpectedError
 
+[untyped]
+.*/node_modules/.*
+
 [version]
-^0.92.0
+^0.98.1
