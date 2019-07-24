@@ -1,6 +1,7 @@
 [ignore]
 ; We fork some components by platform
 .*/*[.]android.js
+.*/*[.]ios.js
 
 ; Ignore "BUCK" generated dirs
 <PROJECT_ROOT>/\.buckd/
@@ -67,5 +68,8 @@ suppress_comment=\\(.\\|\n\\)*\\$FlowIssue\\((\\(<VERSION>\\)? *\\(site=[a-z,_]*
 suppress_comment=\\(.\\|\n\\)*\\$FlowFixedInNextDeploy
 suppress_comment=\\(.\\|\n\\)*\\$FlowExpectedError
 
+[untyped]
+.*/node_modules/.*
+
 [version]
-^0.92.0
+^0.98.1
