@@ -238,7 +238,8 @@ const shareOptions = {
     title: 'Share via',
     message: 'some message',
     url: 'some share url',
-    social: Share.Social.WHATSAPP
+    social: Share.Social.WHATSAPP,
+    whatsAppNumber: "9199999999"  // country code + phone number
 };
 Share.shareSingle(shareOptions);
 ```
