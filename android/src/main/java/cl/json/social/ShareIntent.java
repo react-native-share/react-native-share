@@ -47,6 +47,10 @@ public abstract class ShareIntent {
             this.getIntent().putExtra(Intent.EXTRA_SUBJECT, options.getString("subject"));
         }
 
+        if (ShareIntent.hasValidKey("email", options)) {
+            this.getIntent().putExtra(Intent.EXTRA_EMAIL, new String[] { options.getString("email") });
+        }
+
         if (ShareIntent.hasValidKey("title", options)) {
             this.chooserTitle = options.getString("title");
         }

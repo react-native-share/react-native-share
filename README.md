@@ -172,6 +172,7 @@ Supported options:
 | message | string   |  |
 | title | string   |  (optional) |
 | subject | string   | (optional) |
+| email | string   | Email of addressee (optional) |
 | excludedActivityTypes | string   | (optional) |
 | failOnCancel | boolean | (defaults to true) Specifies whether promise should reject if user cancels share dialog (optional) |
 | showAppsToView | boolean | (optional) only android|
@@ -208,6 +209,7 @@ Supported options:
 | message | string   |  |
 | title | string   |  (optional) |
 | subject | string   | (optional) |
+| email | string   | Email of addressee (optional) |
 | social | string   | supported social apps: [List](#static-values-for-social)  |
 | forceDialog | boolean | (optional) only android. Avoid showing dialog with buttons Just Once / Always. Useful for Instagram to always ask user if share as Story or Feed |
 
