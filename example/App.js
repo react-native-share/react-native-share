@@ -84,6 +84,7 @@ const App = () => {
   const shareEmailImage = async () => {
     const shareOptions = {
       title: 'Share file',
+      email: 'email@example.com',
       social: Share.Social.EMAIL,
       failOnCancel: false,
       urls: [images.image1, images.image2],
