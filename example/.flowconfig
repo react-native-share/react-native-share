@@ -71,5 +71,3 @@ suppress_comment=\\(.\\|\n\\)*\\$FlowExpectedError
 [untyped]
 .*/node_modules/.*
 
-[version]
-^0.98.1
