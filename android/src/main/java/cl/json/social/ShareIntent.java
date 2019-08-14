@@ -56,8 +56,10 @@ public abstract class ShareIntent {
             message = options.getString("message");
         }
 
-        String socialType = options.getString("social");
-
+        String socialType  = "";
+        if (ShareIntent.hasValidKey("social", options)) {
+            socialType = options.getString("social");
+        }
         if (socialType.equals("whatsapp")) {
             String whatsAppNumber = options.getString("whatsAppNumber");
             if (!whatsAppNumber.isEmpty()) {

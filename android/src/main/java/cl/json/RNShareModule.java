@@ -133,12 +133,12 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
             GenericShare share = new GenericShare(this.reactContext);
             share.open(options);
         } catch (ActivityNotFoundException ex) {
-            System.out.println("ERROR");
-            System.out.println(ex.getMessage());
+            System.out.println("ERROR " + ex.getMessage());
+            ex.printStackTrace(System.out);
             TargetChosenReceiver.sendCallback(false, "not_available");
         } catch (Exception e) {
-            System.out.println("ERROR");
-            System.out.println(e.getMessage());
+            System.out.println("ERROR " + e.getMessage());
+            e.printStackTrace(System.out);
             TargetChosenReceiver.sendCallback(false, e.getMessage());
         }
     }
@@ -156,12 +156,12 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
                     throw new ActivityNotFoundException("Invalid share activity");
                 }
             } catch (ActivityNotFoundException ex) {
-                System.out.println("ERROR");
-                System.out.println(ex.getMessage());
+                System.out.println("ERROR " + ex.getMessage());
+                ex.printStackTrace(System.out);
                 TargetChosenReceiver.sendCallback(false, ex.getMessage());
             } catch (Exception e) {
-                System.out.println("ERROR");
-                System.out.println(e.getMessage());
+                System.out.println("ERROR " + e.getMessage());
+                e.printStackTrace(System.out);
                 TargetChosenReceiver.sendCallback(false, e.getMessage());
             }
         } else {
@@ -191,8 +191,8 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
                 successCallback.invoke(false);
             }
         } catch (Exception e) {
-            System.out.println("ERROR");
-            System.out.println(e.getMessage());
+            System.out.println("ERROR " + e.getMessage());
+            e.printStackTrace(System.out);
             failureCallback.invoke(e.getMessage());
         }
     }
