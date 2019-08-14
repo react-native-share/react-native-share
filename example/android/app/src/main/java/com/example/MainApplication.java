@@ -2,8 +2,6 @@ package com.example;
 
 import android.app.Application;
 
-import cl.json.ShareApplication;
-
 import com.facebook.react.PackageList;
 import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
 import com.facebook.react.bridge.JavaScriptExecutorFactory;
@@ -14,7 +12,7 @@ import com.facebook.soloader.SoLoader;
 
 import java.util.List;
 
-public class MainApplication extends Application implements ReactApplication, ShareApplication {
+public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
@@ -49,10 +47,4 @@ public class MainApplication extends Application implements ReactApplication, Sh
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
   }
-
-  @Override
-  public String getFileProviderAuthority() {
-        return BuildConfig.APPLICATION_ID + ".provider";
-  }
-
 }
