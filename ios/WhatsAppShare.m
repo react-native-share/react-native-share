@@ -33,7 +33,7 @@ RCT_EXPORT_MODULE();
             NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
             NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
 
-            NSLog(errorMessage);
+            NSLog(@"%@", errorMessage);
             return failureCallback(error);
         }
 

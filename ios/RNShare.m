@@ -98,7 +98,7 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
 
     NSString *social = [RCTConvert NSString:options[@"social"]];
     if (social) {
-        NSLog(social);
+        NSLog(@"%@", social);
         if([social isEqualToString:@"facebook"]) {
             NSLog(@"TRY OPEN FACEBOOK");
             GenericShare *shareCtl = [[GenericShare alloc] init];
