@@ -18,7 +18,7 @@
     "@babel/core": "^7.5.4",
     "@babel/runtime": "^7.5.4",
     "babel-jest": "^24.8.0",
-    "flow-bin": "0.105.2",
+    "flow-bin": "^0.98",
     "jest": "^24.8.0",
     "metro-react-native-babel-preset": "^0.56.0",
     "react-native-testing-library": "^1.11.1",
