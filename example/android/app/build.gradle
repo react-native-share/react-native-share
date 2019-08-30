@@ -172,7 +172,6 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(':react-native-share')
-    implementation "androidx.appcompat:appcompat:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     if (enableHermes) {
