@@ -17,8 +17,6 @@
     NSLog(@"Try open view");
 
     if ([options objectForKey:@"message"] && [options objectForKey:@"message"] != [NSNull null]) {
-        NSString *text = [RCTConvert NSString:options[@"message"]];
-
         NSLog(@"Try open view");
 
         NSString *subject = @"";
@@ -30,8 +28,7 @@
         message = [RCTConvert NSString:options[@"message"]];
 
         if ([options objectForKey:@"url"] && [options objectForKey:@"url"] != [NSNull null]) {
-            NSString *url = [RCTConvert NSString:options[@"url"]];
-            message = [message stringByAppendingString: [@" " stringByAppendingString: options[@"url"]] ];
+            message = [message stringByAppendingString: [@" " stringByAppendingString: [RCTConvert NSString:options[@"url"]]] ];
         }
 
         NSString * urlWhats = [NSString stringWithFormat:@"mailto:?subject=%@&body=%@", subject, message ];
