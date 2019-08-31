@@ -45,6 +45,7 @@
 #import "InstagramShare.h"
 #import "GooglePlusShare.h"
 #import "EmailShare.h"
+#import "SnapchatShare.h"
 
 @implementation RNShare
 - (dispatch_queue_t)methodQueue
@@ -88,6 +89,7 @@ RCT_EXPORT_MODULE()
     @"WHATSAPP": @"whatsapp",
     @"INSTAGRAM": @"instagram",
     @"EMAIL": @"email",
+    @"SNAPCHAT": @"snapchat",
   };
 }
 
@@ -98,7 +100,7 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
 
     NSString *social = [RCTConvert NSString:options[@"social"]];
     if (social) {
-        NSLog(@"%@", social);
+        NSLog(social);
         if([social isEqualToString:@"facebook"]) {
             NSLog(@"TRY OPEN FACEBOOK");
             GenericShare *shareCtl = [[GenericShare alloc] init];
@@ -126,6 +128,11 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
         } else if([social isEqualToString:@"email"]) {
             NSLog(@"TRY OPEN email");
             EmailShare *shareCtl = [[EmailShare alloc] init];
+            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+        }
+        else if([social isEqualToString:@"snapchat"]) {
+            NSLog(@"TRY OPEN snapchat");
+            SnapchatShare *shareCtl = [[SnapchatShare alloc] init];
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         }
     } else {
