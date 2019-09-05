@@ -238,7 +238,8 @@ const shareOptions = {
     title: 'Share via',
     message: 'some message',
     url: 'some share url',
-    social: Share.Social.WHATSAPP
+    social: Share.Social.WHATSAPP,
+    whatsAppNumber: "9199999999"  // country code + phone number(currently only works on Android)
 };
 Share.shareSingle(shareOptions);
 ```
@@ -366,7 +367,7 @@ static sharePDFWithAndroid(fileUrl, type) {
 
     In this file, add the following contents:
     
-    File: `android/app/src/main/res/filepaths.xml`
+    File: `android/app/src/main/res/xml/filepaths.xml`
     ```xml
     <?xml version="1.0" encoding="utf-8"?>
     <paths xmlns:android="http://schemas.android.com/apk/res/android">
