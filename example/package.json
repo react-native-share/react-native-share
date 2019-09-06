@@ -3,24 +3,25 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "clear": "node ./node_modules/react-native/local-cli/cli.js start --reset-cache",
+    "clear": "react-native start --reset-cache",
     "install-pods": "cd ios && pod install && cd ..",
-    "start": "node ./node_modules/react-native/local-cli/cli.js start",
+    "start": "react-native start",
     "test": "jest",
     "flow": "flow"
   },
   "dependencies": {
     "react": "16.8.6",
-    "react-native": "0.60.3"
+    "react-native": "0.60.5",
+    "react-native-share": "git+https://github.com/react-native-community/react-native-share.git"
   },
   "devDependencies": {
     "@babel/core": "^7.5.4",
     "@babel/runtime": "^7.5.4",
-    "babel-jest": "^24.8.0",
-    "flow-bin": "0.98.1",
-    "jest": "^24.8.0",
-    "metro-react-native-babel-preset": "^0.55.0",
-    "react-native-testing-library": "^1.7.0",
+    "babel-jest": "^24.9.0",
+    "flow-bin": "^0.98",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.56.0",
+    "react-native-testing-library": "^1.11.1",
     "react-test-renderer": "^16.8.6"
   },
   "jest": {

@@ -172,6 +172,7 @@ Supported options:
 | message | string   |  |
 | title | string   |  (optional) |
 | subject | string   | (optional) |
+| email | string   | Email of addressee (optional) |
 | excludedActivityTypes | string   | (optional) |
 | failOnCancel | boolean | (defaults to true) Specifies whether promise should reject if user cancels share dialog (optional) |
 | showAppsToView | boolean | (optional) only android|
@@ -208,6 +209,7 @@ Supported options:
 | message | string   |  |
 | title | string   |  (optional) |
 | subject | string   | (optional) |
+| email | string   | Email of addressee (optional) |
 | social | string   | supported social apps: [List](#static-values-for-social)  |
 | forceDialog | boolean | (optional) only android. Avoid showing dialog with buttons Just Once / Always. Useful for Instagram to always ask user if share as Story or Feed |
 
@@ -239,7 +241,7 @@ const shareOptions = {
     message: 'some message',
     url: 'some share url',
     social: Share.Social.WHATSAPP,
-    whatsAppNumber: "9199999999"  // country code + phone number
+    whatsAppNumber: "9199999999"  // country code + phone number(currently only works on Android)
 };
 Share.shareSingle(shareOptions);
 ```
@@ -367,7 +369,7 @@ static sharePDFWithAndroid(fileUrl, type) {
 
     In this file, add the following contents:
     
-    File: `android/app/src/main/res/filepaths.xml`
+    File: `android/app/src/main/res/xml/filepaths.xml`
     ```xml
     <?xml version="1.0" encoding="utf-8"?>
     <paths xmlns:android="http://schemas.android.com/apk/res/android">
