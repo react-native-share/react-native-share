@@ -175,6 +175,7 @@ Supported options:
 | excludedActivityTypes | string   | (optional) |
 | failOnCancel | boolean | (defaults to true) Specifies whether promise should reject if user cancels share dialog (optional) |
 | showAppsToView | boolean | (optional) only android|
+| filename | string | only support base64 string in Android|
 
 #### Url format when sharing a file
 
@@ -240,6 +241,7 @@ const shareOptions = {
     url: 'some share url',
     social: Share.Social.WHATSAPP,
     whatsAppNumber: "9199999999"  // country code + phone number(currently only works on Android)
+    filename: 'test' , // only for base64 file in Android 
 };
 Share.shareSingle(shareOptions);
 ```
