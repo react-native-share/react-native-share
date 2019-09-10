@@ -27,22 +27,34 @@ public class InstagramStoriesShare extends SingleShareIntent {
     public void open(ReadableMap options) throws ActivityNotFoundException {
         super.open(options);
 
+        if (!options.hasKey("stickerImage") && !options.hasKey("backgroundVideo")) {
+            throw new Error("stickerImage or backgroundVideo required.");
+        }
+
+        Activity activity = this.reactContext.getCurrentActivity();
+
         String attributionURL = "";
         if (ShareIntent.hasValidKey("attributionURL", options)) {
             attributionURL = options.getString("attributionURL");
         }
 
-        ShareFile backgroundVideoFile = new ShareFile(options.getString("backgroundVideo"), "video/mp4", this.reactContext);
-        ShareFile stickerImageFile = new ShareFile(options.getString("stickerImage"), "image/png", this.reactContext);
-        Uri backgroundVideoUri = backgroundVideoFile.getURI();
-        Uri stickerImageUri = stickerImageFile.getURI();
+        if (options.hasKey("backgroundVideo")) {
+            ShareFile backgroundVideoFile = new ShareFile(options.getString("backgroundVideo"), "video/mp4", this.reactContext);
+            Uri backgroundVideoUri = backgroundVideoFile.getURI();
+            this.getIntent().setDataAndType(backgroundVideoUri, "video/mp4");
+        }
+
+        if (options.hasKey("stickerImage")) {
+            ShareFile stickerImageFile = new ShareFile(options.getString("stickerImage"), "image/png", this.reactContext);
+            Uri stickerImageUri = stickerImageFile.getURI();
+            this.getIntent().setType("image/png");
+            this.getIntent().putExtra("interactive_asset_uri", stickerImageUri);
+            activity.grantUriPermission(getPackage(), stickerImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+
         this.getIntent().setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        this.getIntent().setDataAndType(backgroundVideoUri, "video/mp4");
-        this.getIntent().putExtra("interactive_asset_uri", stickerImageUri);
         this.getIntent().putExtra("content_url", attributionURL);
 
-        Activity activity = this.reactContext.getCurrentActivity();
-        activity.grantUriPermission(getPackage(), stickerImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         if (activity.getPackageManager().resolveActivity(this.getIntent(), 0) != null) {
             activity.startActivityForResult(this.getIntent(), 0);
             TargetChosenReceiver.sendCallback(true, true, this.getIntent().getPackage());
