@@ -27,8 +27,8 @@ public class InstagramStoriesShare extends SingleShareIntent {
     public void open(ReadableMap options) throws ActivityNotFoundException {
         super.open(options);
 
-        if (!options.hasKey("stickerImage") && !options.hasKey("backgroundVideo")) {
-            throw new Error("stickerImage or backgroundVideo required.");
+        if (!options.hasKey("stickerImage") && !options.hasKey("backgroundVideo") && !options.hasKey("backgroundImage")) {
+            throw new Error("stickerImage or backgroundVideo or backgroundImage required.");
         }
 
         Activity activity = this.reactContext.getCurrentActivity();
@@ -42,12 +42,18 @@ public class InstagramStoriesShare extends SingleShareIntent {
             ShareFile backgroundVideoFile = new ShareFile(options.getString("backgroundVideo"), "video/mp4", this.reactContext);
             Uri backgroundVideoUri = backgroundVideoFile.getURI();
             this.getIntent().setDataAndType(backgroundVideoUri, "video/mp4");
+        } else if (options.hasKey("backgroundImage")) {
+            ShareFile backgroundImageFile = new ShareFile(options.getString("backgroundImage"), "image/jpg", this.reactContext);
+            Uri backgroundImageUri = backgroundImageFile.getURI();
+            this.getIntent().setDataAndType(backgroundImageUri, "image/jpg");
         }
 
         if (options.hasKey("stickerImage")) {
             ShareFile stickerImageFile = new ShareFile(options.getString("stickerImage"), "image/png", this.reactContext);
             Uri stickerImageUri = stickerImageFile.getURI();
-            this.getIntent().setType("image/png");
+            if (!options.hasKey("backgroundVideo") && !options.hasKey("backgroundImage")) {
+                this.getIntent().setType("image/png");
+            }
             this.getIntent().putExtra("interactive_asset_uri", stickerImageUri);
             activity.grantUriPermission(getPackage(), stickerImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
