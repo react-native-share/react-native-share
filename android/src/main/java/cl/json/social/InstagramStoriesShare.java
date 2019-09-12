@@ -43,9 +43,9 @@ public class InstagramStoriesShare extends SingleShareIntent {
             Uri backgroundVideoUri = backgroundVideoFile.getURI();
             this.getIntent().setDataAndType(backgroundVideoUri, "video/mp4");
         } else if (options.hasKey("backgroundImage")) {
-            ShareFile backgroundVideoFile = new ShareFile(options.getString("backgroundImage"), "image/jpg", this.reactContext);
-            Uri backgroundVideoUri = backgroundVideoFile.getURI();
-            this.getIntent().setDataAndType(backgroundVideoUri, "image/jpg");
+            ShareFile backgroundImageFile = new ShareFile(options.getString("backgroundImage"), "image/jpg", this.reactContext);
+            Uri backgroundImageUri = backgroundImageFile.getURI();
+            this.getIntent().setDataAndType(backgroundImageUri, "image/jpg");
         }
 
         if (options.hasKey("stickerImage")) {
