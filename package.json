@@ -7,27 +7,27 @@
     "url": "git+https://github.com/react-native-community/react-native-share.git"
   },
   "devDependencies": {
-    "@commitlint/cli": "8.0.0",
-    "@commitlint/config-conventional": "8.0.0",
+    "@commitlint/cli": "8.1.0",
+    "@commitlint/config-conventional": "8.1.0",
     "@react-native-community/eslint-config": "0.0.5",
-    "babel-eslint": "10.0.1",
-    "eslint": "5.16.0",
-    "eslint-plugin-flowtype": "3.10.3",
-    "eslint-plugin-import": "2.17.3",
+    "babel-eslint": "10.0.2",
+    "eslint": "6.1.0",
+    "eslint-plugin-flowtype": "4.2.0",
+    "eslint-plugin-import": "2.18.2",
     "eslint-plugin-prettier": "3.1.0",
-    "eslint-plugin-react": "7.13.0",
+    "eslint-plugin-react": "7.14.3",
     "eslint-plugin-react-native": "3.7.0",
-    "flow-bin": "^0.101",
-    "generate-changelog": "1.7.1",
-    "husky": "2.4.1",
+    "flow-bin": "^0.105.2",
+    "generate-changelog": "1.8.0",
+    "husky": "3.0.3",
     "idx": "2.5.6",
-    "lint-staged": "8.2.0",
+    "lint-staged": "9.2.1",
     "minimist": "1.2.0",
     "pre-commit": "1.2.2",
     "prettier": "^1.18.2",
-    "react": "16.8.3",
-    "react-native": "0.60.3",
-    "simple-git": "1.113.0"
+    "react": "16.9.0",
+    "react-native": "0.60.5",
+    "simple-git": "1.124.0"
   },
   "keywords": [
     "react-native",
@@ -54,8 +54,7 @@
   "pre-commit": "lint:staged",
   "readmeFilename": "README.md",
   "scripts": {
-    "commitmsg": "commitlint -e $GIT_PARAMS",
-    "dev-sync": "echo 'This is not needed anymore, the example is always synced'; exit 1",
+    "dev-sync": "cp -r *podspec android ios example/node_modules/react-native-share/",
     "lint": "eslint index.js --max-warnings=0",
     "lint:staged": "lint-staged",
     "release:major": "node ./changelog --major && npm version major && git push origin && git push origin --follow-tags",
@@ -66,5 +65,10 @@
     "validate:flow": "yarn flow",
     "validate:lint": "eslint *js components/*.js --max-warnings=0",
     "validate:prettier": "prettier --write *.js components/*.js"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
+    }
   }
 }

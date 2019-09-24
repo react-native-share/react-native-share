@@ -98,7 +98,7 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
 
     NSString *social = [RCTConvert NSString:options[@"social"]];
     if (social) {
-        NSLog(social);
+        NSLog(@"%@", social);
         if([social isEqualToString:@"facebook"]) {
             NSLog(@"TRY OPEN FACEBOOK");
             GenericShare *shareCtl = [[GenericShare alloc] init];
@@ -190,7 +190,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
     shareController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, __unused NSArray *returnedItems, NSError *activityError) {
         if (activityError) {
             failureCallback(activityError);
-        } else {
+        } else if (completed) {
             successCallback(@[@(completed), RCTNullIfNil(activityType)]);
         }
     };
