@@ -51,5 +51,5 @@
 #import <MessageUI/MessageUI.h>
 @interface EmailShare : NSObject <MFMailComposeViewControllerDelegate>
 
-- (void *) shareSingle:(NSDictionary *)options failureCallback:(RCTResponseErrorBlock)failureCallback successCallback:(RCTResponseSenderBlock)successCallback;
+- (void) shareSingle:(NSDictionary *)options failureCallback:(RCTResponseErrorBlock)failureCallback successCallback:(RCTResponseSenderBlock)successCallback;
 @end

@@ -48,7 +48,7 @@
 #endif
 @interface InstagramShare : NSObject <RCTBridgeModule>
 
-- (void *) shareSingle:(NSDictionary *)options failureCallback:(RCTResponseErrorBlock)failureCallback successCallback:(RCTResponseSenderBlock)successCallback;
+- (void) shareSingle:(NSDictionary *)options failureCallback:(RCTResponseErrorBlock)failureCallback successCallback:(RCTResponseSenderBlock)successCallback;
 - (void)shareSingleImage:(NSDictionary *)options
          failureCallback:(RCTResponseErrorBlock)failureCallback
          successCallback:(RCTResponseSenderBlock)successCallback;

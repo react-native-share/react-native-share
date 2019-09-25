@@ -46,7 +46,7 @@
         NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
         NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
         
-        NSLog(errorMessage);
+        NSLog(@"%@", errorMessage);
         failureCallback(error);
     } 
 }
@@ -98,7 +98,9 @@
             NSURL *instagramURL = [NSURL URLWithString:[NSString stringWithFormat:@"instagram://library?LocalIdentifier=\%@", [placeholder localIdentifier]]];
             
             if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
-                [[UIApplication sharedApplication] openURL:instagramURL options:@{} completionHandler:NULL];
+                if (@available(iOS 10.0, *)) {
+                    [[UIApplication sharedApplication] openURL:instagramURL options:@{} completionHandler:NULL];
+                }
                 if (successCallback != NULL) {
                     successCallback(@[]);
                 }

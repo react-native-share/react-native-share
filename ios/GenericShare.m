@@ -54,7 +54,7 @@
         NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
         NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
 
-        NSLog(errorMessage);
+        NSLog(@"%@", errorMessage);
         failureCallback(error);
 
         NSString *escapedString = [options[@"message"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
@@ -76,8 +76,10 @@
       NSURL *schemeURL = [NSURL URLWithString:scheme];
 
       if ([application respondsToSelector:@selector(openURL:options:completionHandler:)]) {
-          [application openURL:schemeURL options:@{} completionHandler:nil];
-          NSLog(@"Open %@: %d", schemeURL);
+          if (@available(iOS 10.0, *)) {
+              [application openURL:schemeURL options:@{} completionHandler:nil];
+          }
+          NSLog(@"Open %@", schemeURL);
       }
 
   }
