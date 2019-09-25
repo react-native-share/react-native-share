@@ -213,6 +213,10 @@ public abstract class ShareIntent {
 
     protected abstract String getPackage();
 
+    protected String getComponentClass() {
+        return null;
+    }
+
     protected abstract String getDefaultWebLink();
 
     protected abstract String getPlayStoreLink();
