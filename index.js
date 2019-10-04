@@ -253,5 +253,5 @@ class RNShare {
   }
 }
 
-export {Overlay, Sheet, Button, ShareSheet};
+export { Overlay, Sheet, Button, ShareSheet };
 export default RNShare;
