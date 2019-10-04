@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -30,6 +30,7 @@ import cl.json.social.PinterestShare;
 import cl.json.social.SnapChatShare;
 import cl.json.social.SMSShare;
 import cl.json.social.MessengerShare;
+import cl.json.social.LinkedinShare;
 
 public class RNShareModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
@@ -65,7 +66,8 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
         pinterest,
         messenger,
         snapchat,
-        sms;
+        sms,
+        linkedin;
 
 
         public static ShareIntent getShareClass(String social, ReactApplicationContext reactContext) {
@@ -95,6 +97,8 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
                     return new SnapChatShare(reactContext);
                 case messenger:
                     return new MessengerShare(reactContext);
+                case linkedin:
+                    return new LinkedinShare(reactContext);
                 default:
                     return null;
             }
@@ -129,12 +133,12 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
             GenericShare share = new GenericShare(this.reactContext);
             share.open(options);
         } catch (ActivityNotFoundException ex) {
-            System.out.println("ERROR");
-            System.out.println(ex.getMessage());
+            System.out.println("ERROR " + ex.getMessage());
+            ex.printStackTrace(System.out);
             TargetChosenReceiver.sendCallback(false, "not_available");
         } catch (Exception e) {
-            System.out.println("ERROR");
-            System.out.println(e.getMessage());
+            System.out.println("ERROR " + e.getMessage());
+            e.printStackTrace(System.out);
             TargetChosenReceiver.sendCallback(false, e.getMessage());
         }
     }
@@ -152,12 +156,12 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
                     throw new ActivityNotFoundException("Invalid share activity");
                 }
             } catch (ActivityNotFoundException ex) {
-                System.out.println("ERROR");
-                System.out.println(ex.getMessage());
+                System.out.println("ERROR " + ex.getMessage());
+                ex.printStackTrace(System.out);
                 TargetChosenReceiver.sendCallback(false, ex.getMessage());
             } catch (Exception e) {
-                System.out.println("ERROR");
-                System.out.println(e.getMessage());
+                System.out.println("ERROR " + e.getMessage());
+                e.printStackTrace(System.out);
                 TargetChosenReceiver.sendCallback(false, e.getMessage());
             }
         } else {
@@ -187,8 +191,8 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
                 successCallback.invoke(false);
             }
         } catch (Exception e) {
-            System.out.println("ERROR");
-            System.out.println(e.getMessage());
+            System.out.println("ERROR " + e.getMessage());
+            e.printStackTrace(System.out);
             failureCallback.invoke(e.getMessage());
         }
     }

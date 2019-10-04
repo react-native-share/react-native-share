@@ -70,7 +70,7 @@ const App = () => {
     // the share response. If the user cancels, etc.
     try {
       const ShareResponse = await Share.open(shareOptions);
-      setResult(JSON.stringify(ShareResponse, 0, 2));
+      setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
       setResult('error: '.concat(getErrorString(error)));
@@ -84,6 +84,7 @@ const App = () => {
   const shareEmailImage = async () => {
     const shareOptions = {
       title: 'Share file',
+      email: 'email@example.com',
       social: Share.Social.EMAIL,
       failOnCancel: false,
       urls: [images.image1, images.image2],
@@ -91,7 +92,7 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.open(shareOptions);
-      setResult(JSON.stringify(ShareResponse, 0, 2));
+      setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
       setResult('error: '.concat(getErrorString(error)));
@@ -111,7 +112,7 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.open(shareOptions);
-      setResult(JSON.stringify(ShareResponse, 0, 2));
+      setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
       setResult('error: '.concat(getErrorString(error)));

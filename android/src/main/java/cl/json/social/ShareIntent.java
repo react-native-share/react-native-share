@@ -47,6 +47,10 @@ public abstract class ShareIntent {
             this.getIntent().putExtra(Intent.EXTRA_SUBJECT, options.getString("subject"));
         }
 
+        if (ShareIntent.hasValidKey("email", options)) {
+            this.getIntent().putExtra(Intent.EXTRA_EMAIL, new String[] { options.getString("email") });
+        }
+
         if (ShareIntent.hasValidKey("title", options)) {
             this.chooserTitle = options.getString("title");
         }
@@ -55,6 +59,20 @@ public abstract class ShareIntent {
         if (ShareIntent.hasValidKey("message", options)) {
             message = options.getString("message");
         }
+
+        String socialType  = "";
+        if (ShareIntent.hasValidKey("social", options)) {
+            socialType = options.getString("social");
+        }
+        if (socialType.equals("whatsapp")) {
+            String whatsAppNumber = options.getString("whatsAppNumber");
+            if (!whatsAppNumber.isEmpty()) {
+                String chatAddress = whatsAppNumber + "@s.whatsapp.net";
+                this.getIntent().putExtra("jid", chatAddress);
+            }
+        }
+
+
         if (ShareIntent.hasValidKey("urls", options)) {
 
             ShareFiles fileShare = getFileShares(options);
@@ -97,10 +115,14 @@ public abstract class ShareIntent {
     }
 
     protected ShareFile getFileShare(ReadableMap options) {
+         String filename = null;
+        if (ShareIntent.hasValidKey("filename", options)) {
+            filename = options.getString("filename");
+        }
         if (ShareIntent.hasValidKey("type", options)) {
-            return new ShareFile(options.getString("url"), options.getString("type"), this.reactContext);
+            return new ShareFile(options.getString("url"), options.getString("type"), filename, this.reactContext);
         } else {
-            return new ShareFile(options.getString("url"), this.reactContext);
+            return new ShareFile(options.getString("url"), filename, this.reactContext);
         }
     }
 
@@ -194,6 +216,10 @@ public abstract class ShareIntent {
     }
 
     protected abstract String getPackage();
+
+    protected String getComponentClass() {
+        return null;
+    }
 
     protected abstract String getDefaultWebLink();
 

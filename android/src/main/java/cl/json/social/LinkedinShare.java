@@ -10,15 +10,14 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 
 /**
- * Created by Muhzi4u on 14-01-19.
+ * Created by Malai Mihai on 31-05-19.
  */
-public class SnapChatShare extends SingleShareIntent {
+public class LinkedinShare extends SingleShareIntent {
 
-    private static final String PACKAGE = "com.snapchat.android";
-    private static final String CLASS = "com.snapchat.android.LandingPageActivity";
-    private static final String PLAY_STORE_LINK = "market://details?id=com.snapchat.android";
-    
-    public SnapChatShare(ReactApplicationContext reactContext) {
+    private static final String PACKAGE = "com.linkedin.android";
+    private static final String PLAY_STORE_LINK = "market://details?id=com.linkedin.android";
+
+    public LinkedinShare(ReactApplicationContext reactContext) {
         super(reactContext);
     }
 
@@ -33,9 +32,6 @@ public class SnapChatShare extends SingleShareIntent {
     protected String getPackage() {
         return PACKAGE;
     }
-
-    @Override
-    protected String getComponentClass() { return CLASS; }
 
     @Override
     protected String getDefaultWebLink() {
