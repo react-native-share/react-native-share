@@ -396,3 +396,13 @@ static sharePDFWithAndroid(fileUrl, type) {
 
     }
     ```
+
+#### Mocking with Jest
+
+- To mock when using Jest. Add the below line on your `__mock__` directory.
+
+```js
+jest.mock('react-native-share', () => ({
+  default: jest.fn(),
+}));
+```
