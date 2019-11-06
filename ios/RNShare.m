@@ -45,7 +45,9 @@
 #import "InstagramShare.h"
 #import "GooglePlusShare.h"
 #import "EmailShare.h"
+#import "InstagramStories.h"
 #import "SnapchatShare.h"
+
 
 @implementation RNShare
 - (dispatch_queue_t)methodQueue
@@ -90,6 +92,11 @@ RCT_EXPORT_MODULE()
     @"INSTAGRAM": @"instagram",
     @"EMAIL": @"email",
     @"SNAPCHAT": @"snapchat",
+    @"INSTAGRAM_STORIES": @"instagram-stories",
+    @"SHARE_BACKGROUND_IMAGE": @"shareBackgroundImage",
+    @"SHARE_BACKGROUND_VIDEO": @"shareBackgroundVideo",
+    @"SHARE_STICKER_IMAGE": @"shareStickerImage",
+    @"SHARE_BACKGROUND_AND_STICKER_IMAGE": @"shareBackgroundAndStickerImage",
   };
 }
 
@@ -100,7 +107,7 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
 
     NSString *social = [RCTConvert NSString:options[@"social"]];
     if (social) {
-        NSLog(social);
+        NSLog(@"%@", social);
         if([social isEqualToString:@"facebook"]) {
             NSLog(@"TRY OPEN FACEBOOK");
             GenericShare *shareCtl = [[GenericShare alloc] init];
@@ -129,12 +136,16 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             NSLog(@"TRY OPEN email");
             EmailShare *shareCtl = [[EmailShare alloc] init];
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+        } else if([social isEqualToString:@"instagram-stories"]) {
+                NSLog(@"TRY OPEN instagram-stories");
+                InstagramStories *shareCtl = [[InstagramStories alloc] init];
+                [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         }
         else if([social isEqualToString:@"snapchat"]) {
-            NSLog(@"TRY OPEN snapchat");
-            SnapchatShare *shareCtl = [[SnapchatShare alloc] init];
-            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
-        }
+           NSLog(@"TRY OPEN snapchat");
+           SnapchatShare *shareCtl = [[SnapchatShare alloc] init];
+           [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+       }
     } else {
         RCTLogError(@"key 'social' missing in options");
         return;
@@ -197,7 +208,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
     shareController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, __unused NSArray *returnedItems, NSError *activityError) {
         if (activityError) {
             failureCallback(activityError);
-        } else {
+        } else if (completed || activityType == nil) {
             successCallback(@[@(completed), RCTNullIfNil(activityType)]);
         }
     };
