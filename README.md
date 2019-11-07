@@ -106,7 +106,7 @@ Then run a `react-native link react-native-share`, and doing the steps 6 and 7.
 
 You can also see our example to see how you need to setup your podfile.
 
-Btw, We also recommend reading this (amazing article)[https://shift.infinite.red/beginner-s-guide-to-using-cocoapods-with-react-native-46cb4d372995] about how pods and rn work together. =D
+Btw, We also recommend reading this [amazing article](https://shift.infinite.red/beginner-s-guide-to-using-cocoapods-with-react-native-46cb4d372995) about how pods and rn work together. =D
 
 
 ### Android Install
@@ -172,9 +172,11 @@ Supported options:
 | message | string   |  |
 | title | string   |  (optional) |
 | subject | string   | (optional) |
+| email | string   | Email of addressee (optional) |
 | excludedActivityTypes | string   | (optional) |
 | failOnCancel | boolean | (defaults to true) Specifies whether promise should reject if user cancels share dialog (optional) |
 | showAppsToView | boolean | (optional) only android|
+| filename | string | only support base64 string in Android|
 
 #### Url format when sharing a file
 
@@ -208,6 +210,7 @@ Supported options:
 | message | string   |  |
 | title | string   |  (optional) |
 | subject | string   | (optional) |
+| email | string   | Email of addressee (optional) |
 | social | string   | supported social apps: [List](#static-values-for-social)  |
 | forceDialog | boolean | (optional) only android. Avoid showing dialog with buttons Just Once / Always. Useful for Instagram to always ask user if share as Story or Feed |
 
@@ -240,6 +243,7 @@ const shareOptions = {
     url: 'some share url',
     social: Share.Social.WHATSAPP,
     whatsAppNumber: "9199999999"  // country code + phone number(currently only works on Android)
+    filename: 'test' , // only for base64 file in Android 
 };
 Share.shareSingle(shareOptions);
 ```
@@ -392,3 +396,13 @@ static sharePDFWithAndroid(fileUrl, type) {
 
     }
     ```
+
+#### Mocking with Jest
+
+- To mock when using Jest. Add the below line on your `__mock__` directory.
+
+```js
+jest.mock('react-native-share', () => ({
+  default: jest.fn(),
+}));
+```

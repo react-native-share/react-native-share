@@ -1,5 +1,4 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="cl.json">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -9,12 +8,10 @@
             android:name=".RNShareFileProvider"
             android:authorities="${applicationId}.rnshare.fileprovider"
             android:exported="false"
-            tools:replace="android:authorities"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/share_download_paths"
-                tools:replace="android:resource" />
+                android:resource="@xml/share_download_paths" />
         </provider>
     </application>
 </manifest>
