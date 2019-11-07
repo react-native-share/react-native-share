@@ -43,7 +43,6 @@
 #import "GenericShare.h"
 #import "WhatsAppShare.h"
 #import "InstagramShare.h"
-#import "InstagramStories.h"
 #import "GooglePlusShare.h"
 #import "EmailShare.h"
 #import "LINEShare.h"
@@ -67,6 +66,15 @@
         return [anchorView convertRect:anchorView.bounds toView:sourceView];
     } else {
         return (CGRect){sourceView.center, {1, 1}};
+    }
+}
+
+- (BOOL)isImageMimeType:(NSString *)data {
+    NSRange range = [data rangeOfString:@"data:image" options:NSCaseInsensitiveSearch];
+    if (range.location != NSNotFound) {
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -103,11 +111,11 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
         if([social isEqualToString:@"facebook"]) {
             NSLog(@"TRY OPEN FACEBOOK");
             GenericShare *shareCtl = [[GenericShare alloc] init];
-            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback serviceType: SLServiceTypeFacebook];
+            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback serviceType: SLServiceTypeFacebook inAppBaseUrl:@"fb://"];
         } else if([social isEqualToString:@"twitter"]) {
             NSLog(@"TRY OPEN Twitter");
             GenericShare *shareCtl = [[GenericShare alloc] init];
-            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback serviceType: SLServiceTypeTwitter];
+            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback serviceType: SLServiceTypeTwitter inAppBaseUrl:@"twitter://"];
         } else if([social isEqualToString:@"googleplus"]) {
             NSLog(@"TRY OPEN google plus");
             GooglePlusShare *shareCtl = [[GooglePlusShare alloc] init];
@@ -119,7 +127,11 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
         } else if([social isEqualToString:@"instagram"]) {
             NSLog(@"TRY OPEN instagram");
             InstagramShare *shareCtl = [[InstagramShare alloc] init];
-            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+            if([self isImageMimeType:options[@"url"]]) {// Condition to handle image
+                [shareCtl shareSingleImage:options failureCallback: failureCallback successCallback: successCallback];
+            } else {
+                [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+            }
         } else if([social isEqualToString:@"instagramStories"]) {
             NSLog(@"TRY OPEN instagramStories");
             InstagramStories *shareCtl = [[InstagramStories alloc] init];

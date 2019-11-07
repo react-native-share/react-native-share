@@ -5,24 +5,20 @@ import android.content.Intent;
 import java.io.File;
 import android.os.Environment;
 import android.net.Uri;
-import android.provider.Telephony;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 
 /**
- * Created by Muhzi4u on 14-01-19.
+ * Created by Malai Mihai on 31-05-19.
  */
-public class SMSShare extends SingleShareIntent {
+public class LinkedinShare extends SingleShareIntent {
 
-    private static final String PACKAGE = "com.android.mms";
-    private static final String PLAY_STORE_LINK = "market://details?id=com.android.mms";
+    private static final String PACKAGE = "com.linkedin.android";
+    private static final String PLAY_STORE_LINK = "market://details?id=com.linkedin.android";
 
-    private ReactApplicationContext reactContext = null;
-    
-    public SMSShare(ReactApplicationContext reactContext) {
+    public LinkedinShare(ReactApplicationContext reactContext) {
         super(reactContext);
-        this.reactContext = reactContext;
     }
 
     @Override
@@ -34,9 +30,6 @@ public class SMSShare extends SingleShareIntent {
 
     @Override
     protected String getPackage() {
-        if (android.os.Build.VERSION.SDK_INT >= 19 ) {
-            return Telephony.Sms.getDefaultSmsPackage(this.reactContext);
-        }
         return PACKAGE;
     }
 

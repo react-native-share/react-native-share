@@ -2,8 +2,10 @@
 .flowconfig
 .eslintrc
 .gitignore
-circle.yml
+.github/*
+.circleci/*
 jsconfig.json
 commitlint.config.js
+changelog.js
 assets/*
 example/*

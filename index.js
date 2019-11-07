@@ -1,4 +1,9 @@
-// @flow
+/*
+ *
+ * @format
+ * @flow
+ *
+ */
 
 import * as React from 'react';
 import {
@@ -11,6 +16,7 @@ import {
   ActionSheetIOS,
   PermissionsAndroid,
 } from 'react-native';
+import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import Overlay from './components/Overlay';
 import Sheet from './components/Sheet';
@@ -36,10 +42,8 @@ type Props = {
   visible: boolean,
   onCancel: () => void,
   children: React.Node,
-  // $FlowFixMe
-  style?: {},
-  // $FlowFixMe
-  overlayStyle?: {},
+  style?: ViewStyleProp,
+  overlayStyle?: ViewStyleProp,
 };
 
 const shareSheetStyle = { flex: 1 };
@@ -102,7 +106,7 @@ type MultipleOptions = {
 };
 
 type OpenReturn = { app?: string, dismissedAction?: boolean };
-type ShareSingleReturn = { message: string };
+type ShareSingleReturn = { message: string, isInstalled?: boolean };
 
 const requireAndAskPermissions = async (options: Options | MultipleOptions): Promise<any> => {
   if ((options.url || options.urls) && Platform.OS === 'android') {
@@ -151,7 +155,7 @@ const requireAndAskPermissions = async (options: Options | MultipleOptions): Pro
 
 class RNShare {
   static Button: any;
-  static ShareSheet: Class<React.Component<Props>>;
+  static ShareSheet: RNShare.ShareSheet;
   static Overlay: any;
   static Sheet: any;
   static Social = {
@@ -164,6 +168,7 @@ class RNShare {
     GOOGLEPLUS: NativeModules.RNShare.GOOGLEPLUS || 'googleplus',
     EMAIL: NativeModules.RNShare.EMAIL || 'email',
     PINTEREST: NativeModules.RNShare.PINTEREST || 'pinterest',
+    LINKEDIN: NativeModules.RNShare.LINKEDIN || 'linkedin',
   };
 
   static InstagramStories = {
