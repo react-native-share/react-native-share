@@ -43,6 +43,7 @@
 #import "GenericShare.h"
 #import "WhatsAppShare.h"
 #import "InstagramShare.h"
+#import "InstagramStories.h"
 #import "GooglePlusShare.h"
 #import "EmailShare.h"
 #import "LINEShare.h"
