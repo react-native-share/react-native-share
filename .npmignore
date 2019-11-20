@@ -1,11 +1,1 @@
-.babelrc
-.flowconfig
-.eslintrc
-.gitignore
-.github/*
-.circleci/*
-jsconfig.json
-commitlint.config.js
-changelog.js
-assets/*
-example/*
+example/
