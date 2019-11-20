@@ -17,6 +17,7 @@ node_modules/warning/.*
 
 [untyped]
 .*/node_modules/@react-native-community/cli/.*/.*
+.*/node_modules/.*
 
 [include]
 
