@@ -7,7 +7,6 @@
  */
 
 import React, {useState} from 'react';
-
 import {
   Alert,
   Button,
@@ -18,15 +17,12 @@ import {
   View,
 } from 'react-native';
 
-// eslint-disable-next-line import/default
 import Share from 'react-native-share';
 
 import images from './images/imagesBase64';
 
 const App = () => {
-  // eslint-disable-next-line no-undef
   const [packageSearch, setPackageSearch] = useState<string>('');
-  // eslint-disable-next-line no-undef
   const [result, setResult] = useState<string>('');
 
   /**
@@ -148,7 +144,7 @@ const App = () => {
             </View>
           </View>
         )}
-        <Text style={{marginTop: 20, fontSize: 20}}>Result</Text>
+        <Text style={styles.resultTitle}>Result</Text>
         <Text style={styles.result}>{result}</Text>
       </View>
     </View>
@@ -174,6 +170,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
+  },
+  resultTitle: {
+    marginTop: 20,
+    fontSize: 20,
   },
   result: {
     fontSize: 14,
