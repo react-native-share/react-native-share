@@ -1,36 +1,75 @@
 version: 2
 executorType: docker
 jobs:
-  build:
-    resource_class: large
+  build-app:
+    resource_class: medium
+    environment:
+      - GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx3072m -XX:+HeapDumpOnOutOfMemoryError"'
+      - REACT_NATIVE_MAX_WORKERS: 2
+      - ANDROID_BUILD_TOOLS_VERSION: '28.0.3'
     working_directory: ~/app
     docker:
-      - image: circleci/android:api-28-node
+      - image: reactnativecommunity/react-native-android
     steps:
       - checkout
       - restore_cache:
           keys:
-            - v1-yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum "example/yarn.lock" }}
-            - v1-yarn-cache
+            - v1-npm-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - v1-npm
       - run:
           name: Install Dependencies
-          command: yarn install --frozen-lockfile --non-interactive --cache-folder ~/.cache/yarn
+          command: yarn install --frozen-lockfile --non-interactive
+      - save_cache:
+          key: v1-npm
+          paths:
+            - node_modules/
+      - save_cache:
+          key: v1-npm-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules/
       - run:
-          name: Validate
-          command: yarn validate
+          name: Lint
+          command: yarn lint
+      - restore_cache:
+          keys:
+            - v1-gradle-{{ checksum "android/gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "example/android/gradle/wrapper/gradle-wrapper.properties" }}
+            - v1-gradle-wrapper
+      - restore_cache:
+          keys:
+            - v1-gradle-cache-{{ checksum "android/build.gradle" }}-{{ checksum "example/android/build.gradle" }}
+            - v1-gradle-cache
       - run:
           name: Run Checks
           command: |
             cd android
             chmod +x ./gradlew
             ./gradlew clean && ./gradlew && ./gradlew check
+      - store_artifacts:
+          path: android/build/reports
       - run:
           name: Install dependencies of the example app
-          command: cd example && yarn install --frozen-lockfile --non-interactive --cache-folder ~/.cache/yarn
+          command: cd example && yarn install --frozen-lockfile --non-interactive
       - run:
           name: Check for errors in the example app using Flow
-          command: cd example && yarn flow
+          command: |
+            cd example && yarn flow
+      - run:
+          name: Build Sample App
+          command: |
+            cd example/android && chmod +x ./gradlew && ./gradlew build
+      - store_artifacts:
+          path: example/android/app/build/reports
+          destination: app
       - save_cache:
-          key: v1-yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum "example/yarn.lock" }}
+          key: v1-gradle-wrapper-{{ checksum "example/android/gradle/wrapper/gradle-wrapper.properties" }}
           paths:
-            - ~/.cache/yarn
+            - ~/.gradle/wrapper
+      - save_cache:
+          key: v1-gradle-cache-{{ checksum "example/android/build.gradle" }}
+          paths:
+            - ~/.gradle/caches
+workflows:
+  version: 2
+  build-and-lint-app:
+    jobs:
+      - build-app

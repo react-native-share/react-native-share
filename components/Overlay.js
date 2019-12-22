@@ -51,6 +51,7 @@ class Overlay extends React.Component<Props, State> {
     return Animated.timing(this.state.fadeAnim, {
       toValue: newProps.visible ? 1 : 0,
       duration: DEFAULT_ANIMATE_TIME,
+      useNativeDriver: false,
     }).start(this.onAnimatedEnd.bind(this));
   }
   render() {

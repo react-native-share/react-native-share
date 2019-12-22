@@ -6,6 +6,14 @@
     "type": "git",
     "url": "git+https://github.com/react-native-community/react-native-share.git"
   },
+  "main": "index.js",
+  "files": [
+    "android",
+    "components",
+    "ios",
+    "windows",
+    "RNShare.podspec"
+  ],
   "devDependencies": {
     "@commitlint/cli": "8.1.0",
     "@commitlint/config-conventional": "8.1.0",
