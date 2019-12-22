@@ -55,7 +55,7 @@
 	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-        <string>instagram-stories</string>
+	    <string>instagram-stories</string>
         <string>instagram</string>
 		<string>facebook</string>
 		<string>whatsapp</string>
