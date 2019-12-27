@@ -59,6 +59,12 @@ We recommend using the releases from npm, however you can use the master branch 
 ``` 
 yarn add react-native-share@git+https://git@github.com/react-native-community/react-native-share.git
 ```
+---
+
+#### LSApplicationQueriesSchemes on iOS
+Remember to add `instagram`, `facebook` or watever queries schemes you need to LSApplicationQueriesSchemes
+field in your Info.plist. This is required to share content directly to other apps like Instagram, Facebook etc.  
+Values for queries schemes can be found in `Social` field of `RNShare` class.
 
 
 
