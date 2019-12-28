@@ -62,7 +62,7 @@ yarn add react-native-share@git+https://git@github.com/react-native-community/re
 ---
 
 #### LSApplicationQueriesSchemes on iOS
-Remember to add `instagram`, `facebook` or watever queries schemes you need to LSApplicationQueriesSchemes
+Remember to add `instagram`, `facebook` or whatever queries schemes you need to LSApplicationQueriesSchemes
 field in your Info.plist. This is required to share content directly to other apps like Instagram, Facebook etc.  
 Values for queries schemes can be found in `Social` field of `RNShare` class.
 
@@ -78,7 +78,7 @@ Values for queries schemes can be found in `Social` field of `RNShare` class.
 3. Go to `node_modules` ➜ `react-native-share` ➜ `ios` and add `RNShare.xcodeproj`
 4. In XCode, in the project navigator, select your project. Add `libRNShare.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 5. In XCode, in the project navigator, select your project. Add `Social.framework` and `MessageUI.framework` to your project's `General` ➜ `Linked Frameworks and Libraries`
-6. In iOS 9 or higher, You should add app list that you will share.
+6. In iOS 9 or higher, you should add app list that you will share.
 If you want to share Whatsapp and Mailto, you should write `LSApplicationQueriesSchemes` in info.plist  
     ```xml
     <key>LSApplicationQueriesSchemes</key>
@@ -94,7 +94,7 @@ If you want to share Whatsapp and Mailto, you should write `LSApplicationQueries
     ```
 8. Run your project (`Cmd+R`)
 
-### iOS Install(using Pods)
+### iOS Install (using Pods)
 
 
 If you wish, you can use [cocopoads](https://cocoapods.org/) to use react-native-share.
@@ -172,7 +172,7 @@ Supported options:
 
 | Name  | Type     | Description |
 | :---- | :------: | :--- |
-| url | string   | URL you want to share (only support base64 string in iOS & Android ). |
+| url | string   | URL you want to share (only support base64 string in iOS & Android). |
 | urls | Array[string]   | array of base64 string you want to share (only support iOS & Android). |
 | type | string   | File mime type (optional) |
 | message | string   |  |
