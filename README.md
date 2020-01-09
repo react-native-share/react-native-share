@@ -248,7 +248,7 @@ const shareOptions = {
     message: 'some message',
     url: 'some share url',
     social: Share.Social.WHATSAPP,
-    whatsAppNumber: "9199999999"  // country code + phone number(currently only works on Android)
+    whatsAppNumber: "9199999999",  // country code + phone number(currently only works on Android)
     filename: 'test' , // only for base64 file in Android 
 };
 Share.shareSingle(shareOptions);
