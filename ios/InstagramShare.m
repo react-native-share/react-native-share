@@ -38,9 +38,10 @@
         successCallback(@[]);
     } else {
         // Cannot open instagram
-        NSString *stringURL = @"http://itunes.apple.com/app/instagram/id389801252";
+        NSString *stringURL = @"https://itunes.apple.com/app/instagram/id389801252";
         NSURL *url = [NSURL URLWithString:stringURL];
-        [[UIApplication sharedApplication] openURL:url];
+        
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {}];
         
         NSString *errorMessage = @"Not installed";
         NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};

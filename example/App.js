@@ -31,12 +31,9 @@ const App = () => {
    * Only works on Android.
    */
   const checkIfPackageIsInstalled = async () => {
-    const {isInstalled} = await Share.isPackageInstalled(packageSearch);
+    const { isInstalled } = await Share.isPackageInstalled(packageSearch);
 
-    Alert.alert(
-      `Package: ${packageSearch}`,
-      `${isInstalled ? 'Installed' : 'Not Installed'}`,
-    );
+    Alert.alert(`Package: ${packageSearch}`, `${isInstalled ? 'Installed' : 'Not Installed'}`);
   };
 
   function getErrorString(error, defaultValue) {
@@ -115,6 +112,23 @@ const App = () => {
     }
   };
 
+  const shareToInstagramStory = async () => {
+    const shareOptions = {
+      title: 'Share image to instastory',
+      method: Share.InstagramStories.SHARE_BACKGROUND_IMAGE,
+      backgroundImage: images.image1,
+      social: Share.Social.INSTAGRAM_STORIES,
+    };
+
+    try {
+      const ShareResponse  = await Share.shareSingle(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>Welcome to React Native Share Example!</Text>
@@ -128,6 +142,9 @@ const App = () => {
         <View style={styles.button}>
           <Button onPress={shareEmailImage} title="Share Social: Email" />
         </View>
+        <View style={styles.button}>
+          <Button onPress={shareToInstagramStory} title="Share to IG Story" />
+        </View>
         {Platform.OS === 'android' && (
           <View style={styles.searchPackageContainer}>
             <TextInput
@@ -137,10 +154,7 @@ const App = () => {
               style={styles.textInput}
             />
             <View>
-              <Button
-                onPress={checkIfPackageIsInstalled}
-                title="Check Package"
-              />
+              <Button onPress={checkIfPackageIsInstalled} title="Check Package" />
             </View>
           </View>
         )}
