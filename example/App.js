@@ -31,9 +31,12 @@ const App = () => {
    * Only works on Android.
    */
   const checkIfPackageIsInstalled = async () => {
-    const { isInstalled } = await Share.isPackageInstalled(packageSearch);
+    const {isInstalled} = await Share.isPackageInstalled(packageSearch);
 
-    Alert.alert(`Package: ${packageSearch}`, `${isInstalled ? 'Installed' : 'Not Installed'}`);
+    Alert.alert(
+      `Package: ${packageSearch}`,
+      `${isInstalled ? 'Installed' : 'Not Installed'}`,
+    );
   };
 
   function getErrorString(error, defaultValue) {
@@ -121,7 +124,7 @@ const App = () => {
     };
 
     try {
-      const ShareResponse  = await Share.shareSingle(shareOptions);
+      const ShareResponse = await Share.shareSingle(shareOptions);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -154,7 +157,10 @@ const App = () => {
               style={styles.textInput}
             />
             <View>
-              <Button onPress={checkIfPackageIsInstalled} title="Check Package" />
+              <Button
+                onPress={checkIfPackageIsInstalled}
+                title="Check Package"
+              />
             </View>
           </View>
         )}
