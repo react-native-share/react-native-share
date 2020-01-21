@@ -47,6 +47,10 @@
 #import "EmailShare.h"
 
 @implementation RNShare
+
+RCTResponseErrorBlock rejectBlock;
+RCTResponseSenderBlock resolveBlock;
+
 - (dispatch_queue_t)methodQueue
 {
     return dispatch_get_main_queue();
@@ -95,7 +99,6 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
                   failureCallback:(RCTResponseErrorBlock)failureCallback
                   successCallback:(RCTResponseSenderBlock)successCallback)
 {
-
     NSString *social = [RCTConvert NSString:options[@"social"]];
     if (social) {
         NSLog(@"%@", social);
@@ -174,6 +177,28 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
         return;
     }
 
+    UIViewController *controller = RCTPresentedViewController();
+
+    BOOL saveToFiles = [RCTConvert BOOL:options[@"saveToFiles"]];
+    if (saveToFiles) {
+        NSArray *urls = [items filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+            return [evaluatedObject isKindOfClass:[NSURL class]];
+        }]];
+
+        if (urls.count == 0) {
+            RCTLogError(@"No `urls` to save in Files");
+            return;
+        }
+        if (@available(iOS 11.0, *)) {
+            resolveBlock = successCallback;
+            rejectBlock = failureCallback;
+            UIDocumentPickerViewController *documentPicker = [[UIDocumentPickerViewController alloc] initWithURLs:urls inMode:UIDocumentPickerModeExportToService];
+            [documentPicker setDelegate:self];
+            [controller presentViewController:documentPicker animated:YES completion:nil];
+            return;
+        }
+    }
+
     UIActivityViewController *shareController = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];
 
     NSString *subject = [RCTConvert NSString:options[@"subject"]];
@@ -186,7 +211,6 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
         shareController.excludedActivityTypes = excludedActivityTypes;
     }
 
-    UIViewController *controller = RCTPresentedViewController();
     shareController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, __unused NSArray *returnedItems, NSError *activityError) {
         if (activityError) {
             failureCallback(activityError);
@@ -208,5 +232,17 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
     shareController.view.tintColor = [RCTConvert UIColor:options[@"tintColor"]];
 }
 
+- (void)documentPickerWasCancelled:(UIDocumentPickerViewController *)controller {
+    if (rejectBlock) {
+        NSError *error = [NSError errorWithDomain:@"CANCELLED" code: 500 userInfo:@{NSLocalizedDescriptionKey:@"PICKER_WAS_CANCELLED"}];
+        rejectBlock(error);
+    }
+}
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
+    if (resolveBlock) {
+        resolveBlock(@[@(YES), RCTNullIfNil(@{@"app": @"com.apple.DocumentsApp"})]);
+    }
+}
 
 @end
