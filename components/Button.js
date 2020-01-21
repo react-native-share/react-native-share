@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
-import type {ImageSource} from 'react-native/Libraries/Image/ImageSource'
+import type { ImageSource } from 'react-native/Libraries/Image/ImageSource';
 
 const styles = StyleSheet.create({
   buttonText: {
