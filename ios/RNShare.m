@@ -241,7 +241,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
     if (resolveBlock) {
-        resolveBlock(@[@(YES), RCTNullIfNil(@{@"app": @"com.apple.DocumentsApp"})]);
+        resolveBlock(@[@(YES), @"com.apple.DocumentsApp"]);
     }
 }
 

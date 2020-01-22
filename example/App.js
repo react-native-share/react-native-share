@@ -20,6 +20,7 @@ import {
 import Share from 'react-native-share';
 
 import images from './images/imagesBase64';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const App = () => {
   const [packageSearch, setPackageSearch] = useState<string>('');
@@ -115,6 +116,55 @@ const App = () => {
     }
   };
 
+  /**
+   * This function shares remote PDF and PNG files to
+   * the Files app that you send as the urls param
+   */
+  const shareToFiles = async () => {
+    const shareOptions = {
+      title: 'Share file',
+      failOnCancel: false,
+      saveToFiles: true,
+      urls: [],
+    };
+
+    const {fs} = RNFetchBlob;
+    const pdfConfigOptions = {
+      fileCache: true,
+      path: `${fs.dirs.DocumentDir}/dummyPDF.pdf`,
+    };
+    const imageConfigOptions = {
+      fileCache: true,
+      path: `${fs.dirs.DocumentDir}/dummyImage.png`,
+    };
+    const pdfUrl =
+      'https://raw.githubusercontent.com/react-native-community/react-native-share/master/assets/dummy.pdf';
+    const imageUrl =
+      'https://raw.githubusercontent.com/react-native-community/react-native-share/master/assets/ios-250x.png';
+
+    // If you want, you can use a try catch, to parse
+    // the share response. If the user cancels, etc.
+    try {
+      const response = await Promise.all([
+        RNFetchBlob.config(pdfConfigOptions).fetch('GET', pdfUrl),
+        RNFetchBlob.config(imageConfigOptions).fetch('GET', imageUrl),
+      ]);
+      const localPdfPath = response[0].path();
+      const localImagePath = response[1].path();
+      shareOptions.urls = [localPdfPath, localImagePath];
+
+      const ShareResponse = await Share.open(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+
+      // Remove files from Documents dir
+      await fs.unlink(localPdfPath);
+      await fs.unlink(localImagePath);
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>Welcome to React Native Share Example!</Text>
@@ -128,6 +178,11 @@ const App = () => {
         <View style={styles.button}>
           <Button onPress={shareEmailImage} title="Share Social: Email" />
         </View>
+        {Platform.OS === 'ios' && (
+          <View style={styles.button}>
+            <Button onPress={shareToFiles} title="Share To Files" />
+          </View>
+        )}
         {Platform.OS === 'android' && (
           <View style={styles.searchPackageContainer}>
             <TextInput

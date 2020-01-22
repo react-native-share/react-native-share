@@ -217,7 +217,9 @@ PODS:
     - React-cxxreact (= 0.61.4)
     - React-jsi (= 0.61.4)
     - ReactCommon/jscallinvoker (= 0.61.4)
-  - RNShare (2.0.0):
+  - rn-fetch-blob (0.12.0):
+    - React-Core
+  - RNShare (3.0.0):
     - React
   - Yoga (1.14.0)
 
@@ -249,6 +251,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNShare (from `../node_modules/react-native-share`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -305,6 +308,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  rn-fetch-blob:
+    :path: "../node_modules/rn-fetch-blob"
   RNShare:
     :path: "../node_modules/react-native-share"
   Yoga:
@@ -336,7 +341,8 @@ SPEC CHECKSUMS:
   React-RCTText: 21934e0a51d522abcd0a275407e80af45d6fd9ec
   React-RCTVibration: 0f76400ee3cec6edb9c125da49fed279340d145a
   ReactCommon: a6a294e7028ed67b926d29551aa9394fd989c24c
-  RNShare: 72e93ab4c1f10df124f17e5ff53c2c7c974e3374
+  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
+  RNShare: 0e19ddb0bf338b62702ce1d9e001ee14effa68a8
   Yoga: ba3d99dbee6c15ea6bbe3783d1f0cb1ffb79af0f
 
 PODFILE CHECKSUM: 79310af6b976c356911a8a833e9b99c3399fdda3
