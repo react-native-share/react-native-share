@@ -96,6 +96,6 @@ workflows:
       - lint:
           requires:
             - install-dependencies
-      - build-example-app:
+      - build-app:
           requires:
             - lint
