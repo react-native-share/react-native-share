@@ -50,9 +50,6 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/app
-      - run:
-          name: Dev Sync #sync code on the current version to the example app
-          command: yarn dev-sync
       - restore_cache:
           keys:
             - v1-gradle-{{ checksum "android/gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "example/android/gradle/wrapper/gradle-wrapper.properties" }}
@@ -76,6 +73,9 @@ jobs:
           name: Check for errors in the example app using Flow
           command: |
             cd example && yarn flow
+      - run:
+          name: Dev Sync #sync code on the current version to the example app
+          command: yarn dev-sync
       - run:
           name: Build Sample App
           command: |
