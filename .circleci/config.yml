@@ -1,12 +1,7 @@
 version: 2
 executorType: docker
 jobs:
-  build-app:
-    resource_class: medium
-    environment:
-      - GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx3072m -XX:+HeapDumpOnOutOfMemoryError"'
-      - REACT_NATIVE_MAX_WORKERS: 2
-      - ANDROID_BUILD_TOOLS_VERSION: '28.0.3'
+  install-dependencies:
     working_directory: ~/app
     docker:
       - image: reactnativecommunity/react-native-android
@@ -27,9 +22,34 @@ jobs:
           key: v1-npm-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - node_modules/
+      - persist_to_workspace:
+          root: ~/app
+          paths:
+            - node_modules
+  lint:
+    working_directory: ~/app
+    docker:
+      - image: reactnativecommunity/react-native-android
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/app
       - run:
           name: Lint
           command: yarn lint
+  build-example-app:
+    resource_class: medium
+    environment:
+      - GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx3072m -XX:+HeapDumpOnOutOfMemoryError"'
+      - REACT_NATIVE_MAX_WORKERS: 2
+      - ANDROID_BUILD_TOOLS_VERSION: "28.0.3"
+    working_directory: ~/app
+    docker:
+      - image: reactnativecommunity/react-native-android
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/app
       - restore_cache:
           keys:
             - v1-gradle-{{ checksum "android/gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "example/android/gradle/wrapper/gradle-wrapper.properties" }}
@@ -39,7 +59,7 @@ jobs:
             - v1-gradle-cache-{{ checksum "android/build.gradle" }}-{{ checksum "example/android/build.gradle" }}
             - v1-gradle-cache
       - run:
-          name: Run Checks
+          name: Run Gradle Checks on Example App
           command: |
             cd android
             chmod +x ./gradlew
@@ -47,12 +67,15 @@ jobs:
       - store_artifacts:
           path: android/build/reports
       - run:
-          name: Install dependencies of the example app
+          name: Install dependencies on the example app
           command: cd example && yarn install --frozen-lockfile --non-interactive
       - run:
           name: Check for errors in the example app using Flow
           command: |
             cd example && yarn flow
+      - run:
+          name: Dev Sync #sync code on the current version to the example app
+          command: yarn dev-sync
       - run:
           name: Build Sample App
           command: |
@@ -70,6 +93,12 @@ jobs:
             - ~/.gradle/caches
 workflows:
   version: 2
-  build-and-lint-app:
+  build-lint-app:
     jobs:
-      - build-app
+      - install-dependencies
+      - lint:
+          requires:
+            - install-dependencies
+      - build-example-app:
+          requires:
+            - lint
