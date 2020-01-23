@@ -37,7 +37,7 @@ jobs:
       - run:
           name: Lint
           command: yarn lint
-  build-example-app:
+  build-app:
     resource_class: medium
     environment:
       - GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx3072m -XX:+HeapDumpOnOutOfMemoryError"'
