@@ -90,7 +90,7 @@ jobs:
             - ~/.gradle/caches
 workflows:
   version: 2
-  build:
+  build-lint-app:
     jobs:
       - install-dependencies
       - lint:
