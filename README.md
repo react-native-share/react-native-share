@@ -183,7 +183,7 @@ Supported options:
 | failOnCancel | boolean | (defaults to true) Specifies whether promise should reject if user cancels share dialog (optional) |
 | showAppsToView | boolean | (optional) only android|
 | filename | string | only support base64 string in Android|
-| saveToFiles | boolean | Open only `Files` app (optional, supports only urls, requires iOS 11 or later)|
+| saveToFiles | boolean | Open only `Files` app (optional, supports only urls (base64 string or path), requires iOS 11 or later)|
 
 #### Url format when sharing a file
 

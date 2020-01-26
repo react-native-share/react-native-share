@@ -161,6 +161,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
     if (message) {
         [items addObject:message];
     }
+    BOOL saveToFiles = [RCTConvert BOOL:options[@"saveToFiles"]];
     NSArray *urlsArray = options[@"urls"];
     for (int i=0; i<urlsArray.count; i++) {
         NSURL *URL = [RCTConvert NSURL:urlsArray[i]];
@@ -174,7 +175,14 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
                     failureCallback(error);
                     return;
                 }
-                [items addObject:data];
+                if (saveToFiles) {
+                    NSURL *filePath = [self getPathFromBase64:URL.absoluteString with:data];
+                    if (filePath) {
+                        [items addObject: filePath];
+                    }
+                } else {
+                    [items addObject:data];
+                }
             } else {
                 [items addObject:URL];
             }
@@ -189,7 +197,6 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
 
     UIViewController *controller = RCTPresentedViewController();
 
-    BOOL saveToFiles = [RCTConvert BOOL:options[@"saveToFiles"]];
     if (saveToFiles) {
         NSArray *urls = [items filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
             return [evaluatedObject isKindOfClass:[NSURL class]];
@@ -240,6 +247,27 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
     [controller presentViewController:shareController animated:YES completion:nil];
 
     shareController.view.tintColor = [RCTConvert UIColor:options[@"tintColor"]];
+}
+
+- (NSURL*)getPathFromBase64:(NSString*)base64String with:(NSData*)data {
+    NSRange   searchedRange = NSMakeRange(0, [base64String length]);
+    NSString *pattern = @"/[a-zA-Z0-9]+;";
+    NSError  *error = nil;
+
+    NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern: pattern options:0 error:&error];
+    NSArray* matches = [regex matchesInString:base64String options:0 range: searchedRange];
+    NSString * mimeType = @"png";
+    for (NSTextCheckingResult* match in matches) {
+        NSString* matchText = [base64String substringWithRange:[match range]];
+        mimeType = [matchText substringWithRange:(NSMakeRange(1, matchText.length - 2))];
+    }
+
+    NSString *pathComponent = [NSString stringWithFormat:@"file.%@", mimeType];
+    NSString *writePath = [NSTemporaryDirectory() stringByAppendingPathComponent:pathComponent];
+    if ([data writeToFile:writePath atomically:YES]) {
+        return [NSURL fileURLWithPath:writePath];
+    }
+    return NULL;
 }
 
 - (void)documentPickerWasCancelled:(UIDocumentPickerViewController *)controller {

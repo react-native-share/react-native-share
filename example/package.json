@@ -14,8 +14,7 @@
   "dependencies": {
     "react": "16.9.0",
     "react-native": "0.61.5",
-    "react-native-share": "git+https://github.com/react-native-community/react-native-share.git",
-    "rn-fetch-blob": "0.12.0"
+    "react-native-share": "git+https://github.com/react-native-community/react-native-share.git"
   },
   "devDependencies": {
     "@babel/core": "^7.7.7",
