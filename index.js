@@ -188,7 +188,7 @@ class RNShare {
 
             options.urls = [url];
 
-            if(options.filename && !options.filenames){
+            if (options.filename && !options.filenames) {
               options.filenames = [options.filename];
               delete options.filename;
             }
