@@ -184,6 +184,7 @@ Supported options:
 | showAppsToView | boolean | (optional) only android|
 | filename | string | only support base64 string in Android|
 | saveToFiles | boolean | Open only `Files` app (optional, supports only urls (base64 string or path), requires iOS 11 or later)|
+| filenames | Array[string] | array of filename for base64 urls array in Android|
 
 #### Url format when sharing a file
 
