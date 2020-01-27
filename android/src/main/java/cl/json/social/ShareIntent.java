@@ -12,6 +12,7 @@ import android.content.pm.ResolveInfo;
 import android.content.ComponentName;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
 import java.io.UnsupportedEncodingException;
@@ -127,10 +128,18 @@ public abstract class ShareIntent {
     }
 
     protected ShareFiles getFileShares(ReadableMap options) {
+        ArrayList<String> filenames = new ArrayList<>();
+        if (ShareIntent.hasValidKey("filenames", options)) {
+            ReadableArray fileNamesReadableArray = options.getArray("filenames");
+            for (int i = 0; i < fileNamesReadableArray.size(); i++) {
+                filenames.add(fileNamesReadableArray.getString(i));
+            }
+        }
+
         if (ShareIntent.hasValidKey("type", options)) {
-            return new ShareFiles(options.getArray("urls"), options.getString("type"), this.reactContext);
+            return new ShareFiles(options.getArray("urls"), filenames, options.getString("type"), this.reactContext);
         } else {
-            return new ShareFiles(options.getArray("urls"), this.reactContext);
+            return new ShareFiles(options.getArray("urls"), filenames, this.reactContext);
         }
     }
 
