@@ -46,6 +46,7 @@
 #import "InstagramStories.h"
 #import "GooglePlusShare.h"
 #import "EmailShare.h"
+#import "RNShareActivityItemSource.h"
 
 @implementation RNShare
 
@@ -189,6 +190,13 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
         }
     }
 
+    NSArray *activityItemSources = options[@"activityItemSources"];
+    if (activityItemSources) {
+        [activityItemSources enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            RNShareActivityItemSource *activityItemSource = [[RNShareActivityItemSource alloc] initWithOptions:obj];
+            [items addObject:activityItemSource];
+        }];
+    }
 
     if (items.count == 0) {
         RCTLogError(@"No `url` or `message` to share");

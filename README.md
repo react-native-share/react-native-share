@@ -185,6 +185,7 @@ Supported options:
 | filename | string | only support base64 string in Android|
 | saveToFiles | boolean | Open only `Files` app (optional, supports only urls (base64 string or path), requires iOS 11 or later)|
 | filenames | Array[string] | array of filename for base64 urls array in Android|
+| activityItemSources | Array[Object] | (optional) Array of activity item sources (iOS only). Each items should conform to [ActivityItemSource](#activityitemsource) type. See [below](#provide-data-to-share-by-using-activityitemsources-in-ios). |
 
 #### Url format when sharing a file
 
@@ -201,6 +202,105 @@ When share a local file directly, please follow the format below:
 ```
 url: "file://<file_path>",
 ```
+
+#### Provide data to share by using activityItemSources (in iOS)
+
+In order to share different data according to activities or to customize the share sheet, you can provide the data by using `activityItemSources` .
+
+See [here](https://developer.apple.com/documentation/uikit/uiactivityitemsource) for more information about UIActivityItemSource.
+
+##### Example
+
+```jsx
+import { Platform } from 'react-native';
+import Share from 'react-native-share';
+
+const url = 'https://awesome.contents.com/';
+const title = 'Awesome Contents';
+const message = 'Please check this out.';
+const options = Platform.select({
+  ios: {
+    activityItemSources: [
+      {
+        placeholderItem: { type: 'url', content: url },
+        item: {
+          default: { type: 'url', content: url },
+        },
+        subject: {
+          default: title,
+        },
+        linkMetadata: { originalUrl: url, url, title },
+      },
+      {
+        placeholderItem: { type: 'text', content: message },
+        item: {
+          default: { type: 'text', content: message },
+          message: null, // Specify no text to share via Messages app.
+        },
+      },
+    ],
+  },
+  default: {
+    title,
+    subject: title,
+    message: `${message} ${url}`,
+  },
+});
+
+Share.open(options);
+```
+
+##### ActivityItemSource
+
+| Name | Type | Description |
+| :--- | :--: | :---------- |
+| placeholderItem | Object | An object to use as a placeholder for the actual data. This should comform to [ActivityItem](#activityitem) type. |
+| item | Object | An object that contains the final data object to be acted on for each [activity types](#activitytype). This should be `{ [ActivityType]: ?ActivityItem }` . |
+| subject | Object | (optional) An object that contains a string to use as the contents of the subject field for each [activity types](#activitytype).  This should be `{ [ActivityType]: string }` . |
+| dataTypeIdentifier | Object | (optional) An object that contains the UTI for the item for each [activity types](#activitytype). This should be `{ [ActivityType]: string }` . See [here](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/understanding_utis/understand_utis_intro/understand_utis_intro.html) for more information. |
+| thumbnailImage | Object | (optional) An object that contains the URL to the image to use as a preview for the item for each [activity types](#activitytype). This should be `{ [ActivityType]: string }` . The URL should begin with `data:` and contain the data as base 64 encoded string. |
+| linkMetadata | Object | (optional) An object that contains the metadata about a URL, including its title, icon, images, and video. See [LinkMetadata](#linkmetadata). |
+
+##### ActivityType
+
+- `addToReadingList`
+- `airDrop`
+- `assignToContact`
+- `copyToPasteBoard`
+- `mail`
+- `message`
+- `openInIBooks` (iOS 9+)
+- `postToFacebook`
+- `postToFlickr`
+- `postToTencentWeibo`
+- `postToTwitter`
+- `postToVimeo`
+- `postToWeibo`
+- `print`
+- `saveToCameraRoll`
+- `markupAsPDF` (iOS 11+)
+
+Also you can use `default` in order to specify default behavior.
+
+##### ActivityItem
+
+| Name | Type | Description |
+| :--- | :--: | :---------- |
+| type | `text` \| `url` | Type of the content. |
+| content | string | Text or URL to share. You can specify image with URL that begins with `data` and contains the data as base 64 encoded string. |
+
+##### LinkMetadata
+
+| Name | Type | Description |
+| :--- | :--: | :---------- |
+| originalUrl | string | (optional) The original URL of the metadata request. |
+| url | string | (optional) The URL that returns the metadata, taking server-side redirects into account. |
+| title | string | (optional) A representative title for the URL. |
+| icon | string | (optional) A URL of the file corresponding to a representative icon for the URL. |
+| image | string | (optional) A URL of the file corresponding to a representative image for the URL. |
+| remoteVideoUrl | string | (optional) A remote URL corresponding to a representative video for the URL. |
+| video | string | (optional) A URL of the file corresponding to a representative video for the URL. |
+
 
 ---
 ### shareSingle(options) (in iOS & Android)
