@@ -91,6 +91,7 @@ type Options = {
   excludedActivityTypes?: string,
   failOnCancel?: boolean,
   showAppsToView?: boolean,
+  saveToFiles?: boolean,
 };
 type MultipleOptions = {
   url?: string,
@@ -102,6 +103,7 @@ type MultipleOptions = {
   excludedActivityTypes?: string,
   failOnCancel?: boolean,
   showAppsToView?: boolean,
+  saveToFiles?: boolean,
 };
 
 type OpenReturn = { app?: string, dismissedAction?: boolean };

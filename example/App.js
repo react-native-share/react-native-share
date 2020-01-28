@@ -115,6 +115,29 @@ const App = () => {
     }
   };
 
+  /**
+   * This function shares PDF and PNG files to
+   * the Files app that you send as the urls param
+   */
+  const shareToFiles = async () => {
+    const shareOptions = {
+      title: 'Share file',
+      failOnCancel: false,
+      saveToFiles: true,
+      urls: [images.image1, images.pdf1], // base64 with mimeType or path to local file
+    };
+
+    // If you want, you can use a try catch, to parse
+    // the share response. If the user cancels, etc.
+    try {
+      const ShareResponse = await Share.open(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
   const shareToInstagramStory = async () => {
     const shareOptions = {
       title: 'Share image to instastory',
@@ -148,6 +171,11 @@ const App = () => {
         <View style={styles.button}>
           <Button onPress={shareToInstagramStory} title="Share to IG Story" />
         </View>
+        {Platform.OS === 'ios' && (
+          <View style={styles.button}>
+            <Button onPress={shareToFiles} title="Share To Files" />
+          </View>
+        )}
         {Platform.OS === 'android' && (
           <View style={styles.searchPackageContainer}>
             <TextInput

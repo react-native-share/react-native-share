@@ -5445,8 +5445,8 @@ react-is@^16.9.0:
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
 
 "react-native-share@git+https://github.com/react-native-community/react-native-share.git":
-  version "2.0.0"
-  resolved "git+https://github.com/react-native-community/react-native-share.git#d88e542ddd0983d09a4aa1a82737bb05b5731801"
+  version "3.0.0"
+  resolved "git+https://github.com/react-native-community/react-native-share.git#c4adb6fa50ab04f52489ec19964fa310ad28b729"
 
 react-native-testing-library@^1.11.1:
   version "1.11.1"
