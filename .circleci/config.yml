@@ -41,9 +41,6 @@ jobs:
     working_directory: ~/app
     docker:
       - image: reactnativecommunity/react-native-android
-    #environment:
-    #      GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx3072m -XX:+HeapDumpOnOutOfMemoryError"'
-    #      ANDROID_BUILD_TOOLS_VERSION: "28.0.3"
     steps:
       - checkout
       - attach_workspace:
@@ -93,7 +90,11 @@ workflows:
   version: 2
   build-lint-app:
     jobs:
-      - install-dependencies
+      - install-dependencies:
+          filters:
+            branches:
+              ignore:
+                - master
       - lint:
           requires:
             - install-dependencies
