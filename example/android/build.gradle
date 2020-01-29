@@ -1,7 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-project.ext.react = [ extraPackagerArgs: ["--max-workers=2", "--no-daemon"] ]
-
 buildscript {
     ext {
         buildToolsVersion = "28.0.3"
