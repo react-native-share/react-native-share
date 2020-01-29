@@ -41,9 +41,9 @@ jobs:
     working_directory: ~/app
     docker:
       - image: reactnativecommunity/react-native-android
-    environment:
-      GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx3072m -XX:+HeapDumpOnOutOfMemoryError"'
-      ANDROID_BUILD_TOOLS_VERSION: "28.0.3"
+    #environment:
+    #      GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx3072m -XX:+HeapDumpOnOutOfMemoryError"'
+    #      ANDROID_BUILD_TOOLS_VERSION: "28.0.3"
     steps:
       - checkout
       - attach_workspace:
