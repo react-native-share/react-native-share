@@ -183,19 +183,6 @@ class RNShare {
     return new Promise((resolve, reject) => {
       requireAndAskPermissions(options)
         .then(() => {
-/*           if (options.url && !options.urls) {
-            // Backward compatibility with { Share } from react-native
-            const url = options.url;
-            delete options.url;
-
-            options.urls = [url];
-
-            if (options.filename && !options.filenames) {
-              options.filenames = [options.filename];
-              delete options.filename;
-            }
-          } */
-
           NativeModules.RNShare.open(
             options,
             e => {
