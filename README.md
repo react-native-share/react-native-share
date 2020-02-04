@@ -132,7 +132,7 @@ Btw, We also recommend reading this [amazing article](https://shift.infinite.red
    `android/app/build.gradle`:
 
     ```
-      compile project(':react-native-share')
+      implementation project(':react-native-share')
     ```
 5. **(Optional)** [Follow this for implementing Provider](#adding-your-implementation-of-fileprovider)
 
