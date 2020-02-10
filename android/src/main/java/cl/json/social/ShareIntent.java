@@ -249,7 +249,6 @@ public abstract class ShareIntent {
 
         if (ShareIntent.hasValidKey("excludedActivityTypes", options)) {
             activity.startActivityForResult(excludeChooserIntent(this.getIntent(), options), RNShareModule.SHARE_REQUEST_CODE);
-        }
         } else {
             activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
         }
