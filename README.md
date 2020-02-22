@@ -44,13 +44,13 @@ After installing jetifier, runs a ```npx jetify -r``` and test if this works by 
 ---
 ``` 
 yarn add react-native-share
-react-native link react-native-share
+react-native link react-native-share # not needed for react-native >= 0.60.0
 ```
 
 or if you're using npm
 ``` 
 npm install react-native-share --save
-react-native link react-native-share
+react-native link react-native-share # not needed for react-native >= 0.60.0
 ```
 ---
 
@@ -132,7 +132,7 @@ Btw, We also recommend reading this [amazing article](https://shift.infinite.red
    `android/app/build.gradle`:
 
     ```
-      compile project(':react-native-share')
+      implementation project(':react-native-share')
     ```
 5. **(Optional)** [Follow this for implementing Provider](#adding-your-implementation-of-fileprovider)
 
