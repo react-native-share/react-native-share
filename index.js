@@ -95,15 +95,55 @@ type Options = {
 };
 type MultipleOptions = {
   url?: string,
-  urls: Array<string>,
+  urls?: Array<string>,
   type?: string,
   message?: string,
   title?: string,
   subject?: string,
+  activityItemSources?: Array<ActivityItemSource>,
   excludedActivityTypes?: string,
   failOnCancel?: boolean,
   showAppsToView?: boolean,
   saveToFiles?: boolean,
+};
+
+type ActivityType =
+  | 'addToReadingList'
+  | 'airDrop'
+  | 'assignToContact'
+  | 'copyToPasteBoard'
+  | 'mail'
+  | 'message'
+  | 'openInIBooks' // iOS 9 or later
+  | 'postToFacebook'
+  | 'postToFlickr'
+  | 'postToTencentWeibo'
+  | 'postToTwitter'
+  | 'postToVimeo'
+  | 'postToWeibo'
+  | 'print'
+  | 'saveToCameraRoll'
+  | 'markupAsPDF'; // iOS 11 or later
+
+type ActivityItem = { type: 'text' | 'url', content: string };
+
+type LinkMetadata = {
+  originalUrl?: string,
+  url?: string,
+  title?: string,
+  icon?: string,
+  image?: string,
+  remoteVideoUrl?: string,
+  video?: string,
+};
+
+type ActivityItemSource = {
+  placeholderItem: ActivityItem,
+  item: { [ActivityType | string]: ?ActivityItem },
+  subject?: { [ActivityType | string]: string },
+  dataTypeIdentifier?: { [ActivityType | string]: string },
+  thumbnailImage?: { [ActivityType | string]: string },
+  linkMetadata?: LinkMetadata,
 };
 
 type OpenReturn = { app?: string, dismissedAction?: boolean };
@@ -111,7 +151,7 @@ type ShareSingleReturn = { message: string, isInstalled?: boolean };
 
 const requireAndAskPermissions = async (options: Options | MultipleOptions): Promise<any> => {
   if ((options.url || options.urls) && Platform.OS === 'android') {
-    const urls: Array<string> = options.urls || [options.url];
+    const urls: Array<string> = options.urls || (options.url ? [options.url] : []);
     try {
       const resultArr = await Promise.all(
         urls.map(
