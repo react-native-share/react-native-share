@@ -139,9 +139,9 @@ public abstract class ShareIntent {
                 }
             } else {
                 if (!TextUtils.isEmpty(message)) {
-                    this.getIntent().putExtra(Intent.EXTRA_TEXT, message + " " + options.getArray("urls").toString());
+                    this.getIntent().putExtra(Intent.EXTRA_TEXT, message + " " + options.getArray("urls").getString(0));
                 } else {
-                    this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getArray("urls").toString());
+                    this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getArray("urls").getString(0));
                 }
             }
         } else if (ShareIntent.hasValidKey("url", options)) {
