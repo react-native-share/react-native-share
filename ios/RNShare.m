@@ -238,6 +238,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
 
     shareController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, __unused NSArray *returnedItems, NSError *activityError) {
         if (activityError) {
+            [controller  dismissViewControllerAnimated:true completion:nil];
             failureCallback(activityError);
         } else if (completed || activityType == nil) {
             successCallback(@[@(completed), RCTNullIfNil(activityType)]);
