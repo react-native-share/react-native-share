@@ -1,4 +1,4 @@
-﻿# react-native-share [![CircleCI](https://circleci.com/gh/react-native-community/react-native-share/tree/master.svg?style=svg&circle-token=0c6860240abba4e16bd07df0ea805a72b67b8d41)](https://circleci.com/gh/react-native-community/react-native-share/tree/master) [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
+# react-native-share [![CircleCI](https://circleci.com/gh/react-native-community/react-native-share/tree/master.svg?style=svg&circle-token=0c6860240abba4e16bd07df0ea805a72b67b8d41)](https://circleci.com/gh/react-native-community/react-native-share/tree/master) [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
 React Native Share, a simple tool for share message and file to other apps.
 
 # Sponsors
@@ -350,7 +350,7 @@ const shareOptions = {
     message: 'some message',
     url: 'some share url',
     social: Share.Social.WHATSAPP,
-    whatsAppNumber: "9199999999",  // country code + phone number(currently only works on Android)
+    whatsAppNumber: "9199999999",  // country code + phone number
     filename: 'test' , // only for base64 file in Android 
 };
 Share.shareSingle(shareOptions);
