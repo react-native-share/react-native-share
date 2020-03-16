@@ -20,6 +20,7 @@ RCT_EXPORT_MODULE();
     if ([options objectForKey:@"message"] && [options objectForKey:@"message"] != [NSNull null]) {
         NSString *text = [RCTConvert NSString:options[@"message"]];
         text = [text stringByAppendingString: [@" " stringByAppendingString: options[@"url"]] ];
+        NSString *whatsAppNumber = [RCTConvert NSString:options[@"whatsAppNumber"]];
 
         if ([[UIApplication sharedApplication] canOpenURL: [NSURL URLWithString:@"whatsapp://app"]]) {
             NSLog(@"WhatsApp installed");
@@ -49,7 +50,7 @@ RCT_EXPORT_MODULE();
         } else {
             text = (NSString*)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef) text, NULL,CFSTR("!*'();:@&=+$,/?%#[]"),kCFStringEncodingUTF8));
             
-            NSString * urlWhats = [NSString stringWithFormat:@"whatsapp://send?text=%@", text];
+            NSString * urlWhats = whatsAppNumber ? [NSString stringWithFormat:@"whatsapp://send?phone=%@&text=%@", whatsAppNumber, text] : [NSString stringWithFormat:@"whatsapp://send?text=%@", text];
             NSURL * whatsappURL = [NSURL URLWithString:urlWhats];
     
             if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
