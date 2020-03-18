@@ -103,9 +103,9 @@ workflows:
     jobs:
       - install-dependencies:
           filters:
-              branches:
-                ignore:
-                  - master
+            branches:
+              ignore:
+                - master
       - lint:
           requires:
             - install-dependencies
@@ -118,8 +118,6 @@ workflows:
             - lint
       - publish-version:
           filters:
-            requires:
-              - install-dependencies
             branches:
               only:
                 - master
