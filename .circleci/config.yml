@@ -115,7 +115,7 @@ workflows:
       - publish-version:
           requires:
             - install-dependencies
-#          filters:
-#            branches:
-#              only:
-#                - master
+          filters:
+            branches:
+              only:
+                - master
