@@ -101,11 +101,7 @@ workflows:
   version: 2
   build-lint-app:
     jobs:
-      - install-dependencies:
-          filters:
-            branches:
-              ignore:
-                - master
+      - install-dependencies
       - lint:
           requires:
             - install-dependencies
@@ -117,7 +113,9 @@ workflows:
           requires:
             - lint
       - publish-version:
-          filters:
-            branches:
-              only:
-                - master
+          requires:
+            - install-dependencies
+#          filters:
+#            branches:
+#              only:
+#                - master

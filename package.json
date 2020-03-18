@@ -83,7 +83,7 @@
     "validate:flow": "yarn flow",
     "validate:lint": "eslint *js components/*.js --max-warnings=0",
     "validate:prettier": "prettier --write *.js components/*.js",
-    "ci:publish": "semantic-release"
+    "ci:publish": "ls node_modules"
   },
   "husky": {
     "hooks": {
