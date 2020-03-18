@@ -39,7 +39,6 @@
     "prettier": "^1.18.2",
     "react": "16.9.0",
     "react-native": "0.61.5",
-    "semantic-release": "^17.0.4",
     "simple-git": "1.124.0"
   },
   "keywords": [
@@ -77,36 +76,11 @@
     "validate": "yarn validate:prettier && yarn validate:lint && yarn validate:flow",
     "validate:flow": "yarn flow",
     "validate:lint": "eslint *js components/*.js --max-warnings=0",
-    "validate:prettier": "prettier --write *.js components/*.js",
-    "ci:publish": "yarn semantic-release"
+    "validate:prettier": "prettier --write *.js components/*.js"
   },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
     }
-  },
-  "release": {
-    "branches": ["master"],
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/npm",
-      [
-        "@semantic-release/github",
-        {
-          "assets": [
-            "package.json"
-          ],
-          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-        }
-      ],
-      [
-        "@semantic-release/git",
-        {
-          "assets": "package.json",
-          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-        }
-      ]
-    ]
   }
 }

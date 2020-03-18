@@ -86,34 +86,18 @@ jobs:
           key: v1-gradle-cache-{{ checksum "example/android/build.gradle" }}
           paths:
             - ~/.gradle/caches
-  publish-version:
-    working_directory: ~/app
-    docker:
-      - image: reactnativecommunity/react-native-android
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/app
-      - run:
-          name: Publish New Version
-          command: yarn ci:publish
 workflows:
   version: 2
   build-lint-app:
     jobs:
-      - install-dependencies
-      - lint:
-          requires:
-            - install-dependencies
+      - install-dependencies:
           filters:
             branches:
               ignore:
                 - master
+      - lint:
+          requires:
+            - install-dependencies
       - build-example-app:
           requires:
             - lint
-      - publish-version:
-          filters:
-            branches:
-              only:
-                - master
