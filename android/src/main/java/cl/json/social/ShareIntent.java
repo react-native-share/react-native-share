@@ -7,14 +7,19 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.content.pm.ResolveInfo;
 import android.content.ComponentName;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -40,11 +45,62 @@ public abstract class ShareIntent {
         this.getIntent().setType("text/plain");
     }
 
+    public Intent excludeChooserIntent(Intent prototype, ReadableMap options) {
+        List<Intent> targetedShareIntents = new ArrayList<Intent>();
+        List<HashMap<String, String>> intentMetaInfo = new ArrayList<HashMap<String, String>>();
+        Intent chooserIntent;
+
+        Intent dummy = new Intent(prototype.getAction());
+        dummy.setType(prototype.getType());
+        List<ResolveInfo> resInfo = this.reactContext.getPackageManager().queryIntentActivities(dummy, 0);
+
+        if (!resInfo.isEmpty()) {
+            for (ResolveInfo resolveInfo : resInfo) {
+                if (resolveInfo.activityInfo == null || options.getArray("excludedActivityTypes").toString().contains(resolveInfo.activityInfo.packageName))
+                    continue;
+
+                HashMap<String, String> info = new HashMap<String, String>();
+                info.put("packageName", resolveInfo.activityInfo.packageName);
+                info.put("className", resolveInfo.activityInfo.name);
+                info.put("simpleName", String.valueOf(resolveInfo.activityInfo.loadLabel(this.reactContext.getPackageManager())));
+                intentMetaInfo.add(info);
+            }
+
+            if (!intentMetaInfo.isEmpty()) {
+                // sorting for nice readability
+                Collections.sort(intentMetaInfo, new Comparator<HashMap<String, String>>() {
+                    @Override
+                    public int compare(HashMap<String, String> map, HashMap<String, String> map2) {
+                        return map.get("simpleName").compareTo(map2.get("simpleName"));
+                    }
+                });
+
+                // create the custom intent list
+                for (HashMap<String, String> metaInfo : intentMetaInfo) {
+                    Intent targetedShareIntent = (Intent) prototype.clone();
+                    targetedShareIntent.setPackage(metaInfo.get("packageName"));
+                    targetedShareIntent.setClassName(metaInfo.get("packageName"), metaInfo.get("className"));
+                    targetedShareIntents.add(targetedShareIntent);
+                }
+
+                chooserIntent = Intent.createChooser(targetedShareIntents.remove(targetedShareIntents.size() - 1), "share");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
+                return chooserIntent;
+            }
+        }
+
+        return Intent.createChooser(prototype, "Share");
+    }
+
     public void open(ReadableMap options) throws ActivityNotFoundException {
         this.options = options;
 
         if (ShareIntent.hasValidKey("subject", options)) {
             this.getIntent().putExtra(Intent.EXTRA_SUBJECT, options.getString("subject"));
+        }
+
+        if (ShareIntent.hasValidKey("email", options)) {
+            this.getIntent().putExtra(Intent.EXTRA_EMAIL, new String[] { options.getString("email") });
         }
 
         if (ShareIntent.hasValidKey("title", options)) {
@@ -55,6 +111,20 @@ public abstract class ShareIntent {
         if (ShareIntent.hasValidKey("message", options)) {
             message = options.getString("message");
         }
+
+        String socialType  = "";
+        if (ShareIntent.hasValidKey("social", options)) {
+            socialType = options.getString("social");
+        }
+        if (socialType.equals("whatsapp")) {
+            String whatsAppNumber = options.getString("whatsAppNumber");
+            if (!whatsAppNumber.isEmpty()) {
+                String chatAddress = whatsAppNumber + "@s.whatsapp.net";
+                this.getIntent().putExtra("jid", chatAddress);
+            }
+        }
+
+
         if (ShareIntent.hasValidKey("urls", options)) {
 
             ShareFiles fileShare = getFileShares(options);
@@ -69,9 +139,9 @@ public abstract class ShareIntent {
                 }
             } else {
                 if (!TextUtils.isEmpty(message)) {
-                    this.getIntent().putExtra(Intent.EXTRA_TEXT, message + " " + options.getArray("urls").toString());
+                    this.getIntent().putExtra(Intent.EXTRA_TEXT, message + " " + options.getArray("urls").getString(0));
                 } else {
-                    this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getArray("urls").toString());
+                    this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getArray("urls").getString(0));
                 }
             }
         } else if (ShareIntent.hasValidKey("url", options)) {
@@ -97,18 +167,30 @@ public abstract class ShareIntent {
     }
 
     protected ShareFile getFileShare(ReadableMap options) {
+         String filename = null;
+        if (ShareIntent.hasValidKey("filename", options)) {
+            filename = options.getString("filename");
+        }
         if (ShareIntent.hasValidKey("type", options)) {
-            return new ShareFile(options.getString("url"), options.getString("type"), this.reactContext);
+            return new ShareFile(options.getString("url"), options.getString("type"), filename, this.reactContext);
         } else {
-            return new ShareFile(options.getString("url"), this.reactContext);
+            return new ShareFile(options.getString("url"), filename, this.reactContext);
         }
     }
 
     protected ShareFiles getFileShares(ReadableMap options) {
+        ArrayList<String> filenames = new ArrayList<>();
+        if (ShareIntent.hasValidKey("filenames", options)) {
+            ReadableArray fileNamesReadableArray = options.getArray("filenames");
+            for (int i = 0; i < fileNamesReadableArray.size(); i++) {
+                filenames.add(fileNamesReadableArray.getString(i));
+            }
+        }
+
         if (ShareIntent.hasValidKey("type", options)) {
-            return new ShareFiles(options.getArray("urls"), options.getString("type"), this.reactContext);
+            return new ShareFiles(options.getArray("urls"), filenames, options.getString("type"), this.reactContext);
         } else {
-            return new ShareFiles(options.getArray("urls"), this.reactContext);
+            return new ShareFiles(options.getArray("urls"), filenames, this.reactContext);
         }
     }
 
@@ -165,7 +247,17 @@ public abstract class ShareIntent {
             chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, viewIntents);
         }
 
-        activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+        if (ShareIntent.hasValidKey("excludedActivityTypes", options)) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+               chooser.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, options.getArray("excludedActivityTypes").toString());
+                activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+            }else {
+                activity.startActivityForResult(excludeChooserIntent(this.getIntent(),options), RNShareModule.SHARE_REQUEST_CODE);
+            }
+        } else {
+            activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+        }
+
         if (intentSender == null) {
             TargetChosenReceiver.sendCallback(true, true, "OK");
         }
@@ -194,6 +286,10 @@ public abstract class ShareIntent {
     }
 
     protected abstract String getPackage();
+
+    protected String getComponentClass() {
+        return null;
+    }
 
     protected abstract String getDefaultWebLink();
 

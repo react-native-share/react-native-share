@@ -1,4 +1,9 @@
-// @flow
+/*
+ *
+ * @format
+ * @flow
+ *
+ */
 
 import * as React from 'react';
 import {
@@ -8,9 +13,9 @@ import {
   BackHandler,
   NativeModules,
   Platform,
-  ActionSheetIOS,
   PermissionsAndroid,
 } from 'react-native';
+import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import Overlay from './components/Overlay';
 import Sheet from './components/Sheet';
@@ -36,8 +41,8 @@ type Props = {
   visible: boolean,
   onCancel: () => void,
   children: React.Node,
-  style?: {},
-  overlayStyle?: {},
+  style?: ViewStyleProp,
+  overlayStyle?: ViewStyleProp,
 };
 
 const shareSheetStyle = { flex: 1 };
@@ -86,25 +91,67 @@ type Options = {
   excludedActivityTypes?: string,
   failOnCancel?: boolean,
   showAppsToView?: boolean,
+  saveToFiles?: boolean,
 };
 type MultipleOptions = {
   url?: string,
-  urls: Array<string>,
+  urls?: Array<string>,
   type?: string,
   message?: string,
   title?: string,
   subject?: string,
+  activityItemSources?: Array<ActivityItemSource>,
   excludedActivityTypes?: string,
   failOnCancel?: boolean,
   showAppsToView?: boolean,
+  saveToFiles?: boolean,
+};
+
+type ActivityType =
+  | 'addToReadingList'
+  | 'airDrop'
+  | 'assignToContact'
+  | 'copyToPasteBoard'
+  | 'mail'
+  | 'message'
+  | 'openInIBooks' // iOS 9 or later
+  | 'postToFacebook'
+  | 'postToFlickr'
+  | 'postToTencentWeibo'
+  | 'postToTwitter'
+  | 'postToVimeo'
+  | 'postToWeibo'
+  | 'print'
+  | 'saveToCameraRoll'
+  | 'markupAsPDF'; // iOS 11 or later
+
+type ActivityItem = { type: 'text' | 'url', content: string };
+
+type LinkMetadata = {
+  originalUrl?: string,
+  url?: string,
+  title?: string,
+  icon?: string,
+  image?: string,
+  remoteVideoUrl?: string,
+  video?: string,
+};
+
+type ActivityItemSource = {
+  placeholderItem: ActivityItem,
+  item: { [ActivityType | string]: ?ActivityItem },
+  subject?: { [ActivityType | string]: string },
+  dataTypeIdentifier?: { [ActivityType | string]: string },
+  thumbnailImage?: { [ActivityType | string]: string },
+  linkMetadata?: LinkMetadata,
 };
 
 type OpenReturn = { app?: string, dismissedAction?: boolean };
-type ShareSingleReturn = { message: string };
+type ShareSingleReturn = { message: string, isInstalled?: boolean };
 
 const requireAndAskPermissions = async (options: Options | MultipleOptions): Promise<any> => {
   if ((options.url || options.urls) && Platform.OS === 'android') {
-    const urls: Array<string> = options.urls || [options.url];
+    const urls: Array<string> = options.urls || (options.url ? [options.url] : []);
     try {
       const resultArr = await Promise.all(
         urls.map(
@@ -149,7 +196,7 @@ const requireAndAskPermissions = async (options: Options | MultipleOptions): Pro
 
 class RNShare {
   static Button: any;
-  static ShareSheet: React.Element<*>;
+  static ShareSheet: RNShare.ShareSheet;
   static Overlay: any;
   static Sheet: any;
   static Social = {
@@ -162,6 +209,7 @@ class RNShare {
     GOOGLEPLUS: NativeModules.RNShare.GOOGLEPLUS || 'googleplus',
     EMAIL: NativeModules.RNShare.EMAIL || 'email',
     PINTEREST: NativeModules.RNShare.PINTEREST || 'pinterest',
+    LINKEDIN: NativeModules.RNShare.LINKEDIN || 'linkedin',
   };
 
   static InstagramStories = {
@@ -176,49 +224,39 @@ class RNShare {
     return new Promise((resolve, reject) => {
       requireAndAskPermissions(options)
         .then(() => {
-          if (Platform.OS === 'ios' && !options.urls) {
-            // Handle for single file share
-            ActionSheetIOS.showShareActionSheetWithOptions(
-              options,
-              error => {
-                return reject({ error: error });
-              },
-              (success, activityType) => {
-                if (success) {
-                  return resolve({
-                    app: activityType,
-                  });
-                } else if (options.failOnCancel === false) {
-                  return resolve({
-                    dismissedAction: true,
-                  });
-                } else {
-                  reject(new Error('User did not share'));
-                }
-              },
-            );
-          } else {
-            NativeModules.RNShare.open(
-              options,
-              e => {
-                return reject({ error: e });
-              },
-              (success, activityType) => {
-                if (success) {
-                  return resolve({
-                    app: activityType,
-                    message: activityType,
-                  });
-                } else if (options.failOnCancel === false) {
-                  return resolve({
-                    dismissedAction: true,
-                  });
-                } else {
-                  reject(new Error('User did not share'));
-                }
-              },
-            );
+          if (options.url && !options.urls) {
+            // Backward compatibility with { Share } from react-native
+            const url = options.url;
+            delete options.url;
+
+            options.urls = [url];
+
+            if (options.filename && !options.filenames) {
+              options.filenames = [options.filename];
+              delete options.filename;
+            }
           }
+
+          NativeModules.RNShare.open(
+            options,
+            e => {
+              return reject({ error: e });
+            },
+            (success, activityType) => {
+              if (success) {
+                return resolve({
+                  app: activityType,
+                  message: activityType,
+                });
+              } else if (options.failOnCancel === false) {
+                return resolve({
+                  dismissedAction: true,
+                });
+              } else {
+                reject(new Error('User did not share'));
+              }
+            },
+          );
         })
         .catch(e => reject(e));
     });
@@ -271,8 +309,5 @@ class RNShare {
   }
 }
 
-module.exports = RNShare;
-module.exports.Overlay = Overlay;
-module.exports.Sheet = Sheet;
-module.exports.Button = Button;
-module.exports.ShareSheet = ShareSheet;
+export { Overlay, Sheet, Button, ShareSheet };
+export default RNShare;

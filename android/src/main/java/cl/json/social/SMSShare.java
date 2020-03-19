@@ -5,6 +5,7 @@ import android.content.Intent;
 import java.io.File;
 import android.os.Environment;
 import android.net.Uri;
+import android.provider.Telephony;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
@@ -16,9 +17,12 @@ public class SMSShare extends SingleShareIntent {
 
     private static final String PACKAGE = "com.android.mms";
     private static final String PLAY_STORE_LINK = "market://details?id=com.android.mms";
+
+    private ReactApplicationContext reactContext = null;
     
     public SMSShare(ReactApplicationContext reactContext) {
         super(reactContext);
+        this.reactContext = reactContext;
     }
 
     @Override
@@ -30,6 +34,9 @@ public class SMSShare extends SingleShareIntent {
 
     @Override
     protected String getPackage() {
+        if (android.os.Build.VERSION.SDK_INT >= 19 ) {
+            return Telephony.Sms.getDefaultSmsPackage(this.reactContext);
+        }
         return PACKAGE;
     }
 
