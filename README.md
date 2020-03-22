@@ -27,6 +27,11 @@ npm install react-native-share --save
 ```
 ---
 
+#### Requirements:
+
+1. Xcode 11 or higher
+2. iOS 13 SDK or higher
+
 #### Important:
 Linking is not needed anymore. ``react-native@0.60.0+`` supports dependencies auto linking.
 For iOS you also need additional step to install auto linked Pods (Cocoapods should be installed):
@@ -381,6 +386,13 @@ Share.shareSingle(shareOptions);
 ---
 # Troubleshooting
 ---
+
+#### LinkPresentation.h file not found
+
+1. Check iOS SDK version running this command: `xcodebuild -showsdks`
+2. If your SDK is 12 or lower you need to update to Xcode 11 with iOS SDK 13
+3. Build the app with Xcode 11 and everything works ok
+
 #### Share Remote PDF File with Gmail & WhatsApp (iOS)
 
 When sharing a pdf file with base64, there are two current problems.
