@@ -194,14 +194,14 @@ Supported options:
 
 #### Url format when sharing a file
 
-***Share base 64 file
+***Share base 64 file***
 
 When share a base 64 file, please follow the format below:
 ```
 url: "data:<data_type>/<file_extension>;base64,<base64_data>"
 ```
 
-***Share file directly
+***Share file directly***
 
 When share a local file directly, please follow the format below:
 ```
