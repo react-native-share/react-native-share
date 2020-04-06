@@ -397,6 +397,12 @@ For supporting multi language, you can add CFBundleAllowMixedLocalizations key t
 <string>true</string>
 ```
 
+#### LinkPresentation.h file not found
+
+1. Check iOS SDK version running this command: `xcodebuild -showsdks`
+2. If your SDK is 12 or lower you need to update to Xcode 11 with iOS SDK 13
+3. Build the app with Xcode 11 and everything works ok
+
 #### Share Remote PDF File with Gmail & WhatsApp (iOS)
 
 When sharing a pdf file with base64, there are two current problems.
