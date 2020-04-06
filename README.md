@@ -27,6 +27,11 @@ npm install react-native-share --save
 ```
 ---
 
+#### Requirements:
+
+1. Xcode 11 or higher
+2. iOS 13 SDK or higher
+
 #### Important:
 Linking is not needed anymore. ``react-native@0.60.0+`` supports dependencies auto linking.
 For iOS you also need additional step to install auto linked Pods (Cocoapods should be installed):
@@ -189,14 +194,14 @@ Supported options:
 
 #### Url format when sharing a file
 
-***Share base 64 file
+***Share base 64 file***
 
 When share a base 64 file, please follow the format below:
 ```
 url: "data:<data_type>/<file_extension>;base64,<base64_data>"
 ```
 
-***Share file directly
+***Share file directly***
 
 When share a local file directly, please follow the format below:
 ```
