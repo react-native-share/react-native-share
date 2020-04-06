@@ -387,6 +387,21 @@ Share.shareSingle(shareOptions);
 # Troubleshooting
 ---
 
+#### Language Support (iOS)
+
+On iOS, share component reads language value from CFBundleDevelopmentRegion at Info.plist file. By changing CFBundleDevelopmentRegion value you can change default language for component.
+
+```XML
+<key>CFBundleDevelopmentRegion</key>
+<string>en</string>
+```
+For supporting multi language, you can add CFBundleAllowMixedLocalizations key to Info.plist.
+
+```XML
+<key>CFBundleAllowMixedLocalizations</key>
+<string>true</string>
+```
+
 #### LinkPresentation.h file not found
 
 1. Check iOS SDK version running this command: `xcodebuild -showsdks`
