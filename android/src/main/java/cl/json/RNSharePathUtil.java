@@ -57,7 +57,7 @@ public class RNSharePathUtil {
                     break;
                 }
             } catch (Exception e) {
-
+                System.out.println("ERROR " + e.getMessage());
             }
         }
         return result;
