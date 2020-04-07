@@ -194,14 +194,14 @@ Supported options:
 
 #### Url format when sharing a file
 
-***Share base 64 file
+***Share base 64 file***
 
 When share a base 64 file, please follow the format below:
 ```
 url: "data:<data_type>/<file_extension>;base64,<base64_data>"
 ```
 
-***Share file directly
+***Share file directly***
 
 When share a local file directly, please follow the format below:
 ```
@@ -386,6 +386,21 @@ Share.shareSingle(shareOptions);
 ---
 # Troubleshooting
 ---
+
+#### Language Support (iOS)
+
+On iOS, share component reads language value from CFBundleDevelopmentRegion at Info.plist file. By changing CFBundleDevelopmentRegion value you can change default language for component.
+
+```XML
+<key>CFBundleDevelopmentRegion</key>
+<string>en</string>
+```
+For supporting multi language, you can add CFBundleAllowMixedLocalizations key to Info.plist.
+
+```XML
+<key>CFBundleAllowMixedLocalizations</key>
+<string>true</string>
+```
 
 #### LinkPresentation.h file not found
 
