@@ -243,6 +243,9 @@ const options = Platform.select({
           default: { type: 'text', content: message },
           message: null, // Specify no text to share via Messages app.
         },
+        linkMetadata: { // For showing app icon on share preview.
+           title: message
+        },
       },
       { // For using custom icon instead of default text icon at share preview when sharing with message.
         placeholderItem: {
