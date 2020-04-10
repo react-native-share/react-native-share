@@ -57,7 +57,7 @@ public class RNSharePathUtil {
                     break;
                 }
             } catch (Exception e) {
-
+                System.out.println("RNSharePathUtil::compatUriFromFile ERROR " + e.getMessage());
             }
         }
         return result;
