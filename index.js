@@ -92,7 +92,7 @@ type Options = {
   failOnCancel?: boolean,
   showAppsToView?: boolean,
   saveToFiles?: boolean,
-  appId?: string,
+  appId: string,
 };
 type MultipleOptions = {
   url?: string,
