@@ -92,6 +92,7 @@ type Options = {
   failOnCancel?: boolean,
   showAppsToView?: boolean,
   saveToFiles?: boolean,
+  appId: string,
 };
 type MultipleOptions = {
   url?: string,
@@ -201,6 +202,7 @@ class RNShare {
   static Sheet: any;
   static Social = {
     FACEBOOK: NativeModules.RNShare.FACEBOOK || 'facebook',
+    FACEBOOK_STORIES: NativeModules.RNShare.FACEBOOK_STORIES || 'facebook-stories',
     PAGESMANAGER: NativeModules.RNShare.PAGESMANAGER || 'pagesmanager',
     TWITTER: NativeModules.RNShare.TWITTER || 'twitter',
     WHATSAPP: NativeModules.RNShare.WHATSAPP || 'whatsapp',
@@ -213,6 +215,13 @@ class RNShare {
   };
 
   static InstagramStories = {
+    SHARE_BACKGROUND_IMAGE: NativeModules.RNShare.SHARE_BACKGROUND_IMAGE || 'shareBackgroundImage',
+    SHARE_STICKER_IMAGE: NativeModules.RNShare.SHARE_STICKER_IMAGE || 'shareStickerImage',
+    SHARE_BACKGROUND_AND_STICKER_IMAGE:
+      NativeModules.RNShare.SHARE_BACKGROUND_AND_STICKER_IMAGE || 'shareBackgroundAndStickerImage',
+  };
+
+  static FacebookStories = {
     SHARE_BACKGROUND_IMAGE: NativeModules.RNShare.SHARE_BACKGROUND_IMAGE || 'shareBackgroundImage',
     SHARE_STICKER_IMAGE: NativeModules.RNShare.SHARE_STICKER_IMAGE || 'shareStickerImage',
     SHARE_BACKGROUND_AND_STICKER_IMAGE:
