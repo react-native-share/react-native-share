@@ -536,7 +536,7 @@ import Share from 'react-native-share';
 const shareOptions = {
     method: Share.FacebookStories.SHARE_BACKGROUND_AND_STICKER_IMAGE,
     backgroundImage: 'http://urlto.png', // url or an base64 string
-    stickerImage: 'data:image/png;base64,<imageInBase64>', //or you can use "data:" link
+    stickerImage: 'data:image/png;base64,<imageInBase64>', //or you can use "data:" url
     backgroundBottomColor: '#fefefe',
     backgroundTopColor: '#906df4',
     attributionURL: 'http://deep-link-to-app', //in beta
