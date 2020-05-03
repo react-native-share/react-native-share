@@ -22,13 +22,14 @@ RCT_EXPORT_MODULE();
     if(self)
     {
         if (!_scSdkSnapApi) {
-            _scSdkSnapApi = [SCSDKSnapAPI new];
+            _scSdkSnapApi = [[SCSDKSnapAPI alloc] init];
+            NSLog(@"hi");
         }
     }
     return self;
 }
 
-- (void)shareSingle:(NSDictionary *)options
+- (void *)shareSingle:(NSDictionary *)options
     failureCallback:(RCTResponseErrorBlock)failureCallback
     successCallback:(RCTResponseSenderBlock)successCallback {
     
@@ -36,28 +37,46 @@ RCT_EXPORT_MODULE();
     
     // #TODO: Check duration (max 10 secs)
     if ([[UIApplication sharedApplication] canOpenURL: [NSURL URLWithString:@"snapchat://"]]) {
+        NSLog(@"video");
         // send a video
         if ([options[@"url"] rangeOfString:@"mp4"].location != NSNotFound) {
+
             // snap.sticker = sticker; /* Optional */
             NSURL * videoUrl = [NSURL URLWithString: options[@"url"]];
             /* Main image content to be used in Snap */
-            SCSDKSnapVideo *video = [[SCSDKSnapVideo alloc] initWithVideoUrl:videoUrl];
-            SCSDKVideoSnapContent *videoContent = [[SCSDKVideoSnapContent alloc] initWithSnapVideo:video];
-            // we use title instead of message because it will get appended to url
-            if ([options objectForKey:@"title"]) {
-                videoContent.caption = options[@"title"];
+            @try {
+                /* RN FETCH BLOB WOULDNT WORK SO TRY WITH A LOCAL IMAGE
+                  -> DRAG TO XCODE -> COPY BUNDLE RESOURCES AND UNCOMMENT
+                NSString*thePath=[[NSBundle mainBundle] pathForResource:@"small" ofType:@"mp4"];
+                NSURL*videoUrl=[NSURL fileURLWithPath:thePath];
+                */
+                 
+                SCSDKSnapVideo *video = [[SCSDKSnapVideo alloc] initWithVideoUrl:videoUrl];
+                SCSDKVideoSnapContent *videoContent = [[SCSDKVideoSnapContent alloc] initWithSnapVideo:video];
+                
+               // we use title instead of message because it will get appended to url
+               if ([options objectForKey:@"title"]) {
+                   videoContent.caption = options[@"title"];
+               }
+               if ([options objectForKey:@"attachmentUrl"]) {
+                   videoContent.attachmentUrl = options[@"attachmentUrl"];
+               }
+
+               [_scSdkSnapApi startSendingContent:videoContent completionHandler:^(NSError *error) {
+                   /* Handle response */
+                   if (error) {
+                       failureCallback(error);
+                   } else {
+                       successCallback(@[]);
+                   }
+               }];
+            } @catch (NSException *exception) {
+                // NSInternalInconsistencyException
+                failureCallback(@"Could not load file");
             }
-            if ([options objectForKey:@"attachmentUrl"]) {
-                videoContent.attachmentUrl = options[@"attachmentUrl"];
+            @finally {
             }
-            [_scSdkSnapApi startSendingContent:videoContent completionHandler:^(NSError *error) {
-                /* Handle response */
-                if (error) {
-                    failureCallback(error);
-                } else {
-                    successCallback(@[]);
-                }
-            }];
+
         // send image
         } else if ([options[@"url"] rangeOfString:@"jpg"].location != NSNotFound && ![options objectForKey:@"sticker"]) {
             NSURL * imageUrl = [NSURL URLWithString: options[@"url"]];
@@ -129,7 +148,7 @@ RCT_EXPORT_MODULE();
         NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
         
         failureCallback(error);
-    } 
+    }
 }
 
 

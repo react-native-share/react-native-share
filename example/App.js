@@ -19,6 +19,8 @@ import {
 
 import Share from 'react-native-share';
 
+import RNFetchBlob from 'rn-fetch-blob'
+
 import images from './images/imagesBase64';
 
 const App = () => {
@@ -140,34 +142,23 @@ const App = () => {
 
 
   // SNAPCHAT EXAMPLE
-  import RNFetchBlob from 'rn-fetch-blob'
-  shareToSnapchat = async (
-    mediaUrl = "https://sample-videos.com/video123/mp4/480/big_buck_bunny_480p_1mb.mp4",
-  ) => {
-    try {
-      RNFetchBlob.config({
-        fileCache : true,
-        appendExt : 'mp4'
-      }).fetch('GET', mediaUrl, {})
-      .then((res) => {
-        let shareOptions = {
-          title: "SNAP TEXT CONTENT",
-          url: 'file://' + res.path(),
-          type: 'video/mp4', // change type here accordingly
-          attachmentUrl: 'https://snapchat.com',
-          social: Share.Social.SNAPCHAT,
-        }
-        Share.shareSingle(shareOptions)
-          .then((res) => {
-            // returns undefined
-            console.log('res:', res)
-          })
-          .catch((err) => console.log('err', err))
-        });
-    } catch(e) {
-      console.warn(e)
+  shareToSnapchat = async () => {
+    // fetch blob got in a require loop
+    // https://github.com/joltup/rn-fetch-blob/issues/183
+    let shareOptions = {
+      title: "SNAP TEXT CONTENT",
+      url: 'http://mirrors.standaloneinstaller.com/video-sample/small.mp4', //res.path(),
+      type: 'video/mp4', // change type here accordingly
+      attachmentUrl: 'https://snapchat.com',
+      social: 'snapchat'
     }
-  };
+    Share.shareSingle(shareOptions)
+      .then((res) => {
+        // returns undefined
+        console.log('res:', res)
+      }).catch((err) => console.log('err', err))
+  }
+
 
 
   const shareToInstagramStory = async () => {
@@ -202,6 +193,9 @@ const App = () => {
         </View>
         <View style={styles.button}>
           <Button onPress={shareToInstagramStory} title="Share to IG Story" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareToSnapchat} title="Share to Snapchat" />
         </View>
         {Platform.OS === 'ios' && (
           <View style={styles.button}>
