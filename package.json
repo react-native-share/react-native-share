@@ -1,17 +1,33 @@
 {
   "name": "react-native-share",
   "description": "Social share, sending simple data to other apps.",
-  "version": "2.0.0",
+  "version": "3.3.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/react-native-community/react-native-share.git"
   },
+  "main": "index.js",
+  "files": [
+    "android",
+    "components",
+    "ios",
+    "windows",
+    "RNShare.podspec"
+  ],
   "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/runtime": "^7.7.7",
     "@commitlint/cli": "8.1.0",
     "@commitlint/config-conventional": "8.1.0",
-    "@react-native-community/eslint-config": "0.0.5",
+    "@react-native-community/eslint-config": "^0.0.6",
+    "@react-native-community/eslint-plugin": "^1.0.0",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/github": "^7.0.4",
+    "@semantic-release/npm": "^7.0.4",
+    "@semantic-release/release-notes-generator": "^9.0.1",
     "babel-eslint": "10.0.2",
-    "eslint": "6.1.0",
+    "eslint": "^6.8.0",
     "eslint-plugin-flowtype": "4.2.0",
     "eslint-plugin-import": "2.18.2",
     "eslint-plugin-prettier": "3.1.0",
@@ -22,11 +38,13 @@
     "husky": "3.0.3",
     "idx": "2.5.6",
     "lint-staged": "9.2.1",
-    "minimist": "1.2.0",
+    "metro-react-native-babel-preset": "^0.56.4",
+    "minimist": "1.2.3",
     "pre-commit": "1.2.2",
     "prettier": "^1.18.2",
     "react": "16.9.0",
-    "react-native": "0.60.5",
+    "react-native": "0.61.5",
+    "semantic-release": "^17.0.4",
     "simple-git": "1.124.0"
   },
   "keywords": [
@@ -54,7 +72,7 @@
   "pre-commit": "lint:staged",
   "readmeFilename": "README.md",
   "scripts": {
-    "dev-sync": "cp -r *podspec android ios example/node_modules/react-native-share/",
+    "dev-sync": "cp -r *podspec *.js android ios example/node_modules/react-native-share/",
     "lint": "eslint index.js --max-warnings=0",
     "lint:staged": "lint-staged",
     "release:major": "node ./changelog --major && npm version major && git push origin && git push origin --follow-tags",
@@ -64,11 +82,38 @@
     "validate": "yarn validate:prettier && yarn validate:lint && yarn validate:flow",
     "validate:flow": "yarn flow",
     "validate:lint": "eslint *js components/*.js --max-warnings=0",
-    "validate:prettier": "prettier --write *.js components/*.js"
+    "validate:prettier": "prettier --write *.js components/*.js",
+    "ci:publish": "npx semantic-release"
   },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
     }
+  },
+  "release": {
+    "branches": [
+      "master"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      [
+        "@semantic-release/github",
+        {
+          "assets": [
+            "package.json"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ],
+      [
+        "@semantic-release/git",
+        {
+          "assets": "package.json",
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ]
+    ]
   }
 }

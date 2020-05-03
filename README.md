@@ -1,4 +1,4 @@
-﻿# react-native-share [![CircleCI](https://circleci.com/gh/react-native-community/react-native-share/tree/master.svg?style=svg&circle-token=0c6860240abba4e16bd07df0ea805a72b67b8d41)](https://circleci.com/gh/react-native-community/react-native-share/tree/master) [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
+# react-native-share [![CircleCI](https://circleci.com/gh/react-native-community/react-native-share/tree/master.svg?style=svg&circle-token=0c6860240abba4e16bd07df0ea805a72b67b8d41)](https://circleci.com/gh/react-native-community/react-native-share/tree/master) [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
 React Native Share, a simple tool for share message and file to other apps.
 
 # Sponsors
@@ -17,20 +17,25 @@ This gives you the power to prioritize our work and support the project contribu
 
 ## Automatic Way
 ---
-``` 
+```
 yarn add react-native-share
 ```
 
 or if you're using npm
-``` 
+```
 npm install react-native-share --save
 ```
 ---
 
+#### Requirements:
+
+1. Xcode 11 or higher
+2. iOS 13 SDK or higher
+
 #### Important:
 Linking is not needed anymore. ``react-native@0.60.0+`` supports dependencies auto linking.
 For iOS you also need additional step to install auto linked Pods (Cocoapods should be installed):
-``` 
+```
 cd ios && pod install && cd ../
 ```
 ___
@@ -42,23 +47,29 @@ After installing jetifier, runs a ```npx jetify -r``` and test if this works by 
 ## Automatic Way
 
 ---
-``` 
+```
 yarn add react-native-share
-react-native link react-native-share
+react-native link react-native-share # not needed for react-native >= 0.60.0
 ```
 
 or if you're using npm
-``` 
+```
 npm install react-native-share --save
-react-native link react-native-share
+react-native link react-native-share # not needed for react-native >= 0.60.0
 ```
 ---
 
-We recommend using the releases from npm, however you can use the master branch if you need any feature that is not available on NPM. By doing this you will be able to use unreleased features, but the module may be less stable. 
-**yarn**: 
-``` 
+We recommend using the releases from npm, however you can use the master branch if you need any feature that is not available on NPM. By doing this you will be able to use unreleased features, but the module may be less stable.
+**yarn**:
+```
 yarn add react-native-share@git+https://git@github.com/react-native-community/react-native-share.git
 ```
+---
+
+#### LSApplicationQueriesSchemes on iOS
+Remember to add `instagram`, `facebook` or whatever queries schemes you need to LSApplicationQueriesSchemes
+field in your Info.plist. This is required to share content directly to other apps like Instagram, Facebook etc.
+Values for queries schemes can be found in `Social` field of `RNShare` class.
 
 
 
@@ -72,8 +83,8 @@ yarn add react-native-share@git+https://git@github.com/react-native-community/re
 3. Go to `node_modules` ➜ `react-native-share` ➜ `ios` and add `RNShare.xcodeproj`
 4. In XCode, in the project navigator, select your project. Add `libRNShare.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 5. In XCode, in the project navigator, select your project. Add `Social.framework` and `MessageUI.framework` to your project's `General` ➜ `Linked Frameworks and Libraries`
-6. In iOS 9 or higher, You should add app list that you will share.
-If you want to share Whatsapp and Mailto, you should write `LSApplicationQueriesSchemes` in info.plist  
+6. In iOS 9 or higher, you should add app list that you will share.
+If you want to share Whatsapp and Mailto, you should write `LSApplicationQueriesSchemes` in info.plist
     ```xml
     <key>LSApplicationQueriesSchemes</key>
     <array>
@@ -88,7 +99,7 @@ If you want to share Whatsapp and Mailto, you should write `LSApplicationQueries
     ```
 8. Run your project (`Cmd+R`)
 
-### iOS Install(using Pods)
+### iOS Install (using Pods)
 
 
 If you wish, you can use [cocopoads](https://cocoapods.org/) to use react-native-share.
@@ -100,7 +111,7 @@ You just need to add to your Podfile the react-native-share dependency.
   pod 'RNShare', :path => '../node_modules/react-native-share'
 ```
 
-After that, just run a `pod install` or `pod udpate` to get up and running with react-native-share. 
+After that, just run a `pod install` or `pod udpate` to get up and running with react-native-share.
 
 Then run a `react-native link react-native-share`, and doing the steps 6 and 7.
 
@@ -126,7 +137,7 @@ Btw, We also recommend reading this [amazing article](https://shift.infinite.red
    `android/app/build.gradle`:
 
     ```
-      compile project(':react-native-share')
+      implementation project(':react-native-share')
     ```
 5. **(Optional)** [Follow this for implementing Provider](#adding-your-implementation-of-fileprovider)
 
@@ -166,7 +177,7 @@ Supported options:
 
 | Name  | Type     | Description |
 | :---- | :------: | :--- |
-| url | string   | URL you want to share (only support base64 string in iOS & Android ). |
+| url | string   | URL you want to share (only support base64 string in iOS & Android). |
 | urls | Array[string]   | array of base64 string you want to share (only support iOS & Android). |
 | type | string   | File mime type (optional) |
 | message | string   |  |
@@ -177,22 +188,144 @@ Supported options:
 | failOnCancel | boolean | (defaults to true) Specifies whether promise should reject if user cancels share dialog (optional) |
 | showAppsToView | boolean | (optional) only android|
 | filename | string | only support base64 string in Android|
+| saveToFiles | boolean | Open only `Files` app (optional, supports only urls (base64 string or path), requires iOS 11 or later)|
+| filenames | Array[string] | array of filename for base64 urls array in Android|
+| activityItemSources | Array[Object] | (optional) Array of activity item sources (iOS only). Each items should conform to [ActivityItemSource](#activityitemsource) type. See [below](#provide-data-to-share-by-using-activityitemsources-in-ios). |
 
 #### Url format when sharing a file
 
-***Share base 64 file
+***Share base 64 file***
 
 When share a base 64 file, please follow the format below:
 ```
 url: "data:<data_type>/<file_extension>;base64,<base64_data>"
 ```
 
-***Share file directly
+***Share file directly***
 
 When share a local file directly, please follow the format below:
 ```
 url: "file://<file_path>",
 ```
+
+#### Provide data to share by using activityItemSources (in iOS)
+
+In order to share different data according to activities or to customize the share sheet, you can provide the data by using `activityItemSources` .
+
+See [here](https://developer.apple.com/documentation/uikit/uiactivityitemsource) for more information about UIActivityItemSource.
+
+##### Example
+
+```jsx
+import { Platform } from 'react-native';
+import Share from 'react-native-share';
+
+const url = 'https://awesome.contents.com/';
+const title = 'Awesome Contents';
+const message = 'Please check this out.';
+const icon = 'data:<data_type>/<file_extension>;base64,<base64_data>';
+const options = Platform.select({
+  ios: {
+    activityItemSources: [
+      { // For sharing url with custom title.
+        placeholderItem: { type: 'url', content: url },
+        item: {
+          default: { type: 'url', content: url },
+        },
+        subject: {
+          default: title,
+        },
+        linkMetadata: { originalUrl: url, url, title },
+      },
+      { // For sharing text.
+        placeholderItem: { type: 'text', content: message },
+        item: {
+          default: { type: 'text', content: message },
+          message: null, // Specify no text to share via Messages app.
+        },
+        linkMetadata: { // For showing app icon on share preview.
+           title: message
+        },
+      },
+      { // For using custom icon instead of default text icon at share preview when sharing with message.
+        placeholderItem: {
+          type: 'url',
+          content: icon
+        },
+        item: {
+          default: {
+            type: 'text',
+            content: `${message} ${url}`
+          },
+        },
+        linkMetadata: {
+           title: message,
+           icon: icon
+        }
+      },
+    ],
+  },
+  default: {
+    title,
+    subject: title,
+    message: `${message} ${url}`,
+  },
+});
+
+Share.open(options);
+```
+
+##### ActivityItemSource
+
+| Name | Type | Description |
+| :--- | :--: | :---------- |
+| placeholderItem | Object | An object to use as a placeholder for the actual data. This should comform to [ActivityItem](#activityitem) type. |
+| item | Object | An object that contains the final data object to be acted on for each [activity types](#activitytype). This should be `{ [ActivityType]: ?ActivityItem }` . |
+| subject | Object | (optional) An object that contains a string to use as the contents of the subject field for each [activity types](#activitytype).  This should be `{ [ActivityType]: string }` . |
+| dataTypeIdentifier | Object | (optional) An object that contains the UTI for the item for each [activity types](#activitytype). This should be `{ [ActivityType]: string }` . See [here](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/understanding_utis/understand_utis_intro/understand_utis_intro.html) for more information. |
+| thumbnailImage | Object | (optional) An object that contains the URL to the image to use as a preview for the item for each [activity types](#activitytype). This should be `{ [ActivityType]: string }` . The URL should begin with `data:` and contain the data as base 64 encoded string. |
+| linkMetadata | Object | (optional) An object that contains the metadata about a URL, including its title, icon, images, and video. See [LinkMetadata](#linkmetadata). |
+
+##### ActivityType
+
+- `addToReadingList`
+- `airDrop`
+- `assignToContact`
+- `copyToPasteBoard`
+- `mail`
+- `message`
+- `openInIBooks` (iOS 9+)
+- `postToFacebook`
+- `postToFlickr`
+- `postToTencentWeibo`
+- `postToTwitter`
+- `postToVimeo`
+- `postToWeibo`
+- `print`
+- `saveToCameraRoll`
+- `markupAsPDF` (iOS 11+)
+
+Also you can use `default` in order to specify default behavior.
+
+##### ActivityItem
+
+| Name | Type | Description |
+| :--- | :--: | :---------- |
+| type | `text` \| `url` | Type of the content. |
+| content | string | Text or URL to share. You can specify image with URL that begins with `data` and contains the data as base 64 encoded string. |
+
+##### LinkMetadata
+
+| Name | Type | Description |
+| :--- | :--: | :---------- |
+| originalUrl | string | (optional) The original URL of the metadata request. |
+| url | string | (optional) The URL that returns the metadata, taking server-side redirects into account. |
+| title | string | (optional) A representative title for the URL. |
+| icon | string | (optional) A URL of the file corresponding to a representative icon for the URL. |
+| image | string | (optional) A URL of the file corresponding to a representative image for the URL. |
+| remoteVideoUrl | string | (optional) A remote URL corresponding to a representative video for the URL. |
+| video | string | (optional) A URL of the file corresponding to a representative video for the URL. |
+
 
 ---
 ### shareSingle(options) (in iOS & Android)
@@ -218,7 +351,7 @@ Supported options:
 
 ---
 ### isPackageInstalled(<app>) (in Android)
-It's a method that checks if an app (package) is installed on Android. 
+It's a method that checks if an app (package) is installed on Android.
 It returns a promise with `isInstalled`. e.g.
 
 Checking if Instagram is installed on Android.
@@ -242,8 +375,8 @@ const shareOptions = {
     message: 'some message',
     url: 'some share url',
     social: Share.Social.WHATSAPP,
-    whatsAppNumber: "9199999999"  // country code + phone number(currently only works on Android)
-    filename: 'test' , // only for base64 file in Android 
+    whatsAppNumber: "9199999999",  // country code + phone number
+    filename: 'test' , // only for base64 file in Android
 };
 Share.shareSingle(shareOptions);
 ```
@@ -251,9 +384,11 @@ Share.shareSingle(shareOptions);
 | Name  | Android     | iOS | Windows |
 | :---- | :------: | :--- | :---
 | **FACEBOOK** | yes   | yes | no |
+| **FACEBOOK_STORIES** | no   | yes | no |
 | **PAGESMANAGER** | yes   | no | no |
 | **WHATSAPP** | yes   | yes | no |
 | **INSTAGRAM** | yes   | yes | no |
+| **INSTAGRAM_STORIES** | no   | yes | no |
 | **GOOGLEPLUS** | yes   | yes | no |
 | **EMAIL** | yes   | yes | no |
 | **PINTEREST** | yes   | no | no |
@@ -272,6 +407,28 @@ Share.shareSingle(shareOptions);
 ---
 # Troubleshooting
 ---
+
+#### Language Support (iOS)
+
+On iOS, share component reads language value from CFBundleDevelopmentRegion at Info.plist file. By changing CFBundleDevelopmentRegion value you can change default language for component.
+
+```XML
+<key>CFBundleDevelopmentRegion</key>
+<string>en</string>
+```
+For supporting multi language, you can add CFBundleAllowMixedLocalizations key to Info.plist.
+
+```XML
+<key>CFBundleAllowMixedLocalizations</key>
+<string>true</string>
+```
+
+#### LinkPresentation.h file not found
+
+1. Check iOS SDK version running this command: `xcodebuild -showsdks`
+2. If your SDK is 12 or lower you need to update to Xcode 11 with iOS SDK 13
+3. Build the app with Xcode 11 and everything works ok
+
 #### Share Remote PDF File with Gmail & WhatsApp (iOS)
 
 When sharing a pdf file with base64, there are two current problems.
@@ -333,11 +490,86 @@ static sharePDFWithAndroid(fileUrl, type) {
     });
 }
 ```
+#### Static Values for Instagram Stories
+
+These can be assessed using Share.Social property
+For eg.
+```javascript
+import Share from 'react-native-share';
+
+const shareOptions = {
+    method: Share.InstagramStories.SHARE_BACKGROUND_AND_STICKER_IMAGE,
+    backgroundImage: 'http://urlto.png',
+    stickerImage: 'data:image/png;base64,<imageInBase64>', //or you can use "data:" link
+    backgroundBottomColor: '#fefefe',
+    backgroundTopColor: '#906df4',
+    attributionURL: 'http://deep-link-to-app', //in beta
+    social: Share.Social.INSTAGRAM_STORIES
+};
+Share.shareSingle(shareOptions);
+```
+
+Supported options for INSTAGRAM_STORIES:
+
+| Name  | Type     | Description |
+| :---- | :------: | :--- |
+| backgroundImage | string   | URL you want to share |
+| stickerImage | string   | URL you want to share |
+| method | string   | [List](#instagram-stories-method-list) |
+| backgroundBottomColor | string   |  (optional) default #837DF4 |
+| backgroundTopColor | string   | (optional) default #906df4 |
+| attributionURL | string   | (optional) facebook beta-test |
+
+#### Instagram stories method list
+| Name  | Required options    |
+| :---- | :------: |
+| **SHARE_BACKGROUND_IMAGE** | backgroundImage   |
+| **SHARE_STICKER_IMAGE** | stickerImage   |
+| **SHARE_BACKGROUND_AND_STICKER_IMAGE** | backgroundImage, stickerImage   |
+
+### Static Values for Facebook Stories
+These can be assessed using Share.Social property
+For eg.
+```javascript
+import Share from 'react-native-share';
+
+const shareOptions = {
+    method: Share.FacebookStories.SHARE_BACKGROUND_AND_STICKER_IMAGE,
+    backgroundImage: 'http://urlto.png', // url or an base64 string
+    stickerImage: 'data:image/png;base64,<imageInBase64>', //or you can use "data:" url
+    backgroundBottomColor: '#fefefe',
+    backgroundTopColor: '#906df4',
+    attributionURL: 'http://deep-link-to-app', //in beta
+    appId: '219376304', //facebook appId
+    social: Share.Social.FACEBOOK_STORIES
+};
+Share.shareSingle(shareOptions);
+```
+
+Supported options for FACEBOOK_STORIES:
+
+| Name  | Type     | Description |
+| :---- | :------: | :--- |
+| appId | string   | (required) facebook appId |
+| backgroundImage | string   | URL you want to share |
+| stickerImage | string   | URL you want to share |
+| method | string   | [List](#instagram-stories-method-list) |
+| backgroundBottomColor | string   |  (optional) default #837DF4 |
+| backgroundTopColor | string   | (optional) default #906df4 |
+| attributionURL | string   | (optional) facebook beta-test |
+
+### Facebook stories method list
+| Name  | Required options    |
+| :---- | :------: |
+| **SHARE_BACKGROUND_IMAGE** | backgroundImage   |
+| **SHARE_STICKER_IMAGE** | stickerImage   |
+| **SHARE_BACKGROUND_AND_STICKER_IMAGE** | backgroundImage, stickerImage   |
+
 
 #### Adding your implementation of FileProvider
 
 [Android guide](https://developer.android.com/training/secure-file-sharing/setup-sharing.html).
-   
+
 - `applicationId` should be defined in the `defaultConfig` section in your `android/app/build.gradle`:
 
 - File: `android/app/build.gradle`
@@ -348,7 +580,7 @@ static sharePDFWithAndroid(fileUrl, type) {
         ...
     }
     ```
-    
+
 - Add this `<provider>` section to your `AndroidManifest.xml`
 
     File: `AndroidManifest.xml`
@@ -367,10 +599,10 @@ static sharePDFWithAndroid(fileUrl, type) {
     ```
 
 - Create a `filepaths.xml` under this directory:
-`android/app/src/main/res/xml`. 
+`android/app/src/main/res/xml`.
 
     In this file, add the following contents:
-    
+
     File: `android/app/src/main/res/xml/filepaths.xml`
     ```xml
     <?xml version="1.0" encoding="utf-8"?>
@@ -386,7 +618,7 @@ static sharePDFWithAndroid(fileUrl, type) {
     ```java
     import cl.json.ShareApplication
     public class MainApplication extends Application implements ShareApplication, ReactApplication {
-    
+
          @Override
          public String getFileProviderAuthority() {
                 return BuildConfig.APPLICATION_ID + ".provider";

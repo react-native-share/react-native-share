@@ -5,10 +5,10 @@ package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 Pod::Spec.new do |s|
   s.name         = "RNShare"
   s.version      = package["version"]
-  s.summary      = "Social Share, Sending Simple Data to Other Apps"
-  s.homepage     = "https://github.com/react-native-community/react-native-share"
-  s.license      = "MIT"
-  s.author             = { "Esteban Fuentealba" => "efuentealba@json.cl" }
+  s.summary      = package["description"]
+  s.homepage     = package["homepage"]
+  s.license      = package["license"]
+  s.author       = { package["author"]["name"] => package["author"]["email"] }
   s.platform     = :ios, "8.0"
   s.source       = { :git => "https://github.com/react-native-community/react-native-share.git", :tag => "v#{s.version}" }
 

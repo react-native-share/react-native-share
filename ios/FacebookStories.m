@@ -1,9 +1,10 @@
 //
-//  InstagramStories.m
+//  FacebookStories.m
 //  RNShare
 //
-//  Created by Nikita Logachev on 13.02.2019.
-//  link: https://github.com/loga4
+//  Created by Quynh Nguyen on 4/13/20.
+//  Link: https://github.com/Quynh-Nguyen
+//  Copyright © 2020 Facebook. All rights reserved.
 //
 
 // import RCTLog
@@ -15,24 +16,24 @@
 #import "React/RCTLog.h"   // Required when used as a Pod in a Swift project
 #endif
 
-#import "InstagramStories.h"
+#import "FacebookStories.h"
 
-@implementation InstagramStories
+@implementation FacebookStories
 RCT_EXPORT_MODULE();
 
-- (void)backgroundImage:(NSData *)backgroundImage attributionURL:(NSString *)attributionURL {
+- (void)backgroundImage:(NSData *)backgroundImage attributionURL:(NSString *)attributionURL appId:(NSString *)appId {
     // Verify app can open custom URL scheme, open if able
 
-    NSURL *urlScheme = [NSURL URLWithString:@"instagram-stories://share"];
+    NSURL *urlScheme = [NSURL URLWithString:@"facebook-stories://share"];
     if ([[UIApplication sharedApplication] canOpenURL:urlScheme]) {
         // Assign background image asset and attribution link URL to pasteboard
-        NSArray *pasteboardItems = @[@{@"com.instagram.sharedSticker.backgroundImage" : backgroundImage, @"com.instagram.sharedSticker.contentURL" : attributionURL}];
+        NSArray *pasteboardItems = @[@{@"com.facebook.sharedSticker.backgroundImage" : backgroundImage, @"com.facebook.sharedSticker.contentURL" : attributionURL, @"com.facebook.sharedSticker.appID" : appId}];
         NSDictionary *pasteboardOptions = @{UIPasteboardOptionExpirationDate : [[NSDate date] dateByAddingTimeInterval:60 * 5]};
         // This call is iOS 10+, can use 'setItems' depending on what versions you support
         [[UIPasteboard generalPasteboard] setItems:pasteboardItems options:pasteboardOptions];
         [[UIApplication sharedApplication] openURL:urlScheme options:@{} completionHandler:nil];
     } else { // Handle older app versions or app not installed case
-        [self fallbackInstagram];
+        [self fallbackFacebook];
     }
 }
 
@@ -40,16 +41,17 @@ RCT_EXPORT_MODULE();
   backgroundTopColor:(NSString *)backgroundTopColor
 backgroundBottomColor:(NSString *)backgroundBottomColor
       attributionURL:(NSString *)attributionURL
+      appId:(NSString *)appId
 {
     // Verify app can open custom URL scheme. If able,
     // assign assets to pasteboard, open scheme.
 
-    NSURL *urlScheme = [NSURL URLWithString:@"instagram-stories://share"];
+    NSURL *urlScheme = [NSURL URLWithString:@"facebook-stories://share"];
     if ([[UIApplication sharedApplication] canOpenURL:urlScheme]) {
 
         // Assign sticker image asset and attribution link URL to pasteboard
 
-        NSArray *pasteboardItems = @[@{@"com.instagram.sharedSticker.stickerImage" : stickerImage, @"com.instagram.sharedSticker.backgroundTopColor" : backgroundTopColor, @"com.instagram.sharedSticker.backgroundBottomColor" : backgroundBottomColor, @"com.instagram.sharedSticker.contentURL" : attributionURL}];
+        NSArray *pasteboardItems = @[@{@"com.facebook.sharedSticker.stickerImage" : stickerImage, @"com.facebook.sharedSticker.backgroundTopColor" : backgroundTopColor, @"com.facebook.sharedSticker.backgroundBottomColor" : backgroundBottomColor, @"com.facebook.sharedSticker.contentURL" : attributionURL, @"com.facebook.sharedSticker.appID" : appId}];
 
         NSDictionary *pasteboardOptions = @{UIPasteboardOptionExpirationDate : [[NSDate date] dateByAddingTimeInterval:60 * 5]};
 
@@ -59,26 +61,26 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
         [[UIApplication sharedApplication] openURL:urlScheme options:@{} completionHandler:nil];
 
     } else { // Handle older app versions or app not installed case
-        [self fallbackInstagram];
+        [self fallbackFacebook];
     }
 }
 
-- (void)backgroundImage:(NSData *)backgroundImage stickerImage:(NSData *)stickerImage attributionURL:(NSString *)attributionURL
+- (void)backgroundImage:(NSData *)backgroundImage stickerImage:(NSData *)stickerImage attributionURL:(NSString *)attributionURL  appId:(NSString *)appId
 {
     // Verify app can open custom URL scheme. If able,
     // assign assets to pasteboard, open scheme.
-    NSURL *urlScheme = [NSURL URLWithString:@"instagram-stories://share"];
+    NSURL *urlScheme = [NSURL URLWithString:@"facebook-stories://share"];
     if ([[UIApplication sharedApplication] canOpenURL:urlScheme]) {
         // Assign background and sticker image assets and
         // attribution link URL to pasteboard
-        NSArray *pasteboardItems = @[@{@"com.instagram.sharedSticker.backgroundImage" : backgroundImage, @"com.instagram.sharedSticker.stickerImage" : stickerImage, @"com.instagram.sharedSticker.contentURL" : attributionURL}];
+        NSArray *pasteboardItems = @[@{@"com.facebook.sharedSticker.backgroundImage" : backgroundImage, @"com.facebook.sharedSticker.stickerImage" : stickerImage, @"com.facebook.sharedSticker.contentURL" : attributionURL, @"com.facebook.sharedSticker.appID" : appId}];
         NSDictionary *pasteboardOptions = @{UIPasteboardOptionExpirationDate : [[NSDate date] dateByAddingTimeInterval:60 * 5]};
         // This call is iOS 10+, can use 'setItems' depending on what versions you support
         [[UIPasteboard generalPasteboard] setItems:pasteboardItems options:pasteboardOptions];
         [[UIApplication sharedApplication] openURL:urlScheme options:@{} completionHandler:nil];
 
     } else { // Handle older app versions or app not installed case
-        [self fallbackInstagram];
+        [self fallbackFacebook];
     }
 }
 
@@ -92,6 +94,8 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
         attrURL = @"";
     }
 
+    NSString *appId = [RCTConvert NSString:options[@"appId"]];
+
     NSString *method = [RCTConvert NSString:options[@"method"]];
     if (method) {
         if([method isEqualToString:@"shareBackgroundImage"]) {
@@ -102,7 +106,7 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
             } else {
                 UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:URL]];
 
-                [self backgroundImage:UIImagePNGRepresentation(image) attributionURL:attrURL];
+                [self backgroundImage:UIImagePNGRepresentation(image) attributionURL:attrURL appId:appId];
             }
         } else if([method isEqualToString:@"shareStickerImage"]) {
             RCTLog(@"method shareStickerImage");
@@ -122,7 +126,7 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
             } else {
                 UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:URL]];
 
-                [self stickerImage:UIImagePNGRepresentation(image) backgroundTopColor:backgroundTopColor backgroundBottomColor:backgroundBottomColor attributionURL:attrURL];
+                [self stickerImage:UIImagePNGRepresentation(image) backgroundTopColor:backgroundTopColor backgroundBottomColor:backgroundBottomColor attributionURL:attrURL appId:appId];
             }
         } else if([method isEqualToString:@"shareBackgroundAndStickerImage"]) {
             RCTLog(@"method shareBackgroundAndStickerImage");
@@ -136,7 +140,7 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
                 UIImage *backgroundImage = [UIImage imageWithData: [NSData dataWithContentsOfURL:backgroundURL]];
                 UIImage *stickerImage = [UIImage imageWithData: [NSData dataWithContentsOfURL:sticketURL]];
 
-                [self backgroundImage:UIImagePNGRepresentation(backgroundImage) stickerImage:UIImagePNGRepresentation(stickerImage) attributionURL:attrURL];
+                [self backgroundImage:UIImagePNGRepresentation(backgroundImage) stickerImage:UIImagePNGRepresentation(stickerImage) attributionURL:attrURL appId:appId];
             }
         }
     } else {
@@ -144,9 +148,9 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
     }
 }
 
-- (void)fallbackInstagram {
-    // Cannot open instagram
-    NSString *stringURL = @"http://itunes.apple.com/app/instagram/id389801252";
+- (void)fallbackFacebook {
+    // Cannot open facebook
+    NSString *stringURL = @"http://itunes.apple.com/app/facebook/id284882215";
     NSURL *url = [NSURL URLWithString:stringURL];
     [[UIApplication sharedApplication] openURL:url];
 
@@ -156,5 +160,4 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
 
     NSLog(errorMessage);
 }
-// https://instagram.fhrk1-1.fna.fbcdn.net/vp/80c479ffc246a9320e614fa4def6a3dc/5C667D3F/t51.12442-15/e35/50679864_1663709050595244_6964601913751831460_n.jpg?_nc_ht=instagram.fhrk1-1.fna.fbcdn.net
 @end

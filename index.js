@@ -91,17 +91,60 @@ type Options = {
   excludedActivityTypes?: string,
   failOnCancel?: boolean,
   showAppsToView?: boolean,
+  saveToFiles?: boolean,
+  appId: string,
 };
 type MultipleOptions = {
   url?: string,
-  urls: Array<string>,
+  urls?: Array<string>,
   type?: string,
   message?: string,
   title?: string,
   subject?: string,
+  activityItemSources?: Array<ActivityItemSource>,
   excludedActivityTypes?: string,
   failOnCancel?: boolean,
   showAppsToView?: boolean,
+  saveToFiles?: boolean,
+};
+
+type ActivityType =
+  | 'addToReadingList'
+  | 'airDrop'
+  | 'assignToContact'
+  | 'copyToPasteBoard'
+  | 'mail'
+  | 'message'
+  | 'openInIBooks' // iOS 9 or later
+  | 'postToFacebook'
+  | 'postToFlickr'
+  | 'postToTencentWeibo'
+  | 'postToTwitter'
+  | 'postToVimeo'
+  | 'postToWeibo'
+  | 'print'
+  | 'saveToCameraRoll'
+  | 'markupAsPDF'; // iOS 11 or later
+
+type ActivityItem = { type: 'text' | 'url', content: string };
+
+type LinkMetadata = {
+  originalUrl?: string,
+  url?: string,
+  title?: string,
+  icon?: string,
+  image?: string,
+  remoteVideoUrl?: string,
+  video?: string,
+};
+
+type ActivityItemSource = {
+  placeholderItem: ActivityItem,
+  item: { [ActivityType | string]: ?ActivityItem },
+  subject?: { [ActivityType | string]: string },
+  dataTypeIdentifier?: { [ActivityType | string]: string },
+  thumbnailImage?: { [ActivityType | string]: string },
+  linkMetadata?: LinkMetadata,
 };
 
 type OpenReturn = { app?: string, dismissedAction?: boolean };
@@ -109,7 +152,7 @@ type ShareSingleReturn = { message: string, isInstalled?: boolean };
 
 const requireAndAskPermissions = async (options: Options | MultipleOptions): Promise<any> => {
   if ((options.url || options.urls) && Platform.OS === 'android') {
-    const urls: Array<string> = options.urls || [options.url];
+    const urls: Array<string> = options.urls || (options.url ? [options.url] : []);
     try {
       const resultArr = await Promise.all(
         urls.map(
@@ -159,26 +202,47 @@ class RNShare {
   static Sheet: any;
   static Social = {
     FACEBOOK: NativeModules.RNShare.FACEBOOK || 'facebook',
+    FACEBOOK_STORIES: NativeModules.RNShare.FACEBOOK_STORIES || 'facebook-stories',
     PAGESMANAGER: NativeModules.RNShare.PAGESMANAGER || 'pagesmanager',
     TWITTER: NativeModules.RNShare.TWITTER || 'twitter',
     WHATSAPP: NativeModules.RNShare.WHATSAPP || 'whatsapp',
     INSTAGRAM: NativeModules.RNShare.INSTAGRAM || 'instagram',
+    INSTAGRAM_STORIES: NativeModules.RNShare.INSTAGRAM_STORIES || 'instagram-stories',
     GOOGLEPLUS: NativeModules.RNShare.GOOGLEPLUS || 'googleplus',
     EMAIL: NativeModules.RNShare.EMAIL || 'email',
     PINTEREST: NativeModules.RNShare.PINTEREST || 'pinterest',
     LINKEDIN: NativeModules.RNShare.LINKEDIN || 'linkedin',
   };
 
+  static InstagramStories = {
+    SHARE_BACKGROUND_IMAGE: NativeModules.RNShare.SHARE_BACKGROUND_IMAGE || 'shareBackgroundImage',
+    SHARE_STICKER_IMAGE: NativeModules.RNShare.SHARE_STICKER_IMAGE || 'shareStickerImage',
+    SHARE_BACKGROUND_AND_STICKER_IMAGE:
+      NativeModules.RNShare.SHARE_BACKGROUND_AND_STICKER_IMAGE || 'shareBackgroundAndStickerImage',
+  };
+
+  static FacebookStories = {
+    SHARE_BACKGROUND_IMAGE: NativeModules.RNShare.SHARE_BACKGROUND_IMAGE || 'shareBackgroundImage',
+    SHARE_STICKER_IMAGE: NativeModules.RNShare.SHARE_STICKER_IMAGE || 'shareStickerImage',
+    SHARE_BACKGROUND_AND_STICKER_IMAGE:
+      NativeModules.RNShare.SHARE_BACKGROUND_AND_STICKER_IMAGE || 'shareBackgroundAndStickerImage',
+  };
+
   static open(options: Options | MultipleOptions): Promise<OpenReturn> {
     return new Promise((resolve, reject) => {
       requireAndAskPermissions(options)
         .then(() => {
-          if (options.url && !options.urls) {
+          if (Platform.OS === 'ios' && options.url && !options.urls) {
             // Backward compatibility with { Share } from react-native
             const url = options.url;
             delete options.url;
 
             options.urls = [url];
+
+            if (options.filename && !options.filenames) {
+              options.filenames = [options.filename];
+              delete options.filename;
+            }
           }
 
           NativeModules.RNShare.open(

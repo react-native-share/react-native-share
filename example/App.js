@@ -7,7 +7,6 @@
  */
 
 import React, {useState} from 'react';
-
 import {
   Alert,
   Button,
@@ -18,15 +17,12 @@ import {
   View,
 } from 'react-native';
 
-// eslint-disable-next-line import/default
 import Share from 'react-native-share';
 
 import images from './images/imagesBase64';
 
 const App = () => {
-  // eslint-disable-next-line no-undef
   const [packageSearch, setPackageSearch] = useState<string>('');
-  // eslint-disable-next-line no-undef
   const [result, setResult] = useState<string>('');
 
   /**
@@ -119,6 +115,78 @@ const App = () => {
     }
   };
 
+  /**
+   * This function shares PDF and PNG files to
+   * the Files app that you send as the urls param
+   */
+  const shareToFiles = async () => {
+    const shareOptions = {
+      title: 'Share file',
+      failOnCancel: false,
+      saveToFiles: true,
+      urls: [images.image1, images.pdf1], // base64 with mimeType or path to local file
+    };
+
+    // If you want, you can use a try catch, to parse
+    // the share response. If the user cancels, etc.
+    try {
+      const ShareResponse = await Share.open(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
+
+  // SNAPCHAT EXAMPLE
+  import RNFetchBlob from 'rn-fetch-blob'
+  shareToSnapchat = async (
+    mediaUrl = "https://sample-videos.com/video123/mp4/480/big_buck_bunny_480p_1mb.mp4",
+  ) => {
+    try {
+      RNFetchBlob.config({
+        fileCache : true,
+        appendExt : 'mp4'
+      }).fetch('GET', mediaUrl, {})
+      .then((res) => {
+        let shareOptions = {
+          title: "SNAP TEXT CONTENT",
+          url: 'file://' + res.path(),
+          type: 'video/mp4', // change type here accordingly
+          attachmentUrl: 'https://snapchat.com',
+          social: Share.Social.SNAPCHAT,
+        }
+        Share.shareSingle(shareOptions)
+          .then((res) => {
+            // returns undefined
+            console.log('res:', res)
+          })
+          .catch((err) => console.log('err', err))
+        });
+    } catch(e) {
+      console.warn(e)
+    }
+  };
+
+
+  const shareToInstagramStory = async () => {
+    const shareOptions = {
+      title: 'Share image to instastory',
+      method: Share.InstagramStories.SHARE_BACKGROUND_IMAGE,
+      backgroundImage: images.image1,
+      social: Share.Social.INSTAGRAM_STORIES,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>Welcome to React Native Share Example!</Text>
@@ -132,6 +200,14 @@ const App = () => {
         <View style={styles.button}>
           <Button onPress={shareEmailImage} title="Share Social: Email" />
         </View>
+        <View style={styles.button}>
+          <Button onPress={shareToInstagramStory} title="Share to IG Story" />
+        </View>
+        {Platform.OS === 'ios' && (
+          <View style={styles.button}>
+            <Button onPress={shareToFiles} title="Share To Files" />
+          </View>
+        )}
         {Platform.OS === 'android' && (
           <View style={styles.searchPackageContainer}>
             <TextInput
@@ -148,7 +224,7 @@ const App = () => {
             </View>
           </View>
         )}
-        <Text style={{marginTop: 20, fontSize: 20}}>Result</Text>
+        <Text style={styles.resultTitle}>Result</Text>
         <Text style={styles.result}>{result}</Text>
       </View>
     </View>
@@ -174,6 +250,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
+  },
+  resultTitle: {
+    marginTop: 20,
+    fontSize: 20,
   },
   result: {
     fontSize: 14,
