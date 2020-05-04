@@ -32,9 +32,9 @@ RCT_EXPORT_MODULE();
 - (void *)shareSingle:(NSDictionary *)options
     failureCallback:(RCTResponseErrorBlock)failureCallback
     successCallback:(RCTResponseSenderBlock)successCallback {
-    
+
     NSLog(@"Try open view");
-    
+
     // #TODO: Check duration (max 10 secs)
     if ([[UIApplication sharedApplication] canOpenURL: [NSURL URLWithString:@"snapchat://"]]) {
         NSLog(@"video");
@@ -50,33 +50,45 @@ RCT_EXPORT_MODULE();
                 NSString*thePath=[[NSBundle mainBundle] pathForResource:@"small" ofType:@"mp4"];
                 NSURL*videoUrl=[NSURL fileURLWithPath:thePath];
                 */
-                 
+
                 SCSDKSnapVideo *video = [[SCSDKSnapVideo alloc] initWithVideoUrl:videoUrl];
                 SCSDKVideoSnapContent *videoContent = [[SCSDKVideoSnapContent alloc] initWithSnapVideo:video];
-                
-               // we use title instead of message because it will get appended to url
-               if ([options objectForKey:@"title"]) {
-                   videoContent.caption = options[@"title"];
-               }
-               if ([options objectForKey:@"attachmentUrl"]) {
-                   videoContent.attachmentUrl = options[@"attachmentUrl"];
-               }
 
-               [_scSdkSnapApi startSendingContent:videoContent completionHandler:^(NSError *error) {
+                // we use title instead of message because it will get appended to url
+                if ([options objectForKey:@"title"]) {
+                   videoContent.caption = options[@"title"];
+                }
+                if ([options objectForKey:@"attachmentUrl"]) {
+                   videoContent.attachmentUrl = options[@"attachmentUrl"];
+                }
+
+                if ([options objectForKey:@"sticker"]) {
+                       NSURL * stickerUrl = [NSURL URLWithString: options[@"sticker"]];
+                       bool isAnimated = [options objectForKey:@"isStickerAnimated"] ?: false;
+                       SCSDKSnapSticker * sticker = [[SCSDKSnapSticker alloc] initWithStickerUrl:stickerUrl isAnimated:isAnimated];
+
+                       // cgfloats, https://docs.snapchat.com/docs/api/ios/ in SCSDKSnapSticker
+                       sticker.posX = 0.5; // half screen
+                       sticker.posY = 0.5; // half screen
+                       sticker.rotation = 3.14; // 0 - 2pi radians
+                       // sticker.height, sticker.width deprecated
+                       videoContent.sticker = sticker;
+                }
+
+                [_scSdkSnapApi startSendingContent:videoContent completionHandler:^(NSError *error) {
                    /* Handle response */
                    if (error) {
                        failureCallback(error);
                    } else {
                        successCallback(@[]);
                    }
-               }];
+                }];
             } @catch (NSException *exception) {
                 // NSInternalInconsistencyException
                 failureCallback(@"Could not load file");
             }
             @finally {
             }
-
         // send image
         } else if ([options[@"url"] rangeOfString:@"jpg"].location != NSNotFound && ![options objectForKey:@"sticker"]) {
             NSURL * imageUrl = [NSURL URLWithString: options[@"url"]];
@@ -91,7 +103,7 @@ RCT_EXPORT_MODULE();
                 imageContent.attachmentUrl = options[@"attachmentUrl"];
             }
             // snap.sticker = sticker; /* Optional */
-            
+
             [_scSdkSnapApi startSendingContent:imageContent completionHandler:^(NSError *error) {
                 /* Handle response */
                 if (error) {
@@ -133,7 +145,7 @@ RCT_EXPORT_MODULE();
                 }
             }];
         }
-        
+
         // prevent release of the _scSdkSnapApi
         // this could be more elegant
         [NSThread sleepForTimeInterval:2.0f];
@@ -142,11 +154,11 @@ RCT_EXPORT_MODULE();
         NSString *stringURL = @"http://itunes.apple.com/app/snapchat/id447188370";
         NSURL *url = [NSURL URLWithString:stringURL];
         [[UIApplication sharedApplication] openURL:url];
-        
+
         NSString *errorMessage = @"Not installed";
         NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
         NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
-        
+
         failureCallback(error);
     }
 }

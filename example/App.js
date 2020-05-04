@@ -19,8 +19,6 @@ import {
 
 import Share from 'react-native-share';
 
-import RNFetchBlob from 'rn-fetch-blob'
-
 import images from './images/imagesBase64';
 
 const App = () => {
