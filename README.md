@@ -33,10 +33,11 @@ npm install react-native-share --save
 2. iOS 13 SDK or higher
 
 #### Important:
+
 Linking is not needed anymore. ``react-native@0.60.0+`` supports dependencies auto linking.
-For iOS you also need additional step to install auto linked Pods (Cocoapods should be installed):
-```
-cd ios && pod install && cd ../
+For iOS you also need additional step to install auto linked Pods:
+```sh
+npx pod-install
 ```
 ___
 
