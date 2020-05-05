@@ -217,8 +217,12 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
-  - RNShare (3.0.0):
+  - rn-fetch-blob (0.12.0):
+    - React-Core
+  - RNShare (3.3.0):
     - React
+    - SnapSDK/SCSDKCreativeKit
+  - SnapSDK/SCSDKCreativeKit (1.4.4)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -249,12 +253,14 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNShare (from `../node_modules/react-native-share`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
     - boost-for-react-native
+    - SnapSDK
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -305,6 +311,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  rn-fetch-blob:
+    :path: "../node_modules/rn-fetch-blob"
   RNShare:
     :path: "../node_modules/react-native-share"
   Yoga:
@@ -336,7 +344,9 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
-  RNShare: 0e19ddb0bf338b62702ce1d9e001ee14effa68a8
+  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
+  RNShare: 81220b7064eb1f3e074b96de37fd1017bd4c9f57
+  SnapSDK: 9ea8d26ca876b7f1d85fad2f2ec09852f3b156d0
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
 PODFILE CHECKSUM: 79310af6b976c356911a8a833e9b99c3399fdda3

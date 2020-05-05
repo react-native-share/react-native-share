@@ -130,6 +130,19 @@ RCT_EXPORT_MODULE();
             SCSDKNoSnapContent *snap = [[SCSDKNoSnapContent alloc] init];
             // snap.sticker = sticker; /* Optional */
             // we use title instead of message because it will get appended to url
+            if ([options objectForKey:@"sticker"]) {
+                   NSURL * stickerUrl = [NSURL URLWithString: options[@"sticker"]];
+                   bool isAnimated = [options objectForKey:@"isStickerAnimated"] ?: false;
+                   SCSDKSnapSticker * sticker = [[SCSDKSnapSticker alloc] initWithStickerUrl:stickerUrl isAnimated:isAnimated];
+
+                   // cgfloats, https://docs.snapchat.com/docs/api/ios/ in SCSDKSnapSticker
+                   sticker.posX = 0.5; // half screen
+                   sticker.posY = 0.5; // half screen
+                   sticker.rotation = 3.14; // 0 - 2pi radians
+                   // sticker.height, sticker.width deprecated
+                   snap.sticker = sticker;
+            }
+            
             if ([options objectForKey:@"title"]) {
                 snap.caption = options[@"title "];
             }
@@ -148,7 +161,7 @@ RCT_EXPORT_MODULE();
 
         // prevent release of the _scSdkSnapApi
         // this could be more elegant
-        [NSThread sleepForTimeInterval:2.0f];
+        [NSThread sleepForTimeInterval:1.0f];
     } else {
         // Cannot open snapchat
         NSString *stringURL = @"http://itunes.apple.com/app/snapchat/id447188370";
