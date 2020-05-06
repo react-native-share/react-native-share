@@ -42,7 +42,7 @@
     "minimist": "1.2.5",
     "pre-commit": "1.2.2",
     "prettier": "^2.0.5",
-    "react": "16.13.1",
+    "react": "16.11.0",
     "react-native": "0.62.2",
     "semantic-release": "^17.0.4",
     "simple-git": "2.4.0"
