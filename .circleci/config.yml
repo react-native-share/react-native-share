@@ -72,7 +72,11 @@ workflows:
 
   build-lint-app:
     jobs:
-      - install-dependencies
+      - install-dependencies:
+          filters:
+            branches:
+              ignore:
+                - master
       - build-example-app:
           requires:
             - install-dependencies          
