@@ -32,7 +32,6 @@ jobs:
           root: .
           paths:
             - node_modules
-
     
   lint:
     executor: react-native/linux_js
@@ -41,6 +40,14 @@ jobs:
       - run:
           name: Lint
           command: yarn lint
+
+  validate-flow:
+    executor: react-native/linux_js
+    steps:
+      - checkout-attach-workspace
+      - run:
+          name: Lint
+          command: yarn validate:flow
   
   build-example-app:
     executor: react-native/linux_android
@@ -70,6 +77,9 @@ workflows:
           requires:
             - install-dependencies          
       - lint:
+          requires:
+            - install-dependencies
+      - validate-flow:
           requires:
             - install-dependencies
   
