@@ -1,121 +1,95 @@
-version: 2
-executorType: docker
-jobs:
-  install-dependencies:
-    working_directory: ~/app
-    docker:
-      - image: reactnativecommunity/react-native-android
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-npm-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - v1-npm
-      - run:
-          name: Install Dependencies
-          command: yarn install --frozen-lockfile --non-interactive
-      - save_cache:
-          key: v1-npm
-          paths:
-            - node_modules/
-      - save_cache:
-          key: v1-npm-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths:
-            - node_modules/
-      - persist_to_workspace:
-          root: ~/app
-          paths:
-            - node_modules
-  lint:
-    working_directory: ~/app
-    docker:
-      - image: reactnativecommunity/react-native-android
+version: 2.1
+
+orbs:
+  react-native: react-native-community/react-native@4.4.0
+
+commands:
+  checkout-attach-workspace:
+    description: "Checkout and attach workspace"
     steps:
       - checkout
       - attach_workspace:
-          at: ~/app
+            at: .
+
+  dev-sync-files:
+    description: "Copy files from root to example"
+    steps:
+      - checkout-attach-workspace
+      - run:
+          name: "Enter example app"
+          command: cd example && yarn install --frozen-lockfile --non-interactiv
+      - run:
+          name: "Sync files with example app"
+          command: yarn dev-sync
+
+jobs:
+  install-dependencies:
+    executor: react-native/linux_js
+    steps:
+      - checkout-attach-workspace
+      - react-native/yarn_install  
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
+    
+  lint:
+    executor: react-native/linux_js
+    steps:
+      - checkout-attach-workspace
       - run:
           name: Lint
           command: yarn lint
+
+  validate-flow:
+    executor: react-native/linux_js
+    steps:
+      - checkout-attach-workspace
+      - run:
+          name: Flow
+          command: yarn validate:flow
+  
   build-example-app:
-    working_directory: ~/app
-    docker:
-      - image: reactnativecommunity/react-native-android
+    executor: react-native/linux_android
     steps:
-      - checkout
-      - attach_workspace:
-          at: ~/app
-      - restore_cache:
-          keys:
-            - v1-gradle-{{ checksum "android/gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "example/android/gradle/wrapper/gradle-wrapper.properties" }}
-            - v1-gradle-wrapper
-      - restore_cache:
-          keys:
-            - v1-gradle-cache-{{ checksum "android/build.gradle" }}-{{ checksum "example/android/build.gradle" }}
-            - v1-gradle-cache
-      - run:
-          name: Run Gradle Checks on Example App
-          command: |
-            cd android
-            chmod +x ./gradlew
-            ./gradlew clean && ./gradlew && ./gradlew check
-      - store_artifacts:
-          path: android/build/reports
-      - run:
-          name: Install dependencies on the example app
-          command: cd example && yarn install --frozen-lockfile --non-interactive
-      - run:
-          name: Check for errors in the example app using Flow
-          command: |
-            cd example && yarn flow
-      - run:
-          name: Dev Sync #sync code on the current version to the example app
-          command: yarn dev-sync
-      - run:
-          name: Build Sample App
-          command: |
-            cd example/android && chmod +x ./gradlew && ./gradlew build
-      - store_artifacts:
-          path: example/android/app/build/reports
-          destination: app
-      - save_cache:
-          key: v1-gradle-wrapper-{{ checksum "example/android/gradle/wrapper/gradle-wrapper.properties" }}
-          paths:
-            - ~/.gradle/wrapper
-      - save_cache:
-          key: v1-gradle-cache-{{ checksum "example/android/build.gradle" }}
-          paths:
-            - ~/.gradle/caches
+      - checkout-attach-workspace
+      - dev-sync-files
+      - react-native/android_build:
+          project_path: ./example/android
+      
   publish-version:
-    working_directory: ~/app
-    docker:
-      - image: reactnativecommunity/react-native-android
+    executor: react-native/linux_js
     steps:
-      - checkout
+      - checkout-attach-workspace
       - attach_workspace:
           at: ~/app
       - run:
           name: Publish New Version
           command: yarn ci:publish
+
 workflows:
   version: 2
+
   build-lint-app:
     jobs:
       - install-dependencies
+      - build-example-app:
+          requires:
+            - install-dependencies          
       - lint:
           requires:
             - install-dependencies
-          filters:
-            branches:
-              ignore:
-                - master
-      - build-example-app:
-          requires:
-            - lint
-      - publish-version:
+      - validate-flow:
           requires:
             - install-dependencies
+  
+  release:
+    jobs:
+      - install-dependencies:
           filters:
             branches:
               only:
                 - master
+      - publish-version:
+          requires:
+            - install-dependencies
