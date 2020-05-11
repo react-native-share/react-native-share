@@ -42,6 +42,15 @@ jobs:
           name: Lint
           command: yarn lint
   
+  build-example-app:
+    working_directory: ~/app
+    executor: react-native/linux_android
+    steps:
+      - checkout-attach-workspace
+      - dev-sync-files
+      - react-native/android_build:
+          project_path: ./example/android
+      
   publish-version:
     working_directory: ~/app
     executor: react-native/linux_js
@@ -59,6 +68,9 @@ workflows:
   build-lint-app:
     jobs:
       - install-dependencies
+      - build-example-app:
+          requires:
+            - install-dependencies          
       - lint:
           requires:
             - install-dependencies
