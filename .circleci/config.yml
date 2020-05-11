@@ -9,7 +9,7 @@ commands:
     steps:
       - checkout
       - attach_workspace:
-            at: ~/app
+            at: .
 
   dev-sync-files:
     description: "Copy files from root to example"
@@ -28,13 +28,8 @@ jobs:
     steps:
       - checkout-attach-workspace
       - react-native/yarn_install
-      - persist_to_workspace:
-          root: ~/app
-          paths:
-            - node_modules
     
   lint:
-    working_directory: ~/app
     executor: react-native/linux_js
     steps:
       - checkout-attach-workspace
@@ -43,7 +38,6 @@ jobs:
           command: yarn lint
   
   build-example-app:
-    working_directory: ~/app
     executor: react-native/linux_android
     steps:
       - checkout-attach-workspace
@@ -52,7 +46,6 @@ jobs:
           project_path: ./example/android
       
   publish-version:
-    working_directory: ~/app
     executor: react-native/linux_js
     steps:
       - checkout-attach-workspace
