@@ -27,7 +27,12 @@ jobs:
     executor: react-native/linux_js
     steps:
       - checkout-attach-workspace
-      - react-native/yarn_install
+      - react-native/yarn_install  
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
+
     
   lint:
     executor: react-native/linux_js
