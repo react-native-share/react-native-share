@@ -46,7 +46,7 @@ jobs:
     steps:
       - checkout-attach-workspace
       - run:
-          name: Lint
+          name: Flow
           command: yarn validate:flow
   
   build-example-app:
