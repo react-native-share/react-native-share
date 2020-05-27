@@ -1,5 +1,8 @@
 #import "RNShareActivityItemSource.h"
+
+#ifdef __IPHONE_13_0
 #import <LinkPresentation/LinkPresentation.h>
+#endif
 
 // import RCTBridgeModule
 #if __has_include(<React/RCTBridgeModule.h>)
@@ -25,7 +28,9 @@
     NSDictionary *subjectDictionary;
     NSDictionary *dataTypeIdentifierDictionary;
     NSDictionary *thumbnailImageDictionary;
+#ifdef __IPHONE_13_0
     LPLinkMetadata *linkMetadata API_AVAILABLE(ios(13.0));
+#endif
 }
 
 - (instancetype)initWithOptions:(NSDictionary *)options {
@@ -33,6 +38,7 @@
     if (self) {
         placeholderItem = [RNShareActivityItemSource itemFromDictionary:options[@"placeholderItem"]];
 
+#ifdef __IPHONE_13_0
         if (@available(iOS 13.0, *)) {
             linkMetadata = [RNShareActivityItemSource linkMetadataFromDictionary:options[@"linkMetadata"]];
             if ([placeholderItem isKindOfClass:NSURL.class] && ![RNShareActivityItemSource isURLSchemeData:placeholderItem]) {
@@ -40,6 +46,7 @@
                 [self fetchMetadataForURL:URL];
             }
         }
+#endif
 
         itemDictionary = options[@"item"];
         subjectDictionary = options[@"subject"];
@@ -50,6 +57,7 @@
 }
 
 - (void)fetchMetadataForURL:(nonnull NSURL *)URL {
+#ifdef __IPHONE_13_0
     if (@available(iOS 13.0, *)) {
         LPMetadataProvider *metadataProvider = [[LPMetadataProvider alloc] init];
         [metadataProvider startFetchingMetadataForURL:URL completionHandler:^(LPLinkMetadata * _Nullable metadata, NSError * _Nullable error) {
@@ -70,6 +78,7 @@
             }
         }];
     }
+#endif
 }
 
 #pragma mark - Utilities
@@ -103,6 +112,7 @@
     return nil;
 }
 
+#ifdef __IPHONE_13_0
 + (nullable LPLinkMetadata *)linkMetadataFromDictionary:(NSDictionary *)dictionary API_AVAILABLE(ios(13.0)) {
     if (dictionary) {
         LPLinkMetadata *linkMetadata = [[LPLinkMetadata alloc] init];
@@ -126,6 +136,7 @@
     }
     return nil;
 }
+#endif
 
 + (nullable NSString *)keyForActivityType:(UIActivityType)activityType {
     if ([activityType isEqual:UIActivityTypeAddToReadingList]) {
@@ -270,8 +281,10 @@
     return nil;
 }
 
+#ifdef __IPHONE_13_0
 - (LPLinkMetadata *)activityViewControllerLinkMetadata:(UIActivityViewController *)activityViewController API_AVAILABLE(ios(13.0)) {
     return linkMetadata;
 }
+#endif
 
 @end
