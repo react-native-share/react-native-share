@@ -58,6 +58,10 @@ public abstract class SingleShareIntent extends ShareIntent {
         super.open(options);
     }
 
+    protected void openIntentChooser() throws ActivityNotFoundException {
+        this.openIntentChooser(null);
+    }
+
     protected void openIntentChooser(ReadableMap options) throws ActivityNotFoundException {
         if (this.options.hasKey("forceDialog") && this.options.getBoolean("forceDialog")) {
             Activity activity = this.reactContext.getCurrentActivity();
