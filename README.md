@@ -389,7 +389,7 @@ Share.shareSingle(shareOptions);
 | **PAGESMANAGER** | yes   | no | no |
 | **WHATSAPP** | yes   | yes | no |
 | **INSTAGRAM** | yes   | yes | no |
-| **INSTAGRAM_STORIES** | no   | yes | no |
+| **INSTAGRAM_STORIES** | yes   | yes | no |
 | **GOOGLEPLUS** | yes   | yes | no |
 | **EMAIL** | yes   | yes | no |
 | **PINTEREST** | yes   | no | no |
