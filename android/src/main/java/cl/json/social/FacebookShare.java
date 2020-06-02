@@ -21,7 +21,7 @@ public class FacebookShare extends SingleShareIntent {
     public void open(ReadableMap options) throws ActivityNotFoundException {
         super.open(options);
         //  MORE DATA
-        this.openIntentChooser();
+        this.openIntentChooser(options);
     }
     @Override
     protected String getPackage() {

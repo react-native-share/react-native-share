@@ -26,7 +26,7 @@ public class SnapChatShare extends SingleShareIntent {
     public void open(ReadableMap options) throws ActivityNotFoundException {
         super.open(options);
         //  extra params here
-        this.openIntentChooser();
+        this.openIntentChooser(options);
     }
 
     @Override
