@@ -65,11 +65,13 @@ public abstract class SingleShareIntent extends ShareIntent {
                 TargetChosenReceiver.sendCallback(false, "Something went wrong");
                 return;
             }
-            String socialType = options.getString("social");
-            if (socialType.equals("instagramstories")) {
-                String method = options.getString("method");
-                if (method.equals("shareStickerImage") || method.equals("shareBackgroundAndStickerImage")) {
-                    activity.grantUriPermission("com.instagram.android", this.stickerAsset.getURI(), Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            if (options != null && !options.isEmpty()) {
+                String socialType = options.getString("social");
+                if (socialType.equals("instagramstories")) {
+                    String method = options.getString("method");
+                    if (method.equals("shareStickerImage") || method.equals("shareBackgroundAndStickerImage")) {
+                        activity.grantUriPermission("com.instagram.android", this.stickerAsset.getURI(), Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    }
                 }
             }
             if (TargetChosenReceiver.isSupported()) {

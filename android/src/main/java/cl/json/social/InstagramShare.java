@@ -15,7 +15,7 @@ import com.facebook.react.bridge.ReadableMap;
 public class InstagramShare extends SingleShareIntent {
 
     private static final String PACKAGE = "com.instagram.android";
-    private static final String PLAY_STORE_LINK = "market://details?id=com.instagram.android";
+    private static final String PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=com.instagram.android";
 
     public InstagramShare(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -25,7 +25,7 @@ public class InstagramShare extends SingleShareIntent {
     public void open(ReadableMap options) throws ActivityNotFoundException {
         super.open(options);
         //  extra params here
-        this.openIntentChooser(options);
+        this.openIntentChooser();
     }
 
     @Override
