@@ -1,17 +1,17 @@
 module.exports = {
-  title: 'My Site',
+  title: 'React Native Share',
   tagline: 'The tagline of my site',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
-  favicon: 'img/favicon.ico',
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  favicon: 'img/community.png',
+  organizationName: 'react-native-community', // Usually your GitHub org/user name.
+  projectName: 'react-native-share',
   themeConfig: {
     navbar: {
-      title: 'My Site',
+      title: 'react-native-share',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'react-native-community logo',
+        src: 'img/community.png',
       },
       links: [
         {
@@ -20,9 +20,14 @@ module.exports = {
           label: 'Docs',
           position: 'left',
         },
-        {to: 'blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
+          to: 'docs/contributing',
+          activeBasePath: 'contributing',
+          label: 'Contributing',
+          position: 'left',
+        },
+        {
+          href: 'https://github.com/react-native-community/react-native-share',
           label: 'GitHub',
           position: 'right',
         },
