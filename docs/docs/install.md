@@ -1,6 +1,6 @@
 ---
 id: install
-title: Install
+title: Installing
 ---
 
 ## Install
