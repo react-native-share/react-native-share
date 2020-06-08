@@ -1,6 +1,6 @@
 module.exports = {
   title: 'React Native Share',
-  tagline: 'The tagline of my site',
+  tagline: 'Share simple data between applications',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
   favicon: 'img/community.png',
@@ -8,14 +8,14 @@ module.exports = {
   projectName: 'react-native-share',
   themeConfig: {
     navbar: {
-      title: 'react-native-share',
+      title: 'React Native Share',
       logo: {
         alt: 'react-native-community logo',
         src: 'img/community.png',
       },
       links: [
         {
-          to: 'docs/',
+          to: 'docs/install',
           activeBasePath: 'docs',
           label: 'Docs',
           position: 'left',
@@ -53,34 +53,17 @@ module.exports = {
           title: 'Community',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              label: 'Issues',
+              href: 'https://github.com/react-native-community/react-native-share/issues',
             },
             {
               label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'Blog',
-              to: 'blog',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://twitter.com/ReactNativeComm',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} react-native-community. Built with Docusaurus 🦖.`,
     },
   },
   presets: [
