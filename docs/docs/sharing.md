@@ -1,8 +1,6 @@
 ---
 id: sharing
-title: Your first share
+title: Sharing 😱
 ---
 
 Write about `Share.open` with common examples, possible with a GIF.
-
-## Markdown Syntax
