@@ -6,9 +6,6 @@ module.exports = {
   favicon: 'img/community.png',
   organizationName: 'react-native-community', // Usually your GitHub org/user name.
   projectName: 'react-native-share',
-  colors: {
-    primaryColor: "#083903",
-  },  
   themeConfig: {
     navbar: {
       title: 'React Native Share',
