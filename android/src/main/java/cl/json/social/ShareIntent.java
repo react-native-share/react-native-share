@@ -17,6 +17,7 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -249,7 +250,7 @@ public abstract class ShareIntent {
 
         if (ShareIntent.hasValidKey("excludedActivityTypes", options)) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-               chooser.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, options.getArray("excludedActivityTypes").toString());
+                chooser.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, getExcludedComponentArray(options.getArray("excludedActivityTypes")));
                 activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
             }else {
                 activity.startActivityForResult(excludeChooserIntent(this.getIntent(),options), RNShareModule.SHARE_REQUEST_CODE);
@@ -294,4 +295,23 @@ public abstract class ShareIntent {
     protected abstract String getDefaultWebLink();
 
     protected abstract String getPlayStoreLink();
+
+    private ComponentName[] getExcludedComponentArray(ReadableArray excludeActivityTypes){
+        if (excludeActivityTypes == null){
+            return null;
+        }
+        Intent dummy = new Intent(getIntent().getAction());
+        dummy.setType(getIntent().getType());
+        List<ComponentName> componentNameList = new ArrayList<>();
+        List<ResolveInfo> resInfoList = this.reactContext.getPackageManager().queryIntentActivities(dummy, 0);
+        for (int index = 0; index < excludeActivityTypes.size(); index++) {
+            String packageName = excludeActivityTypes.getString(index);
+            for(ResolveInfo resInfo : resInfoList) {
+                if(resInfo.activityInfo.packageName.equals(packageName)) {
+                    componentNameList.add(new ComponentName(resInfo.activityInfo.packageName, resInfo.activityInfo.name));
+                }
+            }
+        }
+        return componentNameList.toArray(new ComponentName[]{});
+    }
 }
