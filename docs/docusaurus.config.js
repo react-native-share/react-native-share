@@ -6,6 +6,9 @@ module.exports = {
   favicon: 'img/community.png',
   organizationName: 'react-native-community', // Usually your GitHub org/user name.
   projectName: 'react-native-share',
+  colors: {
+    primaryColor: "#083903",
+  },  
   themeConfig: {
     navbar: {
       title: 'React Native Share',
@@ -53,6 +56,10 @@ module.exports = {
           title: 'Community',
           items: [
             {
+              label: 'react-native-community',
+              href: 'https://github.com/react-native-community',
+            },
+            {
               label: 'Issues',
               href: 'https://github.com/react-native-community/react-native-share/issues',
             },
@@ -63,7 +70,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} react-native-community. Built with Docusaurus 🦖.`,
+      copyright: `made with ❤️ by react-native-community`,
     },
   },
   presets: [
@@ -72,17 +79,11 @@ module.exports = {
       {
         docs: {
           // It is recommended to set document id as docs home page (`docs/` path).
-          homePageId: 'doc1',
+          homePageId: 'install',
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
-        },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/blog/',
+            'https://github.com/react-native-community/react-native-share/edit/master/website/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
