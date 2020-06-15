@@ -27,22 +27,22 @@ Or with `async/await`:
 
 You can customize the call to `Share.open` passing the following parameters:
 
-| Name  | Type     | Description | Optional | Android | iOS
-| :---- | :------: | :---  | :--- | :-- | :-- |
-| message | string   | Message sent to the share activity | 🚫 |  ✅ | ✅
-| title | string   |  Title sent to the share activity | 🚫 | ✅ | ✅
-| url | string   | URL you want to share (only support base64 string in iOS & Android). | ✅ | ✅ | ✅
-| urls | Array[string]   | Array of base64 string you want to share. | ✅ | ✅ | ✅
-| type | string   | File mime type | ✅ | ✅ | ✅ 
-| subject | string   | Subject sent when sharing to email | ✅ | ✅ | ✅ 
-| email | string   | Email of addressee | ✅ | ✅ | ✅ 
-| excludedActivityTypes | Array[string] |  Activity types that won't show in the Share dialog | 🚫 | ✅ | ✅ 
-| failOnCancel | boolean | (defaults to true) Specifies whether promise should reject if user cancels share dialog | ✅ | ✅ | ✅
-| showAppsToView | boolean | only android | ✅ | ✅ | 🚫
-| filename | string | Only support base64 string in Android | ✅ | ✅ | 🚫
-| saveToFiles | boolean | Open only `Files` app (supports only urls (base64 string or path), requires iOS 11 or later) | ✅ | 🚫 | ✅
-| filenames | Array[string] | Array of filename for base64 urls array in Android | ✅ | ✅ | 🚫
-| activityItemSources | Array[Object] | Array of activity item sources. Each items should conform to [ActivityItemSource](#activityitemsource) specification. [Example](#example-activityitemsources). | ✅ | 🚫| ✅
+| Name  | Type     | Description | Optional | Android | iOS | Windows
+| :---- | :------: | :---  | :--- | :-- | :-- | :-- |
+| message | string   | Message sent to the share activity | 🚫 |  ✅ | ✅ | ❓
+| title | string   |  Title sent to the share activity | 🚫 | ✅ | ✅ | ❓
+| url | string   | URL you want to share (only support base64 string in iOS & Android). | ✅ | ✅ | ✅ | ❓
+| urls | Array[string]   | Array of base64 string you want to share. | ✅ | ✅ | ✅ | ❓
+| type | string   | File mime type | ✅ | ✅ | ✅  | ❓
+| subject | string   | Subject sent when sharing to email | ✅ | ✅ | ✅  | ❓
+| email | string   | Email of addressee | ✅ | ✅ | ✅  | ❓
+| excludedActivityTypes | Array[string] |  Activity types that won't show in the Share dialog | 🚫 | ✅ | ✅  | ❓
+| failOnCancel | boolean | (defaults to true) Specifies whether promise should reject if user cancels share dialog | ✅ | ✅ | ✅ | ❓
+| showAppsToView | boolean | only android | ✅ | ✅ | 🚫 | ❓
+| filename | string | Only support base64 string in Android | ✅ | ✅ | 🚫 | ❓
+| saveToFiles | boolean | Open only `Files` app (supports only urls (base64 string or path), requires iOS 11 or later) | ✅ | 🚫 | ✅ | ❓
+| filenames | Array[string] | Array of filename for base64 urls array in Android | ✅ | ✅ | 🚫 | ❓
+| activityItemSources | Array[Object] | Array of activity item sources. Each items should conform to [ActivityItemSource](#activityitemsource) specification. [Example](#example-activityitemsources). | ✅ | 🚫| ✅ | ❓
 
 ## Sharing a base64 file format
 

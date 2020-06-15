@@ -3,8 +3,6 @@ id: install
 title: Installing
 ---
 
-## Install
-
 If you are using `react-native >= 0.60` you just need to do a simple:
 
 ```shell

@@ -40,12 +40,16 @@ module.exports = {
           title: 'Docs',
           items: [
             {
-              label: 'Style Guide',
-              to: 'docs/',
+              label: 'Installing',
+              to: 'docs/install/',
             },
             {
-              label: 'Second Doc',
-              to: 'docs/doc2/',
+              label: 'Share.open',
+              to: 'docs/share-open/',
+            },
+            {
+              label: 'Share.single',
+              to: 'docs/share-single/',
             },
           ],
         },

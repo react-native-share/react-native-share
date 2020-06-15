@@ -1,0 +1,158 @@
+---
+id: share-single
+title: Share.single
+---
+
+Open the share dialog with the specific application. This returns a promise similar to `Share.open`, keep in mind that you will need to handle the same response when the user cancel/dismiss.
+
+Using a promise implementation:
+
+```js
+  const shareOptions = {
+    title: 'Share via',
+    message: 'some message',
+    url: 'some share url',
+    social: Share.Social.WHATSAPP,
+    whatsAppNumber: "9199999999",  // country code + phone number
+    filename: 'test' , // only for base64 file in Android
+  };
+
+  Share.single(shareOptions)
+    .then((res) => { console.log(res) })
+    .catch((err) => { err && console.log(err); });
+```
+
+Or with `async/await`:
+
+```js
+  const shareOptions = {
+    title: 'Share via',
+    message: 'some message',
+    url: 'some share url',
+    social: Share.Social.WHATSAPP,
+    whatsAppNumber: "9199999999",  // country code + phone number
+    filename: 'test' , // only for base64 file in Android
+  };
+
+  const fun = async () => {
+    const shareResponse = await Share.single(shareOptions);
+  }
+```
+
+## Supported Options
+
+You can pass the option that will be handled by the native code, similar to `Share.open`.
+
+| Name  | Type     | Description | Optional | Android | iOS | Windows
+| :---- | :------: | :--- | :--- | :--- | :--- | :--- |
+| url | string   | URL you want to share | ✅ |  ✅ | ✅ | ❓
+| type | string   | File mime type | ✅ |  ✅ | ✅ | ❓
+| message | string   | Message sent to the share activity | ✅ |  ✅ | ✅ | ❓
+| title | string   |  Title sent to the share activity | ✅ |  ✅ | ✅ | ❓
+| subject | string   | Subject sent when sharing to email | ✅ | ✅ | ✅  | ❓
+| email | string   | Email of addressee | ✅ | ✅ | ✅  | ❓
+| social | string   | supported social apps: [List](#static-values-for-social)  | 🚫 | ✅ | ✅  | ❓
+| forceDialog | boolean | (optional) only android. Avoid showing dialog with buttons Just Once / Always. Useful for Instagram to always ask user if share as Story or Feed | ✅ | ✅ | ✅  | ❓
+
+***NOTE: If both `message` and `url` are provided, `url` will be concatenated to the end of `message` to form the body of the message. If only one is provided it will be used***
+
+## Supported Applications
+
+`react-native-share` export a `enum` containing all supported apps, wich can be seen [here](https://github.com/react-native-community/react-native-share/blob/5299d95aab25bfba6815e0f5455876897ed8ddc6/index.js#L207-L219).
+
+| Name  | Android     | iOS | Windows |
+| :---- | :------: | :--- | :---
+| **FACEBOOK** | ✅   | ✅ | 🚫 |
+| **FACEBOOK_STORIES** | 🚫   | ✅ | 🚫 |
+| **PAGESMANAGER** | ✅   | 🚫 | 🚫 |
+| **WHATSAPP** | ✅   | ✅ | 🚫 |
+| **INSTAGRAM** | ✅   | ✅ | 🚫 |
+| **INSTAGRAM_STORIES** | 🚫   | ✅ | 🚫 |
+| **GOOGLEPLUS** | ✅   | ✅ | 🚫 |
+| **EMAIL** | ✅   | ✅ | 🚫 |
+| **PINTEREST** | ✅   | 🚫 | 🚫 |
+| **SMS** | ✅   | 🚫 | 🚫 |
+| **SNAPCHAT** | ✅   | 🚫 | 🚫 |
+| **MESSENGER** | ✅   | 🚫 | 🚫 |
+| **LINKEDIN** | ✅   | 🚫 | 🚫 |
+
+## Static values for Instagram Stories (iOS Only)
+
+These values can be used when you are calling the method `Share.single` passing `Share.Social.INSTAGRAM_STORIES` on the `social` attribute.
+
+```js
+import Share from 'react-native-share';
+
+const shareOptions = {
+    method: Share.InstagramStories.SHARE_BACKGROUND_AND_STICKER_IMAGE,
+    backgroundImage: 'http://urlto.png',
+    stickerImage: 'data:image/png;base64,<imageInBase64>', //or you can use "data:" link
+    backgroundBottomColor: '#fefefe',
+    backgroundTopColor: '#906df4',
+    attributionURL: 'http://deep-link-to-app', //in beta
+    social: Share.Social.INSTAGRAM_STORIES
+};
+
+Share.shareSingle(shareOptions);
+```
+
+### Supported options for INSTAGRAM_STORIES:
+
+Use this properties to customize the instagram storie view. 
+
+| Name  | Type     | Description | Optional |
+| :---- | :------: | :--- | :--- |
+| backgroundImage | string   | URL you want to share | 🚫
+| stickerImage | string   | URL you want to share | 🚫
+| method | string   | [List](#instagram-stories-method-list) | 🚫
+| backgroundBottomColor | string   |  (optional) default #837DF4 | 🚫
+| backgroundTopColor | string   | (optional) default #906df4 | ✅
+| attributionURL | string   | (optional) facebook beta-test | ✅
+
+#### Instagram stories method list
+
+Methods available when calling the `INSTAGRAM_STORIES` option.
+
+| Name  | Required options    |
+| :---- | :------: |
+| **SHARE_BACKGROUND_IMAGE** | backgroundImage   |
+| **SHARE_STICKER_IMAGE** | stickerImage   |
+| **SHARE_BACKGROUND_AND_STICKER_IMAGE** | backgroundImage, stickerImage   |
+
+## Static Values for Facebook Stories
+These can be assessed using Share.Social property
+For eg.
+```javascript
+import Share from 'react-native-share';
+
+const shareOptions = {
+    method: Share.FacebookStories.SHARE_BACKGROUND_AND_STICKER_IMAGE,
+    backgroundImage: 'http://urlto.png', // url or an base64 string
+    stickerImage: 'data:image/png;base64,<imageInBase64>', //or you can use "data:" url
+    backgroundBottomColor: '#fefefe',
+    backgroundTopColor: '#906df4',
+    attributionURL: 'http://deep-link-to-app', //in beta
+    appId: '219376304', //facebook appId
+    social: Share.Social.FACEBOOK_STORIES
+};
+Share.shareSingle(shareOptions);
+```
+
+Supported options for FACEBOOK_STORIES:
+
+| Name  | Type     | Description |
+| :---- | :------: | :--- |
+| appId | string   | (required) facebook appId |
+| backgroundImage | string   | URL you want to share |
+| stickerImage | string   | URL you want to share |
+| method | string   | [List](#instagram-stories-method-list) |
+| backgroundBottomColor | string   |  (optional) default #837DF4 |
+| backgroundTopColor | string   | (optional) default #906df4 |
+| attributionURL | string   | (optional) facebook beta-test |
+
+### Facebook stories method list
+| Name  | Required options    |
+| :---- | :------: |
+| **SHARE_BACKGROUND_IMAGE** | backgroundImage   |
+| **SHARE_STICKER_IMAGE** | stickerImage   |
+| **SHARE_BACKGROUND_AND_STICKER_IMAGE** | backgroundImage, stickerImage   |
