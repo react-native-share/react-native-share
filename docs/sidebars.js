@@ -1,6 +1,6 @@
 module.exports = {
   someSidebar: {
-    'Getting Started': ['install', "sharing"],
+    'Getting Started': ['install', "share-open"],
     Features: ['mdx'],
   },
 };
