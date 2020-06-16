@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  react-native: react-native-community/react-native@4.4.2
+  react-native: react-native-community/react-native@4.4.0
 
 commands:
   checkout-attach-workspace:
@@ -38,6 +38,16 @@ jobs:
           name: Flow
           command: yarn validate:flow
   
+  build-example-app:
+    executor: react-native/linux_android
+    steps:
+      - checkout-attach-workspace
+      - run:
+          name: Test
+          command: cd ./Example/android && ./gradlew --max-workers 2 downloadDependencies
+      # - react-native/android_build:
+      #     project_path: ./Example/android
+  
   publish-version:
     executor: react-native/linux_js
     steps:
@@ -68,9 +78,9 @@ workflows:
             branches:
               ignore:
                 - master
-      - react-native/android_build:
-          checkout: true
-          project_path: ./Example/android      
+      - build-example-app:
+          requires:
+            - install-dependencies          
       - lint:
           requires:
             - install-dependencies
