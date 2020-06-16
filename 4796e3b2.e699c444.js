@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[12],{146:function(a){a.exports=JSON.parse('{"allTagsPath":"/react-native-share/blog/tags","slug":"facebook","name":"facebook","count":1,"permalink":"/react-native-share/blog/tags/facebook"}')}}]);
