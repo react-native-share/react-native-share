@@ -43,6 +43,7 @@ jobs:
   
   build-example-app:
     executor: react-native/linux_android
+    working_directory: ~/app
     steps:
       - react-native/android_build:
           project_path: Example/android
