@@ -6,6 +6,9 @@
     "type": "git",
     "url": "git+https://github.com/react-native-community/react-native-share.git"
   },
+  "bugs": {
+    "url": "https://github.com/react-native-community/react-native-share/issues"
+  },
   "main": "index.js",
   "files": [
     "android",
@@ -61,7 +64,7 @@
     "name": "Esteban Fuentealba",
     "email": "efuentealba@json.cl"
   },
-  "homepage": "https://github.com/react-native-community/react-native-share#readme",
+  "homepage": "https://react-native-community.github.io/react-native-share/",
   "license": "MIT",
   "lint-staged": {
     "*.js": [
