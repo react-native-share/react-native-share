@@ -1,10 +1,10 @@
 module.exports = {
   title: 'React Native Share',
   tagline: 'Share simple data between applications',
-  url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/',
+  url: 'https://react-native-community.github.io/react-native-share/',
+  baseUrl: '/react-native-share/',
   favicon: 'img/community.png',
-  organizationName: 'react-native-community', // Usually your GitHub org/user name.
+  organizationName: 'react-native-community',
   projectName: 'react-native-share',
   scripts: [
     'https://buttons.github.io/buttons.js',

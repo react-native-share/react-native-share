@@ -67,6 +67,20 @@ jobs:
           name: Publish New Version
           command: yarn ci:publish
 
+  deploy-docs:
+    executor: react-native/linux_js
+    steps:
+      - checkout-attach-workspace
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: Deploying new docs-version
+          command: |
+            git config --global user.email "<GITHUB_USERNAME>@users.noreply.github.com"
+            git config --global user.name "<YOUR_NAME>"
+            echo "machine github.com login <GITHUB_USERNAME> password $GITHUB_TOKEN" > ~/.netrc
+            cd docs && yarn install && GIT_USER=<GIT_USER> yarn run publish-gh-pages
+
 workflows:
   version: 2
 
@@ -77,6 +91,7 @@ workflows:
             branches:
               ignore:
                 - master
+      - deploy-docs
       - build-example-app:
           requires:
             - install-dependencies          
@@ -87,13 +102,13 @@ workflows:
           requires:
             - install-dependencies
   
-  release:
-    jobs:
-      - install-dependencies:
-          filters:
-            branches:
-              only:
-                - master
-      - publish-version:
-          requires:
-            - install-dependencies
+  # release:
+  #   jobs:
+  #     - install-dependencies:
+  #         filters:
+  #           branches:
+  #             only:
+  #               - master
+  #     - publish-version:
+  #         requires:
+  #           - install-dependencies
