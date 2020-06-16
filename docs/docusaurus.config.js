@@ -77,6 +77,10 @@ module.exports = {
           title: 'Community',
           items: [
             {
+              label: 'Contributing Guide',
+              to: 'docs/contributing/',
+            },
+            {
               label: 'react-native-community',
               href: 'https://github.com/react-native-community',
             },
