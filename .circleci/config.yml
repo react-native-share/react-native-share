@@ -42,8 +42,11 @@ jobs:
     executor: react-native/linux_android
     steps:
       - checkout-attach-workspace
+      - run:
+          name: ls -la
+          command: ls -la && pwd
       - react-native/android_build:
-          project_path: ./project/Example/android
+          project_path: ./Example/android
   
   publish-version:
     executor: react-native/linux_js
