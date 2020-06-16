@@ -55,6 +55,10 @@ module.exports = {
               label: 'Share.isPackageInstalled',
               to: 'docs/share-is-package-installed/',
             },
+            {
+              label: 'Testing',
+              to: 'docs/testing/',
+            },
           ],
         },
         {
