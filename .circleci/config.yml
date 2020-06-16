@@ -42,7 +42,9 @@ jobs:
     executor: react-native/linux_android
     steps:
       - checkout-attach-workspace
-      - command: cd Example
+      - run:
+          name: Go to Example
+          command: cd Example
       - react-native/android_build
       
   publish-version:
