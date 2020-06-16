@@ -15,7 +15,7 @@ jobs:
   install-dependencies:
     executor: react-native/linux_js
     steps:
-      - checkout-attach-workspace
+      - checkout
       - react-native/yarn_install  
       - persist_to_workspace:
           root: ~/app
@@ -74,7 +74,6 @@ workflows:
                 - master
       - react-native/android_build:
           checkout: true
-          attach_workspace: false
           project_path: Example/android
           workspace_root: ~/app
       # - build-example-app:
