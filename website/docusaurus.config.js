@@ -78,7 +78,7 @@ module.exports = {
           items: [
             {
               label: 'Contributing Guide',
-              to: 'docs/contributing/',
+              to: 'docs/contributing',
             },
             {
               label: 'react-native-community',
