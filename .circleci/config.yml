@@ -91,7 +91,6 @@ workflows:
             branches:
               ignore:
                 - master
-      - deploy-docs
       - build-example-app:
           requires:
             - install-dependencies          
@@ -102,13 +101,14 @@ workflows:
           requires:
             - install-dependencies
   
-  # release:
-  #   jobs:
-  #     - install-dependencies:
-  #         filters:
-  #           branches:
-  #             only:
-  #               - master
-  #     - publish-version:
-  #         requires:
-  #           - install-dependencies
+  release:
+    jobs:
+      - install-dependencies:
+          filters:
+            branches:
+              only:
+                - master
+      - publish-version:
+          requires:
+            - install-dependencies
+      - deploy-docs
