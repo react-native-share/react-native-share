@@ -14,6 +14,7 @@ commands:
 jobs:
   install-dependencies:
     executor: react-native/linux_js
+    working_directory: ~/app
     steps:
       - checkout
       - react-native/yarn_install  
@@ -24,6 +25,7 @@ jobs:
     
   lint:
     executor: react-native/linux_js
+    working_directory: ~/app
     steps:
       - checkout-attach-workspace
       - run:
@@ -32,6 +34,7 @@ jobs:
 
   validate-flow:
     executor: react-native/linux_js
+    working_directory: ~/app
     steps:
       - checkout-attach-workspace
       - run:
@@ -44,6 +47,7 @@ jobs:
   
   publish-version:
     executor: react-native/linux_js
+    working_directory: ~/app
     steps:
       - checkout-attach-workspace
       - run:
@@ -52,6 +56,7 @@ jobs:
 
   deploy-docs:
     executor: react-native/linux_js
+    working_directory: ~/app
     steps:
       - checkout-attach-workspace
       - run:
