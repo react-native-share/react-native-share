@@ -11,17 +11,6 @@ commands:
       - attach_workspace:
             at: .
 
-  dev-sync-files:
-    description: "Copy files from root to example"
-    steps:
-      - checkout-attach-workspace
-      - run:
-          name: "Enter example app"
-          command: cd example && yarn install --frozen-lockfile --non-interactiv
-      - run:
-          name: "Sync files with example app"
-          command: yarn dev-sync
-
 jobs:
   install-dependencies:
     executor: react-native/linux_js
@@ -53,9 +42,8 @@ jobs:
     executor: react-native/linux_android
     steps:
       - checkout-attach-workspace
-      - dev-sync-files
       - react-native/android_build:
-          project_path: ./example/android
+          project_path: ./Example/android
       
   publish-version:
     executor: react-native/linux_js
