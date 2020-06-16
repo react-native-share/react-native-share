@@ -76,10 +76,10 @@ jobs:
       - run:
           name: Deploying new docs-version
           command: |
-            git config --global user.email "<GITHUB_USERNAME>@users.noreply.github.com"
-            git config --global user.name "<YOUR_NAME>"
-            echo "machine github.com login <GITHUB_USERNAME> password $GITHUB_TOKEN" > ~/.netrc
-            cd docs && yarn install && GIT_USER=<GIT_USER> yarn run publish-gh-pages
+            git config --global user.email "${GH_EMAIL}@users.noreply.github.com"
+            git config --global user.name "${GH_NAME}"
+            echo "machine github.com login $GH_NAME password $GH_TOKEN" > ~/.netrc
+            cd website && yarn install && GIT_USER=${GH_NAME} yarn run publish-gh-pages
 
 workflows:
   version: 2
