@@ -51,6 +51,10 @@ module.exports = {
               label: 'Share.single',
               to: 'docs/share-single/',
             },
+            {
+              label: 'Share.isPackageInstalled',
+              to: 'docs/share-is-package-installed/',
+            },
           ],
         },
         {

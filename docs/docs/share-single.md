@@ -111,7 +111,7 @@ Use this properties to customize the instagram storie view.
 
 #### Instagram stories method list
 
-Methods available when calling the `INSTAGRAM_STORIES` option.
+Methods available when calling the `INSTAGRAM_STORIES` social option.
 
 | Name  | Required options    |
 | :---- | :------: |
@@ -135,10 +135,11 @@ const shareOptions = {
     appId: '219376304', //facebook appId
     social: Share.Social.FACEBOOK_STORIES
 };
+
 Share.shareSingle(shareOptions);
 ```
 
-Supported options for FACEBOOK_STORIES:
+Supported options for `FACEBOOK_STORIES`:
 
 | Name  | Type     | Description |
 | :---- | :------: | :--- |
@@ -151,6 +152,9 @@ Supported options for FACEBOOK_STORIES:
 | attributionURL | string   | (optional) facebook beta-test |
 
 ### Facebook stories method list
+
+Methods available when calling the `FACEBOOK_STORIES` social option.
+
 | Name  | Required options    |
 | :---- | :------: |
 | **SHARE_BACKGROUND_IMAGE** | backgroundImage   |
