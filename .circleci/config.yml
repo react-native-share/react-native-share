@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  react-native: react-native-community/react-native@4.4.0
+  react-native: react-native-community/react-native@4.4.2
 
 commands:
   checkout-attach-workspace:
@@ -69,9 +69,8 @@ workflows:
               ignore:
                 - master
       - react-native/android_build:
-          project_path: ./Example/android
-          requires:
-            - install-dependencies          
+          checkout: true
+          project_path: ./Example/android      
       - lint:
           requires:
             - install-dependencies
