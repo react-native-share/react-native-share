@@ -9,7 +9,7 @@ commands:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/app
+          at: .
 
 jobs:
   install-dependencies:
