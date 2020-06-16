@@ -9,7 +9,7 @@ commands:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: ~/app
 
 jobs:
   install-dependencies:
@@ -18,7 +18,7 @@ jobs:
       - checkout-attach-workspace
       - react-native/yarn_install  
       - persist_to_workspace:
-          root: .
+          root: ~/app
           paths:
             - node_modules
     
@@ -41,12 +41,11 @@ jobs:
   build-example-app:
     executor: react-native/linux_android
     steps:
-      - checkout-attach-workspace
-      - run:
-          name: Test
-          command: cd ./Example/android && ./gradlew --max-workers 2 downloadDependencies
-      # - react-native/android_build:
-      #     project_path: ./Example/android
+      - react-native/android_build:
+          checkout: true
+          attach_workspace: false
+          project_path: Example/android
+          workspace_root: ~/app
   
   publish-version:
     executor: react-native/linux_js
@@ -78,9 +77,10 @@ workflows:
             branches:
               ignore:
                 - master
-      - build-example-app:
-          requires:
-            - install-dependencies          
+      - build-example-app
+      # - build-example-app:
+          # requires:
+          #   - install-dependencies          
       - lint:
           requires:
             - install-dependencies
