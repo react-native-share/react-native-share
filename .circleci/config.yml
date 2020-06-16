@@ -43,7 +43,7 @@ jobs:
     steps:
       - checkout-attach-workspace
       - react-native/android_build:
-          project_path: ./Example/android
+          project_path: Example/android
       
   publish-version:
     executor: react-native/linux_js
