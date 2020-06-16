@@ -64,6 +64,10 @@ module.exports = {
               to: 'docs/share-is-package-installed/',
             },
             {
+              label: 'UI Components',
+              to: 'docs/ui-components/',
+            },
+            {
               label: 'Testing',
               to: 'docs/testing/',
             },
