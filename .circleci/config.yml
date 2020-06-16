@@ -111,4 +111,8 @@ workflows:
       - publish-version:
           requires:
             - install-dependencies
-      - deploy-docs
+      - deploy-docs: 
+          filters:
+            branches:
+              only:
+                - master
