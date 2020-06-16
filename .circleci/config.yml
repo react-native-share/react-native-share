@@ -48,7 +48,8 @@ jobs:
       - checkout-attach-workspace
       - run:
           name: Flow
-          command: cd Example/android && ls -la
+          command: ls -la
+          # command: cd Example/android && ls -la
 
       # cd Example/android
       # - react-native/android_build:
