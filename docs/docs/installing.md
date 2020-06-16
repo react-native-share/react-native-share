@@ -64,7 +64,7 @@ react-native link react-native-share
     ```
       implementation project(':react-native-share')
     ```
-5. **(Optional)** [Follow this for implementing Provider](#adding-your-implementation-of-fileprovider) ## FIXME
+5. **(Optional)** [Follow this for implementing Provider](#adding-your-implementation-of-fileprovider)
 
 ### Windows Install
 
@@ -76,7 +76,68 @@ react-native link react-native-share
   - Add `using Cl.Json.RNShare;` to the usings at the top of the file
   - Add `new RNSharePackage()` to the `List<IReactPackage>` returned by the `Packages` method
 
+### Adding your implementation of FileProvider
 
+Follow this to implement your `FileProvider`. If you have any doubt please you found more about that [here](https://developer.android.com/training/secure-file-sharing/setup-sharing.html)
+
+- `applicationId` should be defined in the `defaultConfig` section in your `android/app/build.gradle`:
+
+- File: `android/app/build.gradle`
+
+    ```
+    defaultConfig {
+        applicationId "com.yourcompany.yourappname"
+        ...
+    }
+    ```
+
+- Add this `<provider>` section to your `AndroidManifest.xml`
+
+    File: `AndroidManifest.xml`
+    ```xml
+    <application>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+    </application>
+    ```
+
+- Create a `filepaths.xml` under this directory:
+`android/app/src/main/res/xml`.
+
+    In this file, add the following contents:
+
+    File: `android/app/src/main/res/xml/filepaths.xml`
+    ```xml
+    <?xml version="1.0" encoding="utf-8"?>
+    <paths xmlns:android="http://schemas.android.com/apk/res/android">
+      <external-path name="myexternalimages" path="Download/" />
+    </paths>
+    ```
+
+- Edit your `MainApplication.java` class to add `implements ShareApplication` and `getFileProviderAuthority`
+- The `getFileProviderAuthority` function returns the `android:authorities` value added in the `AndroidManifest.xml` file
+- `applicationId` is defined in the `defaultConfig` section of your `android/app/build.gradle` and referenced using `BuildConfig.APPLICATION_ID`
+
+    ```java
+    import cl.json.ShareApplication
+    public class MainApplication extends Application implements ShareApplication, ReactApplication {
+
+         @Override
+         public String getFileProviderAuthority() {
+                return BuildConfig.APPLICATION_ID + ".provider";
+         }
+
+         // ...Your own code
+
+    }
+    ```
 
 ## Older versions
 
