@@ -46,8 +46,13 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout-attach-workspace
-      - react-native/android_build:
-          project_path: Example/android
+      - run:
+          name: Flow
+          command: cd Example/android && ls -la
+
+      # cd Example/android
+      # - react-native/android_build:
+      #     project_path: Example/android
   
   publish-version:
     executor: react-native/linux_js
@@ -81,10 +86,9 @@ workflows:
             branches:
               ignore:
                 - master
-      - build-example-app
-      # - build-example-app:
-          # requires:
-          #   - install-dependencies          
+      - build-example-app:
+          requires:
+            - install-dependencies          
       - lint:
           requires:
             - install-dependencies
