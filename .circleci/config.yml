@@ -38,16 +38,6 @@ jobs:
           name: Flow
           command: yarn validate:flow
   
-  build-example-app:
-    executor: react-native/linux_android
-    steps:
-      - checkout-attach-workspace
-      - run:
-          name: ls -la
-          command: ls -la && pwd
-      - react-native/android_build:
-          project_path: ./Example/android
-  
   publish-version:
     executor: react-native/linux_js
     steps:
@@ -78,7 +68,8 @@ workflows:
             branches:
               ignore:
                 - master
-      - build-example-app:
+      - react-native/android_build:
+          project_path: ./Example/android
           requires:
             - install-dependencies          
       - lint:
