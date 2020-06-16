@@ -1,0 +1,32 @@
+---
+id: share-is-package-installed
+title: Share.isPackageInstalled (Android only)
+---
+
+It's a simple method that check if a `package-name` is installed with the `Intent` on Android. Similar to `Share.open` and `Share.single` this method will return a `Promise`, which will be fulfilled when the native code successfully check for the application.
+
+Using a promise implementation:
+
+```js
+Share.isPackageInstalled('com.instagram.android')
+  .then((response) => {
+    console.log(response);
+    // { isInstalled: true/false, message: 'Package is Installed' }
+  })
+  .catch((error) => {
+    console.log(error);
+    // { error }
+  });
+```
+
+Or with `async/await`:
+
+```js
+const checkPackage = async = () => {
+  const { isInstalled } = await Share.isPackageInstalled('com.instagram.android');
+}
+```
+
+Keep in mind, that similar to `Share.open` and `Share.single` it's a good idea using a `try/catch` whenever a call to this method is requested.
+
+For iOS you can use the `Linking.canOpenURL(instagram://)` where the `url` is the app scheme that you want to check. Also, note that calling the `isPackageInstalled` on iOS will return a `Error: Not implemented`.
