@@ -9,7 +9,7 @@ commands:
     steps:
       - checkout
       - attach_workspace:
-            at: .
+          at: ~/app
 
 jobs:
   install-dependencies:
@@ -49,8 +49,6 @@ jobs:
     executor: react-native/linux_js
     steps:
       - checkout-attach-workspace
-      - attach_workspace:
-          at: ~/app
       - run:
           name: Publish New Version
           command: yarn ci:publish
@@ -59,8 +57,6 @@ jobs:
     executor: react-native/linux_js
     steps:
       - checkout-attach-workspace
-      - attach_workspace:
-          at: ~/app
       - run:
           name: Deploying new docs-version
           command: |
