@@ -46,16 +46,8 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout-attach-workspace
-      - run:
-          name: Flow
-          command: ls -la
-          # command: cd Example/android && ls -la
-      - run:
-          name: Flow
-          command: cd ./Example/android && ls -la
-      # cd Example/android
-      # - react-native/android_build:
-      #     project_path: Example/android
+      - react-native/android_build:
+          project_path: ./example/android
   
   publish-version:
     executor: react-native/linux_js
