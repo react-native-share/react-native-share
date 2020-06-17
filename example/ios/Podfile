@@ -4,7 +4,9 @@ $node_modules_path = "../../node_modules"
 require_relative "#{$node_modules_path}/@react-native-community/cli-platform-ios/native_modules"
 
 def add_flipper_pods!(versions = {})
-  versions["Flipper"] ||= "~> 0.33.1"
+  ## We need to use this version because of an error with rn@62.2 and Flipper which
+  ## was causing crashes when sharing a base64: https://github.com/react-native-community/react-native-share/issues/797
+  versions["Flipper"] ||= "~> 0.37.0"
   versions["DoubleConversion"] ||= "1.1.7"
   versions["Flipper-Folly"] ||= "~> 2.1"
   versions["Flipper-Glog"] ||= "0.3.6"
