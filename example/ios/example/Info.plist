@@ -24,6 +24,14 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+  <key>LSApplicationQueriesSchemes</key>	
+	<array>	
+	    <string>instagram-stories</string>	
+        <string>instagram</string>	
+		<string>facebook</string>	
+		<string>whatsapp</string>	
+		<string>mailto</string>	
+	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
