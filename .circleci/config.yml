@@ -53,6 +53,7 @@ jobs:
           project_path: ./example/ios/Example.xcworkspace
           project_type: workspace
           scheme: example
+          device: iPhone 11
   
   publish-version:
     executor: react-native/linux_js
