@@ -77,7 +77,7 @@ jobs:
             git config --global user.email "${GH_EMAIL}@users.noreply.github.com"
             git config --global user.name "${GH_NAME}"
             echo "machine github.com login $GH_NAME password $GH_TOKEN" > ~/.netrc
-            cd website && yarn install && GIT_USER=${GH_NAME} && yarn deploy
+            cd website && yarn install && CUSTOM_COMMIT_MESSAGE="[skip ci]" GIT_USER=${GH_NAME} yarn deploy
 
 workflows:
   version: 2
