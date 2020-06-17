@@ -49,6 +49,8 @@ jobs:
       - checkout
       - react-native/setup_macos_executor
       - run: yarn install --frozen-lockfile --non-interactive
+      - react-native/pod_install:
+          pod_install_directory: ./example/ios
       - react-native/ios_build:
           project_path: ./example/ios/Example.xcworkspace
           project_type: workspace
