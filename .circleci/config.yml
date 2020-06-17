@@ -40,6 +40,19 @@ jobs:
       - run:
           name: Flow
           command: yarn validate:flow
+
+  ios_build:
+    macos:
+      xcode: 11.5.0
+    working_directory: ~/app
+    steps:
+      - checkout
+      - react-native/setup_macos_executor
+      - run: yarn install --frozen-lockfile --non-interactive
+      - react-native/ios_build:
+          project_path: ./example/ios/Example.xcworkspace
+          project_type: workspace
+          scheme: example
   
   publish-version:
     executor: react-native/linux_js
@@ -77,13 +90,7 @@ workflows:
           checkout: true
           project_path: ./example/android
           workspace_root: ~/app
-      - react-native/ios_build:
-          checkout: true
-          device: iPhone X
-          project_path: ./example/ios/Example.xcworkspace
-          project_type: workspace
-          scheme: example
-          workspace_root: ~/app
+      - ios_build
       - lint:
           requires:
             - install-dependencies
