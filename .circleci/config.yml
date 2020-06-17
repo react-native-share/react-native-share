@@ -93,7 +93,15 @@ workflows:
           checkout: true
           project_path: ./example/android
           workspace_root: ~/app
-      - ios_build
+          filters:
+            branches:
+              ignore:
+                - master
+      - ios_build:
+          filters:
+            branches:
+              ignore:
+                - master
       - lint:
           requires:
             - install-dependencies
