@@ -77,6 +77,13 @@ workflows:
           checkout: true
           project_path: ./example/android
           workspace_root: ~/app
+      - react-native/ios_build:
+          checkout: true
+          device: iPhone X
+          project_path: ./example/ios/Example.xcworkspace
+          project_type: workspace
+          scheme: Example
+          workspace_root: ~/app
       - lint:
           requires:
             - install-dependencies
