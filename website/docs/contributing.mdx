@@ -7,20 +7,32 @@ title: Contributing Guide
 
 So whenever a new commit arrives at the `master`, if it's attending the `semantic-release` config to release a newer version in just a few minutes a new release will be published to npm. 🚀
 
-## Example App
+## Documentation
 
-To run the example app, which is located at `./example`, just run a:
-
-```shell
-cd example && yarn && npx pod-install
-```
-
-By doing this, you will have a simple react-native project up and ready to go. Then, to since the last changes with the `../../` root folder, at the root folder run a:
+We use [Docusaurus](https://github.com/facebook/docusaurus) to build our documentation. Everything you need to change the docs is located at `./website`.
+You just need to run a:
 
 ```shell
-yarn dev-sync
+yarn; yarn start
 ```
 
-This command will copy the content from `iOS`, `android` and `index.js` to the `example/node_modules/react-native-share`.
+And you will be able to run a local version of Docusaurus. Everytime a PR is merged on the `master` branch, a new version of the docs will be published. So you just need to think about writing some cool `.mdx`.
 
-If you have a better way to handle this, please fell free to open a PR pr a issue to help us with that. ❤️
+## Using the Example App
+
+To run the example app, which is located at `./example`, just run at the root project:
+
+```shell
+yarn && cd example/ios && pod install && cd -
+```
+And finally a `yarn start` at the root folder.
+
+## Where is the package.json and node_modules?
+
+We don't need a `package.json` or `node_modules` because we are using a custom config with `react-native.config.js`, that let us use easily the rootFolder of the project.
+
+Also, we changed some native files like: [`AppDelegate.M`](https://github.com/react-native-community/react-native-share/blob/56faa20d7ad30501056b89b24205f22c9efb93f3/example/ios/example/AppDelegate.m#L36), 
+[`MainApplication.java`](https://github.com/react-native-community/react-native-share/blob/56faa20d7ad30501056b89b24205f22c9efb93f3/example/android/app/src/main/java/com/example/MainApplication.java#L33) and
+other files. By doing this, we are able to use the root-version of react-native-share and react at `../../../`.
+
+If you want to do something similar on your library, or other project I recommend looking at [datetimepicker](https://github.com/react-native-community/datetimepicker) which was the base to apply this changes.

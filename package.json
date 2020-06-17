@@ -75,7 +75,9 @@
   "pre-commit": "lint:staged",
   "readmeFilename": "README.md",
   "scripts": {
-    "dev-sync": "cp -r *podspec *.js android ios example/node_modules/react-native-share/",
+    "start": "react-native start",
+    "start:android": "react-native run-android",
+    "start:ios": "react-native run-ios",
     "lint": "eslint index.js --max-warnings=0",
     "lint:staged": "lint-staged",
     "release:major": "node ./changelog --major && npm version major && git push origin && git push origin --follow-tags",

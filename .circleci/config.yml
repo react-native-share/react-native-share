@@ -9,32 +9,23 @@ commands:
     steps:
       - checkout
       - attach_workspace:
-            at: .
-
-  dev-sync-files:
-    description: "Copy files from root to example"
-    steps:
-      - checkout-attach-workspace
-      - run:
-          name: "Enter example app"
-          command: cd example && yarn install --frozen-lockfile --non-interactiv
-      - run:
-          name: "Sync files with example app"
-          command: yarn dev-sync
+          at: ~/app
 
 jobs:
   install-dependencies:
     executor: react-native/linux_js
+    working_directory: ~/app
     steps:
-      - checkout-attach-workspace
+      - checkout
       - react-native/yarn_install  
       - persist_to_workspace:
-          root: .
+          root: ~/app
           paths:
             - node_modules
     
   lint:
     executor: react-native/linux_js
+    working_directory: ~/app
     steps:
       - checkout-attach-workspace
       - run:
@@ -43,36 +34,43 @@ jobs:
 
   validate-flow:
     executor: react-native/linux_js
+    working_directory: ~/app
     steps:
       - checkout-attach-workspace
       - run:
           name: Flow
           command: yarn validate:flow
-  
-  build-example-app:
-    executor: react-native/linux_android
+
+  ios_build:
+    macos:
+      xcode: 11.5.0
+    working_directory: ~/app
     steps:
-      - checkout-attach-workspace
-      - dev-sync-files
-      - react-native/android_build:
-          project_path: ./example/android
-      
+      - checkout
+      - react-native/setup_macos_executor
+      - run: yarn install --frozen-lockfile --non-interactive
+      - react-native/pod_install:
+          pod_install_directory: ./example/ios
+      - react-native/ios_build:
+          project_path: ./example/ios/Example.xcworkspace
+          project_type: workspace
+          scheme: example
+          device: iPhone 11
+  
   publish-version:
     executor: react-native/linux_js
+    working_directory: ~/app
     steps:
       - checkout-attach-workspace
-      - attach_workspace:
-          at: ~/app
       - run:
           name: Publish New Version
           command: yarn ci:publish
 
   deploy-docs:
     executor: react-native/linux_js
+    working_directory: ~/app
     steps:
       - checkout-attach-workspace
-      - attach_workspace:
-          at: ~/app
       - run:
           name: Deploying new docs-version
           command: |
@@ -91,9 +89,11 @@ workflows:
             branches:
               ignore:
                 - master
-      - build-example-app:
-          requires:
-            - install-dependencies          
+      - react-native/android_build:
+          checkout: true
+          project_path: ./example/android
+          workspace_root: ~/app
+      - ios_build
       - lint:
           requires:
             - install-dependencies
