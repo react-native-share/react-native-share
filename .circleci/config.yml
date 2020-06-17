@@ -82,7 +82,7 @@ workflows:
           device: iPhone X
           project_path: ./example/ios/Example.xcworkspace
           project_type: workspace
-          scheme: Example
+          scheme: example
           workspace_root: ~/app
       - lint:
           requires:
