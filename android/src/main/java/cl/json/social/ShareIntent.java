@@ -39,6 +39,8 @@ public abstract class ShareIntent {
     protected String chooserTitle = "Share";
     protected ShareFile fileShare;
     protected ReadableMap options;
+    protected ShareFile stickerAsset;
+    protected ShareFile backgroundAsset;
 
     public ShareIntent(ReactApplicationContext reactContext) {
         this.reactContext = reactContext;
@@ -117,6 +119,7 @@ public abstract class ShareIntent {
         if (ShareIntent.hasValidKey("social", options)) {
             socialType = options.getString("social");
         }
+
         if (socialType.equals("whatsapp")) {
             String whatsAppNumber = options.getString("whatsAppNumber");
             if (!whatsAppNumber.isEmpty()) {
@@ -125,6 +128,68 @@ public abstract class ShareIntent {
             }
         }
 
+        if (socialType.equals("instagramstories")) {
+            if (ShareIntent.hasValidKey("method", options)) {
+                String method = options.getString("method");
+                switch (method) {
+                    case "shareBackgroundImage": {
+                        if (ShareIntent.hasValidKey("backgroundImage", options)) {
+                            this.backgroundAsset = new ShareFile(options.getString("backgroundImage"), "image/jpeg", "background", this.reactContext);
+                            this.getIntent().setDataAndType(backgroundAsset.getURI(), backgroundAsset.getType());
+                            this.getIntent().addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                            if (ShareIntent.hasValidKey("attributionURL", options)) {
+                                this.getIntent().putExtra("content_url", options.getString("attributionURL"));
+                            }
+                        } else {
+                            throw new java.lang.IllegalArgumentException("backgroundImage is empty");
+                        }
+                        break;
+                    }
+                    case "shareStickerImage": {
+                        if (ShareIntent.hasValidKey("stickerImage", options)) {
+                            this.getIntent().setType("image/jpeg");
+                            this.stickerAsset = new ShareFile(options.getString("stickerImage"), "image/jpeg", "sticker", this.reactContext);
+                            this.getIntent().putExtra("interactive_asset_uri", stickerAsset.getURI());
+
+                            if (ShareIntent.hasValidKey("attributionURL", options)) {
+                                this.getIntent().putExtra("content_url", options.getString("attributionURL"));
+                            }
+
+                            if (ShareIntent.hasValidKey("backgroundTopColor", options)) {
+                                this.getIntent().putExtra("top_background_color", options.getString("backgroundTopColor"));
+                            }
+
+                            if (ShareIntent.hasValidKey("backgroundBottomColor", options)) {
+                                this.getIntent().putExtra("bottom_background_color", options.getString("backgroundBottomColor"));
+                            }
+                        } else {
+                            throw new java.lang.IllegalArgumentException("stickerImage is empty");
+                        }
+                        break;
+                    }
+                    case "shareBackgroundAndStickerImage": {
+                        if (ShareIntent.hasValidKey("backgroundImage", options) && ShareIntent.hasValidKey("stickerImage", options)) {
+                            this.backgroundAsset = new ShareFile(options.getString("backgroundImage"), "image/jpeg", "background", this.reactContext);
+                            this.stickerAsset = new ShareFile(options.getString("stickerImage"), "image/jpeg", "sticker", this.reactContext);
+
+                            this.getIntent().setDataAndType(backgroundAsset.getURI(), backgroundAsset.getType());
+                            this.getIntent().addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            this.getIntent().putExtra("interactive_asset_uri", stickerAsset.getURI());
+
+                            if (ShareIntent.hasValidKey("attributionURL", options)) {
+                                this.getIntent().putExtra("content_url", options.getString("attributionURL"));
+                            }
+                        } else {
+                            throw new java.lang.IllegalArgumentException("backgroundImage or stickerImage is empty");
+                        }
+                        break;
+                    }
+                    default:
+                        throw new java.lang.IllegalStateException("Unknown Instagram stories sharing mode: " + method);
+                }
+            }
+        }
 
         if (ShareIntent.hasValidKey("urls", options)) {
 
@@ -252,7 +317,7 @@ public abstract class ShareIntent {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 chooser.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, getExcludedComponentArray(options.getArray("excludedActivityTypes")));
                 activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
-            }else {
+            } else {
                 activity.startActivityForResult(excludeChooserIntent(this.getIntent(),options), RNShareModule.SHARE_REQUEST_CODE);
             }
         } else {

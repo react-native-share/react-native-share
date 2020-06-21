@@ -67,7 +67,7 @@ You can pass the option that will be handled by the native code, similar to `Sha
 | **PAGESMANAGER** | ✅   | 🚫 | 🚫 |
 | **WHATSAPP** | ✅   | ✅ | 🚫 |
 | **INSTAGRAM** | ✅   | ✅ | 🚫 |
-| **INSTAGRAM_STORIES** | 🚫   | ✅ | 🚫 |
+| **INSTAGRAM_STORIES** | ✅   | ✅ | 🚫 |
 | **GOOGLEPLUS** | ✅   | ✅ | 🚫 |
 | **EMAIL** | ✅   | ✅ | 🚫 |
 | **PINTEREST** | ✅   | 🚫 | 🚫 |
@@ -76,7 +76,7 @@ You can pass the option that will be handled by the native code, similar to `Sha
 | **MESSENGER** | ✅   | 🚫 | 🚫 |
 | **LINKEDIN** | ✅   | 🚫 | 🚫 |
 
-## Static values for Instagram Stories (iOS Only)
+## Static values for Instagram Stories
 
 These values can be used when you are calling the method `Share.single` passing `Share.Social.INSTAGRAM_STORIES` on the `social` attribute.
 
@@ -102,11 +102,11 @@ Use this properties to customize the instagram storie view.
 
 | Name  | Type     | Description | Optional |
 | :---- | :------: | :--- | :--- |
-| backgroundImage | string   | URL you want to share | 🚫
-| stickerImage | string   | URL you want to share | 🚫
+| backgroundImage | string   | URL you want to share | ✅
+| stickerImage | string   | URL you want to share | ✅
 | method | string   | [List](#instagram-stories-method-list) | 🚫
-| backgroundBottomColor | string   |  (optional) default #837DF4 | 🚫
-| backgroundTopColor | string   | (optional) default #906df4 | ✅
+| backgroundBottomColor | string   | default #837DF4 | ✅
+| backgroundTopColor | string   | default #906df4 | ✅
 | attributionURL | string   | (optional) facebook beta-test | ✅
 
 #### Instagram stories method list
@@ -119,7 +119,7 @@ Methods available when calling the `INSTAGRAM_STORIES` social option.
 | **SHARE_STICKER_IMAGE** | stickerImage   |
 | **SHARE_BACKGROUND_AND_STICKER_IMAGE** | backgroundImage, stickerImage   |
 
-## Static Values for Facebook Stories
+## Static Values for Facebook Stories (iOS only)
 These can be assessed using Share.Social property
 For eg.
 ```javascript
