@@ -121,18 +121,10 @@ public abstract class ShareIntent {
         }
 
         if (socialType.equals("sms")) {
-            String[] recipientsArray = options.getArray("recipients");
-            String separator = ",";
-            if(android.os.Build.MANUFACTURER.equals("Samsung")){
-                separator = ";";
-            }
-            String recipients = "";
-            for (int i = 0; i < recipientsArray.size(); i++) {
-                recipients += recipientsArray.getString(i);
-                recipients += separator;
-            }
-            if (!recipients.isEmpty()) {
-                this.getIntent().putExtra("address", recipients);
+            String recipient = options.getString("recipient");
+
+            if (!recipient.isEmpty()) {
+                this.getIntent().putExtra("address", recipient);
             }
         }
 
