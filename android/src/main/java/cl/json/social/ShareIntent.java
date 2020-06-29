@@ -120,6 +120,14 @@ public abstract class ShareIntent {
             socialType = options.getString("social");
         }
 
+        if (socialType.equals("sms")) {
+            String recipient = options.getString("recipient");
+
+            if (!recipient.isEmpty()) {
+                this.getIntent().putExtra("address", recipient);
+            }
+        }
+
         if (socialType.equals("whatsapp")) {
             String whatsAppNumber = options.getString("whatsAppNumber");
             if (!whatsAppNumber.isEmpty()) {

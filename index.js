@@ -90,6 +90,7 @@ type Options = {
   message?: string,
   title?: string,
   subject?: string,
+  recipient?: string,
   excludedActivityTypes?: string,
   failOnCancel?: boolean,
   showAppsToView?: boolean,
@@ -216,6 +217,7 @@ class RNShare {
     EMAIL: NativeModules.RNShare.EMAIL || 'email',
     PINTEREST: NativeModules.RNShare.PINTEREST || 'pinterest',
     LINKEDIN: NativeModules.RNShare.LINKEDIN || 'linkedin',
+    SMS: NativeModules.RNShare.SMS || 'sms',
   };
 
   static InstagramStories = {
