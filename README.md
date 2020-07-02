@@ -1,4 +1,4 @@
-# react-native-share [![CircleCI](https://circleci.com/gh/react-native-community/react-native-share/tree/master.svg?style=svg&circle-token=0c6860240abba4e16bd07df0ea805a72b67b8d41)](https://circleci.com/gh/react-native-community/react-native-share/tree/master) [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
+# react-native-share [![CircleCI](https://circleci.com/gh/react-native-community/react-native-share/tree/master.svg?style=svg&circle-token=0c6860240abba4e16bd07df0ea805a72b67b8d41)](https://circleci.com/gh/react-native-community/react-native-share/tree/master) [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 React Native Share, a simple tool for share message and file to other apps.
 
 # Sponsors
@@ -13,162 +13,27 @@ This gives you the power to prioritize our work and support the project contribu
 # Getting started
 ---
 
-### If you are using `react-native` >= 0.60.0 please use `react-native-share` >= 2.0.0
+If you are using `react-native >= 0.60` you just need to do a simple:
 
-## Automatic Way
----
-```
+```shell
 yarn add react-native-share
 ```
 
-or if you're using npm
+Or if are using npm:
+
+
+```shell
+npm i react-native-share --save
 ```
-npm install react-native-share --save
-```
----
+After that, we need to install the dependencies to use the project on iOS(you can skip this part, if you are using this on Android).
 
-#### Requirements:
+Now run a simple: `npx pod-install` or `cd ios && pod install`. After that, you should be able to use the library on both Platforms, iOS and Android. 
 
-1. Xcode 11 or higher
-2. iOS 13 SDK or higher
+Then simply import:
 
-#### Important:
+```js
+  import Share from "react-native-share";
 
-Linking is not needed anymore. ``react-native@0.60.0+`` supports dependencies auto linking.
-For iOS you also need additional step to install auto linked Pods:
-```sh
-npx pod-install
-```
-___
-
-### If you are using `react-native` <= 0.59.10 please use `react-native-share` <= 1.2.1:
-If you are having any problems with this library, or need to use >= 2.0.0 please refer to: [jetifier](https://github.com/mikehardy/jetifier#to-reverse-jetify--convert-node_modules-dependencies-to-support-libraries).
-
-After installing jetifier, runs a ```npx jetify -r``` and test if this works by running a ```react-native run-android```.
-## Automatic Way
-
----
-```
-yarn add react-native-share
-react-native link react-native-share # not needed for react-native >= 0.60.0
-```
-
-or if you're using npm
-```
-npm install react-native-share --save
-react-native link react-native-share # not needed for react-native >= 0.60.0
-```
----
-
-We recommend using the releases from npm, however you can use the master branch if you need any feature that is not available on NPM. By doing this you will be able to use unreleased features, but the module may be less stable.
-**yarn**:
-```
-yarn add react-native-share@git+https://git@github.com/react-native-community/react-native-share.git
-```
----
-
-#### LSApplicationQueriesSchemes on iOS
-Remember to add `instagram`, `facebook` or whatever queries schemes you need to LSApplicationQueriesSchemes
-field in your Info.plist. This is required to share content directly to other apps like Instagram, Facebook etc.
-Values for queries schemes can be found in `Social` field of `RNShare` class.
-
-
-
-## Manual install
-
-### iOS Install
-
-
-1. `yarn add react-native-share`
-2. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-3. Go to `node_modules` ➜ `react-native-share` ➜ `ios` and add `RNShare.xcodeproj`
-4. In XCode, in the project navigator, select your project. Add `libRNShare.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
-5. In XCode, in the project navigator, select your project. Add `Social.framework` and `MessageUI.framework` to your project's `General` ➜ `Linked Frameworks and Libraries`
-6. In iOS 9 or higher, you should add app list that you will share.
-If you want to share Whatsapp and Mailto, you should write `LSApplicationQueriesSchemes` in info.plist
-    ```xml
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-      <string>whatsapp</string>
-      <string>mailto</string>
-    </array>
-    ```
-7. (Optional) Also following lines allows users to save photos, add them in `info.plist`
-    ```xml
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>$(PRODUCT_NAME) wants to save photos</string>
-    ```
-8. Run your project (`Cmd+R`)
-
-### iOS Install (using Pods)
-
-
-If you wish, you can use [cocopoads](https://cocoapods.org/) to use react-native-share.
-
-You just need to add to your Podfile the react-native-share dependency.
-
-```ruby
-  # React-Native-Share pod
-  pod 'RNShare', :path => '../node_modules/react-native-share'
-```
-
-After that, just run a `pod install` or `pod udpate` to get up and running with react-native-share.
-
-Then run a `react-native link react-native-share`, and doing the steps 6 and 7.
-
-You can also see our example to see how you need to setup your podfile.
-
-Btw, We also recommend reading this [amazing article](https://shift.infinite.red/beginner-s-guide-to-using-cocoapods-with-react-native-46cb4d372995) about how pods and rn work together. =D
-
-
-### Android Install
-
-
-1. `yarn add react-native-share`
-2. Open up `android/app/src/main/java/[...]/MainApplication.java`
-    - Add `import cl.json.RNSharePackage;` and `import cl.json.ShareApplication;` to the imports at the top of the file
-    - Add `new RNSharePackage()` to the list returned by the `getPackages()` method
-
-3. Append the following lines to `android/settings.gradle`:
-  	```
-  	include ':react-native-share'
-  	project(':react-native-share').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-share/android')
-  	```
-4. Insert the following lines inside the dependencies block in
-   `android/app/build.gradle`:
-
-    ```
-      implementation project(':react-native-share')
-    ```
-5. **(Optional)** [Follow this for implementing Provider](#adding-your-implementation-of-fileprovider)
-
-### Windows Install
-
-
-[Read it! :D](https://github.com/ReactWindows/react-native)
-
-1. `yarn add react-native-share`
-2. In Visual Studio add the `RNShare.sln` in `node_modules/react-native-share/windows/RNShare.sln` folder to their solution, reference from their app.
-2. Open up your `MainPage.cs` app
-  - Add `using Cl.Json.RNShare;` to the usings at the top of the file
-  - Add `new RNSharePackage()` to the `List<IReactPackage>` returned by the `Packages` method
-
-
-
-# Methods
----
-
-### open(options)
-
-Open Simple share dialog
-
-Returns a promise that fulfills or rejects as soon as user successfully open the share action sheet or cancelled/failed to do so. As a result you might need to further handle the rejection while necessary. e.g.
-
-*For share multiple files, you must using option urls instead of url to share multiple files/images/docs.
-Example could be found in Example folder
-
-
-```jsx
   Share.open(options)
     .then((res) => { console.log(res) })
     .catch((err) => { err && console.log(err); });
@@ -561,83 +426,11 @@ Supported options for FACEBOOK_STORIES:
 | backgroundTopColor | string   | (optional) default #906df4 |
 | attributionURL | string   | (optional) facebook beta-test |
 
-### Facebook stories method list
-| Name  | Required options    |
-| :---- | :------: |
-| **SHARE_BACKGROUND_IMAGE** | backgroundImage   |
-| **SHARE_STICKER_IMAGE** | stickerImage   |
-| **SHARE_BACKGROUND_AND_STICKER_IMAGE** | backgroundImage, stickerImage   |
+Which you do something similar to this:
 
 
-#### Adding your implementation of FileProvider
+![example-ios](website/static/img/assets-docs/ios-readme-example.gif)
 
-[Android guide](https://developer.android.com/training/secure-file-sharing/setup-sharing.html).
+# Documentation
 
-- `applicationId` should be defined in the `defaultConfig` section in your `android/app/build.gradle`:
-
-- File: `android/app/build.gradle`
-
-    ```
-    defaultConfig {
-        applicationId "com.yourcompany.yourappname"
-        ...
-    }
-    ```
-
-- Add this `<provider>` section to your `AndroidManifest.xml`
-
-    File: `AndroidManifest.xml`
-    ```xml
-    <application>
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:grantUriPermissions="true"
-            android:exported="false">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
-        </provider>
-    </application>
-    ```
-
-- Create a `filepaths.xml` under this directory:
-`android/app/src/main/res/xml`.
-
-    In this file, add the following contents:
-
-    File: `android/app/src/main/res/xml/filepaths.xml`
-    ```xml
-    <?xml version="1.0" encoding="utf-8"?>
-    <paths xmlns:android="http://schemas.android.com/apk/res/android">
-      <external-path name="myexternalimages" path="Download/" />
-    </paths>
-    ```
-
-- Edit your `MainApplication.java` class to add `implements ShareApplication` and `getFileProviderAuthority`
-- The `getFileProviderAuthority` function returns the `android:authorities` value added in the `AndroidManifest.xml` file
-- `applicationId` is defined in the `defaultConfig` section of your `android/app/build.gradle` and referenced using `BuildConfig.APPLICATION_ID`
-
-    ```java
-    import cl.json.ShareApplication
-    public class MainApplication extends Application implements ShareApplication, ReactApplication {
-
-         @Override
-         public String getFileProviderAuthority() {
-                return BuildConfig.APPLICATION_ID + ".provider";
-         }
-
-         // ...Your own code
-
-    }
-    ```
-
-#### Mocking with Jest
-
-- To mock when using Jest. Add the below line on your `__mock__` directory.
-
-```js
-jest.mock('react-native-share', () => ({
-  default: jest.fn(),
-}));
-```
+If you are using a older version of `react-native` or `react-native-share`, having any problem or want to know how use `Share.open` and other functions, please refer to our new [docs](https://react-native-community.github.io/react-native-share) and help us improve that. ❤️

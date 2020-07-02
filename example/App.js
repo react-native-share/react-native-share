@@ -23,6 +23,7 @@ import images from './images/imagesBase64';
 
 const App = () => {
   const [packageSearch, setPackageSearch] = useState<string>('');
+  const [recipient, setRecipient] = useState<string>('');
   const [result, setResult] = useState<string>('');
 
   /**
@@ -155,6 +156,23 @@ const App = () => {
     }
   };
 
+  const shareSms = async () => {
+    const shareOptions = {
+      title: '',
+      social: Share.Social.SMS,
+      recipient,
+      message: 'Example SMS',
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>Welcome to React Native Share Example!</Text>
@@ -177,20 +195,34 @@ const App = () => {
           </View>
         )}
         {Platform.OS === 'android' && (
-          <View style={styles.searchPackageContainer}>
-            <TextInput
-              placeholder="Search for a Package"
-              onChangeText={setPackageSearch}
-              value={packageSearch}
-              style={styles.textInput}
-            />
-            <View>
-              <Button
-                onPress={checkIfPackageIsInstalled}
-                title="Check Package"
+          <>
+            <View style={styles.withInputContainer}>
+              <TextInput
+                placeholder="Recipient"
+                onChangeText={setRecipient}
+                value={recipient}
+                style={styles.textInput}
+                keyboardType="number-pad"
               />
+              <View>
+                <Button onPress={shareSms} title="Share Social: SMS" />
+              </View>
             </View>
-          </View>
+            <View style={styles.withInputContainer}>
+              <TextInput
+                placeholder="Search for a Package"
+                onChangeText={setPackageSearch}
+                value={packageSearch}
+                style={styles.textInput}
+              />
+              <View>
+                <Button
+                  onPress={checkIfPackageIsInstalled}
+                  title="Check Package"
+                />
+              </View>
+            </View>
+          </>
         )}
         <Text style={styles.resultTitle}>Result</Text>
         <Text style={styles.result}>{result}</Text>
@@ -230,7 +262,7 @@ const styles = StyleSheet.create({
   optionsRow: {
     justifyContent: 'space-between',
   },
-  searchPackageContainer: {
+  withInputContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',

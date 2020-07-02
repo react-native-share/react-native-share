@@ -90,6 +90,7 @@ type Options = {
   message?: string,
   title?: string,
   subject?: string,
+  recipient?: string,
   excludedActivityTypes?: string,
   failOnCancel?: boolean,
   showAppsToView?: boolean,
@@ -211,11 +212,12 @@ class RNShare {
     TWITTER: NativeModules.RNShare.TWITTER || 'twitter',
     WHATSAPP: NativeModules.RNShare.WHATSAPP || 'whatsapp',
     INSTAGRAM: NativeModules.RNShare.INSTAGRAM || 'instagram',
-    INSTAGRAM_STORIES: NativeModules.RNShare.INSTAGRAM_STORIES || 'instagram-stories',
+    INSTAGRAM_STORIES: NativeModules.RNShare.INSTAGRAM_STORIES || 'instagramstories',
     GOOGLEPLUS: NativeModules.RNShare.GOOGLEPLUS || 'googleplus',
     EMAIL: NativeModules.RNShare.EMAIL || 'email',
     PINTEREST: NativeModules.RNShare.PINTEREST || 'pinterest',
     LINKEDIN: NativeModules.RNShare.LINKEDIN || 'linkedin',
+    SMS: NativeModules.RNShare.SMS || 'sms',
   };
 
   static InstagramStories = {
