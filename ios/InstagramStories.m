@@ -90,7 +90,6 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
     if ([[UIApplication sharedApplication] canOpenURL:urlScheme]) {
         // Assign background image asset and attribution link URL to pasteboard
         NSArray *pasteboardItems = @[@{@"com.instagram.sharedSticker.backgroundVideo" : backgroundVideo}];
-        //NSArray *pasteboardItems = @[@{@"com.instagram.sharedSticker.backgroundVideo" : backgroundVideo;
         NSDictionary *pasteboardOptions = @{UIPasteboardOptionExpirationDate : [[NSDate date] dateByAddingTimeInterval:60 * 5]};
         // This call is iOS 10+, can use 'setItems' depending on what versions you support
         [[UIPasteboard generalPasteboard] setItems:pasteboardItems options:pasteboardOptions]; [[UIApplication sharedApplication] openURL:urlScheme options:@{} completionHandler:nil];
@@ -184,4 +183,3 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
 }
 // https://instagram.fhrk1-1.fna.fbcdn.net/vp/80c479ffc246a9320e614fa4def6a3dc/5C667D3F/t51.12442-15/e35/50679864_1663709050595244_6964601913751831460_n.jpg?_nc_ht=instagram.fhrk1-1.fna.fbcdn.net
 @end
-
