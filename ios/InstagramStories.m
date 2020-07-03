@@ -104,7 +104,6 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
     successCallback:(RCTResponseSenderBlock)successCallback {
     
     NSString *attrURL = [RCTConvert NSString:options[@"attributionURL"]];
-    //NSData *backgroundVideo = [[NSFileManager defaultManager] contentsAtPath:path];
     if (attrURL == nil) {
         attrURL = @"";
     }
