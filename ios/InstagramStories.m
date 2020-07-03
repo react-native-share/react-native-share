@@ -153,7 +153,7 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
                 UIImage *stickerImage = [UIImage imageWithData: [NSData dataWithContentsOfURL:sticketURL]];
                 [self backgroundImage:UIImagePNGRepresentation(backgroundImage) stickerImage:UIImagePNGRepresentation(stickerImage) attributionURL:attrURL];
             }
-        }else if([method isEqualToString:@"shareBackgroundVideo"]) {
+        } else if([method isEqualToString:@"shareBackgroundVideo"]) {
             
             NSString *URL = [RCTConvert NSString:options[@"backgroundVideo"]];
             if (URL == nil) {
