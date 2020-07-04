@@ -68,7 +68,7 @@ public abstract class ShareIntent {
                     this.getIntent().putExtra(Intent.EXTRA_TEXT, message);
                 }
             } else {
-                if (!TextUtils.isEmpty(message)) {
+                if (!TextUtils.isEmpty(message) && !isShareWithoutMessage(this)) {
                     this.getIntent().putExtra(Intent.EXTRA_TEXT, message + " " + options.getArray("urls").toString());
                 } else {
                     this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getArray("urls").toString());
@@ -85,7 +85,7 @@ public abstract class ShareIntent {
                     this.getIntent().putExtra(Intent.EXTRA_TEXT, message);
                 }
             } else {
-                if (!TextUtils.isEmpty(message)) {
+                if (!TextUtils.isEmpty(message) && !isShareWithoutMessage(this)) {
                     this.getIntent().putExtra(Intent.EXTRA_TEXT, message + " " + options.getString("url"));
                 } else {
                     this.getIntent().putExtra(Intent.EXTRA_TEXT, options.getString("url"));
@@ -198,4 +198,14 @@ public abstract class ShareIntent {
     protected abstract String getDefaultWebLink();
 
     protected abstract String getPlayStoreLink();
+
+    private boolean isShareWithoutMessage(ShareIntent shareIntent) {
+        if(shareIntent instanceof GenericShare) {
+            // 特定の媒体を指定しないシェアでは url の検出の仕組みが予測できないので message を付与しない
+            // e.g Facebook では、URL を自動で検出して反映していて、message に stand.fm などがあるとそちらが優先されてしまう
+            return true;
+        }
+
+        return false;
+    }
 }
