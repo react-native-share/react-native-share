@@ -41,7 +41,6 @@ Then simply import:
 
 Which you do something similar to this:
 
-
 ![example-ios](website/static/img/assets-docs/ios-readme-example.gif)
 
 # Documentation
