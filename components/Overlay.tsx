@@ -1,8 +1,5 @@
-// @flow
-
 import * as React from 'react';
-import { Animated, StyleSheet } from 'react-native';
-import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+import { StyleSheet, Animated, StyleProp, ViewStyle } from 'react-native';
 
 const DEFAULT_ANIMATE_TIME = 300;
 const styles = StyleSheet.create({
@@ -23,14 +20,12 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  visible: boolean,
-  onCancel: () => void,
-  children: React.Node,
+  visible: boolean;
 };
 
 type State = {
-  fadeAnim: Object,
-  overlayStyle: ViewStyleProp,
+  fadeAnim: Animated.Value;
+  overlayStyle: StyleProp<ViewStyle>;
 };
 
 class Overlay extends React.Component<Props, State> {

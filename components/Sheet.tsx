@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react';
 import { Animated } from 'react-native';
 
@@ -7,15 +5,14 @@ const DEFAULT_BOTTOM = -300;
 const DEFAULT_ANIMATE_TIME = 300;
 
 type Props = {
-  children: React.Node,
-  visible: boolean,
+  visible: boolean;
 };
 
 type State = {
-  bottom: Object,
+  bottom: Animated.Value;
 };
 
-export default class extends React.Component<Props, State> {
+class Sheet extends React.Component<Props, State> {
   state = {
     bottom: new Animated.Value(DEFAULT_BOTTOM),
   };
@@ -34,3 +31,5 @@ export default class extends React.Component<Props, State> {
     );
   }
 }
+
+export default Sheet;
