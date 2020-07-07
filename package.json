@@ -83,7 +83,7 @@
     "start": "react-native start",
     "start:android": "react-native run-android",
     "start:ios": "react-native run-ios",
-    "lint": "eslint index.js --max-warnings=0",
+    "lint": "eslint index.tsx",
     "lint:staged": "lint-staged",
     "release:major": "node ./changelog --major && npm version major && git push origin && git push origin --follow-tags",
     "release:minor": "node ./changelog --minor && npm version minor && git push origin && git push origin --follow-tags",
@@ -92,7 +92,7 @@
     "validate": "yarn validate:prettier && yarn validate:lint && yarn validate:flow && validate:ts",
     "validate:flow": "echo yarn flow",
     "validate:ts": "yarn tsc",
-    "validate:lint": "eslint *js components/*.js --max-warnings=0",
+    "validate:lint": "eslint *js components/*.tsx",
     "validate:prettier": "prettier --write *.js components/*.js",
     "ci:publish": "npx semantic-release"
   },
