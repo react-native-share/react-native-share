@@ -81,5 +81,5 @@
     "prettier.config.js",
     "react-native.config.js"
   ],
-  "include": ["components/**/*.tsx", "index.ts"]
+  "include": ["components/**/*.tsx", "index.tsx"]
 }
