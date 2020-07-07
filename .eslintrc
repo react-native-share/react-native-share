@@ -1,45 +1,79 @@
 {
-  "parser": "babel-eslint",
+  "root": true,
+  "parser": "@typescript-eslint/parser",
   "env": {
     "browser": true,
     "node": true,
     "jest": true,
     "es6": true
   },
-  "plugins": [
-    "react",
-    "react-native",
-    "flowtype",
-    "import"
-  ],
+  "plugins": ["react", "react-native", "flowtype", "import", "@typescript-eslint"],
   "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "modules": true
-    }
+    "ecmaVersion": 2020,
+    "sourceType": "module"
   },
   "extends": [
     "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "plugin:import/errors",
     "@react-native-community"
-
   ],
   "settings": {
     "import/ignore": ["react-native"],
     "import/resolver": {
       "node": {
-        "extensions":[
-          ".js",
-          ".android.js",
-          ".ios.js",
-          ".json"
-        ]
+        "extensions": [".js", ".android.js", ".ios.js", ".json", ".ts", ".tsx"]
       }
     }
   },
   "globals": {
     "__DEV__": true
+  },
+  "rules": {
+    /**
+     * eslint
+     */
+    "no-shadow": [
+      "error",
+      {
+        "builtinGlobals": false,
+        "hoist": "all",
+        "allow": []
+      }
+    ],
+    /**
+     * typescript
+     */
+    "@typescript-eslint/ban-ts-comment": [
+      "error",
+      {
+        "ts-expect-error": "allow-with-description",
+        "ts-ignore": "allow-with-description",
+        "ts-nocheck": "allow-with-description",
+        "ts-check": false,
+        "minimumDescriptionLength": 3
+      }
+    ],
+    "@typescript-eslint/no-use-before-define": "warn",
+    "@typescript-eslint/member-delimiter-style": "off",
+    "@typescript-eslint/indent": "off",
+    "@typescript-eslint/ban-ts-ignore": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-member-accessibility": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-extra-semi": "off",
+    //
+    // conflicts with or replaced by prettier
+    //
+    "no-extra-semi": "off",
+    "max-len": "off",
+    "indent": "off",
+    "arrow-parens": "off",
+    "no-underscore-dangle": "off",
+    "arrow-body-style": "off",
+    "padded-blocks": "off",
+    "spaced-comment": "off"
   }
 }
