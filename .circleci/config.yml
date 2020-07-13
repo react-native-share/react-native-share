@@ -17,12 +17,12 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout
-      - react-native/yarn_install  
+      - react-native/yarn_install
       - persist_to_workspace:
           root: ~/app
           paths:
             - node_modules
-    
+
   lint:
     executor: react-native/linux_js
     working_directory: ~/app
@@ -32,14 +32,14 @@ jobs:
           name: Lint
           command: yarn lint
 
-  validate-flow:
+  js-build:
     executor: react-native/linux_js
     working_directory: ~/app
     steps:
       - checkout-attach-workspace
       - run:
-          name: Flow
-          command: yarn validate:flow
+          name: Build
+          command: yarn build
 
   ios_build:
     macos:
@@ -56,7 +56,7 @@ jobs:
           project_type: workspace
           scheme: example
           device: iPhone 11
-  
+
   publish-version:
     executor: react-native/linux_js
     working_directory: ~/app
@@ -108,7 +108,7 @@ workflows:
       - validate-flow:
           requires:
             - install-dependencies
-  
+
   release:
     jobs:
       - install-dependencies:
@@ -119,7 +119,7 @@ workflows:
       - publish-version:
           requires:
             - install-dependencies
-      - deploy-docs: 
+      - deploy-docs:
           filters:
             branches:
               only:
