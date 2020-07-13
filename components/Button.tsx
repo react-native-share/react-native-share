@@ -40,7 +40,7 @@ type Props = {
   textStyle?: StyleProp<TextStyle>;
 };
 
-const Button: React.FC<Props> = ({ buttonStyle, onPress, iconSrc, textStyle, children }) => {
+const Button: React.FC<Props> = ({ buttonStyle = {}, onPress, iconSrc, textStyle = {}, children }) => {
   return (
     <TouchableOpacity activeOpacity={0.5} style={[styles.button, buttonStyle]} onPress={onPress}>
       <Image style={styles.icon} source={iconSrc} />
