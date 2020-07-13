@@ -62,7 +62,7 @@ class ShareSheet extends React.Component<Props> {
   render() {
     const { style = {}, overlayStyle = {}, visible, ...props } = this.props;
     return (
-      <Overlay visible={visible} {...props}>
+      <Overlay {...props} visible={visible}>
         <View style={[styles.actionSheetContainer, overlayStyle]}>
           <TouchableOpacity style={shareSheetStyle} onPress={this.props.onCancel} />
           <Sheet visible={this.props.visible}>
@@ -213,24 +213,39 @@ const requireAndAskPermissions = async (options: Options | MultipleOptions) => {
   return Promise.resolve(true);
 };
 
+enum Social {
+  facebook = 'facebook',
+  facebookStories = 'facebook-stories',
+  pagesmanager = 'pagesmanager',
+  twitter = 'twitter',
+  whatsapp = 'whatsapp',
+  instagram = 'instagram',
+  instagramstories = 'instagramstories',
+  googleplus = 'googleplus',
+  email = 'email',
+  pinterest = 'pinterest',
+  linkedin = 'linkedin',
+  sms = 'sms',
+}
+
 class RNShare {
-  static Button: any;
-  static ShareSheet: any;
-  static Overlay: any;
-  static Sheet: any;
+  static Button: typeof Button;
+  static ShareSheet: ShareSheet;
+  static Overlay: Overlay;
+  static Sheet: Sheet;
   static Social = {
-    FACEBOOK: NativeModules.RNShare.FACEBOOK || 'facebook',
-    FACEBOOK_STORIES: NativeModules.RNShare.FACEBOOK_STORIES || 'facebook-stories',
-    PAGESMANAGER: NativeModules.RNShare.PAGESMANAGER || 'pagesmanager',
-    TWITTER: NativeModules.RNShare.TWITTER || 'twitter',
-    WHATSAPP: NativeModules.RNShare.WHATSAPP || 'whatsapp',
-    INSTAGRAM: NativeModules.RNShare.INSTAGRAM || 'instagram',
-    INSTAGRAM_STORIES: NativeModules.RNShare.INSTAGRAM_STORIES || 'instagramstories',
-    GOOGLEPLUS: NativeModules.RNShare.GOOGLEPLUS || 'googleplus',
-    EMAIL: NativeModules.RNShare.EMAIL || 'email',
-    PINTEREST: NativeModules.RNShare.PINTEREST || 'pinterest',
-    LINKEDIN: NativeModules.RNShare.LINKEDIN || 'linkedin',
-    SMS: NativeModules.RNShare.SMS || 'sms',
+    FACEBOOK: NativeModules.RNShare.FACEBOOK || Social.facebook,
+    FACEBOOK_STORIES: NativeModules.RNShare.FACEBOOK_STORIES || Social.facebookStories,
+    PAGESMANAGER: NativeModules.RNShare.PAGESMANAGER || Social.pagesmanager,
+    TWITTER: NativeModules.RNShare.TWITTER || Social.twitter,
+    WHATSAPP: NativeModules.RNShare.WHATSAPP || Social.whatsapp,
+    INSTAGRAM: NativeModules.RNShare.INSTAGRAM || Social.instagram,
+    INSTAGRAM_STORIES: NativeModules.RNShare.INSTAGRAM_STORIES || Social.instagramstories,
+    GOOGLEPLUS: NativeModules.RNShare.GOOGLEPLUS || Social.googleplus,
+    EMAIL: NativeModules.RNShare.EMAIL || Social.email,
+    PINTEREST: NativeModules.RNShare.PINTEREST || Social.pinterest,
+    LINKEDIN: NativeModules.RNShare.LINKEDIN || Social.linkedin,
+    SMS: NativeModules.RNShare.SMS || Social.sms,
   };
 
   static InstagramStories = {

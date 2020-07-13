@@ -19,16 +19,16 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+export type OverlayProps = {
   visible: boolean;
 };
 
-type State = {
+export type OverlayState = {
   fadeAnim: Animated.Value;
   overlayStyle: StyleProp<ViewStyle>;
 };
 
-class Overlay extends React.Component<Props, State> {
+class Overlay extends React.Component<OverlayProps, OverlayState> {
   state = {
     fadeAnim: new Animated.Value(0),
     overlayStyle: styles.emptyOverlay,
@@ -39,7 +39,7 @@ class Overlay extends React.Component<Props, State> {
       this.setState({ overlayStyle: styles.emptyOverlay });
     }
   }
-  UNSAFE_componentWillReceiveProps(newProps: Props) {
+  UNSAFE_componentWillReceiveProps(newProps: OverlayProps) {
     if (newProps.visible) {
       this.setState({ overlayStyle: styles.fullOverlay });
     }
