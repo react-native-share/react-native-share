@@ -1,120 +1,125 @@
-version: 2
-executorType: docker
-jobs:
-  install-dependencies:
-    working_directory: ~/app
-    docker:
-      - image: reactnativecommunity/react-native-android
+version: 2.1
+
+orbs:
+  react-native: react-native-community/react-native@4.4.0
+
+commands:
+  checkout-attach-workspace:
+    description: "Checkout and attach workspace"
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-npm-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - v1-npm
-      - run:
-          name: Install Dependencies
-          command: yarn install --frozen-lockfile --non-interactive
-      - save_cache:
-          key: v1-npm
-          paths:
-            - node_modules/
-      - save_cache:
-          key: v1-npm-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths:
-            - node_modules/
+      - attach_workspace:
+          at: ~/app
+
+jobs:
+  install-dependencies:
+    executor: react-native/linux_js
+    working_directory: ~/app
+    steps:
+      - checkout
+      - react-native/yarn_install  
       - persist_to_workspace:
           root: ~/app
           paths:
             - node_modules
+    
   lint:
+    executor: react-native/linux_js
     working_directory: ~/app
-    docker:
-      - image: reactnativecommunity/react-native-android
     steps:
-      - checkout
-      - attach_workspace:
-          at: ~/app
+      - checkout-attach-workspace
       - run:
           name: Lint
           command: yarn lint
-  build-example-app:
+
+  validate-flow:
+    executor: react-native/linux_js
     working_directory: ~/app
-    docker:
-      - image: reactnativecommunity/react-native-android
+    steps:
+      - checkout-attach-workspace
+      - run:
+          name: Flow
+          command: yarn validate:flow
+
+  ios_build:
+    macos:
+      xcode: 11.5.0
+    working_directory: ~/app
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/app
-      - restore_cache:
-          keys:
-            - v1-gradle-{{ checksum "android/gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "example/android/gradle/wrapper/gradle-wrapper.properties" }}
-            - v1-gradle-wrapper
-      - restore_cache:
-          keys:
-            - v1-gradle-cache-{{ checksum "android/build.gradle" }}-{{ checksum "example/android/build.gradle" }}
-            - v1-gradle-cache
-      - run:
-          name: Run Gradle Checks on Example App
-          command: |
-            cd android
-            chmod +x ./gradlew
-            ./gradlew clean && ./gradlew && ./gradlew check
-      - store_artifacts:
-          path: android/build/reports
-      - run:
-          name: Install dependencies on the example app
-          command: cd example && yarn install --frozen-lockfile --non-interactive
-      - run:
-          name: Check for errors in the example app using Flow
-          command: |
-            cd example && yarn flow
-      - run:
-          name: Dev Sync #sync code on the current version to the example app
-          command: yarn dev-sync
-      - run:
-          name: Build Sample App
-          command: |
-            cd example/android && chmod +x ./gradlew && ./gradlew build
-      - store_artifacts:
-          path: example/android/app/build/reports
-          destination: app
-      - save_cache:
-          key: v1-gradle-wrapper-{{ checksum "example/android/gradle/wrapper/gradle-wrapper.properties" }}
-          paths:
-            - ~/.gradle/wrapper
-      - save_cache:
-          key: v1-gradle-cache-{{ checksum "example/android/build.gradle" }}
-          paths:
-            - ~/.gradle/caches
+      - react-native/setup_macos_executor
+      - run: yarn install --frozen-lockfile --non-interactive
+      - react-native/pod_install:
+          pod_install_directory: ./example/ios
+      - react-native/ios_build:
+          project_path: ./example/ios/Example.xcworkspace
+          project_type: workspace
+          scheme: example
+          device: iPhone 11
+  
   publish-version:
+    executor: react-native/linux_js
     working_directory: ~/app
-    docker:
-      - image: reactnativecommunity/react-native-android
     steps:
-      - checkout
-      - attach_workspace:
-          at: ~/app
+      - checkout-attach-workspace
       - run:
           name: Publish New Version
           command: yarn ci:publish
+
+  deploy-docs:
+    executor: react-native/linux_js
+    working_directory: ~/app
+    steps:
+      - checkout-attach-workspace
+      - run:
+          name: Deploying new docs-version
+          command: |
+            git config --global user.email "${GH_EMAIL}@users.noreply.github.com"
+            git config --global user.name "${GH_NAME}"
+            echo "machine github.com login $GH_NAME password $GH_TOKEN" > ~/.netrc
+            cd website && yarn install && CUSTOM_COMMIT_MESSAGE="[skip ci]" GIT_USER=${GH_NAME} yarn deploy
+
 workflows:
   version: 2
+
   build-lint-app:
     jobs:
-      - install-dependencies
-      - lint:
-          requires:
-            - install-dependencies
+      - install-dependencies:
           filters:
             branches:
               ignore:
                 - master
-      - build-example-app:
+      - react-native/android_build:
+          checkout: true
+          project_path: ./example/android
+          workspace_root: ~/app
+          filters:
+            branches:
+              ignore:
+                - master
+      - ios_build:
+          filters:
+            branches:
+              ignore:
+                - master
+      - lint:
           requires:
-            - lint
+            - install-dependencies
+      - validate-flow:
+          requires:
+            - install-dependencies
+  
+  release:
+    jobs:
+      - install-dependencies:
+          filters:
+            branches:
+              only:
+                - master
       - publish-version:
           requires:
             - install-dependencies
+      - deploy-docs: 
           filters:
             branches:
               only:

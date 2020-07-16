@@ -59,11 +59,32 @@ public abstract class SingleShareIntent extends ShareIntent {
     }
 
     protected void openIntentChooser() throws ActivityNotFoundException {
+        this.openIntentChooser(null);
+    }
+
+    protected void openIntentChooser(ReadableMap options) throws ActivityNotFoundException {
         if (this.options.hasKey("forceDialog") && this.options.getBoolean("forceDialog")) {
             Activity activity = this.reactContext.getCurrentActivity();
             if (activity == null) {
                 TargetChosenReceiver.sendCallback(false, "Something went wrong");
                 return;
+            }
+            if (options != null) {
+                if (ShareIntent.hasValidKey("social", options)) {
+                    String socialType = options.getString("social");
+                    if (socialType.equals("instagramstories")) {
+                        if (ShareIntent.hasValidKey("method", options)) {
+                            String method = options.getString("method");
+                            if (method.equals("shareStickerImage") || method.equals("shareBackgroundAndStickerImage")) {
+                                activity.grantUriPermission("com.instagram.android", this.stickerAsset.getURI(), Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            }
+                        } else {
+                            throw new java.lang.IllegalArgumentException("instagram share mode is empty");
+                        }
+                    }
+                } else {
+                    throw new java.lang.IllegalArgumentException("social is empty");
+                }
             }
             if (TargetChosenReceiver.isSupported()) {
                 IntentSender sender = TargetChosenReceiver.getSharingSenderIntent(this.reactContext);
