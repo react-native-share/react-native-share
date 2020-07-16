@@ -47,12 +47,8 @@
 #import "FacebookStories.h"
 #import "GooglePlusShare.h"
 #import "EmailShare.h"
-
-
 #import "InstagramStories.h"
-// add snapchatshare
 #import "SnapchatShare.h"
-
 #import "RNShareActivityItemSource.h"
 
 @implementation RNShare
