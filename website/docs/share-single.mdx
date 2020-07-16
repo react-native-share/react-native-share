@@ -163,3 +163,21 @@ Methods available when calling the `FACEBOOK_STORIES` social option.
 | **SHARE_BACKGROUND_IMAGE** | backgroundImage   |
 | **SHARE_STICKER_IMAGE** | stickerImage   |
 | **SHARE_BACKGROUND_AND_STICKER_IMAGE** | backgroundImage, stickerImage   |
+
+### Share videos to Instagram
+Instagram tries to select **the very last file of the cameraroll** so you have to save videos to the cameraroll in case you want to share them to Instagram.
+```js
+import RNFetchBlob from 'rn-fetch-blob';
+import CameraRoll from '@react-native-community/cameraroll';
+
+const cache = await RNFetchBlob.config({
+            fileCache: true,
+            appendExt: 'mp4',
+          }).fetch('GET', this.props.review.data.watermarkedVideo, {});
+const gallery = await CameraRoll.save(cache.path(), 'video');
+cache.flush();
+await Share.shareSingle({
+    social: Share.Social.INSTAGRAM,
+    url: gallery,
+});
+```
