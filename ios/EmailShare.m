@@ -10,6 +10,25 @@
 
 
 @implementation EmailShare
+
+- (NSString*)getExtensionFromBase64:(NSString*)base64String {
+    NSRange   searchedRange = NSMakeRange(0, [base64String length]);
+    NSString *pattern = @"/[a-zA-Z0-9]+;";
+    NSError  *error = nil;
+
+    NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern: pattern options:0 error:&error];
+    NSArray* matches = [regex matchesInString:base64String options:0 range: searchedRange];
+    
+    NSString *ext = nil;
+    
+    for (NSTextCheckingResult* match in matches) {
+        NSString* matchText = [base64String substringWithRange:[match range]];
+        ext = [matchText substringWithRange:(NSMakeRange(1, matchText.length - 2))];
+    }
+
+    return ext;
+}
+
 - (void)shareSingle:(NSDictionary *)options
     failureCallback:(RCTResponseErrorBlock)failureCallback
     successCallback:(RCTResponseSenderBlock)successCallback {
@@ -54,7 +73,9 @@
             NSURL *URL = [RCTConvert NSURL:options[@"url"]];
             
             if (URL) {
-                if (URL.fileURL || [URL.scheme.lowercaseString isEqualToString:@"data"]) {
+                BOOL isDataScheme = [URL.scheme.lowercaseString isEqualToString:@"data"];
+                
+                if (URL.fileURL || isDataScheme) {
                     NSError *error;
                     NSData *data = [NSData dataWithContentsOfURL:URL
                                                          options:(NSDataReadingOptions)0
@@ -73,6 +94,22 @@
                     
                     if([options objectForKey:@"filename"]){
                         filename = [RCTConvert NSString:options[@"filename"]];
+                        
+                        
+                        // add extension just like Android for consistency
+                        // file name should not include extension
+                        if(URL.isFileURL){
+                            NSString *ext = [[URL.absoluteString componentsSeparatedByString:@"."] lastObject];
+                            
+                            filename = [filename stringByAppendingString: [@"." stringByAppendingString:ext]];
+                        }
+                        else if (isDataScheme){
+                            NSString *ext = [self getExtensionFromBase64: URL.absoluteString];
+                            
+                            if(ext){
+                                filename = [filename stringByAppendingString: [@"." stringByAppendingString:ext]];
+                            }
+                        }
                     }
                     else if(URL.fileURL){
                         NSArray *parts = [URL.absoluteString componentsSeparatedByString:@"/"];
