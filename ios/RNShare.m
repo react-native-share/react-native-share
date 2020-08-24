@@ -54,6 +54,11 @@
 RCTResponseErrorBlock rejectBlock;
 RCTResponseSenderBlock resolveBlock;
 
+// we need this since this controller
+// may implement a delegate and could be garbage collected
+// before it is called
+EmailShare *shareCtl;
+
 - (dispatch_queue_t)methodQueue
 {
     return dispatch_get_main_queue();
@@ -62,6 +67,14 @@ RCTResponseSenderBlock resolveBlock;
 + (BOOL)requiresMainQueueSetup
 {
     return YES;
+}
+
+- (id) init
+{
+    if ((self = [super init])) {
+        shareCtl = [[EmailShare alloc] init];
+    }
+    return self;
 }
 
 - (CGRect)sourceRectInView:(UIView *)sourceView
@@ -152,7 +165,6 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         } else if([social isEqualToString:@"email"]) {
             NSLog(@"TRY OPEN email");
-            EmailShare *shareCtl = [[EmailShare alloc] init];
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         }
     } else {
