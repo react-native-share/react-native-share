@@ -7,27 +7,11 @@
 //
 
 #import "EmailShare.h"
+#import "Utils.h"
 
 
 @implementation EmailShare
 
-- (NSString*)getExtensionFromBase64:(NSString*)base64String {
-    NSRange   searchedRange = NSMakeRange(0, [base64String length]);
-    NSString *pattern = @"/[a-zA-Z0-9]+;";
-    NSError  *error = nil;
-
-    NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern: pattern options:0 error:&error];
-    NSArray* matches = [regex matchesInString:base64String options:0 range: searchedRange];
-    
-    NSString *ext = nil;
-    
-    for (NSTextCheckingResult* match in matches) {
-        NSString* matchText = [base64String substringWithRange:[match range]];
-        ext = [matchText substringWithRange:(NSMakeRange(1, matchText.length - 2))];
-    }
-
-    return ext;
-}
 
 - (void)shareSingle:(NSDictionary *)options
     failureCallback:(RCTResponseErrorBlock)failureCallback
@@ -104,7 +88,7 @@
                             filename = [filename stringByAppendingString: [@"." stringByAppendingString:ext]];
                         }
                         else if (isDataScheme){
-                            NSString *ext = [self getExtensionFromBase64: URL.absoluteString];
+                            NSString *ext = [Utils getExtensionFromBase64: URL.absoluteString];
                             
                             if(ext){
                                 filename = [filename stringByAppendingString: [@"." stringByAppendingString:ext]];
@@ -143,25 +127,6 @@
 
 -(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(nullable NSError *)error
 {
-// TODO: Do something with this
-//    switch (result)
-//    {
-//        case MFMailComposeResultCancelled:
-//            NSLog(@"Mail cancelled");
-//            break;
-//        case MFMailComposeResultSaved:
-//            NSLog(@"Mail saved");
-//            break;
-//        case MFMailComposeResultSent:
-//            NSLog(@"Mail sent");
-//            break;
-//        case MFMailComposeResultFailed:
-//            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
-//            break;
-//        default:
-//            break;
-//    }
-     
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController *ctrl = RCTPresentedViewController();
         [ctrl dismissViewControllerAnimated:YES completion:NULL];
