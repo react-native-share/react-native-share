@@ -38,6 +38,7 @@ public abstract class SingleShareIntent extends ShareIntent {
                     this.getIntent().setPackage(getPackage());
                 }
                 super.open(options);
+                return; // once we open we don't need to continue
             } else {
                 System.out.println("NOT INSTALLED");
                 String url = "";
