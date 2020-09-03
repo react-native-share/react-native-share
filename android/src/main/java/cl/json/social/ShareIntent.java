@@ -142,7 +142,7 @@ public abstract class ShareIntent {
                 switch (method) {
                     case "shareBackgroundImage": {
                         if (ShareIntent.hasValidKey("backgroundImage", options)) {
-                            this.backgroundAsset = new ShareFile(options.getString("backgroundImage"), "image/jpeg", "background", this.reactContext);
+                            this.backgroundAsset = new ShareFile(options.getString("backgroundImage"), "background", this.reactContext);
                             this.getIntent().setDataAndType(backgroundAsset.getURI(), backgroundAsset.getType());
                             this.getIntent().addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
@@ -157,8 +157,16 @@ public abstract class ShareIntent {
                     case "shareStickerImage": {
                         if (ShareIntent.hasValidKey("stickerImage", options)) {
                             this.getIntent().setType("image/jpeg");
-                            this.stickerAsset = new ShareFile(options.getString("stickerImage"), "image/jpeg", "sticker", this.reactContext);
+                            this.stickerAsset = new ShareFile(options.getString("stickerImage"), "sticker", this.reactContext);
                             this.getIntent().putExtra("interactive_asset_uri", stickerAsset.getURI());
+                            Activity activity = this.reactContext.getCurrentActivity();
+                            if (activity == null) {
+                                TargetChosenReceiver.sendCallback(false, "Something went wrong");
+                                return;
+                            }
+                            activity.grantUriPermission(
+                                    "com.instagram.android", stickerAsset.getURI(), Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            );
 
                             if (ShareIntent.hasValidKey("attributionURL", options)) {
                                 this.getIntent().putExtra("content_url", options.getString("attributionURL"));
@@ -184,6 +192,14 @@ public abstract class ShareIntent {
                             this.getIntent().setDataAndType(backgroundAsset.getURI(), backgroundAsset.getType());
                             this.getIntent().addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             this.getIntent().putExtra("interactive_asset_uri", stickerAsset.getURI());
+                            Activity activity = this.reactContext.getCurrentActivity();
+                            if (activity == null) {
+                                TargetChosenReceiver.sendCallback(false, "Something went wrong");
+                                return;
+                            }
+                            activity.grantUriPermission(
+                                    "com.instagram.android", stickerAsset.getURI(), Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            );
 
                             if (ShareIntent.hasValidKey("attributionURL", options)) {
                                 this.getIntent().putExtra("content_url", options.getString("attributionURL"));
