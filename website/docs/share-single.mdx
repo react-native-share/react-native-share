@@ -1,6 +1,6 @@
 ---
 id: share-single
-title: Share.single
+title: Share.shareSingle
 ---
 
 Open the share dialog with the specific application. This returns a promise similar to `Share.open`, keep in mind that you will need to handle the same response when the user cancel/dismiss.
@@ -17,7 +17,7 @@ Using a promise implementation:
     filename: 'test' , // only for base64 file in Android
   };
 
-  Share.single(shareOptions)
+  Share.shareSingle(shareOptions)
     .then((res) => { console.log(res) })
     .catch((err) => { err && console.log(err); });
 ```
@@ -35,7 +35,7 @@ Or with `async/await`:
   };
 
   const fun = async () => {
-    const shareResponse = await Share.single(shareOptions);
+    const shareResponse = await Share.shareSingle(shareOptions);
   }
 ```
 
