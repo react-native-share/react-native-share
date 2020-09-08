@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import android.util.Log;
+
 /**
  * Created by disenodosbbcl on 22-07-16.
  */
@@ -114,10 +116,14 @@ public class ShareFile {
         return result;
     }
     public Uri getURI() {
-
         final MimeTypeMap mime = MimeTypeMap.getSingleton();
         String extension = mime.getExtensionFromMimeType(getType());
 
+        if (extension == null)
+        {
+            extension = getType().contains("/") ? getType().split("/")[1] : getType();
+            Log.w("LS","mimetype " + getType() + " not recognized, used following as extension : "+ extension);
+        }
         if(this.isBase64File()) {
             String encodedImg = this.uri.toString().substring(BASE_64_DATA_LENGTH + this.type.length() + BASE_64_DATA_OFFSET);
             String filename = this.filename != null ? this.filename : System.nanoTime() + "";
