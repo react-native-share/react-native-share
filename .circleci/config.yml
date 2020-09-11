@@ -17,12 +17,12 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout
-      - react-native/yarn_install  
+      - react-native/yarn_install
       - persist_to_workspace:
           root: ~/app
           paths:
             - node_modules
-    
+
   lint:
     executor: react-native/linux_js
     working_directory: ~/app
@@ -41,22 +41,6 @@ jobs:
           name: Flow
           command: yarn validate:flow
 
-  ios_build:
-    macos:
-      xcode: 11.5.0
-    working_directory: ~/app
-    steps:
-      - checkout
-      - react-native/setup_macos_executor
-      - run: yarn install --frozen-lockfile --non-interactive
-      - react-native/pod_install:
-          pod_install_directory: ./example/ios
-      - react-native/ios_build:
-          project_path: ./example/ios/Example.xcworkspace
-          project_type: workspace
-          scheme: example
-          device: iPhone 11
-  
   publish-version:
     executor: react-native/linux_js
     working_directory: ~/app
@@ -97,18 +81,13 @@ workflows:
             branches:
               ignore:
                 - master
-      - ios_build:
-          filters:
-            branches:
-              ignore:
-                - master
       - lint:
           requires:
             - install-dependencies
       - validate-flow:
           requires:
             - install-dependencies
-  
+
   release:
     jobs:
       - install-dependencies:
@@ -119,7 +98,7 @@ workflows:
       - publish-version:
           requires:
             - install-dependencies
-      - deploy-docs: 
+      - deploy-docs:
           filters:
             branches:
               only:
