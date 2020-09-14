@@ -1,1 +1,10 @@
-example/
+example
+website
+.eslintrc
+.eslintignore
+.flowconfig
+commitlint.config.js
+CHANGELOG.md
+CODEOWNERS
+react-native.config.js
+prettier.config.js

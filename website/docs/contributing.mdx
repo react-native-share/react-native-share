@@ -25,13 +25,16 @@ To run the example app, which is located at `./example`, just run at the root pr
 ```shell
 yarn && cd example/ios && pod install && cd -
 ```
+
 And finally a `yarn start` at the root folder.
+
+After that, open the file `example/ios/example.xcworkspace` with XCode or run a `yarn start:android` to start the android simulator.
 
 ## Where is the package.json and node_modules?
 
 We don't need a `package.json` or `node_modules` because we are using a custom config with `react-native.config.js`, that let us use easily the rootFolder of the project.
 
-Also, we changed some native files like: [`AppDelegate.M`](https://github.com/react-native-community/react-native-share/blob/56faa20d7ad30501056b89b24205f22c9efb93f3/example/ios/example/AppDelegate.m#L36), 
+Also, we changed some native files like: [`AppDelegate.M`](https://github.com/react-native-community/react-native-share/blob/56faa20d7ad30501056b89b24205f22c9efb93f3/example/ios/example/AppDelegate.m#L36),
 [`MainApplication.java`](https://github.com/react-native-community/react-native-share/blob/56faa20d7ad30501056b89b24205f22c9efb93f3/example/android/app/src/main/java/com/example/MainApplication.java#L33) and
 other files. By doing this, we are able to use the root-version of react-native-share and react at `../../../`.
 
