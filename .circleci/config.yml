@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  react-native: react-native-community/react-native@4.4.0
+  react-native: react-native-community/react-native@4.4.2
 
 commands:
   checkout-attach-workspace:
@@ -17,12 +17,12 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout
-      - react-native/yarn_install  
+      - react-native/yarn_install
       - persist_to_workspace:
           root: ~/app
           paths:
             - node_modules
-    
+
   lint:
     executor: react-native/linux_js
     working_directory: ~/app
@@ -56,7 +56,7 @@ jobs:
           project_type: workspace
           scheme: example
           device: iPhone 11
-  
+
   publish-version:
     executor: react-native/linux_js
     working_directory: ~/app
@@ -108,7 +108,7 @@ workflows:
       - validate-flow:
           requires:
             - install-dependencies
-  
+
   release:
     jobs:
       - install-dependencies:
@@ -119,7 +119,7 @@ workflows:
       - publish-version:
           requires:
             - install-dependencies
-      - deploy-docs: 
+      - deploy-docs:
           filters:
             branches:
               only:

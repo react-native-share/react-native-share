@@ -11,9 +11,7 @@ module.exports = {
     'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js',
     '/js/code-block-buttons.js',
   ],
-  stylesheets: [
-    '/css/code-block-buttons.css'
-  ],
+  stylesheets: ['/css/code-block-buttons.css'],
   themeConfig: {
     navbar: {
       title: 'React Native Share',
@@ -21,7 +19,7 @@ module.exports = {
         alt: 'react-native-community logo',
         src: 'img/community.png',
       },
-      links: [
+      items: [
         {
           to: 'docs/install',
           activeBasePath: 'docs',
@@ -95,7 +93,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `made with ❤️ by react-native-community`,
+      copyright: 'made with ❤️ by react-native-community',
     },
   },
   presets: [
@@ -104,7 +102,6 @@ module.exports = {
       {
         docs: {
           // It is recommended to set document id as docs home page (`docs/` path).
-          homePageId: 'install',
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
