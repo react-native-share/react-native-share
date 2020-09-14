@@ -9,7 +9,7 @@ module.exports = {
       sourceDir: './example/android',
     },
     ios: {
-      project: './example/ios/Example.xcodeproj',
+      project: './example/ios/example.xcodeproj',
     },
   },
 };
