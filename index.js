@@ -21,7 +21,7 @@ import Overlay from './components/Overlay';
 import Sheet from './components/Sheet';
 import Button from './components/Button';
 
-const androidKitKatSdkVersion = 19;
+const ANDROID_KIT_KAT_SDK_VERSION = 19;
 const androidPermissionRequestRequired = Platform.constants.Version < androidKitKatSdkVersion;
 
 const styles = StyleSheet.create({
