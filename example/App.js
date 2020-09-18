@@ -20,6 +20,7 @@ import {
 import Share from 'react-native-share';
 
 import images from './images/imagesBase64';
+import pdfBase64 from './images/pdfBase64';
 
 const App = () => {
   const [packageSearch, setPackageSearch] = useState<string>('');
@@ -173,6 +174,21 @@ const App = () => {
     }
   };
 
+  const sharePdfBase64 = async () => {
+    const shareOptions = {
+      title: '',
+      url: pdfBase64,
+    };
+
+    try {
+      const ShareResponse = await Share.open(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('sharePdfBase64 Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>Welcome to React Native Share Example!</Text>
@@ -196,6 +212,9 @@ const App = () => {
         )}
         {Platform.OS === 'android' && (
           <>
+            <View style={styles.button}>
+              <Button onPress={sharePdfBase64} title="Share Base64'd PDF url" />
+            </View>
             <View style={styles.withInputContainer}>
               <TextInput
                 placeholder="Recipient"
