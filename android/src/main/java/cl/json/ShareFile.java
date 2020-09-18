@@ -122,7 +122,7 @@ public class ShareFile {
             String encodedImg = this.uri.toString().substring(BASE_64_DATA_LENGTH + this.type.length() + BASE_64_DATA_OFFSET);
             String filename = this.filename != null ? this.filename : System.nanoTime() + "";
             try {
-                File dir = new File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_DOWNLOADS );
+                File dir = new File(this.reactContext.getExternalCacheDir(), Environment.DIRECTORY_DOWNLOADS );
                 if (!dir.exists() && !dir.mkdirs()) {
                     throw new IOException("mkdirs failed on " + dir.getAbsolutePath());
                 }
