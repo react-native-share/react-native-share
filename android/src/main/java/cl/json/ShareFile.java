@@ -17,7 +17,7 @@ import java.io.IOException;
 public class ShareFile {
 
     public static final int BASE_64_DATA_LENGTH = 5; // `data:`
-    public static final int BASE_64_DATA_OFFSET = 16; // `;base64,` + 8
+    public static final int BASE_64_DATA_OFFSET = 8; // `;base64,`
     private final ReactApplicationContext reactContext;
     private String url;
     private Uri uri;
