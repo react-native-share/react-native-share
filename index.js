@@ -21,6 +21,9 @@ import Overlay from './components/Overlay';
 import Sheet from './components/Sheet';
 import Button from './components/Button';
 
+const ANDROID_KIT_KAT_SDK_VERSION = 19;
+const androidPermissionRequestRequired = Platform.constants.Version < ANDROID_KIT_KAT_SDK_VERSION;
+
 const styles = StyleSheet.create({
   actionSheetContainer: {
     flex: 1,
@@ -186,13 +189,16 @@ const requireAndAskPermissions = async (options: Options | MultipleOptions): Pro
       if (hasPermission) {
         return Promise.resolve(true);
       }
-      const result = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-      );
-      if (result === PermissionsAndroid.RESULTS.GRANTED) {
-        return Promise.resolve();
+
+      if (androidPermissionRequestRequired) {
+        const result = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        );
+        if (result === PermissionsAndroid.RESULTS.GRANTED) {
+          return Promise.resolve();
+        }
+        throw new Error('Write Permission not available');
       }
-      throw new Error('Write Permission not available');
     } catch (e) {
       return Promise.reject(e);
     }
