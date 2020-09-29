@@ -141,7 +141,7 @@ public class ShareFiles
                 String encodedImg = uri.getSchemeSpecificPart().substring(uri.getSchemeSpecificPart().indexOf(";base64,") + 8);
                 String fileName = filenames.size() >= uriIndex + 1 ? filenames.get(uriIndex) : (System.currentTimeMillis() + "." + extension);
                 try {
-                    File dir = new File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_DOWNLOADS );
+                    File dir = new File(this.reactContext.getExternalCacheDir(), Environment.DIRECTORY_DOWNLOADS );
                     if (!dir.exists() && !dir.mkdirs()) {
                         throw new IOException("mkdirs failed on " + dir.getAbsolutePath());
                     }
