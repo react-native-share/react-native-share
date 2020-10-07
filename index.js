@@ -22,7 +22,8 @@ import Sheet from './components/Sheet';
 import Button from './components/Button';
 
 const ANDROID_KIT_KAT_SDK_VERSION = 19;
-const androidPermissionRequestRequired = Platform.Version < ANDROID_KIT_KAT_SDK_VERSION;
+const androidPermissionRequestRequired =
+  parseInt(Platform.Version, 10) < ANDROID_KIT_KAT_SDK_VERSION;
 
 const styles = StyleSheet.create({
   actionSheetContainer: {
