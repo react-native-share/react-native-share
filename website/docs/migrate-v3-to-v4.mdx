@@ -1,0 +1,38 @@
+---
+id: migrate-v3-to-v4
+title: Migrating to v4
+---
+
+## iOS
+
+No breaking changes :relieved:
+
+## Android
+
+[v4 introduces some changes](https://github.com/react-native-community/react-native-share/pull/871) to permission requesting & where we write files to disk.
+
+### getExternalStorageDirectory -> getExternalCacheDir
+
+If your app targets API 29 you'll notice `getExternalStorageDirectory` is now deprecated. We've therefore migrated where we save files to disk (ie: in the base of base64 sharing) to use [getExternalCacheDir](<https://developer.android.com/reference/android/content/Context#getExternalCacheDir()>) which has been available since API 8.
+
+**What you need to do**
+
+If your app relies on where files were being saved before, you'll need to update the paths you use accordingly.
+
+Also if you've designated a `FileProvider` in your AndroidManifest, you'll need to whitelist the correct path, ie:
+
+```diff
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+-  <external-path name="myexternalimages" path="Download/" />
++  <external-cache-path name="myexternalimages" path="Download/" />
+</paths>
+```
+
+### Removal of WRITE_EXTERNAL_STORAGE permission request
+
+If you're targeting versions from KITKAT (API 19) you no longer need to ask for permission to write to storage, so we've skipped that prompt in that case. If your app was displaying messaging to prep your users or otherwise expected this prompt to occur, be advised.
+
+Per the [Android docs](<https://developer.android.com/reference/android/content/Context#getExternalCacheDir()>):
+
+> Starting in Build.VERSION_CODES.KITKAT, no permissions are required to read or write to the returned path; it's always accessible to the calling app. This only applies to paths generated for package name of the calling application.
