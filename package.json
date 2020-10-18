@@ -60,7 +60,7 @@
     "name": "Esteban Fuentealba",
     "email": "efuentealba@json.cl"
   },
-  "homepage": "https://react-native-community.github.io/react-native-share/",
+  "homepage": "https://react-native-share.github.io/react-native-share/",
   "license": "MIT",
   "lint-staged": {
     "*.js": [
