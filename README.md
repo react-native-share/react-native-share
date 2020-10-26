@@ -52,4 +52,4 @@ Which you do something similar to this:
 
 # Documentation
 
-If you are using a older version of `react-native` or `react-native-share`, having any problem or want to know how use `Share.open` and other functions, please refer to our new [docs](https://react-native-community.github.io/react-native-share) and help us improve that. ❤️
+If you are using a older version of `react-native` or `react-native-share`, having any problem or want to know how use `Share.open` and other functions, please refer to our new [docs](https://react-native-share.github.io/react-native-share) and help us improve that. ❤️
