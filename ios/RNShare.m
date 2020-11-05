@@ -48,11 +48,17 @@
 #import "GooglePlusShare.h"
 #import "EmailShare.h"
 #import "RNShareActivityItemSource.h"
+#import "Utils.h"
 
 @implementation RNShare
 
 RCTResponseErrorBlock rejectBlock;
 RCTResponseSenderBlock resolveBlock;
+
+// we need this since this controller
+// may implement a delegate and could be garbage collected
+// before it is called
+EmailShare *shareCtl;
 
 - (dispatch_queue_t)methodQueue
 {
@@ -62,6 +68,14 @@ RCTResponseSenderBlock resolveBlock;
 + (BOOL)requiresMainQueueSetup
 {
     return YES;
+}
+
+- (id) init
+{
+    if ((self = [super init])) {
+        shareCtl = [[EmailShare alloc] init];
+    }
+    return self;
 }
 
 - (CGRect)sourceRectInView:(UIView *)sourceView
@@ -152,7 +166,6 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         } else if([social isEqualToString:@"email"]) {
             NSLog(@"TRY OPEN email");
-            EmailShare *shareCtl = [[EmailShare alloc] init];
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         }
     } else {
@@ -190,7 +203,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
                     return;
                 }
                 if (saveToFiles) {
-                    NSURL *filePath = [self getPathFromBase64:URL.absoluteString with:data];
+                    NSURL *filePath = [Utils getPathFromBase64:URL.absoluteString with:data];
                     if (filePath) {
                         [items addObject: filePath];
                     }
@@ -269,27 +282,6 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
     [controller presentViewController:shareController animated:YES completion:nil];
 
     shareController.view.tintColor = [RCTConvert UIColor:options[@"tintColor"]];
-}
-
-- (NSURL*)getPathFromBase64:(NSString*)base64String with:(NSData*)data {
-    NSRange   searchedRange = NSMakeRange(0, [base64String length]);
-    NSString *pattern = @"/[a-zA-Z0-9]+;";
-    NSError  *error = nil;
-
-    NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern: pattern options:0 error:&error];
-    NSArray* matches = [regex matchesInString:base64String options:0 range: searchedRange];
-    NSString * mimeType = @"png";
-    for (NSTextCheckingResult* match in matches) {
-        NSString* matchText = [base64String substringWithRange:[match range]];
-        mimeType = [matchText substringWithRange:(NSMakeRange(1, matchText.length - 2))];
-    }
-
-    NSString *pathComponent = [NSString stringWithFormat:@"file.%@", mimeType];
-    NSString *writePath = [NSTemporaryDirectory() stringByAppendingPathComponent:pathComponent];
-    if ([data writeToFile:writePath atomically:YES]) {
-        return [NSURL fileURLWithPath:writePath];
-    }
-    return NULL;
 }
 
 - (void)documentPickerWasCancelled:(UIDocumentPickerViewController *)controller {
