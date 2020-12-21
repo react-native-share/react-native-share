@@ -140,6 +140,20 @@ public abstract class ShareIntent {
             if (ShareIntent.hasValidKey("method", options)) {
                 String method = options.getString("method");
                 switch (method) {
+                    case "shareBackgroundVideo": {
+                        if (ShareIntent.hasValidKey("backgroundVideo", options)) {
+                            this.backgroundAsset = new ShareFile(options.getString("backgroundVideo"), "background", this.reactContext);
+                            this.getIntent().setDataAndType(backgroundAsset.getURI(), backgroundAsset.getType());
+                            this.getIntent().addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                            if (ShareIntent.hasValidKey("attributionURL", options)) {
+                                this.getIntent().putExtra("content_url", options.getString("attributionURL"));
+                            }
+                        } else {
+                            throw new java.lang.IllegalArgumentException("backgroundVideo is empty");
+                        }
+                        break;
+                    }
                     case "shareBackgroundImage": {
                         if (ShareIntent.hasValidKey("backgroundImage", options)) {
                             this.backgroundAsset = new ShareFile(options.getString("backgroundImage"), "background", this.reactContext);
