@@ -10,7 +10,7 @@ module.exports = {
       'testing',
     ],
     Recipes: ['share-remote-file'],
-    Migrating: ['migrate-v3-to-v4'],
+    Migrating: ['migrate-v3-to-v4', 'migrate-v4-to-v5'],
     Troubleshooting: ['troubleshooting-ios'],
   },
 };

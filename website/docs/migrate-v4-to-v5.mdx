@@ -1,0 +1,27 @@
+---
+id: migrate-v4-to-v5
+title: Migrating to v5
+---
+
+## iOS
+
+No breaking changes :relieved:
+
+## Android
+
+[v5 introduces a change](https://github.com/react-native-community/react-native-share/issues/936) to remove the `WRITE_EXTERNAL_STORAGE` permission from being automatically added to implementing apps.
+
+This is motivated by the Android 11 system enforcing new restrictions on storage, and mandating the use of scoped storage. If this impacts you, you should read more here to make sure your app will still work on Android 11: [Scoped Storage restrictions](https://developer.android.com/about/versions/11/privacy/storage)
+
+### Removal of WRITE_EXTERNAL_STORAGE permission request
+
+`base64` file sharing requires the `WRITE_EXTERNAL_STORAGE` permission to be included in the AndroidManifest.xml file. As `WRITE_EXTERNAL_STORAGE` is seen as a [dangerous](https://developer.android.com/reference/android/Manifest.permission#WRITE_EXTERNAL_STORAGE) permission, it is now the responsibility of the implementing app to add this permission to their own AndroidManifest.xml file.
+
+To do this, add:
+
+```xml
+<!-- required for react-native-share base64 sharing -->
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+```
+
+to your application's `AndroidManifest.xml` file as per the example project.

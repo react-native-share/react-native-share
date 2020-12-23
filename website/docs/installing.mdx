@@ -27,6 +27,15 @@ Also, to use this library on iOS you will need:
 
 After that, you will see that the library is now available at your `node_modules`.
 
+**Note:** If your application requires the ability to share `base64` files on Android, you need to add
+
+```xml
+<!-- required for react-native-share base64 sharing -->
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+```
+
+to your application's `AndroidManifest.xml` file as per the example project.
+
 ## Manual Linking
 
 If the auto-linking doesn't work for any reason, you can still run a:
