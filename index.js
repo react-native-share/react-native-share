@@ -214,7 +214,7 @@ class RNShare {
   static Sheet: any;
   static Social = {
     FACEBOOK: NativeModules.RNShare.FACEBOOK || 'facebook',
-    FACEBOOK_STORIES: NativeModules.RNShare.FACEBOOK_STORIES || 'facebook-stories',
+    FACEBOOK_STORIES: NativeModules.RNShare.FACEBOOK_STORIES || 'facebookstories',
     PAGESMANAGER: NativeModules.RNShare.PAGESMANAGER || 'pagesmanager',
     TWITTER: NativeModules.RNShare.TWITTER || 'twitter',
     WHATSAPP: NativeModules.RNShare.WHATSAPP || 'whatsapp',

@@ -104,7 +104,7 @@ RCT_EXPORT_MODULE()
 {
   return @{
     @"FACEBOOK": @"facebook",
-    @"FACEBOOK_STORIES": @"facebook-stories",
+    @"FACEBOOK_STORIES": @"facebookstories",
     @"TWITTER": @"twitter",
     @"GOOGLEPLUS": @"googleplus",
     @"WHATSAPP": @"whatsapp",
@@ -130,7 +130,7 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             NSLog(@"TRY OPEN FACEBOOK");
             GenericShare *shareCtl = [[GenericShare alloc] init];
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback serviceType: SLServiceTypeFacebook inAppBaseUrl:@"fb://"];
-        } else if([social isEqualToString:@"facebook-stories"]) {
+        } else if([social isEqualToString:@"facebookstories"]) {
             NSString *appId = [RCTConvert NSString:options[@"appId"]];
             if (appId) {
                 NSLog(@"TRY OPEN FACEBOOK STORIES");
