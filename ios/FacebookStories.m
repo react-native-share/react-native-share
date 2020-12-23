@@ -132,13 +132,13 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
             RCTLog(@"method shareBackgroundAndStickerImage");
 
             NSURL *backgroundURL = [RCTConvert NSURL:options[@"backgroundImage"]];
-            NSURL *sticketURL = [RCTConvert NSURL:options[@"stickerImage"]];
+            NSURL *stickerURL = [RCTConvert NSURL:options[@"stickerImage"]];
 
-            if (backgroundURL == nil || sticketURL == nil) {
+            if (backgroundURL == nil || stickerURL == nil) {
                 RCTLogError(@"key 'backgroundImage' or 'stickerImage' missing in options");
             } else {
                 UIImage *backgroundImage = [UIImage imageWithData: [NSData dataWithContentsOfURL:backgroundURL]];
-                UIImage *stickerImage = [UIImage imageWithData: [NSData dataWithContentsOfURL:sticketURL]];
+                UIImage *stickerImage = [UIImage imageWithData: [NSData dataWithContentsOfURL:stickerURL]];
 
                 [self backgroundImage:UIImagePNGRepresentation(backgroundImage) stickerImage:UIImagePNGRepresentation(stickerImage) attributionURL:attrURL appId:appId];
             }
