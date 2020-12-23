@@ -65,7 +65,7 @@ You can pass the option that will be handled by the native code, similar to `Sha
 | Name  | Android     | iOS | Windows |
 | :---- | :------: | :--- | :---
 | **FACEBOOK** | ✅   | ✅ | 🚫 |
-| **FACEBOOK_STORIES** | 🚫   | ✅ | 🚫 |
+| **FACEBOOK_STORIES** | ✅   | ✅ | 🚫 |
 | **PAGESMANAGER** | ✅   | 🚫 | 🚫 |
 | **WHATSAPP** | ✅   | ✅ | 🚫 |
 | **INSTAGRAM** | ✅   | ✅ | 🚫 |
@@ -123,14 +123,15 @@ Methods available when calling the `INSTAGRAM_STORIES` social option.
 | **SHARE_BACKGROUND_AND_STICKER_IMAGE** | backgroundImage, stickerImage   |
 | **SHARE_BACKGROUND_VIDEO** | backgroundVideo   |
 
-## Static Values for Facebook Stories (iOS only)
+## Static Values for Facebook Stories
 These can be assessed using Share.Social property
 For eg.
 ```javascript
 import Share from 'react-native-share';
 
 const shareOptions = {
-    method: Share.FacebookStories.SHARE_BACKGROUND_AND_STICKER_IMAGE,
+    method: Share.FacebookStories.SHARE_BACKGROUND_AND_STICKER_IMAGE, // iOS only
+    backgroundVideo: 'URI_TO_MP4', // Android only (uri to a local file)
     backgroundImage: 'http://urlto.png', // url or an base64 string
     stickerImage: 'data:image/png;base64,<imageInBase64>', //or you can use "data:" url
     backgroundBottomColor: '#fefefe',
@@ -148,14 +149,16 @@ Supported options for `FACEBOOK_STORIES`:
 | Name  | Type     | Description |
 | :---- | :------: | :--- |
 | appId | string   | (required) facebook appId |
-| backgroundImage | string   | URL you want to share |
-| stickerImage | string   | URL you want to share |
-| method | string   | [List](#instagram-stories-method-list) |
+| backgroundImage*| string   | URL you want to share (iOS) / URI to a local file (Android) |
+| backgroundVideo* | string   | URI to a local file (Android only) |
+| stickerImage* | string   | URL you want to share (iOS) / URI to a local file (Android)  |
+| method | string   | [List](#instagram-stories-method-list) (iOS only) |
 | backgroundBottomColor | string   |  (optional) default #837DF4 |
 | backgroundTopColor | string   | (optional) default #906df4 |
 | attributionURL | string   | (optional) facebook beta-test |
 
-### Facebook stories method list
+\* check the platform specific documentation ([Android](https://developers.facebook.com/docs/sharing/sharing-to-stories/android-developers)/[iOS](https://developers.facebook.com/docs/sharing/sharing-to-stories/ios-developers)) to understand the differences between them.
+### Facebook stories method list (iOS only)
 
 Methods available when calling the `FACEBOOK_STORIES` social option.
 
