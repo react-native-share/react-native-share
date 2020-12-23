@@ -51,6 +51,15 @@ When sharing a `base64` file, you will need to follow the format below:
 
 ```url: "data:<data_type>/<file_extension>;base64,<base64_data>"```
 
+**Note:** If your application requires the ability to share `base64` files on Android, you need to add
+
+```xml
+<!-- required for react-native-share base64 sharing -->
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+```
+
+to your application's `AndroidManifest.xml` file as per the example project.
+
 ## Sharing a file directly
 
 When sharing a local file directly, you can use the following format:
