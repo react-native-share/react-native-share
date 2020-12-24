@@ -54,6 +54,19 @@ react-native link react-native-share
 4. In XCode, in the project navigator, select your project. Add `libRNShare.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 5. In XCode, in the project navigator, select your project. Add `Social.framework` and `MessageUI.framework` to your project's `General` ➜ `Linked Frameworks and Libraries`
 6. Run your project (`Cmd+R`)
+7. **(Optional)** LSApplicationQueriesSchemes
+
+If you want to share Whatsapp, Mailto or some applications on iOS, you should write [`LSApplicationQueriesSchemes`](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/LaunchServicesKeys.html#//apple_ref/doc/plist/info/LSApplicationQueriesSchemes) in info.plist:
+
+```xml
+  <key>LSApplicationQueriesSchemes</key>
+  <array>
+    <string>whatsapp</string>
+    <string>mailto</string>
+    <string>instagram</string>
+    <string>instagram-stories</string>
+  </array>
+```
 
 ### Android Install
 
