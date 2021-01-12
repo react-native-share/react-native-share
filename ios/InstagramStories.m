@@ -15,6 +15,7 @@
 #import "React/RCTLog.h"   // Required when used as a Pod in a Swift project
 #endif
 
+#import <Photos/Photos.h>
 #import "InstagramStories.h"
 
 @implementation InstagramStories
@@ -159,8 +160,44 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
             if (URL == nil) {
                 RCTLogError(@"key 'backgroundVideo' missing in options");
             } else {
-                NSData *backgroundVideo = [[NSFileManager defaultManager] contentsAtPath: URL];
-                [self backgroundVideo: backgroundVideo];
+                if([URL hasPrefix:@"ph://"]){
+                    NSURL *imageURL = [NSURL URLWithString:URL];
+                    PHFetchResult *results;
+                    NSString *assetID = @"";
+                    if (!imageURL) {
+                    RCTLogError(@"Cannot load a photo library asset with no URL");
+                    return;
+                    } else if ([imageURL.scheme caseInsensitiveCompare:@"assets-library"] == NSOrderedSame) {
+                    assetID = [imageURL absoluteString];
+                    results = [PHAsset fetchAssetsWithALAssetURLs:@[imageURL] options:nil];
+                    } else {
+                    assetID = [imageURL.absoluteString substringFromIndex:@"ph://".length];
+                    results = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetID] options:nil];
+                    }
+                    if (results.count == 0) {
+                      RCTLogError(@"%@", [NSString stringWithFormat:@"Failed to fetch PHAsset with local identifier %@ with no error message.", assetID]);
+                    return;
+                    }
+
+                    PHAsset *asset = [results firstObject];
+
+                    PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc]init];
+                    options.version = PHVideoRequestOptionsVersionOriginal;
+                    options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
+                    options.networkAccessAllowed = YES;
+
+                    [[PHImageManager defaultManager] requestAVAssetForVideo:(asset) options:(options) resultHandler:^(AVAsset * _Nullable Asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+                    AVURLAsset* myAsset = (AVURLAsset*)Asset;
+
+                    NSData * backgroundVideo = [NSData dataWithContentsOfFile:myAsset.URL.relativePath];
+                    [self backgroundVideo: backgroundVideo];
+
+                    }];
+                }
+                else{
+                     NSData *backgroundVideo = [[NSFileManager defaultManager] contentsAtPath: URL];
+                    [self backgroundVideo: backgroundVideo];
+                }
             }
         }
     } else {
