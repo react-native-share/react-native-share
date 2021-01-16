@@ -194,6 +194,11 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
 
                     }];
                 }
+                else if([URL hasPrefix:@"http"]){
+                    NSURL  *url = [NSURL URLWithString:URL];
+                    NSData *backgroundVideo = [NSData dataWithContentsOfURL:url];
+                    [self backgroundVideo: backgroundVideo];
+                }
                 else{
                      NSData *backgroundVideo = [[NSFileManager defaultManager] contentsAtPath: URL];
                     [self backgroundVideo: backgroundVideo];
