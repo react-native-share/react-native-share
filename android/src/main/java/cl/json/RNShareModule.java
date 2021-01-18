@@ -25,6 +25,8 @@ import cl.json.social.GooglePlusShare;
 import cl.json.social.ShareIntent;
 import cl.json.social.TargetChosenReceiver;
 import cl.json.social.TwitterShare;
+import cl.json.social.WeChatSessionShare;
+import cl.json.social.WeChatTimelineShare;
 import cl.json.social.WhatsAppShare;
 import cl.json.social.InstagramShare;
 import cl.json.social.InstagramStoriesShare;
@@ -71,8 +73,9 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
         messenger,
         snapchat,
         sms,
-        linkedin;
-
+        linkedin,
+        wechatsession,
+        wechattimeline;
 
         public static ShareIntent getShareClass(String social, ReactApplicationContext reactContext) {
             SHARES share = valueOf(social);
@@ -107,6 +110,10 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
                     return new MessengerShare(reactContext);
                 case linkedin:
                     return new LinkedinShare(reactContext);
+                case wechatsession:
+                    return new WeChatSessionShare(reactContext);
+                case wechattimeline:
+                    return new WeChatTimelineShare(reactContext);
                 default:
                     return null;
             }
