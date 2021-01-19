@@ -189,6 +189,40 @@ const App = () => {
     }
   };
 
+  const shareWeChatTimeline = async () => {
+    const shareOptions = {
+      title: 'wechat',
+      social: Share.Social.WECHAT_TIMELINE,
+      url: images.image1,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
+  const shareSingle = async () => {
+    const shareOptions = {
+      title: 'wechat',
+      social: Share.Social.GENERIC_SINGLE,
+      message: 'wechat session',
+      packageName: 'com.tencent.mm',
+      componentClass: 'com.tencent.mm.ui.tools.ShareImgUI',
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>Welcome to React Native Share Example!</Text>
@@ -201,6 +235,12 @@ const App = () => {
         </View>
         <View style={styles.button}>
           <Button onPress={shareEmailImage} title="Share Social: Email" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareSingle} title="Share Social: Share single" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareWeChatTimeline} title="Share Social: wechat timeline" />
         </View>
         <View style={styles.button}>
           <Button onPress={shareToInstagramStory} title="Share to IG Story" />
