@@ -215,6 +215,8 @@ class RNShare {
   static Social = {
     FACEBOOK: NativeModules.RNShare.FACEBOOK || 'facebook',
     FACEBOOK_STORIES: NativeModules.RNShare.FACEBOOK_STORIES || 'facebookstories',
+    GENERIC: NativeModules.RNShare.GENERIC || 'generic',
+    GENERIC_SINGLE: NativeModules.RNShare.GENERIC_SINGLE || 'genericsingle',
     PAGESMANAGER: NativeModules.RNShare.PAGESMANAGER || 'pagesmanager',
     TWITTER: NativeModules.RNShare.TWITTER || 'twitter',
     WHATSAPP: NativeModules.RNShare.WHATSAPP || 'whatsapp',

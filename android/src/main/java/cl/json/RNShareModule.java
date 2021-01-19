@@ -21,6 +21,7 @@ import cl.json.social.FacebookShare;
 import cl.json.social.FacebookStoriesShare;
 import cl.json.social.FacebookPagesManagerShare;
 import cl.json.social.GenericShare;
+import cl.json.social.GenericSingleShare;
 import cl.json.social.GooglePlusShare;
 import cl.json.social.ShareIntent;
 import cl.json.social.TargetChosenReceiver;
@@ -62,6 +63,7 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
         facebook,
         facebookstories,
         generic,
+        genericsingle,
         pagesmanager,
         twitter,
         whatsapp,
@@ -77,8 +79,8 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
         wechatsession,
         wechattimeline;
 
-        public static ShareIntent getShareClass(String social, ReactApplicationContext reactContext) {
-            SHARES share = valueOf(social);
+        public static ShareIntent getShareClass(ReadableMap options, ReactApplicationContext reactContext) {
+            SHARES share = valueOf(options.getString("social"));
             switch (share) {
                 case generic:
                     return new GenericShare(reactContext);
@@ -114,6 +116,8 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
                     return new WeChatSessionShare(reactContext);
                 case wechattimeline:
                     return new WeChatTimelineShare(reactContext);
+                case genericsingle:
+                    return new GenericSingleShare(reactContext,options);
                 default:
                     return null;
             }
@@ -164,7 +168,7 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
         TargetChosenReceiver.registerCallbacks(successCallback, failureCallback);
         if (ShareIntent.hasValidKey("social", options)) {
             try {
-                ShareIntent shareClass = SHARES.getShareClass(options.getString("social"), this.reactContext);
+                ShareIntent shareClass = SHARES.getShareClass(options, this.reactContext);
                 if (shareClass != null && shareClass instanceof ShareIntent) {
                     shareClass.open(options);
                 } else {
