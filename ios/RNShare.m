@@ -266,7 +266,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
         if (activityError) {
             [controller  dismissViewControllerAnimated:true completion:nil];
             failureCallback(activityError);
-        } else if (completed || activityType == nil) {
+        } else {
             successCallback(@[@(completed), RCTNullIfNil(activityType)]);
         }
     };
