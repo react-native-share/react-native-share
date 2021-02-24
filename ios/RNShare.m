@@ -262,12 +262,22 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
         shareController.excludedActivityTypes = excludedActivityTypes;
     }
 
+    __weak UIActivityViewController* weakShareController = shareController;
     shareController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, __unused NSArray *returnedItems, NSError *activityError) {
+        
+        // always dismiss since this may be called from cancelled shares
+        // but the share menu would remain open, and our callback would fire again on close
+        [controller dismissViewControllerAnimated:true completion:nil];
+        
         if (activityError) {
-            [controller  dismissViewControllerAnimated:true completion:nil];
             failureCallback(activityError);
         } else {
             successCallback(@[@(completed), RCTNullIfNil(activityType)]);
+        }
+        
+        // clear the completion handler to prevent cycles
+        if(weakShareController){
+            weakShareController.completionWithItemsHandler = nil;
         }
     };
 
