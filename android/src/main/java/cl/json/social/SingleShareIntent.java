@@ -78,11 +78,11 @@ public abstract class SingleShareIntent extends ShareIntent {
             if (TargetChosenReceiver.isSupported()) {
                 IntentSender sender = TargetChosenReceiver.getSharingSenderIntent(this.reactContext);
                 Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle, sender);
-                chooser.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                chooser.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
             } else {
                 Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
-                chooser.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                chooser.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
                 TargetChosenReceiver.sendCallback(true, true, "OK");
             }
