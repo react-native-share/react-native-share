@@ -160,7 +160,7 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
             if (URL == nil) {
                 RCTLogError(@"key 'backgroundVideo' missing in options");
             } else {
-                if([URL hasPrefix:@"ph://"]){
+                if(![URL hasPrefix:@"ph://"]){
                     NSURL *imageURL = [NSURL URLWithString:URL];
                     PHFetchResult *results;
                     NSString *assetID = @"";
