@@ -160,7 +160,7 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
             if (URL == nil) {
                 RCTLogError(@"key 'backgroundVideo' missing in options");
             } else {
-                if(![URL hasPrefix:@"ph://"]){
+                if([URL hasPrefix:@"ph://"]){
                     NSURL *imageURL = [NSURL URLWithString:URL];
                     PHFetchResult *results;
                     NSString *assetID = @"";
@@ -196,8 +196,19 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
                 }
                 else if([URL hasPrefix:@"http"]){
                     NSURL  *url = [NSURL URLWithString:URL];
-                    NSData *backgroundVideo = [NSData dataWithContentsOfURL:url];
-                    [self backgroundVideo: backgroundVideo];
+                    
+                    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+                    NSURLSession *defaultSession = [NSURLSession sessionWithConfiguration: defaultConfigObject
+                                                                                 delegate: nil
+                                                                            delegateQueue: [NSOperationQueue mainQueue]];
+                    NSURLSessionDataTask * dataTask = [defaultSession dataTaskWithURL:url
+                                                                    completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                        if(error == nil)
+                        {
+                            [self backgroundVideo: data];
+                        }
+                    }];
+                    [dataTask resume];
                 }
                 else{
                      NSData *backgroundVideo = [[NSFileManager defaultManager] contentsAtPath: URL];
