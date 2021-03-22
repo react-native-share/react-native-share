@@ -156,8 +156,8 @@ type ActivityItemSource = {
   linkMetadata?: LinkMetadata,
 };
 
-type OpenReturn = { app?: string, dismissedAction?: boolean };
-type ShareSingleReturn = { message: string, isInstalled?: boolean };
+type OpenReturn = { app?: string, dismissedAction?: boolean, ... };
+type ShareSingleReturn = { message: string, isInstalled?: boolean, ... };
 
 const requireAndAskPermissions = async (options: Options | MultipleOptions): Promise<any> => {
   if ((options.url || options.urls) && Platform.OS === 'android') {
