@@ -267,7 +267,13 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
         
         // always dismiss since this may be called from cancelled shares
         // but the share menu would remain open, and our callback would fire again on close
-        [controller dismissViewControllerAnimated:true completion:nil];
+        if(weakShareController){
+            // closing activity view controller
+            [weakShareController dismissViewControllerAnimated:true completion:nil];
+        } else {
+            [controller dismissViewControllerAnimated:true completion:nil];
+        }
+
         
         if (activityError) {
             failureCallback(activityError);
