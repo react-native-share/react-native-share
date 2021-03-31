@@ -252,7 +252,7 @@ public abstract class ShareIntent {
             this.fileShare = getFileShare(options);
             if (this.fileShare.isFile()) {
                 Uri uriFile = this.fileShare.getURI();
-                this.getIntent().setDataAndType(uriFile, this.fileShare.getType());
+                this.getIntent().setType(this.fileShare.getType());
                 this.getIntent().putExtra(Intent.EXTRA_STREAM, uriFile);
                 this.getIntent().addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 if (!TextUtils.isEmpty(message)) {
