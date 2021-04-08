@@ -10,6 +10,7 @@
     "url": "https://github.com/react-native-community/react-native-share/issues"
   },
   "main": "index.js",
+  "types": "index.d.ts",
   "files": [
     "android",
     "components",
@@ -44,7 +45,9 @@
     "prettier": "^2.1.1",
     "react": "16.13.1",
     "react-native": "0.63.2",
-    "semantic-release": "^17.1.1"
+    "semantic-release": "^17.1.1",
+    "@types/react": "*",
+    "@types/react-native": "*"
   },
   "keywords": [
     "react-native",
