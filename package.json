@@ -10,7 +10,7 @@
     "url": "https://github.com/react-native-community/react-native-share/issues"
   },
   "main": "index.js",
-	"types": "index.d.ts",
+  "types": "index.d.ts",
   "files": [
     "android",
     "components",
@@ -18,12 +18,6 @@
     "windows",
     "RNShare.podspec"
   ],
-	"peerDependencies": {
-		"@types/react": "*",
-		"@types/react-native": "*",
-		"react": "*",
-		"react-native": "*"
-	},
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/runtime": "^7.11.2",
@@ -52,8 +46,8 @@
     "react": "16.13.1",
     "react-native": "0.63.2",
     "semantic-release": "^17.1.1",
-		"@types/react": "*",
-		"@types/react-native": "*"
+    "@types/react": "*",
+    "@types/react-native": "*"
   },
   "keywords": [
     "react-native",
