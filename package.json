@@ -10,12 +10,13 @@
     "url": "https://github.com/react-native-community/react-native-share/issues"
   },
   "main": "index.js",
-  "types": "index.d.ts",
+  "types": "types/typescript/index.d.ts",
   "files": [
     "android",
     "components",
     "ios",
     "windows",
+    "types",
     "RNShare.podspec"
   ],
   "devDependencies": {
