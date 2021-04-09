@@ -1,7 +1,7 @@
 {
   "name": "react-native-share",
   "description": "Social share, sending simple data to other apps.",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/react-native-community/react-native-share.git"
