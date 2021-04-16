@@ -2,7 +2,7 @@ example
 website
 .eslintrc
 .eslintignore
-.flowconfig
+.tsconfig.json
 commitlint.config.js
 CHANGELOG.md
 CODEOWNERS

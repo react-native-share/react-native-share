@@ -9,14 +9,19 @@
   "bugs": {
     "url": "https://github.com/react-native-community/react-native-share/issues"
   },
-  "main": "index.js",
-  "types": "types/typescript/index.d.ts",
+  "main": "lib/commonjs/index.js",
+  "react-native": "src/index.tsx",
+  "module": "lib/module/index.js",
+  "types": "lib/typescript/index.d.ts",
   "files": [
+    "src",
+    "lib",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__",
     "android",
-    "components",
     "ios",
     "windows",
-    "types",
     "RNShare.podspec"
   ],
   "devDependencies": {
@@ -24,31 +29,25 @@
     "@babel/runtime": "^7.11.2",
     "@commitlint/cli": "11.0.0",
     "@commitlint/config-conventional": "11.0.0",
-    "@react-native-community/eslint-config": "^2.0.0",
-    "@react-native-community/eslint-plugin": "^1.0.0",
     "@semantic-release/commit-analyzer": "^8.0.1",
     "@semantic-release/git": "^9.0.0",
     "@semantic-release/github": "^7.1.1",
     "@semantic-release/npm": "^7.0.6",
     "@semantic-release/release-notes-generator": "^9.0.1",
-    "babel-eslint": "10.1.0",
-    "eslint": "^7.9.0",
-    "eslint-plugin-flowtype": "5.2.0",
-    "eslint-plugin-import": "2.22.0",
-    "eslint-plugin-prettier": "3.1.4",
-    "eslint-plugin-react": "7.20.6",
-    "eslint-plugin-react-native": "3.9.1",
-    "flow-bin": "^0.113",
+    "@types/react": "16.14.5",
+    "@types/react-native": "0.63.2",
+    "eslint": "^7.24.0",
+    "eslint-config-satya164": "3.1.10",
     "husky": "4.3.0",
     "lint-staged": "10.3.0",
     "metro-react-native-babel-preset": "^0.63.0",
     "pre-commit": "1.2.2",
-    "prettier": "^2.1.1",
+    "prettier": "^2.2.1",
     "react": "16.13.1",
     "react-native": "0.63.2",
+    "react-native-builder-bob": "^0.18.1",
     "semantic-release": "^17.1.1",
-    "@types/react": "*",
-    "@types/react-native": "*"
+    "typescript": "4.2.4"
   },
   "keywords": [
     "react-native",
@@ -67,28 +66,25 @@
   "homepage": "https://react-native-share.github.io/react-native-share/",
   "license": "MIT",
   "lint-staged": {
-    "*.js": [
-      "yarn validate",
-      "git add"
+    "*.{js,ts,tsx}": [
+      "yarn lint"
     ]
   },
-  "pre-commit": "lint:staged",
   "readmeFilename": "README.md",
   "scripts": {
     "start": "react-native start",
     "start:android": "react-native run-android",
     "start:ios": "react-native run-ios",
-    "lint": "eslint index.js --max-warnings=0",
-    "lint:staged": "lint-staged",
-    "validate": "yarn validate:prettier && yarn validate:lint && yarn validate:flow",
-    "validate:flow": "yarn flow",
-    "validate:lint": "eslint *js components/*.js --max-warnings=0",
-    "validate:prettier": "prettier --write *.js components/*.js",
-    "ci:publish": "npx semantic-release"
+    "lint": "eslint \"src/**/*.{js,ts,tsx}\" --max-warnings=0",
+    "typescript": "tsc --noEmit",
+    "validate": "yarn lint && yarn typescript",
+    "ci:publish": "npx semantic-release",
+    "prepare": "bob build"
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
+      "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS",
+      "pre-commit": "yarn typescript && lint-staged"
     }
   },
   "release": {
@@ -115,6 +111,15 @@
           "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
         }
       ]
+    ]
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      "typescript"
     ]
   }
 }
