@@ -41,22 +41,24 @@ const RNShare = {
 
   InstagramStories: {
     SHARE_BACKGROUND_IMAGE:
-      NativeModules.RNShare.SHARE_BACKGROUND_IMAGE || ShareAsset.BackgroundImage,
+      NativeModules.RNShare.SHARE_BACKGROUND_IMAGE || InstagramStories.ShareBackgroundImage,
     SHARE_BACKGROUND_VIDEO:
-      NativeModules.RNShare.SHARE_BACKGROUND_VIDEO || ShareAsset.BackgroundVideo,
-    SHARE_STICKER_IMAGE: NativeModules.RNShare.SHARE_STICKER_IMAGE || ShareAsset.StickerImage,
+      NativeModules.RNShare.SHARE_BACKGROUND_VIDEO || InstagramStories.ShareBackgroundVideo,
+    SHARE_STICKER_IMAGE:
+      NativeModules.RNShare.SHARE_STICKER_IMAGE || InstagramStories.ShareStickerImage,
     SHARE_BACKGROUND_AND_STICKER_IMAGE:
       NativeModules.RNShare.SHARE_BACKGROUND_AND_STICKER_IMAGE ||
-      ShareAsset.BackgroundAndStickerImage,
+      InstagramStories.ShareBackgroundAndStickerImage,
   },
 
   FacebookStories: {
     SHARE_BACKGROUND_IMAGE:
-      NativeModules.RNShare.SHARE_BACKGROUND_IMAGE || ShareAsset.BackgroundImage,
-    SHARE_STICKER_IMAGE: NativeModules.RNShare.SHARE_STICKER_IMAGE || ShareAsset.StickerImage,
+      NativeModules.RNShare.SHARE_BACKGROUND_IMAGE || FacebookStories.ShareBackgroundImage,
+    SHARE_STICKER_IMAGE:
+      NativeModules.RNShare.SHARE_STICKER_IMAGE || FacebookStories.ShareStickerImage,
     SHARE_BACKGROUND_AND_STICKER_IMAGE:
       NativeModules.RNShare.SHARE_BACKGROUND_AND_STICKER_IMAGE ||
-      ShareAsset.BackgroundAndStickerImage,
+      FacebookStories.ShareBackgroundAndStickerImage,
   },
 
   open(options: ShareOptions): Promise<ShareOpenResult | never> {
@@ -78,10 +80,10 @@ const RNShare = {
 
           NativeModules.RNShare.open(
             options,
-            (error: string) => {
+            (error) => {
               return reject({ error });
             },
-            (success: boolean, message: string) => {
+            (success, message) => {
               if (success) {
                 return resolve({
                   success,
@@ -110,10 +112,10 @@ const RNShare = {
           .then(() => {
             NativeModules.RNShare.shareSingle(
               options,
-              (error: string) => {
+              (error) => {
                 return reject({ error });
               },
-              (success: boolean, message: string) => {
+              (success, message) => {
                 return resolve({
                   success,
                   message,
@@ -133,10 +135,10 @@ const RNShare = {
       return new Promise((resolve, reject) => {
         NativeModules.RNShare.isPackageInstalled(
           packageName,
-          (error: string) => {
+          (error) => {
             return reject({ error });
           },
-          (isInstalled: boolean) => {
+          (isInstalled) => {
             return resolve({
               isInstalled,
               message: 'Package is Installed',

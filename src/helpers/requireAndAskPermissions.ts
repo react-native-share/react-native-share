@@ -16,14 +16,14 @@ const requireAndAskPermissions = async (
       const resultArr = await Promise.all(
         urls.map(
           (url) =>
-            new Promise((res, rej) => {
+            new Promise((resolve, reject) => {
               NativeModules.RNShare.isBase64File(
                 url,
-                (e: unknown) => {
-                  rej(e);
+                (error) => {
+                  reject(error);
                 },
-                (isBase64: boolean) => {
-                  res(isBase64);
+                (isBase64) => {
+                  resolve(isBase64);
                 },
               );
             }),
