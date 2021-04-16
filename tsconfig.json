@@ -70,8 +70,5 @@
   },
   "include": [
     "./src/"
-  ],
-  "exclude": [
-    ".eslintrc.js"
   ]
 }
