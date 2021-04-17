@@ -7,8 +7,6 @@ import ShareSheet from './components/ShareSheet';
 import requireAndAskPermissions from './helpers/requireAndAskPermissions';
 import {
   Social,
-  InstagramStories,
-  FacebookStories,
   IsPackageInstalledResult,
   ActivityType,
   ShareOpenResult,
@@ -41,24 +39,22 @@ const RNShare = {
 
   InstagramStories: {
     SHARE_BACKGROUND_IMAGE:
-      NativeModules.RNShare.SHARE_BACKGROUND_IMAGE || InstagramStories.ShareBackgroundImage,
+      NativeModules.RNShare.SHARE_BACKGROUND_IMAGE || ShareAsset.BackgroundImage,
     SHARE_BACKGROUND_VIDEO:
-      NativeModules.RNShare.SHARE_BACKGROUND_VIDEO || InstagramStories.ShareBackgroundVideo,
-    SHARE_STICKER_IMAGE:
-      NativeModules.RNShare.SHARE_STICKER_IMAGE || InstagramStories.ShareStickerImage,
+      NativeModules.RNShare.SHARE_BACKGROUND_VIDEO || ShareAsset.BackgroundVideo,
+    SHARE_STICKER_IMAGE: NativeModules.RNShare.SHARE_STICKER_IMAGE || ShareAsset.StickerImage,
     SHARE_BACKGROUND_AND_STICKER_IMAGE:
       NativeModules.RNShare.SHARE_BACKGROUND_AND_STICKER_IMAGE ||
-      InstagramStories.ShareBackgroundAndStickerImage,
+      ShareAsset.BackgroundAndStickerImage,
   },
 
   FacebookStories: {
     SHARE_BACKGROUND_IMAGE:
-      NativeModules.RNShare.SHARE_BACKGROUND_IMAGE || FacebookStories.ShareBackgroundImage,
-    SHARE_STICKER_IMAGE:
-      NativeModules.RNShare.SHARE_STICKER_IMAGE || FacebookStories.ShareStickerImage,
+      NativeModules.RNShare.SHARE_BACKGROUND_IMAGE || ShareAsset.BackgroundImage,
+    SHARE_STICKER_IMAGE: NativeModules.RNShare.SHARE_STICKER_IMAGE || ShareAsset.StickerImage,
     SHARE_BACKGROUND_AND_STICKER_IMAGE:
       NativeModules.RNShare.SHARE_BACKGROUND_AND_STICKER_IMAGE ||
-      FacebookStories.ShareBackgroundAndStickerImage,
+      ShareAsset.BackgroundAndStickerImage,
   },
 
   open(options: ShareOptions): Promise<ShareOpenResult | never> {
@@ -152,16 +148,7 @@ const RNShare = {
   },
 } as const;
 
-export {
-  Overlay,
-  Sheet,
-  Button,
-  ShareSheet,
-  ShareAsset,
-  Social,
-  FacebookStories,
-  InstagramStories,
-};
+export { Overlay, Sheet, Button, ShareSheet, ShareAsset, Social };
 export type { ShareSingleOptions, ShareOptions, ActivityType, IsPackageInstalledResult };
 export type { OverlayProps } from './components/Overlay';
 export type { SheetProps } from './components/Sheet';

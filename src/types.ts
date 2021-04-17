@@ -20,19 +20,6 @@ export enum ShareAsset {
   BackgroundAndStickerImage = 'shareBackgroundAndStickerImage',
 }
 
-export enum InstagramStories {
-  ShareBackgroundImage = ShareAsset.BackgroundImage,
-  ShareBackgroundVideo = ShareAsset.BackgroundVideo,
-  ShareStickerImage = ShareAsset.StickerImage,
-  ShareBackgroundAndStickerImage = ShareAsset.BackgroundAndStickerImage,
-}
-
-export enum FacebookStories {
-  ShareBackgroundImage = ShareAsset.BackgroundImage,
-  ShareStickerImage = ShareAsset.StickerImage,
-  ShareBackgroundAndStickerImage = ShareAsset.BackgroundAndStickerImage,
-}
-
 export interface LinkMetadata {
   originalUrl?: string;
   url?: string;
@@ -81,12 +68,12 @@ interface BaseSocialStoriesShareSingleOptions extends Omit<BaseShareSingleOption
 
 export interface InstagramStoriesShareSingleOptions extends BaseSocialStoriesShareSingleOptions {
   social: Social.InstagramStories;
-  method: InstagramStories;
+  method: ShareAsset;
 }
 
 export interface FacebookStoriesShareSingleOptions extends BaseSocialStoriesShareSingleOptions {
   social: Social.FacebookStories;
-  method: FacebookStories;
+  method: Exclude<ShareAsset, ShareAsset.BackgroundVideo>;
   appId: string;
 }
 
