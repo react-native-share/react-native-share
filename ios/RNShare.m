@@ -104,12 +104,12 @@ RCT_EXPORT_MODULE()
 {
   return @{
     @"FACEBOOK": @"facebook",
-    @"FACEBOOK_STORIES": @"facebookstories",
+    @"FACEBOOKSTORIES": @"facebookstories",
     @"TWITTER": @"twitter",
     @"GOOGLEPLUS": @"googleplus",
     @"WHATSAPP": @"whatsapp",
     @"INSTAGRAM": @"instagram",
-    @"INSTAGRAM_STORIES": @"instagramstories",
+    @"INSTAGRAMSTORIES": @"instagramstories",
     @"EMAIL": @"email",
 
     @"SHARE_BACKGROUND_IMAGE": @"shareBackgroundImage",

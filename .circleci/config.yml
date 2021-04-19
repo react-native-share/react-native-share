@@ -5,7 +5,7 @@ orbs:
 
 commands:
   checkout-attach-workspace:
-    description: "Checkout and attach workspace"
+    description: 'Checkout and attach workspace'
     steps:
       - checkout
       - attach_workspace:
@@ -32,14 +32,14 @@ jobs:
           name: Lint
           command: yarn lint
 
-  validate-flow:
+  validate-typescript:
     executor: react-native/linux_js
     working_directory: ~/app
     steps:
       - checkout-attach-workspace
       - run:
-          name: Flow
-          command: yarn validate:flow
+          name: Typescript
+          command: yarn typescript
 
   ios_build:
     macos:
@@ -105,7 +105,7 @@ workflows:
       - lint:
           requires:
             - install-dependencies
-      - validate-flow:
+      - validate-typescript:
           requires:
             - install-dependencies
 
