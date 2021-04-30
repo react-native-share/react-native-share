@@ -143,7 +143,6 @@ const App = () => {
   const shareToInstagramStory = async () => {
     const shareOptions = {
       title: 'Share image to instastory',
-      method: Share.InstagramStories.SHARE_BACKGROUND_IMAGE,
       backgroundImage: images.image1,
       social: Share.Social.INSTAGRAM_STORIES,
     };
