@@ -82,13 +82,12 @@ You can pass the option that will be handled by the native code, similar to `Sha
 
 ## Static values for Instagram Stories
 
-These values can be used when you are calling the method `Share.single` passing `Share.Social.INSTAGRAM_STORIES` on the `social` attribute.
+These values can be used when you are calling the method `Share.single` passing the attributes that you need (You can combine these attributes, Story will use properties that you pass).
 
 ```js
 import Share from 'react-native-share';
 
 const shareOptions = {
-    method: Share.InstagramStories.SHARE_BACKGROUND_AND_STICKER_IMAGE,
     backgroundImage: 'http://urlto.png',
     stickerImage: 'data:image/png;base64,<imageInBase64>', //or you can use "data:" link
     backgroundBottomColor: '#fefefe',
@@ -108,22 +107,10 @@ Use this properties to customize the instagram storie view.
 | :---- | :------: | :--- | :--- |
 | backgroundImage | string   | URL you want to share | ✅
 | stickerImage | string   | URL you want to share | ✅
-| method | string   | [List](#instagram-stories-method-list) | 🚫 (iOS only)
 | backgroundBottomColor | string   | default #837DF4 | ✅
 | backgroundTopColor | string   | default #906df4 | ✅
 | attributionURL | string   | (optional) facebook beta-test | ✅
 | backgroundVideo | string   | URL you want to share | ✅
-
-#### Instagram stories method list
-
-Methods available when calling the `INSTAGRAM_STORIES` social option.
-
-| Name  | Required options    |
-| :---- | :------: |
-| **SHARE_BACKGROUND_IMAGE** | backgroundImage   |
-| **SHARE_STICKER_IMAGE** | stickerImage   |
-| **SHARE_BACKGROUND_AND_STICKER_IMAGE** | backgroundImage, stickerImage   |
-| **SHARE_BACKGROUND_VIDEO** | backgroundVideo   |
 
 ## Static Values for Facebook Stories
 These can be assessed using Share.Social property
