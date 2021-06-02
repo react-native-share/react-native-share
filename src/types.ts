@@ -82,7 +82,7 @@ export type ShareSingleOptions =
   | FacebookStoriesShareSingleOptions;
 
 export interface ShareOptions {
-  message: string;
+  message?: string;
   title: string;
   url?: string;
   urls?: string[];
