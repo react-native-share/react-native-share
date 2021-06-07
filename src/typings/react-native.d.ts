@@ -9,7 +9,7 @@ declare module 'react-native' {
     PAGESMANAGER: Social.Pagesmanager;
     TWITTER: Social.Twitter;
     WHATSAPP: Social.Whatsapp;
-    WHATSAPPBUSINESS: Social.WhatsappBusiness;
+    WHATSAPPBUSINESS: Social.Whatsappbusiness;
     INSTAGRAM: Social.Instagram;
     INSTAGRAMSTORIES: Social.InstagramStories;
     GOOGLEPLUS: Social.Googleplus;
