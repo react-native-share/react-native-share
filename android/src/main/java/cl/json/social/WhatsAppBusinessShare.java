@@ -6,7 +6,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 
 /**
- * Created by disenodosbbcl on 23-07-16.
+ * Created by vijay(vijay@gemsessence.com) on 07-June-2021.
  */
 public class WhatsAppBusinessShare extends SingleShareIntent {
 
