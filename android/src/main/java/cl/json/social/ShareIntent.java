@@ -136,7 +136,7 @@ public abstract class ShareIntent {
             }
         }
         
-        if (socialType.equals("whatsappBusiness")) {
+        if (socialType.equals("whatsappbusiness")) {
             if (options.hasKey("whatsAppNumber")) {
                 String whatsAppNumber = options.getString("whatsAppNumber");
                 String chatAddress = whatsAppNumber + "@s.whatsapp.net";
