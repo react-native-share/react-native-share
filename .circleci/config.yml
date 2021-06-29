@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  react-native: react-native-community/react-native@4.4.2
+  react-native: react-native-community/react-native@5.3.0
 
 commands:
   checkout-attach-workspace:
@@ -67,7 +67,9 @@ jobs:
           command: yarn ci:publish
 
   deploy-docs:
-    executor: react-native/linux_js
+    executor: 
+      name: react-native/linux_js
+      node_version: '12'
     working_directory: ~/app
     steps:
       - checkout-attach-workspace
