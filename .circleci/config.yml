@@ -68,7 +68,7 @@ jobs:
 
   deploy-docs:
     executor: 
-      name: rn/linux_js
+      name: react-native/linux_js
       node_version: '12'
     working_directory: ~/app
     steps:
