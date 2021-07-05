@@ -51,6 +51,7 @@ public class TargetChosenReceiver extends BroadcastReceiver {
 
         Intent intent = new Intent(sTargetChosenReceiveAction);
         intent.setPackage(reactContext.getPackageName());
+        intent.setClass(reactContext.getApplicationContext(), TargetChosenReceiver.class);
         intent.putExtra(EXTRA_RECEIVER_TOKEN, sLastRegisteredReceiver.hashCode());
         final PendingIntent callback = PendingIntent.getBroadcast(reactContext, 0, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
