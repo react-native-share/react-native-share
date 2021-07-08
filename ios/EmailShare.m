@@ -105,6 +105,7 @@
                 } else {
                     // if not a file, just append it to message
                     message = [message stringByAppendingString: [@" " stringByAppendingString: [RCTConvert NSString:options[@"url"]]] ];
+                    [mc setMessageBody:message isHTML:NO];
                 }
             }
                    
