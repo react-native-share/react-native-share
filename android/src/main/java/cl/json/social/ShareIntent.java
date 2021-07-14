@@ -135,6 +135,14 @@ public abstract class ShareIntent {
                 this.getIntent().putExtra("jid", chatAddress);
             }
         }
+        
+        if (socialType.equals("whatsappbusiness")) {
+            if (options.hasKey("whatsAppNumber")) {
+                String whatsAppNumber = options.getString("whatsAppNumber");
+                String chatAddress = whatsAppNumber + "@s.whatsapp.net";
+                this.getIntent().putExtra("jid", chatAddress);
+            }
+        }
 
         if (ShareIntent.hasValidKey("urls", options)) {
 

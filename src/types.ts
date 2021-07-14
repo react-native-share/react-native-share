@@ -4,6 +4,7 @@ export enum Social {
   Pagesmanager = 'pagesmanager',
   Twitter = 'twitter',
   Whatsapp = 'whatsapp',
+  Whatsappbusiness = 'whatsappbusiness',
   Instagram = 'instagram',
   InstagramStories = 'instagramstories',
   Googleplus = 'googleplus',

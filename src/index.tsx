@@ -28,6 +28,7 @@ const RNShare = {
     PAGESMANAGER: NativeModules.RNShare.PAGESMANAGER || Social.Pagesmanager,
     TWITTER: NativeModules.RNShare.TWITTER || Social.Twitter,
     WHATSAPP: NativeModules.RNShare.WHATSAPP || Social.Whatsapp,
+    WHATSAPPBUSINESS: NativeModules.RNShare.WHATSAPPBUSINESS || Social.Whatsappbusiness,
     INSTAGRAM: NativeModules.RNShare.INSTAGRAM || Social.Instagram,
     INSTAGRAM_STORIES: NativeModules.RNShare.INSTAGRAMSTORIES || Social.InstagramStories,
     GOOGLEPLUS: NativeModules.RNShare.GOOGLEPLUS || Social.Googleplus,
