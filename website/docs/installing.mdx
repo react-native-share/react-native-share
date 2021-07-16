@@ -161,6 +161,27 @@ Follow this to implement your `FileProvider`. If you have any doubt please you f
     }
     ```
 
+### Adding Queries for the Android (Necessary for SDK >= 30)
+
+Android 11 introduces changes related to package visibility.
+These changes affect apps only if they target Android 11.
+For more information on these changes, view the guides about [package visibility on Android](https://developer.android.com/training/package-visibility).
+This change can prevent you to use `Share.shareSingle()` or others!
+
+- In `AndroidManifest.xml` insert the `<queries>`.
+
+```
+<manifest package="com.example.game">
+    <queries>
+        <package android:name="com.example.store" />
+        <package android:name="com.example.services" />
+    </queries>
+    ...
+</manifest>
+```
+**Note:** Don't forget change the `android:name` in package for the package id of the app that you will share!
+
+
 ## Older versions
 
 If you need to use a older version of `react-native < 0.60`, then you will need to run a:
