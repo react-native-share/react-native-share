@@ -80,6 +80,7 @@ You can pass the option that will be handled by the native code, similar to `Sha
 | **SNAPCHAT** | ✅   | 🚫 | 🚫 |
 | **MESSENGER** | ✅   | 🚫 | 🚫 |
 | **LINKEDIN** | ✅   | 🚫 | 🚫 |
+| **TELEGRAM** | ✅   | 🚫 | 🚫 |
 
 ## Static values for Instagram Stories
 
@@ -175,4 +176,13 @@ await Share.shareSingle({
     social: Share.Social.INSTAGRAM,
     url: gallery,
 });
+```
+### Share Intent to Telegram
+```js
+Share.shareSingle({
+    title: 'Share via',
+    message: 'some message',
+    url: 'some share url',
+    social: Share.Social.TELEGRAM,
+})
 ```
