@@ -36,6 +36,7 @@ const RNShare = {
     PINTEREST: NativeModules.RNShare.PINTEREST || Social.Pinterest,
     LINKEDIN: NativeModules.RNShare.LINKEDIN || Social.Linkedin,
     SMS: NativeModules.RNShare.SMS || Social.Sms,
+    TELEGRAM: NativeModules.RNShare.TELEGRAM || Social.Telegram,
   },
 
   FacebookStories: {

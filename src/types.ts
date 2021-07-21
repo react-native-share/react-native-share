@@ -12,6 +12,7 @@ export enum Social {
   Pinterest = 'pinterest',
   Linkedin = 'linkedin',
   Sms = 'sms',
+  Telegram = 'telegram',
 }
 
 export enum ShareAsset {

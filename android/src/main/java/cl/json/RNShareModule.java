@@ -24,6 +24,7 @@ import cl.json.social.GenericShare;
 import cl.json.social.GooglePlusShare;
 import cl.json.social.ShareIntent;
 import cl.json.social.TargetChosenReceiver;
+import cl.json.social.TelegramShare;
 import cl.json.social.TwitterShare;
 import cl.json.social.WhatsAppShare;
 import cl.json.social.WhatsAppBusinessShare;
@@ -73,7 +74,8 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
         messenger,
         snapchat,
         sms,
-        linkedin;
+        linkedin,
+        telegram;
 
 
         public static ShareIntent getShareClass(String social, ReactApplicationContext reactContext) {
@@ -111,6 +113,8 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
                     return new MessengerShare(reactContext);
                 case linkedin:
                     return new LinkedinShare(reactContext);
+                case telegram:
+                    return new TelegramShare(reactContext);
                 default:
                     return null;
             }
