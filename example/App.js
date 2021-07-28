@@ -173,6 +173,23 @@ const App = () => {
     }
   };
 
+  const shareToTelegram = async () => {
+    const shareOptions = {
+      title: 'Share image to telegram',
+      message: 'Example Telegram',
+      url: images.image1,
+      social: Share.Social.TELEGRAM,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
   const sharePdfBase64 = async () => {
     const shareOptions = {
       title: '',
@@ -203,6 +220,9 @@ const App = () => {
         </View>
         <View style={styles.button}>
           <Button onPress={shareToInstagramStory} title="Share to IG Story" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareToTelegram} title="Share to Telegram" />
         </View>
         {Platform.OS === 'ios' && (
           <View style={styles.button}>
