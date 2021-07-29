@@ -7,7 +7,7 @@
 //
 
 #import "EmailShare.h"
-#import "Utils.h"
+#import "RNShareUtils.h"
 
 
 @implementation EmailShare
@@ -88,7 +88,7 @@
                             filename = [filename stringByAppendingString: [@"." stringByAppendingString:ext]];
                         }
                         else if (isDataScheme){
-                            NSString *ext = [Utils getExtensionFromBase64: URL.absoluteString];
+                            NSString *ext = [RNShareUtils getExtensionFromBase64: URL.absoluteString];
                             
                             if(ext){
                                 filename = [filename stringByAppendingString: [@"." stringByAppendingString:ext]];
