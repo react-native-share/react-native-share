@@ -22,15 +22,16 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>LSRequiresIPhoneOS</key>
+		<key>LSRequiresIPhoneOS</key>
 	<true/>
-  <key>LSApplicationQueriesSchemes</key>	
-	<array>	
-	    <string>instagram-stories</string>	
-        <string>instagram</string>	
-		<string>fb</string>	
-		<string>whatsapp</string>	
-		<string>mailto</string>	
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>instagram-stories</string>
+		<string>instagram</string>
+		<string>fb</string>
+		<string>whatsapp</string>
+		<string>mailto</string>
+		<string>tg</string>
 	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
