@@ -175,9 +175,8 @@ const App = () => {
 
   const shareToTelegram = async () => {
     const shareOptions = {
-      title: 'Share image to telegram',
       message: 'Example Telegram',
-      url: images.image1,
+      url: 'https://google.com',
       social: Share.Social.TELEGRAM,
     };
 

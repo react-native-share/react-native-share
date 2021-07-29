@@ -15,20 +15,15 @@
     failureCallback:(RCTResponseErrorBlock)failureCallback
     successCallback:(RCTResponseSenderBlock)successCallback {
     
-    NSLog(@"Try open view");
-
-    NSURL * fileURL = [NSURL URLWithString: options[@"url"]];
-    AVURLAsset* videoAsset = [AVURLAsset URLAssetWithURL:fileURL options:nil];
-    CMTime videoDuration = videoAsset.duration;
-    float videoDurationSeconds = CMTimeGetSeconds(videoDuration);
-
-    NSLog(@"Video duration: %f seconds for file %@", videoDurationSeconds, videoAsset.URL.absoluteString);
-        
-    NSString *telegramNumber = [RCTConvert NSString:options[@"telegramNumber"]];
     NSString *text = [RCTConvert NSString:options[@"message"]];
     text = (NSString*)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef) text, NULL,CFSTR("!*'();:@&=+$,/?%#[]"),kCFStringEncodingUTF8));
+    
+    NSString *url = [RCTConvert NSString:options[@"url"]];
 
-    NSString * urlTelegram = telegramNumber ? [NSString stringWithFormat:@"tg://msg?text=%@&to=%@", text, telegramNumber] : [NSString stringWithFormat:@"tg://msg?text=%@", text];
+    NSString *telegramMsg = [NSString stringWithFormat:@"tg://msg?text=%@", text];
+    NSString *telegramMsgUrl = [NSString stringWithFormat:@"tg://msg_url?text=%@&url=%@", text, url];
+
+    NSString * urlTelegram = url ? telegramMsgUrl : telegramMsg;
     NSURL * shareURL = [NSURL URLWithString:urlTelegram];
     
     if ([[UIApplication sharedApplication] canOpenURL: shareURL]) {
