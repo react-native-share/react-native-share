@@ -2,5 +2,5 @@
 */xcuserdata/
 .DS_Store
 .npmignore
-Pods
+Pods/
 build/
