@@ -296,8 +296,8 @@ PODS:
     - React-Core (= 0.63.2)
     - React-cxxreact (= 0.63.2)
     - React-jsi (= 0.63.2)
-  - RNShare (3.7.1):
-    - React
+  - RNShare (6.4.0):
+    - React-Core
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -460,10 +460,10 @@ SPEC CHECKSUMS:
   React-RCTText: 1b6773e776e4b33f90468c20fe3b16ca3e224bb8
   React-RCTVibration: 4d2e726957f4087449739b595f107c0d4b6c2d2d
   ReactCommon: a0a1edbebcac5e91338371b72ffc66aa822792ce
-  RNShare: ea0393515826ea8d27a0e17cd3d6f3cc210630d9
+  RNShare: 129b187a54301c9f32ec7249fb4431e30a8d6ab8
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
 PODFILE CHECKSUM: 0399d18cc42b344f43b18ebc8951bce82966aca6
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.1
