@@ -49,7 +49,7 @@
 #import "EmailShare.h"
 #import "TelegramShare.h"
 #import "RNShareActivityItemSource.h"
-#import "Utils.h"
+#import "RNShareUtils.h"
 
 @implementation RNShare
 
@@ -209,7 +209,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
                     return;
                 }
                 if (saveToFiles) {
-                    NSURL *filePath = [Utils getPathFromBase64:URL.absoluteString with:data];
+                    NSURL *filePath = [RNShareUtils getPathFromBase64:URL.absoluteString with:data];
                     if (filePath) {
                         [items addObject: filePath];
                     }
