@@ -51,7 +51,7 @@ interface BaseShareSingleOptions {
   type?: string;
   filename?: string;
   message?: string;
-  title: string;
+  title?: string;
   subject?: string;
   email?: string;
   recipient?: string;
@@ -85,7 +85,7 @@ export type ShareSingleOptions =
 
 export interface ShareOptions {
   message?: string;
-  title: string;
+  title?: string;
   url?: string;
   urls?: string[];
   type?: string;
