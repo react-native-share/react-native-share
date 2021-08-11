@@ -51,7 +51,7 @@ interface BaseShareSingleOptions {
   type?: string;
   filename?: string;
   message?: string;
-  title: string;
+  title?: string;
   subject?: string;
   email?: string;
   recipient?: string;
