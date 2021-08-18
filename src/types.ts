@@ -39,10 +39,10 @@ export interface ActivityItem {
 
 export interface ActivityItemSource {
   placeholderItem: ActivityItem;
-  item: { [key in ActivityType]: ActivityItem | null | undefined };
-  subject?: { [key in ActivityType]: string };
-  dataTypeIdentifier?: { [key in ActivityType]: string };
-  thumbnailImage?: { [key in ActivityType]: string };
+  item: { [key in ActivityType]?: ActivityItem | null | undefined };
+  subject?: { [key in ActivityType]?: string };
+  dataTypeIdentifier?: { [key in ActivityType]?: string };
+  thumbnailImage?: { [key in ActivityType]?: string };
   linkMetadata?: LinkMetadata;
 }
 
@@ -51,7 +51,7 @@ interface BaseShareSingleOptions {
   type?: string;
   filename?: string;
   message?: string;
-  title: string;
+  title?: string;
   subject?: string;
   email?: string;
   recipient?: string;
