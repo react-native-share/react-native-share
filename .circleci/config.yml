@@ -90,7 +90,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
+                - main
       - react-native/android_build:
           checkout: true
           project_path: ./example/android
@@ -98,12 +98,12 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
+                - main
       - ios_build:
           filters:
             branches:
               ignore:
-                - master
+                - main
       - lint:
           requires:
             - install-dependencies
@@ -117,7 +117,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
       - publish-version:
           requires:
             - install-dependencies
@@ -125,4 +125,4 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
