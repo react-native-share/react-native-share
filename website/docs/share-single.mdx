@@ -110,6 +110,18 @@ By default IG opens New post view with Camera View. There you can find also stor
 import Share from 'react-native-share';
 
 const shareOptions = {
+    url: 'instagram://camera', 
+    social: Share.Social.INSTAGRAM
+};
+
+Share.shareSingle(shareOptions);
+```
+
+### Android
+```js
+import Share from 'react-native-share';
+
+const shareOptions = {
     url: 'instagram://share', 
     social: Share.Social.INSTAGRAM
 };
