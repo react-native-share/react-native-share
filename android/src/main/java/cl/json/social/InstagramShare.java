@@ -24,7 +24,15 @@ public class InstagramShare extends SingleShareIntent {
     @Override
     public void open(ReadableMap options) throws ActivityNotFoundException {
         super.open(options);
-        //  extra params here
+        try {
+            // passing instagram://share as url option opens Camera View for publishing
+            if (ShareIntent.hasValidKey("url", options) && options.getString("url").startsWith("instagram://")) {
+                this.getIntent().setAction(Intent.ACTION_VIEW);
+                this.getIntent().setData(Uri.parse(options.getString("url")));
+            }
+        }catch (Exception e){
+            // bad param passed
+        }
         this.openIntentChooser();
     }
 
