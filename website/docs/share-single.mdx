@@ -101,6 +101,38 @@ const shareOptions = {
 Share.shareSingle(shareOptions);
 ```
 
+## Opening Instagram Share Screen (Camera view)
+
+By default IG opens New post view with Camera View. There you can find also story and gallery view to pick multiple pictures to publish.
+
+### Android + IOS
+```js
+import Share from 'react-native-share';
+
+const shareOptions = {
+    url: 'instagram://camera', 
+    social: Share.Social.INSTAGRAM
+};
+
+Share.shareSingle(shareOptions);
+```
+
+### Android
+```js
+import Share from 'react-native-share';
+
+const shareOptions = {
+    url: 'instagram://share', 
+    social: Share.Social.INSTAGRAM
+};
+
+Share.shareSingle(shareOptions);
+```
+
+URL patterns like `instagram://` can be used on Android, but works different then documented for IOS 
+https://developers.facebook.com/docs/instagram/sharing-to-feed/
+
+
 ### Supported options for INSTAGRAM_STORIES:
 
 Use this properties to customize the instagram storie view.
