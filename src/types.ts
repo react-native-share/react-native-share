@@ -85,7 +85,7 @@ export type ShareSingleOptions =
 
 export interface ShareOptions {
   message?: string;
-  title: string;
+  title?: string;
   url?: string;
   urls?: string[];
   type?: string;
