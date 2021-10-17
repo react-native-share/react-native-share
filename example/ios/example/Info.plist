@@ -22,13 +22,12 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-		<key>LSRequiresIPhoneOS</key>
-	<true/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>instagram-stories</string>
 		<string>instagram</string>
 		<string>fb</string>
+		<string>facebook-stories</string>
 		<string>whatsapp</string>
 		<string>mailto</string>
 		<string>tg</string>
