@@ -147,13 +147,13 @@ Use this properties to customize the instagram storie view.
 | backgroundVideo | string   | URL you want to share | ✅
 
 ## Static Values for Facebook Stories
-These can be assessed using Share.Social property
-For eg.
+
+These values can be used when you are calling the method `Share.single` passing the attributes that you need (You can combine these attributes, Story will use properties that you pass).
+
 ```javascript
 import Share from 'react-native-share';
 
 const shareOptions = {
-    method: Share.FacebookStories.SHARE_BACKGROUND_AND_STICKER_IMAGE, // iOS only
     backgroundVideo: 'URI_TO_MP4', // Android only (uri to a local file)
     backgroundImage: 'http://urlto.png', // url or an base64 string
     stickerImage: 'data:image/png;base64,<imageInBase64>', //or you can use "data:" url
@@ -175,21 +175,11 @@ Supported options for `FACEBOOK_STORIES`:
 | backgroundImage*| string   | URL you want to share (iOS) / URI to a local file (Android) |
 | backgroundVideo* | string   | URI to a local file (Android only) |
 | stickerImage* | string   | URL you want to share (iOS) / URI to a local file (Android)  |
-| method | string   | [List](#instagram-stories-method-list) (iOS only) |
 | backgroundBottomColor | string   |  (optional) default #837DF4 |
 | backgroundTopColor | string   | (optional) default #906df4 |
 | attributionURL | string   | (optional) facebook beta-test |
 
 \* check the platform specific documentation ([Android](https://developers.facebook.com/docs/sharing/sharing-to-stories/android-developers)/[iOS](https://developers.facebook.com/docs/sharing/sharing-to-stories/ios-developers)) to understand the differences between them.
-### Facebook stories method list (iOS only)
-
-Methods available when calling the `FACEBOOK_STORIES` social option.
-
-| Name  | Required options    |
-| :---- | :------: |
-| **SHARE_BACKGROUND_IMAGE** | backgroundImage   |
-| **SHARE_STICKER_IMAGE** | stickerImage   |
-| **SHARE_BACKGROUND_AND_STICKER_IMAGE** | backgroundImage, stickerImage   |
 
 ### Share remote videos to Instagram
 Instagram tries to select **the very last file of the cameraroll** so you have to save videos to the cameraroll in case you want to share them to Instagram.

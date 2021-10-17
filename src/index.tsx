@@ -39,15 +39,6 @@ const RNShare = {
     TELEGRAM: NativeModules.RNShare.TELEGRAM || Social.Telegram,
   },
 
-  FacebookStories: {
-    SHARE_BACKGROUND_IMAGE:
-      NativeModules.RNShare.SHARE_BACKGROUND_IMAGE || ShareAsset.BackgroundImage,
-    SHARE_STICKER_IMAGE: NativeModules.RNShare.SHARE_STICKER_IMAGE || ShareAsset.StickerImage,
-    SHARE_BACKGROUND_AND_STICKER_IMAGE:
-      NativeModules.RNShare.SHARE_BACKGROUND_AND_STICKER_IMAGE ||
-      ShareAsset.BackgroundAndStickerImage,
-  },
-
   open(options: ShareOptions): Promise<ShareOpenResult | never> {
     return new Promise((resolve, reject) => {
       requireAndAskPermissions(options)
