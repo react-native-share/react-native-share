@@ -161,7 +161,7 @@ const App = () => {
       title: 'Share image to fbstory',
       backgroundImage: images.image1,
       social: Share.Social.FACEBOOK_STORIES,
-      appId: '355611832466432',
+      appId: '219376304', //facebook appId
     };
 
     try {
