@@ -37,6 +37,8 @@ const RNShare = {
     LINKEDIN: NativeModules.RNShare.LINKEDIN || Social.Linkedin,
     SMS: NativeModules.RNShare.SMS || Social.Sms,
     TELEGRAM: NativeModules.RNShare.TELEGRAM || Social.Telegram,
+    MESSENGER: NativeModules.RNShare.MESSENGER || Social.Messenger,
+    SNAPCHAT: NativeModules.RNShare.SNAPCHAT || Social.Snapchat,
   },
 
   open(options: ShareOptions): Promise<ShareOpenResult | never> {
