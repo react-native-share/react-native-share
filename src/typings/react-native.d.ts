@@ -18,6 +18,8 @@ declare module 'react-native' {
     LINKEDIN: Social.Linkedin;
     SMS: Social.Sms;
     TELEGRAM: Social.Telegram;
+    SNAPCHAT: Social.Snapchat;
+    MESSENGER: Social.Messenger;
 
     SHARE_BACKGROUND_IMAGE: ShareAsset.BackgroundImage;
     SHARE_BACKGROUND_VIDEO: ShareAsset.BackgroundVideo;
