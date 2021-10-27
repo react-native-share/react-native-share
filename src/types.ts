@@ -13,8 +13,8 @@ export enum Social {
   Linkedin = 'linkedin',
   Sms = 'sms',
   Telegram = 'telegram',
-  Snapchat = "snapchat",
-  Messenger = "messenger"
+  Snapchat = 'snapchat',
+  Messenger = 'messenger'
 }
 
 export enum ShareAsset {
