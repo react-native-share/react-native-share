@@ -8,3 +8,8 @@ title: Troubleshooting iOS
 1. Check iOS SDK version running this command: `xcodebuild -showsdks`
 2. If your SDK is 12 or lower you need to update to Xcode 11 with iOS SDK 13
 3. Build the app with Xcode 11 and everything works ok
+
+### Twitter integration
+Since Twitter stop supporting SDK [(Check here)](https://blog.twitter.com/developer/en_us/topics/tools/2018/discontinuing-support-for-twitter-kit-sdk),
+it was rendering badly the post view. [(Like this)](https://github.com/react-native-share/react-native-share/issues/930)
+So, this library will open the browser, ant then the Twitter app will be launched
