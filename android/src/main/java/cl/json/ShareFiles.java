@@ -26,7 +26,7 @@ public class ShareFiles
     private Boolean useInternalStorage;
 
     public ShareFiles(ReadableArray urls, ArrayList<String> filenames, String type, Boolean useInternalStorage, ReactApplicationContext reactContext) {
-        this(urls, filenames, reactContext);
+        this(urls, filenames, useInternalStorage, reactContext);
         this.intentType = type;
     }
 
@@ -143,8 +143,8 @@ public class ShareFiles
                 String encodedImg = uri.getSchemeSpecificPart().substring(uri.getSchemeSpecificPart().indexOf(";base64,") + 8);
                 String fileName = filenames.size() >= uriIndex + 1 ? filenames.get(uriIndex) : (System.currentTimeMillis() + "." + extension);
                 try {
-                    String cacheDir = this.useInternalStorage ? this.reactContext.getCacheDir() : this.reactContext.getExternalCacheDir()
-                    File dir = new File(cacheDir, Environment.DIRECTORY_DOWNLOADS );
+                    File cacheDir = this.useInternalStorage ? this.reactContext.getCacheDir() : this.reactContext.getExternalCacheDir();
+                    File dir = new File(cacheDir, Environment.DIRECTORY_DOWNLOADS);
                     if (!dir.exists() && !dir.mkdirs()) {
                         throw new IOException("mkdirs failed on " + dir.getAbsolutePath());
                     }
