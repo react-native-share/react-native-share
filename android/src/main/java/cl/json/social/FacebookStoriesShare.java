@@ -81,6 +81,11 @@ public class FacebookStoriesShare extends SingleShareIntent {
             this.intent.putExtra("bottom_background_color", options.getString("backgroundBottomColor"));
         }
 
+        Boolean useInternalStorage = false;
+        if (this.hasValidKey("useInternalStorage", options)) {
+            useInternalStorage = options.getBoolean("useInternalStorage");
+        }
+
         Boolean hasBackgroundAsset = this.hasValidKey("backgroundImage", options)
                 || this.hasValidKey("backgroundVideo", options);
 
@@ -93,14 +98,14 @@ public class FacebookStoriesShare extends SingleShareIntent {
                 backgroundFileName = options.getString("backgroundVideo");
             }
 
-            ShareFile backgroundAsset = new ShareFile(backgroundFileName, "background", this.reactContext);
+            ShareFile backgroundAsset = new ShareFile(backgroundFileName, "background", useInternalStorage, this.reactContext);
 
             this.intent.setDataAndType(backgroundAsset.getURI(), backgroundAsset.getType());
             this.intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
 
         if (this.hasValidKey("stickerImage", options)) {
-            ShareFile stickerAsset = new ShareFile(options.getString("stickerImage"), "sticker", this.reactContext);
+            ShareFile stickerAsset = new ShareFile(options.getString("stickerImage"), "sticker", useInternalStorage, this.reactContext);
 
             if (!hasBackgroundAsset) {
                 this.intent.setType("image/*");

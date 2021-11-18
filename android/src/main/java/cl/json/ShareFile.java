@@ -23,18 +23,19 @@ public class ShareFile {
     private Uri uri;
     private String type;
     private String filename;
+    private Boolean useInternalStorage;
 
-    public ShareFile(String url, String type, String filename, ReactApplicationContext reactContext){
-        this(url, filename, reactContext);
+    public ShareFile(String url, String type, String filename, Boolean useInternalStorage, ReactApplicationContext reactContext){
+        this(url, filename, useInternalStorage, reactContext);
         this.type = type;
-        this.filename = filename;
     }
 
-    public ShareFile(String url, String filename, ReactApplicationContext reactContext){
+    public ShareFile(String url, String filename, Boolean useInternalStorage, ReactApplicationContext reactContext){
         this.url = url;
         this.uri = Uri.parse(this.url);
-        this.reactContext = reactContext;
         this.filename = filename;
+        this.useInternalStorage = useInternalStorage;
+        this.reactContext = reactContext;
     }
     /**
      * Obtain mime type from URL
@@ -122,7 +123,8 @@ public class ShareFile {
             String encodedImg = this.uri.toString().substring(BASE_64_DATA_LENGTH + this.type.length() + BASE_64_DATA_OFFSET);
             String filename = this.filename != null ? this.filename : System.nanoTime() + "";
             try {
-                File dir = new File(this.reactContext.getCacheDir(), Environment.DIRECTORY_DOWNLOADS );
+                String cacheDir = this.useInternalStorage ? this.reactContext.getCacheDir() : this.reactContext.getExternalCacheDir()
+                File dir = new File(cacheDir, Environment.DIRECTORY_DOWNLOADS );
                 if (!dir.exists() && !dir.mkdirs()) {
                     throw new IOException("mkdirs failed on " + dir.getAbsolutePath());
                 }
