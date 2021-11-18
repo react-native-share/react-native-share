@@ -126,7 +126,7 @@ public class ShareFiles
     }
 
     private String getRealPathFromURI(Uri contentUri) {
-        String result = RNSharePathUtil.getRealPathFromURI(this.reactContext, contentUri);
+        String result = RNSharePathUtil.getRealPathFromURI(this.reactContext, contentUri, this.useInternalStorage);
         return result;
     }
 
