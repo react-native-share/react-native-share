@@ -135,7 +135,7 @@ public abstract class ShareIntent {
                 this.getIntent().putExtra("jid", chatAddress);
             }
         }
-        
+
         if (socialType.equals("whatsappbusiness")) {
             if (options.hasKey("whatsAppNumber")) {
                 String whatsAppNumber = options.getString("whatsAppNumber");
@@ -186,14 +186,19 @@ public abstract class ShareIntent {
     }
 
     protected ShareFile getFileShare(ReadableMap options) {
-         String filename = null;
+        String filename = null;
         if (ShareIntent.hasValidKey("filename", options)) {
             filename = options.getString("filename");
         }
+
+        Boolean useInternalStorage = false;
+        if (ShareIntent.hasValidKey("useInternalStorage", options)) {
+            useInternalStorage = options.getBoolean("useInternalStorage");
+        }
         if (ShareIntent.hasValidKey("type", options)) {
-            return new ShareFile(options.getString("url"), options.getString("type"), filename, this.reactContext);
+            return new ShareFile(options.getString("url"), options.getString("type"), filename, useInternalStorage, this.reactContext);
         } else {
-            return new ShareFile(options.getString("url"), filename, this.reactContext);
+            return new ShareFile(options.getString("url"), filename, useInternalStorage, this.reactContext);
         }
     }
 
@@ -206,10 +211,14 @@ public abstract class ShareIntent {
             }
         }
 
+        Boolean useInternalStorage = false;
+        if (ShareIntent.hasValidKey("useInternalStorage", options)) {
+            useInternalStorage = options.getBoolean("useInternalStorage");
+        }
         if (ShareIntent.hasValidKey("type", options)) {
-            return new ShareFiles(options.getArray("urls"), filenames, options.getString("type"), this.reactContext);
+            return new ShareFiles(options.getArray("urls"), filenames, options.getString("type"), useInternalStorage, this.reactContext);
         } else {
-            return new ShareFiles(options.getArray("urls"), filenames, this.reactContext);
+            return new ShareFiles(options.getArray("urls"), filenames, useInternalStorage, this.reactContext);
         }
     }
 
