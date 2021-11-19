@@ -23,13 +23,14 @@ public class ShareFiles
     private ArrayList<Uri> uris;
     private ArrayList<String> filenames;
     private String intentType;
+    private Boolean useInternalStorage;
 
-    public ShareFiles(ReadableArray urls, ArrayList<String> filenames, String type, ReactApplicationContext reactContext) {
-        this(urls, filenames, reactContext);
+    public ShareFiles(ReadableArray urls, ArrayList<String> filenames, String type, Boolean useInternalStorage, ReactApplicationContext reactContext) {
+        this(urls, filenames, useInternalStorage, reactContext);
         this.intentType = type;
     }
 
-    public ShareFiles(ReadableArray urls, ArrayList<String> filenames, ReactApplicationContext reactContext) {
+    public ShareFiles(ReadableArray urls, ArrayList<String> filenames, Boolean useInternalStorage, ReactApplicationContext reactContext) {
         this.uris = new ArrayList<>();
         for (int i = 0; i < urls.size(); i++) {
             String url = urls.getString(i);
@@ -39,6 +40,7 @@ public class ShareFiles
             }
         }
         this.filenames = filenames;
+        this.useInternalStorage = useInternalStorage;
         this.reactContext = reactContext;
     }
     /**
@@ -124,7 +126,7 @@ public class ShareFiles
     }
 
     private String getRealPathFromURI(Uri contentUri) {
-        String result = RNSharePathUtil.getRealPathFromURI(this.reactContext, contentUri);
+        String result = RNSharePathUtil.getRealPathFromURI(this.reactContext, contentUri, this.useInternalStorage);
         return result;
     }
 
@@ -141,7 +143,8 @@ public class ShareFiles
                 String encodedImg = uri.getSchemeSpecificPart().substring(uri.getSchemeSpecificPart().indexOf(";base64,") + 8);
                 String fileName = filenames.size() >= uriIndex + 1 ? filenames.get(uriIndex) : (System.currentTimeMillis() + "." + extension);
                 try {
-                    File dir = new File(this.reactContext.getExternalCacheDir(), Environment.DIRECTORY_DOWNLOADS );
+                    File cacheDir = this.useInternalStorage ? this.reactContext.getCacheDir() : this.reactContext.getExternalCacheDir();
+                    File dir = new File(cacheDir, Environment.DIRECTORY_DOWNLOADS);
                     if (!dir.exists() && !dir.mkdirs()) {
                         throw new IOException("mkdirs failed on " + dir.getAbsolutePath());
                     }
