@@ -58,7 +58,8 @@ public class InstagramShare extends SingleShareIntent {
     }
 
     protected void openInstagramIntentChooserForImage(String url, String chooserTitle) {
-        ShareFile shareFile = new ShareFile(url, "image/jpeg", "image" , this.reactContext);
+        Boolean shouldUseInternalStorage = ShareIntent.hasValidKey("useInternalStorage", options) && options.getBoolean("useInternalStorage");
+        ShareFile shareFile = new ShareFile(url, "image/jpeg", "image", shouldUseInternalStorage, this.reactContext);
         Uri uri = shareFile.getURI();
 
         Intent feedIntent = new Intent(Intent.ACTION_SEND);
