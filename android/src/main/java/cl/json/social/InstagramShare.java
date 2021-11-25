@@ -32,7 +32,13 @@ public class InstagramShare extends SingleShareIntent {
                 return;
             }
             String url = options.getString("url");
+
             Boolean isUrlScheme = url.startsWith("instagram://");
+            if (isUrlScheme) {
+                openInstagramUrlScheme(url);
+                return;
+            }
+
 
             if (!ShareIntent.hasValidKey("type", options)) {
                 Log.e("RNShare", "No type provided");
@@ -41,9 +47,7 @@ public class InstagramShare extends SingleShareIntent {
             String type = options.getString("type");
             Boolean isImage = type.startsWith("image");
 
-            if (isUrlScheme) {
-                openInstagramUrlScheme(url);
-            } else if(isImage) {
+            if (isImage) {
                 this.openInstagramIntentChooserForImage(url, chooserTitle);
             } else {
                 super.openIntentChooser();
