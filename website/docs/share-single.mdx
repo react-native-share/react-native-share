@@ -48,7 +48,7 @@ You can pass the option that will be handled by the native code, similar to `Sha
 | Name               |  Type   | Description                                                                                                                                      | Optional | Android | iOS | Windows |
 | :----------------- | :-----: | :----------------------------------------------------------------------------------------------------------------------------------------------- | :------- | :------ | :-- | :------ |
 | url                | string  | URL you want to share                                                                                                                            | ✅       | ✅      | ✅  | ❓      |
-| type               | string  | File mime type                                                                                                                                   | ✅       | ✅      | ✅  | ❓      |
+| type               | string  | File mime type (required for sharing file with `INSTAGRAM`)                                                                                                                                  | ✅       | ✅      | ✅  | ❓      |
 | filename           | string  | Custom file name for email attachment                                                                                                            | ✅       | ✅      | ✅  | ❓      |
 | message            | string  | Message sent to the share activity                                                                                                               | ✅       | ✅      | ✅  | ❓      |
 | title              | string  | Title sent to the share activity                                                                                                                 | ✅       | ✅      | ✅  | ❓      |
@@ -83,7 +83,9 @@ You can pass the option that will be handled by the native code, similar to `Sha
 | **LINKEDIN**          |   ✅    | 🚫  | 🚫      |
 | **TELEGRAM**          |   ✅    | ✅  | 🚫      |
 
-## Static values for Instagram Stories
+## Instagram
+
+### Share Instagram Stories
 
 These values can be used when you are calling the method `Share.single` passing the attributes that you need (You can combine these attributes, Story will use properties that you pass).
 
@@ -101,12 +103,56 @@ const shareOptions = {
 
 Share.shareSingle(shareOptions);
 ```
+#### Supported options for INSTAGRAM_STORIES:
 
-## Opening Instagram Share Screen (Camera view)
+| Name  | Type     | Description | Optional |
+| :---- | :------: | :--- | :--- |
+| backgroundImage | string   | URL you want to share | ✅
+| stickerImage | string   | URL you want to share | ✅
+| backgroundBottomColor | string   | default #837DF4 | ✅
+| backgroundTopColor | string   | default #906df4 | ✅
+| attributionURL | string   | (optional) facebook beta-test | ✅
+| backgroundVideo | string   | URL you want to share | ✅
+
+### Share image to Instagram
+
+```js
+import Share, { Social } from 'react-native-share'
+
+await Share.shareSingle({
+      social: Share.Social.INSTAGRAM,
+      url: 'data:image/png;base64,<imageInBase64>',
+      type: 'image/*'
+    });
+```
+
+
+### Share remote videos to Instagram
+Instagram tries to select **the very last file of the cameraroll** so you have to save videos to the cameraroll in case you want to share them to Instagram.
+```js
+import Share from 'react-native-share';
+import RNFetchBlob from 'rn-fetch-blob';
+import CameraRoll from '@react-native-community/cameraroll';
+
+const cache = await RNFetchBlob.config({
+            fileCache: true,
+            appendExt: 'mp4',
+          }).fetch('GET', "YOUR OWN REMOTE VIDEO URL", {});
+const gallery = await CameraRoll.save(cache.path(), 'video');
+cache.flush();
+await Share.shareSingle({
+    social: Share.Social.INSTAGRAM,
+    url: gallery,
+    type: "video/*"
+});
+```
+
+
+### Opening Instagram Share Screen (Camera view)
 
 By default IG opens New post view with Camera View. There you can find also story and gallery view to pick multiple pictures to publish.
 
-### Android + IOS
+#### Android + IOS
 ```js
 import Share from 'react-native-share';
 
@@ -118,7 +164,7 @@ const shareOptions = {
 Share.shareSingle(shareOptions);
 ```
 
-### Android
+#### Android
 ```js
 import Share from 'react-native-share';
 
@@ -134,20 +180,9 @@ URL patterns like `instagram://` can be used on Android, but works different the
 https://developers.facebook.com/docs/instagram/sharing-to-feed/
 
 
-### Supported options for INSTAGRAM_STORIES:
+## Facebook
 
-Use this properties to customize the instagram storie view.
-
-| Name  | Type     | Description | Optional |
-| :---- | :------: | :--- | :--- |
-| backgroundImage | string   | URL you want to share | ✅
-| stickerImage | string   | URL you want to share | ✅
-| backgroundBottomColor | string   | default #837DF4 | ✅
-| backgroundTopColor | string   | default #906df4 | ✅
-| attributionURL | string   | (optional) facebook beta-test | ✅
-| backgroundVideo | string   | URL you want to share | ✅
-
-## Static Values for Facebook Stories
+### Static Values for Facebook Stories
 
 These values can be used when you are calling the method `Share.single` passing the attributes that you need (You can combine these attributes, Story will use properties that you pass).
 
@@ -168,7 +203,7 @@ const shareOptions = {
 Share.shareSingle(shareOptions);
 ```
 
-Supported options for `FACEBOOK_STORIES`:
+#### Supported options for `FACEBOOK_STORIES`:
 
 | Name  | Type     | Description |
 | :---- | :------: | :--- |
@@ -182,24 +217,8 @@ Supported options for `FACEBOOK_STORIES`:
 
 \* check the platform specific documentation ([Android](https://developers.facebook.com/docs/sharing/sharing-to-stories/android-developers)/[iOS](https://developers.facebook.com/docs/sharing/sharing-to-stories/ios-developers)) to understand the differences between them.
 
-### Share remote videos to Instagram
-Instagram tries to select **the very last file of the cameraroll** so you have to save videos to the cameraroll in case you want to share them to Instagram.
-```js
-import Share from 'react-native-share';
-import RNFetchBlob from 'rn-fetch-blob';
-import CameraRoll from '@react-native-community/cameraroll';
+## Telegram
 
-const cache = await RNFetchBlob.config({
-            fileCache: true,
-            appendExt: 'mp4',
-          }).fetch('GET', "YOUR OWN REMOTE VIDEO URL", {});
-const gallery = await CameraRoll.save(cache.path(), 'video');
-cache.flush();
-await Share.shareSingle({
-    social: Share.Social.INSTAGRAM,
-    url: gallery,
-});
-```
 ### Share Intent to Telegram
 ```js
 Share.shareSingle({
