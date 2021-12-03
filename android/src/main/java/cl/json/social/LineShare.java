@@ -8,7 +8,7 @@ import com.facebook.react.bridge.ReadableMap;
 public class LineShare extends SingleShareIntent {
 
     private static final String PACKAGE = "jp.naver.line.android";
-    private static final String DEFAULT_WEB_LINK = "https://line.me/R/msg/text/?{message}";
+    private static final String DEFAULT_WEB_LINK = "https://line.me/R/msg/text/?{message}%20{url}";
     private static final String PLAY_STORE_LINK = "market://details?id=jp.naver.line.android";
 
     public LineShare(ReactApplicationContext reactContext) {
