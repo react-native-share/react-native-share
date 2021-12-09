@@ -29,7 +29,7 @@ public class RNSharePathUtil {
                 authorities.add(((ShareApplication) application).getFileProviderAuthority());
             }
 
-            authorities.add(reactContext.getPackageName() + ".rnshare.fileprovider");
+            authorities.add(reactContext.getPackageName() + ".rnmail.provider");
         }
     }
 
