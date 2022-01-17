@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  react-native: react-native-community/react-native@6.0.1
+  react-native: react-native-community/react-native@6.1.0
 
 commands:
   checkout-attach-workspace:
@@ -43,7 +43,7 @@ jobs:
 
   ios_build:
     macos:
-      xcode: 11.5.0
+      xcode: 13.2.1
     working_directory: ~/app
     steps:
       - checkout
@@ -69,7 +69,7 @@ jobs:
   deploy-docs:
     executor: 
       name: react-native/linux_js
-      node_version: '12'
+      node_version: '16'
     working_directory: ~/app
     steps:
       - checkout-attach-workspace
