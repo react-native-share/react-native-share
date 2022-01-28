@@ -1,6 +1,7 @@
 package cl.json.social;
 
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
@@ -19,6 +20,24 @@ public class WhatsAppBusinessShare extends SingleShareIntent {
     @Override
     public void open(ReadableMap options) throws ActivityNotFoundException {
         super.open(options);
+        
+        if (options.hasKey("whatsAppNumber")) {
+            // create an empty conversation in case it's not on contacts
+            this.getIntent().setComponent(new ComponentName(PACKAGE, "com.whatsapp.Conversation")); 
+            this.openIntentChooser();
+
+
+            // leave room for the conversation to be created
+            try {
+                Thread.sleep(300);   
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+
+            // share to conversation
+            this.getIntent().setComponent(new ComponentName(PACKAGE, "com.whatsapp.ContactPicker")); 
+        }
+
         //  extra params here
         this.openIntentChooser();
     }
