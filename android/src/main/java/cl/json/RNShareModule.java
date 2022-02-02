@@ -14,6 +14,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Callback;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import cl.json.social.EmailShare;
@@ -141,7 +142,7 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
     public Map<String, Object> getConstants() {
         Map<String, Object> constants = new HashMap<>();
         for (SHARES val : SHARES.values()) {
-            constants.put(val.toString().toUpperCase(), val.toString());
+            constants.put(val.toString().toUpperCase(Locale.ROOT), val.toString());
         }
         return constants;
     }
