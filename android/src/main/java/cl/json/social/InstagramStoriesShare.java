@@ -100,7 +100,7 @@ public class InstagramStoriesShare extends SingleShareIntent {
         }
 
         if (this.hasValidKey("stickerImage", options)) {
-            ShareFile stickerAsset = new ShareFile(options.getString("stickerImage"), "sticker", useInternalStorage, this.reactContext);
+            ShareFile stickerAsset = new ShareFile(options.getString("stickerImage"), "image/png", "sticker", useInternalStorage, this.reactContext);
 
             if (!hasBackgroundAsset) {
                 this.intent.setType("image/*");

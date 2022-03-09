@@ -17,3 +17,4 @@ jobs:
       with:
         stale-issue-message: 'This issue has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs. Thank you for your contributions. You may also mark this issue as a "discussion" and i will leave this open'
         stale-pr-message: 'This pull request has been marked as stale. Thank you for your contributions. You may also comment, or remove this label in order to avoid closing this.'
+        exempt-issue-milestones: 'awaiting-approval,work-in-progress, discussion'
