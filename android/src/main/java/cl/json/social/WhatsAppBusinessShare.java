@@ -15,9 +15,9 @@ public class WhatsAppBusinessShare extends SingleShareIntent {
     private static final String PLAY_STORE_LINK = "market://details?id=com.whatsapp.w4b";
     
     private static final String START_CONVERSATION_CLASS = "com.whatsapp.Conversation";
-    private static final String SHARE_TO_CONVERSATION_CLASS = "com.whatsapp.ContactPicker";
-    
-    private static final int START_ACTIVITY_TIME_GAP_MS = 300;
+
+    // must be small enough so that both activities are triggered while the app is still on foreground
+    private static final int START_ACTIVITY_TIME_GAP_MS = 10; 
 
     public WhatsAppBusinessShare(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -27,21 +27,21 @@ public class WhatsAppBusinessShare extends SingleShareIntent {
         super.open(options);
         
         if (options.hasKey("whatsAppNumber")) {
-            // create an empty conversation in case it's not on contacts
-            this.getIntent().setComponent(new ComponentName(PACKAGE, START_CONVERSATION_CLASS)); 
-            this.openIntentChooser();
+            try {                
+                // create an empty conversation in case it's not on contacts
+                this.getIntent().setComponent(new ComponentName(PACKAGE, START_CONVERSATION_CLASS)); 
+                this.openIntentChooser();
 
-
-            // leave room for the conversation to be created
-            try {
+                // leave room for the conversation to be created
                 Thread.sleep(START_ACTIVITY_TIME_GAP_MS);   
-            } catch (InterruptedException ex) {
+
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
-
-            // share to conversation
-            this.getIntent().setComponent(new ComponentName(PACKAGE, SHARE_TO_CONVERSATION_CLASS)); 
         }
+
+        // restore default behavior to share to conversation
+        this.getIntent().setComponent(null); 
 
         //  extra params here
         this.openIntentChooser();
