@@ -246,10 +246,15 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
             RCTLogError(@"No `urls` to save in Files");
             return;
         }
-        if (@available(iOS 11.0, *)) {
+        if (@available(iOS 11.0, macCatalyst 13.1, *)) {
             resolveBlock = successCallback;
             rejectBlock = failureCallback;
-            UIDocumentPickerViewController *documentPicker = [[UIDocumentPickerViewController alloc] initWithURLs:urls inMode:UIDocumentPickerModeExportToService];
+            UIDocumentPickerViewController *documentPicker = nil;
+            if (@available(iOS 15.0, macCatalyst 15.0, *)) {
+                documentPicker = [[UIDocumentPickerViewController alloc] initForExportingURLs:urls asCopy:YES];
+            } else {
+                documentPicker = [[UIDocumentPickerViewController alloc] initWithURLs:urls inMode:UIDocumentPickerModeExportToService];
+            }
             [documentPicker setDelegate:self];
             [controller presentViewController:documentPicker animated:YES completion:nil];
             return;
