@@ -66,7 +66,9 @@
             } else {
                 self->linkMetadata.originalURL = metadata.originalURL;
                 self->linkMetadata.URL = metadata.URL;
-                self->linkMetadata.title = metadata.title;
+                if(!self->linkMetadata.title) {
+                    self->linkMetadata.title = metadata.title;
+                }
                 self->linkMetadata.imageProvider = metadata.imageProvider;
                 if (self->linkMetadata.imageProvider) {
                     self->linkMetadata.iconProvider = self->linkMetadata.imageProvider;
