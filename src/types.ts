@@ -101,6 +101,7 @@ export interface ShareOptions {
   filenames?: string[];
   saveToFiles?: boolean;
   activityItemSources?: ActivityItemSource[];
+  isNewTask?: boolean;
 }
 
 export type ActivityType =
