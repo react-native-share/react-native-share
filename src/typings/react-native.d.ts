@@ -6,6 +6,7 @@ declare module 'react-native' {
   export interface RNShare {
     FACEBOOK: Social.Facebook;
     FACEBOOKSTORIES: Social.FacebookStories;
+    FACEBOOKREELS: Social.FacebookReels;
     PAGESMANAGER: Social.Pagesmanager;
     TWITTER: Social.Twitter;
     WHATSAPP: Social.Whatsapp;

@@ -1,6 +1,7 @@
 export enum Social {
   Facebook = 'facebook',
   FacebookStories = 'facebookstories',
+  FacebookReels = 'facebookreels',
   Pagesmanager = 'pagesmanager',
   Twitter = 'twitter',
   Whatsapp = 'whatsapp',
@@ -57,7 +58,7 @@ interface BaseShareSingleOptions {
   subject?: string;
   email?: string;
   recipient?: string;
-  social: Exclude<Social, Social.FacebookStories | Social.InstagramStories>;
+  social: Exclude<Social, Social.FacebookStories | Social.FacebookReels | Social.InstagramStories>;
   forceDialog?: boolean;
 }
 
@@ -80,9 +81,16 @@ export interface FacebookStoriesShareSingleOptions extends BaseSocialStoriesShar
   appId: string;
 }
 
+export interface FacebookReelsShareSingleOptions extends BaseSocialStoriesShareSingleOptions {
+  social: Social.FacebookReels;
+  method: Exclude<ShareAsset, ShareAsset.BackgroundVideo>;
+  appId: string;
+}
+
 export type ShareSingleOptions =
   | BaseShareSingleOptions
   | InstagramStoriesShareSingleOptions
+  | FacebookReelsShareSingleOptions
   | FacebookStoriesShareSingleOptions;
 
 export interface ShareOptions {
