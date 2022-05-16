@@ -20,6 +20,7 @@ import java.util.Map;
 import cl.json.social.EmailShare;
 import cl.json.social.FacebookShare;
 import cl.json.social.FacebookStoriesShare;
+import cl.json.social.FacebookReelsShare;
 import cl.json.social.FacebookPagesManagerShare;
 import cl.json.social.GenericShare;
 import cl.json.social.GooglePlusShare;
@@ -66,6 +67,7 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
     private enum SHARES {
         facebook,
         facebookstories,
+        facebookreels,
         generic,
         pagesmanager,
         twitter,
@@ -92,6 +94,8 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
                     return new FacebookShare(reactContext);
                 case facebookstories:
                     return new FacebookStoriesShare(reactContext);
+                case facebookreels:
+                    return new FacebookReelsShare(reactContext);
                 case pagesmanager:
                     return new FacebookPagesManagerShare(reactContext);
                 case twitter:

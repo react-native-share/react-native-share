@@ -25,6 +25,7 @@ const RNShare = {
   Social: {
     FACEBOOK: NativeModules.RNShare.FACEBOOK || Social.Facebook,
     FACEBOOK_STORIES: NativeModules.RNShare.FACEBOOKSTORIES || Social.FacebookStories,
+    FACEBOOK_REELS: NativeModules.RNShare.FACEBOOKREELS || Social.FacebookReels,
     PAGESMANAGER: NativeModules.RNShare.PAGESMANAGER || Social.Pagesmanager,
     TWITTER: NativeModules.RNShare.TWITTER || Social.Twitter,
     WHATSAPP: NativeModules.RNShare.WHATSAPP || Social.Whatsapp,
