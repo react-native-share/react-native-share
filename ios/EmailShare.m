@@ -52,63 +52,73 @@
         [mc setSubject:subject];
         [mc setMessageBody:message isHTML:NO];
         
-        if ([options objectForKey:@"url"] && [options objectForKey:@"url"] != [NSNull null]) {
-            
-            NSURL *URL = [RCTConvert NSURL:options[@"url"]];
-            
-            if (URL) {
-                BOOL isDataScheme = [URL.scheme.lowercaseString isEqualToString:@"data"];
-                
-                if (URL.fileURL || isDataScheme) {
-                    NSError *error;
-                    NSData *data = [NSData dataWithContentsOfURL:URL
-                                                         options:(NSDataReadingOptions)0
-                                                           error:&error];
-                    if (!data) {
-                        failureCallback(error);
-                        return;
-                    }
-                    
-                    NSString *mime = @"application/octet-stream";
-                    NSString *filename = @"file";
-                    
-                    if([options objectForKey:@"type"]){
-                        mime = [RCTConvert NSString:options[@"type"]];
-                    }
-                    
-                    if([options objectForKey:@"filename"]){
-                        filename = [RCTConvert NSString:options[@"filename"]];
-                        
-                        
-                        // add extension just like Android for consistency
-                        // file name should not include extension
-                        if(URL.isFileURL){
-                            NSString *ext = [[URL.absoluteString componentsSeparatedByString:@"."] lastObject];
-                            
-                            filename = [filename stringByAppendingString: [@"." stringByAppendingString:ext]];
+        if ([options objectForKey:@"urls"] && [options objectForKey:@"urls"] != [NSNull null]) {
+            NSArray *urlsArray = options[@"urls"];
+
+            for (int i=0; i<urlsArray.count; i++) {
+                NSURL *URL = [RCTConvert NSURL:urlsArray[i]];
+
+                if (URL) {
+                    BOOL isDataScheme = [URL.scheme.lowercaseString isEqualToString:@"data"];
+
+                    if (URL.fileURL || isDataScheme) {
+                        NSError *error;
+                        NSData *data = [NSData dataWithContentsOfURL:URL
+                                                            options:(NSDataReadingOptions)0
+                                                            error:&error];
+                        if (!data) {
+                            failureCallback(error);
+                            return;
                         }
-                        else if (isDataScheme){
-                            NSString *ext = [RNShareUtils getExtensionFromBase64: URL.absoluteString];
-                            
-                            if(ext){
-                                filename = [filename stringByAppendingString: [@"." stringByAppendingString:ext]];
+
+                        NSString *mime = @"application/octet-stream";
+                        NSString *filename = @"file";
+
+                        if([options objectForKey:@"type"]){
+                            if(urlsArray.count == 1){
+                                mime = [RCTConvert NSString:options[@"type"]];
+                            } else {
+                                RCTLogWarn(@"key 'type' is ignored when it has more than one url");
                             }
                         }
-                    }
-                    else if(URL.fileURL){
-                        NSArray *parts = [URL.absoluteString componentsSeparatedByString:@"/"];
-                        filename = [parts lastObject];
-                    }
-                    
-                    [mc addAttachmentData:data mimeType:mime fileName:filename];
 
-                } else {
-                    // if not a file, just append it to message
-                    message = [message stringByAppendingString: [@" " stringByAppendingString: [RCTConvert NSString:options[@"url"]]] ];
-                    [mc setMessageBody:message isHTML:NO];
+                        if([options objectForKey:@"filename"]){
+                            if(urlsArray.count == 1){
+                                filename = [RCTConvert NSString:options[@"filename"]];
+
+
+                                // add extension just like Android for consistency
+                                // file name should not include extension
+                                if(URL.isFileURL){
+                                    NSString *ext = [[URL.absoluteString componentsSeparatedByString:@"."] lastObject];
+
+                                    filename = [filename stringByAppendingString: [@"." stringByAppendingString:ext]];
+                                }
+                                else if (isDataScheme){
+                                    NSString *ext = [RNShareUtils getExtensionFromBase64: URL.absoluteString];
+
+                                    if(ext){
+                                        filename = [filename stringByAppendingString: [@"." stringByAppendingString:ext]];
+                                    }
+                                }
+                            } else {
+                                RCTLogWarn(@"key 'filename' is ignored when it has more than one url");
+                            }
+                        }
+                        else if(URL.fileURL){
+                            NSArray *parts = [URL.absoluteString componentsSeparatedByString:@"/"];
+                            filename = [parts lastObject];
+                        }
+
+                        [mc addAttachmentData:data mimeType:mime fileName:filename];
+
+                    } else {
+                        // if not a file, just append it to message
+                        message = [message stringByAppendingString: [@" " stringByAppendingString: [RCTConvert NSString:urlsArray[i]]] ];
+                        [mc setMessageBody:message isHTML:NO];
+                    }
                 }
             }
-                   
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{

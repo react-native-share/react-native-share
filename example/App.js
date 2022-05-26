@@ -97,6 +97,24 @@ const App = () => {
     }
   };
 
+  const shareEmailImages = async () => {
+    const shareOptions = {
+      message: 'Share.singleShare',
+      email: 'email@example.com',
+      social: Share.Social.EMAIL,
+      failOnCancel: false,
+      urls: [images.image1, images.image2],
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
   /**
    * This functions share a image passed using the
    * url param
@@ -242,6 +260,9 @@ const App = () => {
         </View>
         <View style={styles.button}>
           <Button onPress={shareToTelegram} title="Share to Telegram" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareEmailImages} title="Share to Email" />
         </View>
         {Platform.OS === 'ios' && (
           <View style={styles.button}>

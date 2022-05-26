@@ -90,6 +90,10 @@ const RNShare = {
       return new Promise((resolve, reject) => {
         requireAndAskPermissions(options)
           .then(() => {
+            if (options.url) {
+              options.urls = [options.url];
+            }
+
             NativeModules.RNShare.shareSingle(
               options,
               (error) => {
