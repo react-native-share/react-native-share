@@ -49,6 +49,7 @@ export interface ActivityItemSource {
 }
 
 interface BaseShareSingleOptions {
+  urls?: string[];
   url?: string;
   type?: string;
   filename?: string;

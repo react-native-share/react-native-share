@@ -45,19 +45,20 @@ Or with `async/await`:
 
 You can pass the option that will be handled by the native code, similar to `Share.open`.
 
-| Name               |  Type   | Description                                                                                                                                      | Optional | Android | iOS | Windows |
-| :----------------- | :-----: | :----------------------------------------------------------------------------------------------------------------------------------------------- | :------- | :------ | :-- | :------ |
-| url                | string  | URL you want to share                                                                                                                            | ✅       | ✅      | ✅  | ❓      |
-| type               | string  | File mime type (required for sharing file with `INSTAGRAM`)                                                                                                                                  | ✅       | ✅      | ✅  | ❓      |
-| filename           | string  | Custom file name for email attachment                                                                                                            | ✅       | ✅      | ✅  | ❓      |
-| message            | string  | Message sent to the share activity                                                                                                               | ✅       | ✅      | ✅  | ❓      |
-| title              | string  | Title sent to the share activity                                                                                                                 | ✅       | ✅      | ✅  | ❓      |
-| subject            | string  | Subject sent when sharing to email                                                                                                               | ✅       | ✅      | ✅  | ❓      |
-| email              | string  | Email of addressee                                                                                                                               | ✅       | ✅      | ✅  | ❓      |
-| recipient          | string  | Phone number of SMS recipient                                                                                                                    | ✅       | ✅      | 🚫  | 🚫      |
-| social             | string  | supported social apps: [List](#static-values-for-social)                                                                                         | 🚫       | ✅      | ✅  | ❓      |
-| forceDialog        | boolean | (optional) only android. Avoid showing dialog with buttons Just Once / Always. Useful for Instagram to always ask user if share as Story or Feed | ✅       | ✅      | ✅  | ❓      |
-| useInternalStorage | boolean | Store the temporary file in the internal storage cache (Android only)                                                                            | ✅       | ✅      | 🚫  | 🚫      |
+| Name               |   Type   | Description                                                                                                                                      | Optional | Android | iOS | Windows |
+| :----------------- | :------: | :----------------------------------------------------------------------------------------------------------------------------------------------- | :------- | :------ | :-- | :------ |
+| url                | string   | URL you want to share                                                                                                                            | ✅       | ✅      | ✅  | ❓      |
+| urls               | string[] | URL you want to share (it only works for EMAIL case)                                                                                             | ✅       | ✅      | ✅  | ❓      |
+| type               | string   | File mime type (required for sharing file with `INSTAGRAM`)                                                                                      | ✅       | ✅      | ✅  | ❓      |
+| filename           | string   | Custom file name for email attachment                                                                                                            | ✅       | ✅      | ✅  | ❓      |
+| message            | string   | Message sent to the share activity                                                                                                               | ✅       | ✅      | ✅  | ❓      |
+| title              | string   | Title sent to the share activity                                                                                                                 | ✅       | ✅      | ✅  | ❓      |
+| subject            | string   | Subject sent when sharing to email                                                                                                               | ✅       | ✅      | ✅  | ❓      |
+| email              | string   | Email of addressee                                                                                                                               | ✅       | ✅      | ✅  | ❓      |
+| recipient          | string   | Phone number of SMS recipient                                                                                                                    | ✅       | ✅      | 🚫  | 🚫      |
+| social             | string   | supported social apps: [List](#static-values-for-social)                                                                                         | 🚫       | ✅      | ✅  | ❓      |
+| forceDialog        | boolean  | (optional) only android. Avoid showing dialog with buttons Just Once / Always. Useful for Instagram to always ask user if share as Story or Feed | ✅       | ✅      | ✅  | ❓      |
+| useInternalStorage | boolean  | Store the temporary file in the internal storage cache (Android only)                                                                            | ✅       | ✅      | 🚫  | 🚫      |
 
 **_NOTE: If both `message` and `url` are provided, `url` will be concatenated to the end of `message` to form the body of the message. If only one is provided it will be used_**
 
