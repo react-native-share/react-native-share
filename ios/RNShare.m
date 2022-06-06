@@ -18,6 +18,7 @@
 #import "GooglePlusShare.h"
 #import "EmailShare.h"
 #import "TelegramShare.h"
+#import "ViberShare.h"
 #import "RNShareActivityItemSource.h"
 #import "RNShareUtils.h"
 
@@ -83,6 +84,7 @@ RCT_EXPORT_MODULE()
     @"INSTAGRAMSTORIES": @"instagramstories",
     @"TELEGRAM": @"telegram",
     @"EMAIL": @"email",
+    @"VIBER": @"viber",
 
     @"SHARE_BACKGROUND_IMAGE": @"shareBackgroundImage",
     @"SHARE_BACKGROUND_VIDEO": @"shareBackgroundVideo",
@@ -143,7 +145,11 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
         } else if([social isEqualToString:@"email"]) {
             NSLog(@"TRY OPEN email");
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
-        }
+        } else if([social isEqualToString:@"viber"]) {
+            NSLog(@"TRY OPEN viber");
+            ViberShare *shareCtl = [[ViberShare alloc] init];
+            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+        } 
     } else {
         RCTLogError(@"key 'social' missing in options");
         return;

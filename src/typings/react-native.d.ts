@@ -20,6 +20,7 @@ declare module 'react-native' {
     TELEGRAM: Social.Telegram;
     SNAPCHAT: Social.Snapchat;
     MESSENGER: Social.Messenger;
+    VIBER: Social.Viber;
 
     SHARE_BACKGROUND_IMAGE: ShareAsset.BackgroundImage;
     SHARE_BACKGROUND_VIDEO: ShareAsset.BackgroundVideo;

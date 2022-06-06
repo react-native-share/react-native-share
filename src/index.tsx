@@ -39,6 +39,7 @@ const RNShare = {
     TELEGRAM: NativeModules.RNShare.TELEGRAM || Social.Telegram,
     MESSENGER: NativeModules.RNShare.MESSENGER || Social.Messenger,
     SNAPCHAT: NativeModules.RNShare.SNAPCHAT || Social.Snapchat,
+    VIBER: NativeModules.RNShare.VIBER || Social.Viber,
   },
 
   open(options: ShareOptions): Promise<ShareOpenResult | never> {

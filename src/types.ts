@@ -15,6 +15,7 @@ export enum Social {
   Telegram = 'telegram',
   Snapchat = 'snapchat',
   Messenger = 'messenger',
+  Viber = 'viber',
 }
 
 export enum ShareAsset {
