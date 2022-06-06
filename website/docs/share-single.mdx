@@ -83,6 +83,7 @@ You can pass the option that will be handled by the native code, similar to `Sha
 | **MESSENGER**         |   ✅    | 🚫  | 🚫      |
 | **LINKEDIN**          |   ✅    | 🚫  | 🚫      |
 | **TELEGRAM**          |   ✅    | ✅  | 🚫      |
+| **VIBER**             |   ✅    | ✅  | 🚫      |
 
 ## Instagram
 
@@ -227,5 +228,17 @@ Share.shareSingle({
     message: 'some message',
     url: 'some share url',
     social: Share.Social.TELEGRAM,
+})
+```
+
+## Viber
+
+### Share Intent to Viber
+```js
+Share.shareSingle({
+    title: 'Share via',
+    message: 'some message',
+    url: 'some share url',
+    social: Share.Social.VIBER,
 })
 ```
