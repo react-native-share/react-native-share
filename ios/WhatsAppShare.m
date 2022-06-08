@@ -26,7 +26,7 @@ RCT_EXPORT_MODULE();
             NSLog(@"WhatsApp installed");
         } else {
             // Cannot open whatsapp
-            NSString *stringURL = @"http://itunes.apple.com/app/whatsapp-messenger/id310633997";
+            NSString *stringURL = @"https://itunes.apple.com/app/whatsapp-messenger/id310633997";
             NSURL *url = [NSURL URLWithString:stringURL];
             [[UIApplication sharedApplication] openURL:url];
             
