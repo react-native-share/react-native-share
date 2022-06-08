@@ -83,7 +83,7 @@ RCT_EXPORT_MODULE();
 
 - (void)fallbackFacebook {
     // Cannot open facebook
-    NSString *stringURL = @"http://itunes.apple.com/app/facebook/id284882215";
+    NSString *stringURL = @"https://itunes.apple.com/app/facebook/id284882215";
     NSURL *url = [NSURL URLWithString:stringURL];
     [[UIApplication sharedApplication] openURL:url];
 
