@@ -49,7 +49,8 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout
-      - react-native/setup_macos_executor
+      - react-native/setup_macos_executor:
+          node_version: '16'
       - run: yarn install --frozen-lockfile --non-interactive
       - react-native/pod_install:
           pod_install_directory: ./example/ios
