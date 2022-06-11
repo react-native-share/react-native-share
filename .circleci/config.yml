@@ -63,7 +63,7 @@ jobs:
   publish-version:
     executor: 
       name: react-native/linux_js
-      node_version: '14'
+      node_version: '16'
     working_directory: ~/app
     steps:
       - checkout-attach-workspace
