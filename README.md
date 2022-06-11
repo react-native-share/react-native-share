@@ -12,7 +12,7 @@ This gives you the power to prioritize our work and support the project contribu
 
 [![issuehunt-image](https://issuehunt.io/static/embed/issuehunt-button-v1.svg)](https://issuehunt.io/repos/43406976)
 
-# Getting started
+# Getting started 🚀
 
 ---
 
