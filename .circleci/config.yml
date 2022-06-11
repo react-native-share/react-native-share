@@ -61,7 +61,9 @@ jobs:
           device: iPhone 11
 
   publish-version:
-    executor: react-native/linux_js
+    executor: 
+      name: react-native/linux_js
+      node_version: '14'
     working_directory: ~/app
     steps:
       - checkout-attach-workspace
