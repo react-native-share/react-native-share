@@ -27,6 +27,8 @@ const checkPackage = async () => {
 }
 ```
 
+Don't forget to add queries for Android SDK >= 30. Check [package visibility on Android](https://react-native-share.github.io/react-native-share/docs/install#adding-queries-for-the-android-necessary-for-sdk--30)
+
 Keep in mind, that similar to `Share.open` and `Share.single` it's a good idea using a `try/catch` whenever a call to this method is requested.
 
 For iOS you can use the `Linking.canOpenURL(instagram://)` where the `url` is the app scheme that you want to check. Also, note that calling the `isPackageInstalled` on iOS will return a `Error: Not implemented`.
