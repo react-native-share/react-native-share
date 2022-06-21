@@ -78,7 +78,6 @@ export interface InstagramStoriesShareSingleOptions extends BaseSocialStoriesSha
 
 export interface FacebookStoriesShareSingleOptions extends BaseSocialStoriesShareSingleOptions {
   social: Social.FacebookStories;
-  method: Exclude<ShareAsset, ShareAsset.BackgroundVideo>;
   appId: string;
 }
 
