@@ -41,12 +41,14 @@
     "eslint-config-satya164": "3.1.10",
     "husky": "4.3.0",
     "lint-staged": "10.3.0",
+    "metro-config": "^0.66.2",
     "metro-react-native-babel-preset": "^0.66.2",
     "pre-commit": "1.2.2",
     "prettier": "^2.2.1",
     "react": "17.0.2",
     "react-native": "0.66.4",
     "react-native-builder-bob": "^0.18.1",
+    "react-native-windows": "0.66.4",
     "semantic-release": "^19.0.3",
     "typescript": "4.2.4"
   },
@@ -80,7 +82,8 @@
     "typescript": "tsc --noEmit",
     "validate": "yarn lint && yarn typescript",
     "ci:publish": "npx semantic-release",
-    "prepare": "bob build"
+    "prepare": "bob build",
+    "windows": "react-native run-windows"
   },
   "husky": {
     "hooks": {
