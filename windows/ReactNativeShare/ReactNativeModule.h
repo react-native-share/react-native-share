@@ -33,7 +33,7 @@ struct ReactNativeShare
 		}
 
 		REACT_METHOD(open)
-		void open(JSValueObject options, std::function<void(JSValue, JSValue)> errorCallback, std::function<void(JSValue, JSValue)> successCallback) noexcept
+		void open(JSValueObject options, std::function<void(JSValue)> errorCallback, std::function<void(JSValue, JSValue)> successCallback) noexcept
 		{
 				if ((options["message"] == nullptr) || (options["url"] == nullptr))
 				{
@@ -62,7 +62,7 @@ struct ReactNativeShare
 						}
 						catch (hresult_error const& e)
 						{
-								errorCallback(false, "not_available");
+								errorCallback("not_available");
 						}
 				});
 		}
