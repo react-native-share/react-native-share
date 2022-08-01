@@ -35,15 +35,18 @@ struct ReactNativeShare
 		REACT_METHOD(open)
 		void open(JSValueObject options, std::function<void(JSValue)> errorCallback, std::function<void(JSValue, JSValue)> successCallback) noexcept
 		{
-				if ((options["message"] == nullptr) || (options["url"] == nullptr))
-				{
-					return;
+				if (options["title"] == nullptr) {
+						errorCallback("no_title_provided");
+						return;
 				}
 
-				if (options["title"] != nullptr)
+				if ((options["message"] == nullptr) && (options["url"] == nullptr))
 				{
-						requestData.title = to_hstring(options["title"].AsString());
+						errorCallback("no_message_or_url_provided");
+						return;
 				}
+
+				requestData.title = to_hstring(options["title"].AsString());
 
 				if (options["message"] != nullptr)
 				{
