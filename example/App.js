@@ -6,8 +6,8 @@
  * @flow
  */
 
-import React, {useState} from 'react';
-import {
+ import React, {useState} from 'react';
+ import {
   Alert,
   Button,
   Platform,
@@ -158,6 +158,21 @@ const App = () => {
     }
   };
 
+  const shareToInstagramDirect = async () => {
+    const shareOptions = {
+      message: encodeURI('Checkout the great search engine: https://google.com'),
+      social: Share.Social.INSTAGRAM,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
   const shareToInstagramStory = async () => {
     const shareOptions = {
       title: 'Share image to instastory',
@@ -254,6 +269,9 @@ const App = () => {
         </View>
         <View style={styles.button}>
           <Button onPress={shareToInstagramStory} title="Share to IG Story" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareToInstagramDirect} title="Share to IG Direct" />
         </View>
         <View style={styles.button}>
           <Button onPress={shareToFacebookStory} title="Share to FB Story" />

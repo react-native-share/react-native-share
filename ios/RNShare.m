@@ -63,7 +63,7 @@ EmailShare *shareCtl;
 
 - (BOOL)isImageMimeType:(NSString *)data {
     NSRange range = [data rangeOfString:@"data:image" options:NSCaseInsensitiveSearch];
-    if (range.location != NSNotFound) {
+    if (data && range.location != NSNotFound) {
         return true;
     } else {
         return false;
