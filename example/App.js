@@ -68,6 +68,7 @@ const App = () => {
     // the share response. If the user cancels, etc.
     try {
       const ShareResponse = await Share.open(shareOptions);
+      console.log('Result =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -90,6 +91,7 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.open(shareOptions);
+      console.log('Result =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -108,6 +110,7 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -128,6 +131,7 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.open(shareOptions);
+      console.log('Result =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -151,6 +155,7 @@ const App = () => {
     // the share response. If the user cancels, etc.
     try {
       const ShareResponse = await Share.open(shareOptions);
+      console.log('Result =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -182,6 +187,7 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -199,6 +205,7 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -216,6 +223,7 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -232,6 +240,41 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
+  const shareToGooglePlus = async () => {
+    const shareOptions = {
+      message: 'Example Google Plus',
+      url: 'https://google.com',
+      social: Share.Social.GOOGLEPLUS,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
+  const shareToWhatsApp = async () => {
+    const shareOptions = {
+      message: 'Example WhatsApp',
+      url: 'https://google.com',
+      social: Share.Social.WHATSAPP,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -247,6 +290,7 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.open(shareOptions);
+      console.log('Result =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('sharePdfBase64 Error =>', error);
@@ -278,6 +322,12 @@ const App = () => {
         </View>
         <View style={styles.button}>
           <Button onPress={shareToTelegram} title="Share to Telegram" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareToGooglePlus} title="Share to Google Plus" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareToWhatsApp} title="Share to WhatsApp" />
         </View>
         <View style={styles.button}>
           <Button onPress={shareEmailImages} title="Share to Email" />

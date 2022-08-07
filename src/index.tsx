@@ -102,7 +102,7 @@ const RNShare = {
               },
               (success, message) => {
                 return resolve({
-                  success,
+                  success: Boolean(success),
                   message,
                 });
               },

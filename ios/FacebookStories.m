@@ -21,7 +21,9 @@ RCT_EXPORT_MODULE();
 
     NSURL *urlScheme = [NSURL URLWithString:@"facebook-stories://share"];
     if (![[UIApplication sharedApplication] canOpenURL:urlScheme]) {
-        [self fallbackFacebook];
+        NSError* error = [self fallbackFacebook];
+        failureCallback(error);
+        return;
     }
 
     // Create dictionary of assets and attribution
@@ -78,10 +80,10 @@ RCT_EXPORT_MODULE();
     [[UIPasteboard generalPasteboard] setItems:pasteboardItems options:pasteboardOptions];
     [[UIApplication sharedApplication] openURL:urlScheme options:@{} completionHandler:nil];
 
-    successCallback(@[]);
+    successCallback(@[@true, @""]);
 }
 
-- (void)fallbackFacebook {
+- (NSError*)fallbackFacebook {
     // Cannot open facebook
     NSString *stringURL = @"https://itunes.apple.com/app/facebook/id284882215";
     NSURL *url = [NSURL URLWithString:stringURL];
@@ -92,5 +94,6 @@ RCT_EXPORT_MODULE();
     NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
 
     NSLog(errorMessage);
+    return error;
 }
 @end

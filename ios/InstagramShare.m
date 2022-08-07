@@ -45,7 +45,7 @@
     
     if ([[UIApplication sharedApplication] canOpenURL: shareURL]) {
         [[UIApplication sharedApplication] openURL: shareURL];
-        successCallback(@[]);
+        successCallback(@[@true, @""]);
     } else {
         // Cannot open instagram
         NSString *stringURL = @"https://itunes.apple.com/app/instagram/id389801252";
@@ -85,7 +85,7 @@
         }
     } else {
         [[UIApplication sharedApplication] openURL: [NSURL URLWithString:@"instagram://camera"]];
-        successCallback(@[]);
+        successCallback(@[@true, @""]);
     }
 }
 
@@ -113,7 +113,7 @@
                     [[UIApplication sharedApplication] openURL:instagramURL options:@{} completionHandler:NULL];
                 }
                 if (successCallback != NULL) {
-                    successCallback(@[]);
+                    successCallback(@[@true, @""]);
                 }
             }
         }

@@ -131,7 +131,7 @@
             // on the finish delegate.
             // For now, call it here for consistency with
             // GenericShare.shareSingle
-            successCallback(@[]);
+            successCallback(@[@true, @""]);
         });
     }
 }
