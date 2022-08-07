@@ -16,17 +16,26 @@
     successCallback:(RCTResponseSenderBlock)successCallback {
     
     NSLog(@"Try open view");
-
-    NSURL * fileURL = [NSURL URLWithString: options[@"url"]];
-    AVURLAsset* videoAsset = [AVURLAsset URLAssetWithURL:fileURL options:nil];
-    CMTime videoDuration = videoAsset.duration;
-    float videoDurationSeconds = CMTimeGetSeconds(videoDuration);
-
-    NSLog(@"Video duration: %f seconds for file %@", videoDurationSeconds, videoAsset.URL.absoluteString);
-        
+    
     NSURL * shareURL;
-    // Instagram doesn't allow sharing videos longer than 60 seconds on iOS anymore. (next button is not responding, trim is unavailable)
-    if (videoDurationSeconds <= 60.0f) {
+    float videoDurationSeconds = 0.0f;
+    NSString* url = options[@"url"];
+    if (url) {
+        NSURL * fileURL = [NSURL URLWithString: options[@"url"]];
+        AVURLAsset* videoAsset = [AVURLAsset URLAssetWithURL:fileURL options:nil];
+        CMTime videoDuration = videoAsset.duration;
+        float videoDurationSeconds = CMTimeGetSeconds(videoDuration);
+        
+        NSLog(@"Video duration: %f seconds for file %@", videoDurationSeconds, videoAsset.URL.absoluteString);
+    } else {
+        //this will send message directly to instagram DM with plain text
+        shareURL = [NSURL URLWithString:[NSString stringWithFormat:@"instagram://sharesheet?text=%@", options[@"message"]]];
+    }
+    
+    if (shareURL) {
+        NSLog(@"url is already available, no need to do anything");
+    } else if (videoDurationSeconds <= 60.0f) {
+        // Instagram doesn't allow sharing videos longer than 60 seconds on iOS anymore. (next button is not responding, trim is unavailable)
         NSString *phIdentifier= [options[@"url"] stringByReplacingOccurrencesOfString:@"ph://" withString:@""];
         NSString * urlString = [NSString stringWithFormat:@"instagram://library?LocalIdentifier=%@", phIdentifier];
         shareURL = [NSURL URLWithString:urlString];
