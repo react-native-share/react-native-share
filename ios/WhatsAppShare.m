@@ -1,5 +1,5 @@
 //
-//  FacebookShare.m
+//  WhatsAppShare.m
 //  RNShare
 //
 //  Created by Diseño Uno BBCL on 23-07-16.
