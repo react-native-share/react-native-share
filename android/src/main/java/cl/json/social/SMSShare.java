@@ -28,7 +28,7 @@ public class SMSShare extends SingleShareIntent {
     @Override
     public void open(ReadableMap options) throws ActivityNotFoundException {
         super.open(options);
-        //  extra params here
+        // TODO: Open "sms://{address}/?body={message}";
         this.openIntentChooser();
     }
 

@@ -20,6 +20,7 @@
 #import "TelegramShare.h"
 #import "ViberShare.h"
 #import "MessengerShare.h"
+#import "SMSShare.h"
 #import "RNShareActivityItemSource.h"
 #import "RNShareUtils.h"
 
@@ -87,6 +88,7 @@ RCT_EXPORT_MODULE()
     @"EMAIL": @"email",
     @"MESSENGER": @"messanger",
     @"VIBER": @"viber",
+    @"MESSAGES": @"messages",
 
     @"SHARE_BACKGROUND_IMAGE": @"shareBackgroundImage",
     @"SHARE_BACKGROUND_VIDEO": @"shareBackgroundVideo",
@@ -154,6 +156,10 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
         } else if([social isEqualToString:@"messenger"]) {
             NSLog(@"TRY OPEN messenger");
             MessengerShare *shareCtl = [[MessengerShare alloc] init];
+            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+        } else if([social isEqualToString:@"messages"]) {
+            NSLog(@"TRY OPEN messages");
+            SMSShare *shareCtl = [[SMSShare alloc] init];
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         }
     } else {
