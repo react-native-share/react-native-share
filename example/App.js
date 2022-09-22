@@ -164,42 +164,6 @@ const App = () => {
     }
   };
 
-  const shareVideoToInstagramWithDialog = async () => {
-    const shareOptions = {
-      title: 'Share video to instagram',
-      type: 'video/mp4',
-      url: video,
-      social: Share.Social.INSTAGRAM,
-      forceDialog: true,
-    };
-
-    try {
-      const ShareResponse = await Share.shareSingle(shareOptions);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
-  };
-
-  const shareImageToInstagramWithDialog = async () => {
-    const shareOptions = {
-      title: 'Share image to instagram',
-      type: 'image/jpeg',
-      url: images.image1,
-      social: Share.Social.INSTAGRAM,
-      forceDialog: true,
-    };
-
-    try {
-      const ShareResponse = await Share.shareSingle(shareOptions);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
-  };
-
   const shareToInstagramDirect = async () => {
     const shareOptions = {
       message: encodeURI(
@@ -210,6 +174,23 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.shareSingle(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
+  const shareVideoToIGStories = async () => {
+    const shareOptions = {
+      title: 'Share video to instastory',
+      backgroundVideo: video,
+      social: Share.Social.INSTAGRAM_STORIES,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -352,14 +333,8 @@ const App = () => {
         </View>
         <View style={styles.button}>
           <Button
-            onPress={shareVideoToInstagramWithDialog}
-            title="Share Video to IG with dialog"
-          />
-        </View>
-        <View style={styles.button}>
-          <Button
-            onPress={shareImageToInstagramWithDialog}
-            title="Share Image to IG with dialog"
+            onPress={shareVideoToIGStories}
+            title="Share video to IG stories"
           />
         </View>
         <View style={styles.button}>
