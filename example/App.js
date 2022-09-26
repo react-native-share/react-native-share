@@ -181,6 +181,23 @@ const App = () => {
     }
   };
 
+  const shareImageToInstagram = async () => {
+    const shareOptions = {
+      title: 'Share image to instagram',
+      type: 'image/jpeg',
+      url: images.image1,
+      social: Share.Social.INSTAGRAM,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
   const shareToInstagramDirect = async () => {
     const shareOptions = {
       message: encodeURI('Checkout the great search engine: https://google.com'),
@@ -331,6 +348,9 @@ const App = () => {
         </View>
         <View style={styles.button}>
           <Button onPress={shareVideoToInstagram} title="Share Video to IG" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareImageToInstagram} title="Share Image to IG" />
         </View>
         <View style={styles.button}>
           <Button onPress={shareToInstagramStory} title="Share to IG Story" />
