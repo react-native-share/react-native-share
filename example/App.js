@@ -164,7 +164,7 @@ const App = () => {
     }
   };
 
-  const shareVideoToInstagramWithDialog = async () => {
+  const shareVideoToInstagram = async () => {
     const shareOptions = {
       title: 'Share video to instagram',
       type: 'video/mp4',
@@ -181,28 +181,9 @@ const App = () => {
     }
   };
 
-  const shareImageToInstagramWithDialog = async () => {
-    const shareOptions = {
-      title: 'Share image to instagram',
-      type: 'image/jpeg',
-      url: images.image1,
-      social: Share.Social.INSTAGRAM,
-    };
-
-    try {
-      const ShareResponse = await Share.shareSingle(shareOptions);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
-  };
-
   const shareToInstagramDirect = async () => {
     const shareOptions = {
-      message: encodeURI(
-        'Checkout the great search engine: https://google.com',
-      ),
+      message: encodeURI('Checkout the great search engine: https://google.com'),
       social: Share.Social.INSTAGRAM,
     };
 
@@ -349,16 +330,7 @@ const App = () => {
           <Button onPress={shareEmailImage} title="Share Social: Email" />
         </View>
         <View style={styles.button}>
-          <Button
-            onPress={shareVideoToInstagramWithDialog}
-            title="Share Video to IG with dialog"
-          />
-        </View>
-        <View style={styles.button}>
-          <Button
-            onPress={shareImageToInstagramWithDialog}
-            title="Share Image to IG with dialog"
-          />
+          <Button onPress={shareVideoToInstagram} title="Share Video to IG" />
         </View>
         <View style={styles.button}>
           <Button onPress={shareToInstagramStory} title="Share to IG Story" />
