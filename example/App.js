@@ -170,7 +170,6 @@ const App = () => {
       type: 'video/mp4',
       url: video,
       social: Share.Social.INSTAGRAM,
-      forceDialog: true,
     };
 
     try {
@@ -188,7 +187,6 @@ const App = () => {
       type: 'image/jpeg',
       url: images.image1,
       social: Share.Social.INSTAGRAM,
-      forceDialog: true,
     };
 
     try {

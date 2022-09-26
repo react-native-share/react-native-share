@@ -50,7 +50,7 @@ public class InstagramShare extends SingleShareIntent {
             if (isImage) {
                 this.openInstagramIntentChooserForImage(url, chooserTitle);
             } else {
-                super.openIntentChooser();
+                this.openInstagramIntentChooserForVideo(url, chooserTitle);
             }
     }
 
@@ -73,6 +73,30 @@ public class InstagramShare extends SingleShareIntent {
 
         Intent storiesIntent = new Intent("com.instagram.share.ADD_TO_STORY");
         storiesIntent.setDataAndType(uri, "jpg");
+        storiesIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        storiesIntent.setPackage(PACKAGE);
+
+        Intent chooserIntent = Intent.createChooser(feedIntent, chooserTitle);
+        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {storiesIntent});
+
+        Activity activity = this.reactContext.getCurrentActivity();
+        activity.grantUriPermission(PACKAGE, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        this.reactContext.startActivity(chooserIntent);
+    }
+
+    protected void openInstagramIntentChooserForVideo(String url, String chooserTitle) {
+        Boolean shouldUseInternalStorage = ShareIntent.hasValidKey("useInternalStorage", options) && options.getBoolean("useInternalStorage");
+        ShareFile shareFile = new ShareFile(url, "video/mp4", "video", shouldUseInternalStorage, this.reactContext);
+        Uri uri = shareFile.getURI();
+
+        Intent feedIntent = new Intent(Intent.ACTION_SEND);
+        feedIntent.setType("video/*");
+        feedIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        feedIntent.setPackage(PACKAGE);
+
+        Intent storiesIntent = new Intent("com.instagram.share.ADD_TO_STORY");
+        storiesIntent.setDataAndType(uri, "mp4");
         storiesIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         storiesIntent.setPackage(PACKAGE);
 
