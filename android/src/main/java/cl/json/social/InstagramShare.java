@@ -45,9 +45,10 @@ public class InstagramShare extends SingleShareIntent {
                 return;
             }
             String type = options.getString("type");
+            String extension = this.getExtension(type);
             Boolean isImage = type.startsWith("image");
 
-            this.openInstagramIntentChooser(url, chooserTitle, isImage);
+            this.openInstagramIntentChooser(url, chooserTitle, isImage, extension);
     }
 
     protected void openInstagramUrlScheme(String url) {
@@ -57,11 +58,16 @@ public class InstagramShare extends SingleShareIntent {
             super.openIntentChooser();
     }
 
-    protected void openInstagramIntentChooser(String url, String chooserTitle, Boolean isImage) {
+    private String getExtension(String url) {
+            String[] ext = url.split("/");
+            return ext[ext.length -1];
+    }
+
+    protected void openInstagramIntentChooser(String url, String chooserTitle, Boolean isImage, String extension) {
         Boolean shouldUseInternalStorage = ShareIntent.hasValidKey("useInternalStorage", options) && options.getBoolean("useInternalStorage");
         ShareFile shareFile = isImage 
-            ? new ShareFile(url, "image/jpeg", "image", shouldUseInternalStorage, this.reactContext) 
-            : new ShareFile(url, "video/mp4", "video", shouldUseInternalStorage, this.reactContext);
+            ? new ShareFile(url, "image/" + extension, "image", shouldUseInternalStorage, this.reactContext) 
+            : new ShareFile(url, "video/" + extension, "video", shouldUseInternalStorage, this.reactContext);
         Uri uri = shareFile.getURI();
 
         Intent feedIntent = new Intent(Intent.ACTION_SEND);
@@ -77,11 +83,7 @@ public class InstagramShare extends SingleShareIntent {
 
         Intent storiesIntent = new Intent("com.instagram.share.ADD_TO_STORY");
 
-        if (isImage) {
-            storiesIntent.setDataAndType(uri, "jpg");
-        } else {
-            storiesIntent.setDataAndType(uri, "mp4");
-        }
+        storiesIntent.setDataAndType(uri, extension);
 
         storiesIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         storiesIntent.setPackage(PACKAGE);
