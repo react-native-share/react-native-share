@@ -95,6 +95,7 @@ public class InstagramShare extends SingleShareIntent {
         Activity activity = this.reactContext.getCurrentActivity();
         activity.grantUriPermission(PACKAGE, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         this.reactContext.startActivity(chooserIntent);
+        TargetChosenReceiver.sendCallback(true, true, this.getIntent().getPackage());
     }
 
     @Override
