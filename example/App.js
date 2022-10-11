@@ -21,6 +21,7 @@ import Share from 'react-native-share';
 
 import images from './images/imagesBase64';
 import pdfBase64 from './images/pdfBase64';
+import {video} from './videos/videoBase64';
 
 const App = () => {
   const [packageSearch, setPackageSearch] = useState<string>('');
@@ -156,6 +157,40 @@ const App = () => {
     try {
       const ShareResponse = await Share.open(shareOptions);
       console.log('Result =>', ShareResponse);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
+  const shareVideoToInstagram = async () => {
+    const shareOptions = {
+      title: 'Share video to instagram',
+      type: 'video/mp4',
+      url: video,
+      social: Share.Social.INSTAGRAM,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
+  const shareImageToInstagram = async () => {
+    const shareOptions = {
+      title: 'Share image to instagram',
+      type: 'image/jpeg',
+      url: images.image1,
+      social: Share.Social.INSTAGRAM,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -310,6 +345,12 @@ const App = () => {
         </View>
         <View style={styles.button}>
           <Button onPress={shareEmailImage} title="Share Social: Email" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareVideoToInstagram} title="Share Video to IG" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareImageToInstagram} title="Share Image to IG" />
         </View>
         <View style={styles.button}>
           <Button onPress={shareToInstagramStory} title="Share to IG Story" />

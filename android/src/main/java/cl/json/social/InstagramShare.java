@@ -45,13 +45,10 @@ public class InstagramShare extends SingleShareIntent {
                 return;
             }
             String type = options.getString("type");
+            String extension = this.getExtension(type);
             Boolean isImage = type.startsWith("image");
 
-            if (isImage) {
-                this.openInstagramIntentChooserForImage(url, chooserTitle);
-            } else {
-                super.openIntentChooser();
-            }
+            this.openInstagramIntentChooser(url, chooserTitle, isImage, extension);
     }
 
     protected void openInstagramUrlScheme(String url) {
@@ -61,18 +58,33 @@ public class InstagramShare extends SingleShareIntent {
             super.openIntentChooser();
     }
 
-    protected void openInstagramIntentChooserForImage(String url, String chooserTitle) {
+    private String getExtension(String url) {
+            String[] ext = url.split("/");
+            return ext[ext.length -1];
+    }
+
+    protected void openInstagramIntentChooser(String url, String chooserTitle, Boolean isImage, String extension) {
         Boolean shouldUseInternalStorage = ShareIntent.hasValidKey("useInternalStorage", options) && options.getBoolean("useInternalStorage");
-        ShareFile shareFile = new ShareFile(url, "image/jpeg", "image", shouldUseInternalStorage, this.reactContext);
+        ShareFile shareFile = isImage 
+            ? new ShareFile(url, "image/" + extension, "image", shouldUseInternalStorage, this.reactContext) 
+            : new ShareFile(url, "video/" + extension, "video", shouldUseInternalStorage, this.reactContext);
         Uri uri = shareFile.getURI();
 
         Intent feedIntent = new Intent(Intent.ACTION_SEND);
-        feedIntent.setType("image/*");
+
+        if (isImage) {
+            feedIntent.setType("image/*");
+        } else {
+            feedIntent.setType("video/*");
+        }
+
         feedIntent.putExtra(Intent.EXTRA_STREAM, uri);
         feedIntent.setPackage(PACKAGE);
 
         Intent storiesIntent = new Intent("com.instagram.share.ADD_TO_STORY");
-        storiesIntent.setDataAndType(uri, "jpg");
+
+        storiesIntent.setDataAndType(uri, extension);
+
         storiesIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         storiesIntent.setPackage(PACKAGE);
 
@@ -83,6 +95,7 @@ public class InstagramShare extends SingleShareIntent {
         Activity activity = this.reactContext.getCurrentActivity();
         activity.grantUriPermission(PACKAGE, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         this.reactContext.startActivity(chooserIntent);
+        TargetChosenReceiver.sendCallback(true, true, this.getIntent().getPackage());
     }
 
     @Override
