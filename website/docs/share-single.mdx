@@ -41,6 +41,16 @@ Or with `async/await`:
   }
 ```
 
+*Note that in the case of a user closing the share sheet without sharing, an error will be thrown. It is up to you to handle this error, i.e.:
+
+```js
+   try {
+       const shareResponse = await Share.shareSingle(shareOptions);
+   } catch (error) {
+       // handle error
+   }
+```
+
 ## Supported Options
 
 You can pass the option that will be handled by the native code, similar to `Share.open`.
