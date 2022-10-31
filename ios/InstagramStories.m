@@ -17,8 +17,8 @@ RCT_EXPORT_MODULE();
 - (void)shareSingle:(NSDictionary *)options
     failureCallback:(RCTResponseErrorBlock)failureCallback
     successCallback:(RCTResponseSenderBlock)successCallback {
-
-    NSURL *urlScheme = [NSURL URLWithString:@"instagram-stories://share"];
+    
+    NSURL *urlScheme = [NSURL URLWithString:[NSString stringWithFormat:@"instagram-stories://share?source_application=%@", options[@"appId"]]];
     if (![[UIApplication sharedApplication] canOpenURL:urlScheme]) {
         NSError* error = [self fallbackInstagram];
         failureCallback(error);
