@@ -49,6 +49,10 @@ public class InstagramStoriesShare extends SingleShareIntent {
     }
 
     private void shareStory(ReadableMap options) {
+        if (!this.hasValidKey("appId", options)) {
+            throw new IllegalArgumentException("appId was not provided.");
+        }
+
         if (!this.hasValidKey("backgroundImage", options) && !this.hasValidKey("backgroundVideo", options)
                 && !this.hasValidKey("stickerImage", options)) {
             throw new IllegalArgumentException("Invalid background or sticker assets provided.");
@@ -60,6 +64,8 @@ public class InstagramStoriesShare extends SingleShareIntent {
             TargetChosenReceiver.sendCallback(false, "Something went wrong");
             return;
         }
+
+        this.intent.putExtra("source_application", options.getString("appId"));
 
         this.intent.putExtra("bottom_background_color", "#906df4");
         this.intent.putExtra("top_background_color", "#837DF4");

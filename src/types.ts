@@ -74,6 +74,7 @@ interface BaseSocialStoriesShareSingleOptions extends Omit<BaseShareSingleOption
 
 export interface InstagramStoriesShareSingleOptions extends BaseSocialStoriesShareSingleOptions {
   social: Social.InstagramStories;
+  appId: string;
 }
 
 export interface FacebookStoriesShareSingleOptions extends BaseSocialStoriesShareSingleOptions {
