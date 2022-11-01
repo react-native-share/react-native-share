@@ -49,10 +49,6 @@ public class InstagramStoriesShare extends SingleShareIntent {
     }
 
     private void shareStory(ReadableMap options) {
-        if (!this.hasValidKey("appId", options)) {
-            throw new IllegalArgumentException("appId was not provided.");
-        }
-
         if (!this.hasValidKey("backgroundImage", options) && !this.hasValidKey("backgroundVideo", options)
                 && !this.hasValidKey("stickerImage", options)) {
             throw new IllegalArgumentException("Invalid background or sticker assets provided.");

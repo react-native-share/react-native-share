@@ -95,6 +95,13 @@ const RNShare = {
               options.urls = [options.url];
             }
 
+            if (options.social === RNShare.Social.INSTAGRAM_STORIES && !options.appId) {
+              return reject({
+                success: false,
+                message: 'Instagram Story share requires an appId based on Meta policy.',
+              });
+            }
+
             NativeModules.RNShare.shareSingle(
               options,
               (error) => {
