@@ -218,6 +218,8 @@ const App = () => {
       title: 'Share image to instastory',
       backgroundImage: images.image1,
       social: Share.Social.INSTAGRAM_STORIES,
+      appId: '219376304', //instagram appId
+
     };
 
     try {

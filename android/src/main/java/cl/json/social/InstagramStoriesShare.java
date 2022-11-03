@@ -61,6 +61,8 @@ public class InstagramStoriesShare extends SingleShareIntent {
             return;
         }
 
+        this.intent.putExtra("source_application", options.getString("appId"));
+
         this.intent.putExtra("bottom_background_color", "#906df4");
         this.intent.putExtra("top_background_color", "#837DF4");
 
