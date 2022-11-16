@@ -8,13 +8,7 @@
 //
 
 // import RCTLog
-#if __has_include(<React/RCTLog.h>)
 #import <React/RCTLog.h>
-#elif __has_include("RCTLog.h")
-#import "RCTLog.h"
-#else
-#import "React/RCTLog.h"   // Required when used as a Pod in a Swift project
-#endif
 
 #import "FacebookStories.h"
 
@@ -27,7 +21,9 @@ RCT_EXPORT_MODULE();
 
     NSURL *urlScheme = [NSURL URLWithString:@"facebook-stories://share"];
     if (![[UIApplication sharedApplication] canOpenURL:urlScheme]) {
-        [self fallbackFacebook];
+        NSError* error = [self fallbackFacebook];
+        failureCallback(error);
+        return;
     }
 
     // Create dictionary of assets and attribution
@@ -84,12 +80,12 @@ RCT_EXPORT_MODULE();
     [[UIPasteboard generalPasteboard] setItems:pasteboardItems options:pasteboardOptions];
     [[UIApplication sharedApplication] openURL:urlScheme options:@{} completionHandler:nil];
 
-    successCallback(@[]);
+    successCallback(@[@true, @""]);
 }
 
-- (void)fallbackFacebook {
+- (NSError*)fallbackFacebook {
     // Cannot open facebook
-    NSString *stringURL = @"http://itunes.apple.com/app/facebook/id284882215";
+    NSString *stringURL = @"https://itunes.apple.com/app/facebook/id284882215";
     NSURL *url = [NSURL URLWithString:stringURL];
     [[UIApplication sharedApplication] openURL:url];
 
@@ -98,5 +94,6 @@ RCT_EXPORT_MODULE();
     NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
 
     NSLog(errorMessage);
+    return error;
 }
 @end

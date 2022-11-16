@@ -5,22 +5,10 @@
 #endif
 
 // import RCTBridgeModule
-#if __has_include(<React/RCTBridgeModule.h>)
 #import <React/RCTBridgeModule.h>
-#elif __has_include("RCTBridgeModule.h")
-#import "RCTBridgeModule.h"
-#else
-#import "React/RCTBridgeModule.h"   // Required when used as a Pod in a Swift project
-#endif
 
 // import RCTConvert
-#if __has_include(<React/RCTConvert.h>)
 #import <React/RCTConvert.h>
-#elif __has_include("RCTConvert.h")
-#import "RCTConvert.h"
-#else
-#import "React/RCTConvert.h"   // Required when used as a Pod in a Swift project
-#endif
 
 @implementation RNShareActivityItemSource {
     id placeholderItem;
@@ -66,7 +54,9 @@
             } else {
                 self->linkMetadata.originalURL = metadata.originalURL;
                 self->linkMetadata.URL = metadata.URL;
-                self->linkMetadata.title = metadata.title;
+                if(!self->linkMetadata.title) {
+                    self->linkMetadata.title = metadata.title;
+                }
                 self->linkMetadata.imageProvider = metadata.imageProvider;
                 if (self->linkMetadata.imageProvider) {
                     self->linkMetadata.iconProvider = self->linkMetadata.imageProvider;

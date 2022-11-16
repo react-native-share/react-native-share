@@ -1,7 +1,7 @@
 {
   "name": "react-native-share",
   "description": "Social share, sending simple data to other apps.",
-  "version": "7.3.2",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/react-native-community/react-native-share.git"
@@ -25,8 +25,8 @@
     "RNShare.podspec"
   ],
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/runtime": "^7.11.2",
+    "@babel/core": "^7.12.9",
+    "@babel/runtime": "^7.12.5",
     "@commitlint/cli": "11.0.0",
     "@commitlint/config-conventional": "11.0.0",
     "@react-native-community/eslint-config": "^3.0.0",
@@ -41,13 +41,15 @@
     "eslint-config-satya164": "3.1.10",
     "husky": "4.3.0",
     "lint-staged": "10.3.0",
-    "metro-react-native-babel-preset": "^0.63.0",
+    "metro-config": "^0.66.2",
+    "metro-react-native-babel-preset": "^0.66.2",
     "pre-commit": "1.2.2",
     "prettier": "^2.2.1",
-    "react": "16.13.1",
-    "react-native": "0.63.2",
+    "react": "17.0.2",
+    "react-native": "0.66.4",
     "react-native-builder-bob": "^0.18.1",
-    "semantic-release": "^17.1.1",
+    "react-native-windows": "0.66.4",
+    "semantic-release": "^19.0.3",
     "typescript": "4.2.4"
   },
   "keywords": [
@@ -75,12 +77,13 @@
   "scripts": {
     "start": "react-native start",
     "start:android": "react-native run-android",
-    "start:ios": "react-native run-ios",
+    "start:ios": "react-native run-ios --project-path example/ios",
     "lint": "eslint \"src/**/*.{js,ts,tsx}\" --max-warnings=0",
     "typescript": "tsc --noEmit",
     "validate": "yarn lint && yarn typescript",
     "ci:publish": "npx semantic-release",
-    "prepare": "bob build"
+    "prepare": "bob build",
+    "windows": "react-native run-windows"
   },
   "husky": {
     "hooks": {

@@ -21,6 +21,7 @@ import Share from 'react-native-share';
 
 import images from './images/imagesBase64';
 import pdfBase64 from './images/pdfBase64';
+import {video} from './videos/videoBase64';
 
 const App = () => {
   const [packageSearch, setPackageSearch] = useState<string>('');
@@ -68,6 +69,7 @@ const App = () => {
     // the share response. If the user cancels, etc.
     try {
       const ShareResponse = await Share.open(shareOptions);
+      console.log('Result =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -90,6 +92,26 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.open(shareOptions);
+      console.log('Result =>', ShareResponse);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
+  const shareEmailImages = async () => {
+    const shareOptions = {
+      message: 'Share.singleShare',
+      email: 'email@example.com',
+      social: Share.Social.EMAIL,
+      failOnCancel: false,
+      urls: [images.image1, images.image2],
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -110,6 +132,7 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.open(shareOptions);
+      console.log('Result =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -133,6 +156,56 @@ const App = () => {
     // the share response. If the user cancels, etc.
     try {
       const ShareResponse = await Share.open(shareOptions);
+      console.log('Result =>', ShareResponse);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
+  const shareVideoToInstagram = async () => {
+    const shareOptions = {
+      title: 'Share video to instagram',
+      type: 'video/mp4',
+      url: video,
+      social: Share.Social.INSTAGRAM,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
+  const shareImageToInstagram = async () => {
+    const shareOptions = {
+      title: 'Share image to instagram',
+      type: 'image/jpeg',
+      url: images.image1,
+      social: Share.Social.INSTAGRAM,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
+  const shareToInstagramDirect = async () => {
+    const shareOptions = {
+      message: encodeURI('Checkout the great search engine: https://google.com'),
+      social: Share.Social.INSTAGRAM,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -145,10 +218,13 @@ const App = () => {
       title: 'Share image to instastory',
       backgroundImage: images.image1,
       social: Share.Social.INSTAGRAM_STORIES,
+      appId: '219376304', //instagram appId
+
     };
 
     try {
       const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -166,6 +242,7 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -183,6 +260,7 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -199,6 +277,41 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
+  const shareToGooglePlus = async () => {
+    const shareOptions = {
+      message: 'Example Google Plus',
+      url: 'https://google.com',
+      social: Share.Social.GOOGLEPLUS,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
+  const shareToWhatsApp = async () => {
+    const shareOptions = {
+      message: 'Example WhatsApp',
+      url: 'https://google.com',
+      social: Share.Social.WHATSAPP,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('Error =>', error);
@@ -214,6 +327,7 @@ const App = () => {
 
     try {
       const ShareResponse = await Share.open(shareOptions);
+      console.log('Result =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
     } catch (error) {
       console.log('sharePdfBase64 Error =>', error);
@@ -235,13 +349,31 @@ const App = () => {
           <Button onPress={shareEmailImage} title="Share Social: Email" />
         </View>
         <View style={styles.button}>
+          <Button onPress={shareVideoToInstagram} title="Share Video to IG" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareImageToInstagram} title="Share Image to IG" />
+        </View>
+        <View style={styles.button}>
           <Button onPress={shareToInstagramStory} title="Share to IG Story" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareToInstagramDirect} title="Share to IG Direct" />
         </View>
         <View style={styles.button}>
           <Button onPress={shareToFacebookStory} title="Share to FB Story" />
         </View>
         <View style={styles.button}>
           <Button onPress={shareToTelegram} title="Share to Telegram" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareToGooglePlus} title="Share to Google Plus" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareToWhatsApp} title="Share to WhatsApp" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareEmailImages} title="Share to Email" />
         </View>
         {Platform.OS === 'ios' && (
           <View style={styles.button}>

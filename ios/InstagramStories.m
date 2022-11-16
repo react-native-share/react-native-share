@@ -7,13 +7,7 @@
 //
 
 // import RCTLog
-#if __has_include(<React/RCTLog.h>)
 #import <React/RCTLog.h>
-#elif __has_include("RCTLog.h")
-#import "RCTLog.h"
-#else
-#import "React/RCTLog.h"   // Required when used as a Pod in a Swift project
-#endif
 
 #import "InstagramStories.h"
 
@@ -23,10 +17,12 @@ RCT_EXPORT_MODULE();
 - (void)shareSingle:(NSDictionary *)options
     failureCallback:(RCTResponseErrorBlock)failureCallback
     successCallback:(RCTResponseSenderBlock)successCallback {
-
-    NSURL *urlScheme = [NSURL URLWithString:@"instagram-stories://share"];
+    
+    NSURL *urlScheme = [NSURL URLWithString:[NSString stringWithFormat:@"instagram-stories://share?source_application=%@", options[@"appId"]]];
     if (![[UIApplication sharedApplication] canOpenURL:urlScheme]) {
-        [self fallbackInstagram];
+        NSError* error = [self fallbackInstagram];
+        failureCallback(error);
+        return;
     }
 
     // Create dictionary of assets and attribution
@@ -81,12 +77,12 @@ RCT_EXPORT_MODULE();
     [[UIPasteboard generalPasteboard] setItems:pasteboardItems options:pasteboardOptions];
     [[UIApplication sharedApplication] openURL:urlScheme options:@{} completionHandler:nil];
 
-    successCallback(@[]);
+    successCallback(@[@true, @""]);
 }
 
-- (void)fallbackInstagram {
+- (NSError*)fallbackInstagram {
     // Cannot open instagram
-    NSString *stringURL = @"http://itunes.apple.com/app/instagram/id389801252";
+    NSString *stringURL = @"https://itunes.apple.com/app/instagram/id389801252";
     NSURL *url = [NSURL URLWithString:stringURL];
     [[UIApplication sharedApplication] openURL:url];
 
@@ -95,6 +91,7 @@ RCT_EXPORT_MODULE();
     NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
 
     NSLog(errorMessage);
+    return error;
 }
 // https://instagram.fhrk1-1.fna.fbcdn.net/vp/80c479ffc246a9320e614fa4def6a3dc/5C667D3F/t51.12442-15/e35/50679864_1663709050595244_6964601913751831460_n.jpg?_nc_ht=instagram.fhrk1-1.fna.fbcdn.net
 @end

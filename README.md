@@ -12,7 +12,7 @@ This gives you the power to prioritize our work and support the project contribu
 
 [![issuehunt-image](https://issuehunt.io/static/embed/issuehunt-button-v1.svg)](https://issuehunt.io/repos/43406976)
 
-# Getting started
+# Getting started 🚀
 
 ---
 
@@ -52,4 +52,4 @@ Which you do something similar to this:
 
 # Documentation
 
-If you are using a older version of `react-native` or `react-native-share`, having any problem or want to know how use `Share.open` and other functions, please refer to our new [docs](https://react-native-share.github.io/react-native-share) and help us improve that. 🚀
+If you are using a older version of `react-native` or `react-native-share`, having any problem or want to know how use `Share.open` and other functions, please refer to our new [docs](https://react-native-share.github.io/react-native-share) and help us improve that.🚀

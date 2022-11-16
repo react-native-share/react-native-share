@@ -98,6 +98,10 @@ public abstract class ShareIntent {
     public void open(ReadableMap options) throws ActivityNotFoundException {
         this.options = options;
 
+        if (ShareIntent.hasValidKey("isNewTask", options) && options.getBoolean("isNewTask")) {
+            this.getIntent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        }
+
         if (ShareIntent.hasValidKey("subject", options)) {
             this.getIntent().putExtra(Intent.EXTRA_SUBJECT, options.getString("subject"));
         }

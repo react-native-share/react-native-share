@@ -1,5 +1,5 @@
 //
-//  FacebookShare.m
+//  WhatsAppShare.m
 //  RNShare
 //
 //  Created by Diseño Uno BBCL on 23-07-16.
@@ -26,7 +26,7 @@ RCT_EXPORT_MODULE();
             NSLog(@"WhatsApp installed");
         } else {
             // Cannot open whatsapp
-            NSString *stringURL = @"http://itunes.apple.com/app/whatsapp-messenger/id310633997";
+            NSString *stringURL = @"https://itunes.apple.com/app/whatsapp-messenger/id310633997";
             NSURL *url = [NSURL URLWithString:stringURL];
             [[UIApplication sharedApplication] openURL:url];
             
@@ -46,7 +46,7 @@ RCT_EXPORT_MODULE();
             
             [documentInteractionController presentOpenInMenuFromRect:CGRectZero inView:[[[[[UIApplication sharedApplication] delegate] window] rootViewController] view] animated:YES];
             NSLog(@"Done whatsapp movie");
-            successCallback(@[]);
+            successCallback(@[@true, @""]);
         } else if ([options[@"url"] rangeOfString:@"png"].location != NSNotFound || [options[@"url"] rangeOfString:@"jpeg"].location != NSNotFound || [options[@"url"] rangeOfString:@"jpg"].location != NSNotFound || [options[@"url"] rangeOfString:@"gif"].location != NSNotFound) {
             UIImage * image;
             NSURL *imageURL = [RCTConvert NSURL:options[@"url"]];
@@ -71,7 +71,7 @@ RCT_EXPORT_MODULE();
                     documentInteractionController.delegate = self;
                     
                     [documentInteractionController presentOpenInMenuFromRect:CGRectZero inView:[[[[[UIApplication sharedApplication] delegate] window] rootViewController] view] animated:YES];
-                    successCallback(@[]);
+                    successCallback(@[@true, @""]);
                 }
             } else {
                 NSError *error = [NSError errorWithDomain:@"com.rnshare" code:3 userInfo:@{ NSLocalizedDescriptionKey:@"Something went wrong"}];
@@ -85,7 +85,7 @@ RCT_EXPORT_MODULE();
             
             if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
                 [[UIApplication sharedApplication] openURL: whatsappURL];
-                successCallback(@[]);
+                successCallback(@[@true, @""]);
             }
         }
     }

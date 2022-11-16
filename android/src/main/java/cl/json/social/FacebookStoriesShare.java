@@ -98,14 +98,14 @@ public class FacebookStoriesShare extends SingleShareIntent {
                 backgroundFileName = options.getString("backgroundVideo");
             }
 
-            ShareFile backgroundAsset = new ShareFile(backgroundFileName, "background", useInternalStorage, this.reactContext);
+            ShareFile backgroundAsset = new ShareFile(backgroundFileName, "image/jpeg", "background", useInternalStorage, this.reactContext);
 
             this.intent.setDataAndType(backgroundAsset.getURI(), backgroundAsset.getType());
             this.intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
 
         if (this.hasValidKey("stickerImage", options)) {
-            ShareFile stickerAsset = new ShareFile(options.getString("stickerImage"), "sticker", useInternalStorage, this.reactContext);
+            ShareFile stickerAsset = new ShareFile(options.getString("stickerImage"), "image/png", "sticker", useInternalStorage, this.reactContext);
 
             if (!hasBackgroundAsset) {
                 this.intent.setType("image/*");

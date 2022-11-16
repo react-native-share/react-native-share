@@ -22,10 +22,15 @@
 
         if ([[UIApplication sharedApplication] canOpenURL: gplusURL]) {
             [[UIApplication sharedApplication] openURL:gplusURL];
-            successCallback(@[]);
+            successCallback(@[@true, @""]);
         } else {
             // Cannot open gplus
-            NSLog(@"error web intent");
+            NSString *errorMessage = @"Not installed";
+            NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
+            NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
+
+            NSLog(errorMessage);
+            failureCallback(error);
         }
     }
 }

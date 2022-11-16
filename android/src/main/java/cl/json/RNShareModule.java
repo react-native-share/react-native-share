@@ -14,6 +14,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Callback;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import cl.json.social.EmailShare;
@@ -35,6 +36,7 @@ import cl.json.social.SnapChatShare;
 import cl.json.social.SMSShare;
 import cl.json.social.MessengerShare;
 import cl.json.social.LinkedinShare;
+import cl.json.social.ViberShare;
 
 public class RNShareModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
@@ -79,7 +81,8 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
         snapchat,
         sms,
         linkedin,
-        telegram;
+        telegram,
+        viber;
 
 
         public static ShareIntent getShareClass(String social, ReactApplicationContext reactContext) {
@@ -119,6 +122,8 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
                     return new LinkedinShare(reactContext);
                 case telegram:
                     return new TelegramShare(reactContext);
+                case viber:
+                    return new ViberShare(reactContext);
                 default:
                     return null;
             }
@@ -141,7 +146,7 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
     public Map<String, Object> getConstants() {
         Map<String, Object> constants = new HashMap<>();
         for (SHARES val : SHARES.values()) {
-            constants.put(val.toString().toUpperCase(), val.toString());
+            constants.put(val.toString().toUpperCase(Locale.ROOT), val.toString());
         }
         return constants;
     }

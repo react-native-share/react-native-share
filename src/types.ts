@@ -15,6 +15,7 @@ export enum Social {
   Telegram = 'telegram',
   Snapchat = 'snapchat',
   Messenger = 'messenger',
+  Viber = 'viber',
 }
 
 export enum ShareAsset {
@@ -49,6 +50,7 @@ export interface ActivityItemSource {
 }
 
 interface BaseShareSingleOptions {
+  urls?: string[];
   url?: string;
   type?: string;
   filename?: string;
@@ -72,11 +74,11 @@ interface BaseSocialStoriesShareSingleOptions extends Omit<BaseShareSingleOption
 
 export interface InstagramStoriesShareSingleOptions extends BaseSocialStoriesShareSingleOptions {
   social: Social.InstagramStories;
+  appId: string;
 }
 
 export interface FacebookStoriesShareSingleOptions extends BaseSocialStoriesShareSingleOptions {
   social: Social.FacebookStories;
-  method: Exclude<ShareAsset, ShareAsset.BackgroundVideo>;
   appId: string;
 }
 
@@ -94,13 +96,14 @@ export interface ShareOptions {
   subject?: string;
   email?: string;
   recipient?: string;
-  excludedActivityTypes?: ActivityType[];
+  excludedActivityTypes?: ActivityType[] | string[];
   failOnCancel?: boolean;
   showAppsToView?: boolean;
   filename?: string;
   filenames?: string[];
   saveToFiles?: boolean;
   activityItemSources?: ActivityItemSource[];
+  isNewTask?: boolean;
 }
 
 export type ActivityType =

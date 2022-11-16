@@ -39,6 +39,7 @@ const RNShare = {
     TELEGRAM: NativeModules.RNShare.TELEGRAM || Social.Telegram,
     MESSENGER: NativeModules.RNShare.MESSENGER || Social.Messenger,
     SNAPCHAT: NativeModules.RNShare.SNAPCHAT || Social.Snapchat,
+    VIBER: NativeModules.RNShare.VIBER || Social.Viber,
   },
 
   open(options: ShareOptions): Promise<ShareOpenResult | never> {
@@ -90,6 +91,17 @@ const RNShare = {
       return new Promise((resolve, reject) => {
         requireAndAskPermissions(options)
           .then(() => {
+            if (options.url) {
+              options.urls = [options.url];
+            }
+
+            if (options.social === RNShare.Social.INSTAGRAM_STORIES && !options.appId) {
+              return reject({
+                success: false,
+                message: 'Instagram Story share requires an appId based on Meta policy.',
+              });
+            }
+
             NativeModules.RNShare.shareSingle(
               options,
               (error) => {
@@ -97,7 +109,7 @@ const RNShare = {
               },
               (success, message) => {
                 return resolve({
-                  success,
+                  success: Boolean(success),
                   message,
                 });
               },

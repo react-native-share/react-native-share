@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4EED9CAF24F5A2EB006505C4 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EED9CAE24F5A2EB006505C4 /* Utils.m */; };
+		6513A53928AF109A00F0AE09 /* MessengerShare.m in Sources */ = {isa = PBXBuildFile; fileRef = 6513A53828AF109A00F0AE09 /* MessengerShare.m */; };
+		65B4E1BA28AF0DC800D905B8 /* RNShareUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 65B4E1B928AF0DC800D905B8 /* RNShareUtils.m */; };
 		6D697F8423A86EBC00F754A1 /* RNShareActivityItemSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D697F8323A86EBC00F754A1 /* RNShareActivityItemSource.m */; };
 		B33C22851D441713006BCD98 /* GenericShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B33C22841D441713006BCD98 /* GenericShare.m */; };
 		B33C22891D4419E8006BCD98 /* WhatsAppShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B33C22881D4419E8006BCD98 /* WhatsAppShare.m */; };
@@ -33,8 +34,10 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libRNShare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNShare.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		4EED9CAD24F5A2EB006505C4 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
-		4EED9CAE24F5A2EB006505C4 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		6513A53728AF108500F0AE09 /* MessengerShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessengerShare.h; sourceTree = "<group>"; };
+		6513A53828AF109A00F0AE09 /* MessengerShare.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessengerShare.m; sourceTree = "<group>"; };
+		65B4E1B828AF0DB400D905B8 /* RNShareUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNShareUtils.h; sourceTree = "<group>"; };
+		65B4E1B928AF0DC800D905B8 /* RNShareUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNShareUtils.m; sourceTree = "<group>"; };
 		6D697F8223A86EBC00F754A1 /* RNShareActivityItemSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNShareActivityItemSource.h; sourceTree = "<group>"; };
 		6D697F8323A86EBC00F754A1 /* RNShareActivityItemSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNShareActivityItemSource.m; sourceTree = "<group>"; };
 		B33C22841D441713006BCD98 /* GenericShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenericShare.m; sourceTree = "<group>"; };
@@ -89,22 +92,24 @@
 		B33C22801D43F9B0006BCD98 /* social */ = {
 			isa = PBXGroup;
 			children = (
-				CE0C76361E9E7DE100ED396E /* InstagramShare.m */,
-				CE0C76621E9E869300ED396E /* InstagramShare.h */,
-				B33C22841D441713006BCD98 /* GenericShare.m */,
-				B33C22861D441723006BCD98 /* GenericShare.h */,
-				B33C22871D4419DA006BCD98 /* WhatsAppShare.h */,
-				B33C22881D4419E8006BCD98 /* WhatsAppShare.m */,
-				B33C228A1D442576006BCD98 /* EmailShare.m */,
 				B33C228C1D442583006BCD98 /* EmailShare.h */,
-				4EED9CAD24F5A2EB006505C4 /* Utils.h */,
-				4EED9CAE24F5A2EB006505C4 /* Utils.m */,
-				B3EEE48D1D4844E7008422B6 /* GooglePlusShare.m */,
-				B3EEE48F1D4844F4008422B6 /* GooglePlusShare.h */,
-				FCC7BB4D2214566C00E1EA39 /* InstagramStories.h */,
-				FCC7BB4E221457EF00E1EA39 /* InstagramStories.m */,
+				B33C228A1D442576006BCD98 /* EmailShare.m */,
 				F1A1AD562444B09B00E32E33 /* FacebookStories.h */,
 				F1A1AD572444B09B00E32E33 /* FacebookStories.m */,
+				B33C22861D441723006BCD98 /* GenericShare.h */,
+				B33C22841D441713006BCD98 /* GenericShare.m */,
+				B3EEE48F1D4844F4008422B6 /* GooglePlusShare.h */,
+				B3EEE48D1D4844E7008422B6 /* GooglePlusShare.m */,
+				CE0C76621E9E869300ED396E /* InstagramShare.h */,
+				CE0C76361E9E7DE100ED396E /* InstagramShare.m */,
+				FCC7BB4D2214566C00E1EA39 /* InstagramStories.h */,
+				FCC7BB4E221457EF00E1EA39 /* InstagramStories.m */,
+				6513A53728AF108500F0AE09 /* MessengerShare.h */,
+				6513A53828AF109A00F0AE09 /* MessengerShare.m */,
+				65B4E1B828AF0DB400D905B8 /* RNShareUtils.h */,
+				65B4E1B928AF0DC800D905B8 /* RNShareUtils.m */,
+				B33C22871D4419DA006BCD98 /* WhatsAppShare.h */,
+				B33C22881D4419E8006BCD98 /* WhatsAppShare.m */,
 			);
 			name = social;
 			sourceTree = "<group>";
@@ -167,14 +172,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1A1AD582444B09B00E32E33 /* FacebookStories.m in Sources */,
+				65B4E1BA28AF0DC800D905B8 /* RNShareUtils.m in Sources */,
 				6D697F8423A86EBC00F754A1 /* RNShareActivityItemSource.m in Sources */,
 				CE0C76371E9E7DE100ED396E /* InstagramShare.m in Sources */,
-				4EED9CAF24F5A2EB006505C4 /* Utils.m in Sources */,
 				B3EEE48E1D4844E7008422B6 /* GooglePlusShare.m in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* RNShare.m in Sources */,
 				B33C22891D4419E8006BCD98 /* WhatsAppShare.m in Sources */,
 				B33C228B1D442577006BCD98 /* EmailShare.m in Sources */,
 				FCC7BB4F221457EF00E1EA39 /* InstagramStories.m in Sources */,
+				6513A53928AF109A00F0AE09 /* MessengerShare.m in Sources */,
 				B33C22851D441713006BCD98 /* GenericShare.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
