@@ -42,10 +42,10 @@ export interface ActivityItem {
 
 export interface ActivityItemSource {
   placeholderItem: ActivityItem;
-  item: { [key in ActivityType]?: ActivityItem | null | undefined };
-  subject?: { [key in ActivityType]?: string };
-  dataTypeIdentifier?: { [key in ActivityType]?: string };
-  thumbnailImage?: { [key in ActivityType]?: string };
+  item: { [key in ActivityTypeItemSource]?: ActivityItem | null | undefined };
+  subject?: { [key in ActivityTypeItemSource]?: string };
+  dataTypeIdentifier?: { [key in ActivityTypeItemSource]?: string };
+  thumbnailImage?: { [key in ActivityTypeItemSource]?: string };
   linkMetadata?: LinkMetadata;
 }
 
@@ -124,6 +124,8 @@ export type ActivityType =
   | 'print'
   | 'saveToCameraRoll'
   | 'markupAsPDF'; // iOS 11 or late
+
+export type ActivityTypeItemSource = ActivityType | string;
 
 export interface ShareSingleResult {
   message: string;
