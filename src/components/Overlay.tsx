@@ -23,12 +23,15 @@ export interface OverlayProps {
   visible: boolean;
 }
 
-const Overlay: React.FC<React.PropsWithChildren<OverlayProps>> = ({
-  visible,
-  children,
-}) => {
+const Overlay: React.FC<React.PropsWithChildren<OverlayProps>> = ({ visible, children }) => {
   const [fadeAnim] = React.useState(new Animated.Value(0));
   const [overlayStyle, setOverlayStyle] = React.useState<StyleProp<ViewStyle>>(styles.emptyOverlay);
+
+  const onAnimatedEnd = React.useCallback(() => {
+    if (!visible) {
+      setOverlayStyle(styles.emptyOverlay);
+    }
+  }, [visible]);
 
   React.useEffect(() => {
     if (visible) {
@@ -39,20 +42,9 @@ const Overlay: React.FC<React.PropsWithChildren<OverlayProps>> = ({
       duration: DEFAULT_ANIMATE_TIME,
       useNativeDriver: false,
     }).start(onAnimatedEnd);
-  }, [visible, fadeAnim]);
+  }, [visible, fadeAnim, onAnimatedEnd]);
 
-  const onAnimatedEnd = () => {
-    if (!visible) {
-      setOverlayStyle(styles.emptyOverlay);
-    }
-  };
-
-  return (
-    <Animated.View style={[overlayStyle, { opacity: fadeAnim }]}>
-      {children}
-    </Animated.View>
-  );
-
+  return <Animated.View style={[overlayStyle, { opacity: fadeAnim }]}>{children}</Animated.View>;
 };
 
 export default Overlay;

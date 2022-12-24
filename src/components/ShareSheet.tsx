@@ -1,6 +1,12 @@
 import * as React from 'react';
-import { ViewStyle, StyleProp, StyleSheet } from 'react-native';
-import { View, TouchableOpacity, BackHandler } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  BackHandler,
+  ViewStyle,
+  StyleProp,
+  StyleSheet,
+} from 'react-native';
 
 import Overlay from './Overlay';
 import Sheet from './Sheet';
