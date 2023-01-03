@@ -18,7 +18,13 @@ export interface ButtonProps {
   children: React.ReactNode;
 }
 
-const Button = ({ buttonStyle, onPress, iconSrc, textStyle, children }: ButtonProps) => (
+const Button: React.FC<ButtonProps> = ({
+  buttonStyle,
+  onPress,
+  iconSrc,
+  textStyle,
+  children,
+}: ButtonProps) => (
   <TouchableOpacity activeOpacity={0.5} style={[styles.button, buttonStyle]} onPress={onPress}>
     <Image style={styles.icon} source={iconSrc} />
     <Text style={[styles.buttonText, textStyle]}>{children}</Text>

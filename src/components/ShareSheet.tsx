@@ -1,6 +1,12 @@
 import * as React from 'react';
-import { View, StyleSheet, TouchableOpacity, BackHandler } from 'react-native';
-import type { ViewStyle, StyleProp } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  BackHandler,
+  ViewStyle,
+  StyleProp,
+  StyleSheet,
+} from 'react-native';
 
 import Overlay from './Overlay';
 import Sheet from './Sheet';
@@ -8,46 +14,43 @@ import Sheet from './Sheet';
 export interface ShareSheetProps {
   visible: boolean;
   onCancel: () => void;
-  children: React.ReactChildren;
   style?: StyleProp<ViewStyle>;
   overlayStyle?: StyleProp<ViewStyle>;
 }
 
-class ShareSheet extends React.Component<ShareSheetProps> {
-  componentDidMount() {
-    this.backButtonHandler = this.backButtonHandler.bind(this);
-    BackHandler.addEventListener('hardwareBackPress', this.backButtonHandler);
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.backButtonHandler);
-  }
-
-  backButtonHandler(): boolean {
-    if (this.props.visible) {
-      this.props.onCancel();
+const ShareSheet: React.FC<React.PropsWithChildren<ShareSheetProps>> = ({
+  style = {},
+  overlayStyle = {},
+  visible,
+  onCancel,
+  children,
+}) => {
+  const backButtonHandler = React.useCallback(() => {
+    if (visible) {
+      onCancel();
       return true;
     }
     return false;
-  }
+  }, [visible, onCancel]);
 
-  render() {
-    const { style = {}, overlayStyle = {}, ...props } = this.props;
+  React.useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', backButtonHandler);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', backButtonHandler);
+    };
+  }, [backButtonHandler]);
 
-    return (
-      <Overlay {...props}>
-        <View style={[styles.actionSheetContainer, overlayStyle]}>
-          <TouchableOpacity style={styles.button} onPress={this.props.onCancel} />
-          <Sheet visible={this.props.visible}>
-            <View style={[styles.buttonContainer, style]}>{this.props.children}</View>
-          </Sheet>
-        </View>
-      </Overlay>
-    );
-  }
-}
-
-export default ShareSheet;
+  return (
+    <Overlay visible={visible}>
+      <View style={[styles.actionSheetContainer, overlayStyle]}>
+        <TouchableOpacity style={styles.button} onPress={onCancel} />
+        <Sheet visible={visible}>
+          <View style={[styles.buttonContainer, style]}>{children}</View>
+        </Sheet>
+      </View>
+    </Overlay>
+  );
+};
 
 const styles = StyleSheet.create({
   actionSheetContainer: {
@@ -67,3 +70,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default ShareSheet;
