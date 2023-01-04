@@ -23,41 +23,28 @@ export interface OverlayProps {
   visible: boolean;
 }
 
-interface State {
-  fadeAnim: Animated.Value;
-  overlayStyle: StyleProp<ViewStyle>;
-}
+const Overlay: React.FC<React.PropsWithChildren<OverlayProps>> = ({ visible, children }) => {
+  const [fadeAnim] = React.useState(new Animated.Value(0));
+  const [overlayStyle, setOverlayStyle] = React.useState<StyleProp<ViewStyle>>(styles.emptyOverlay);
 
-class Overlay extends React.Component<OverlayProps, State> {
-  state = {
-    fadeAnim: new Animated.Value(0),
-    overlayStyle: styles.emptyOverlay,
-  };
-
-  UNSAFE_componentWillReceiveProps(newProps: OverlayProps) {
-    if (newProps.visible) {
-      this.setState({ overlayStyle: styles.fullOverlay });
+  const onAnimatedEnd = React.useCallback(() => {
+    if (!visible) {
+      setOverlayStyle(styles.emptyOverlay);
     }
-    return Animated.timing(this.state.fadeAnim, {
-      toValue: newProps.visible ? 1 : 0,
+  }, [visible]);
+
+  React.useEffect(() => {
+    if (visible) {
+      setOverlayStyle(styles.fullOverlay);
+    }
+    return Animated.timing(fadeAnim, {
+      toValue: visible ? 1 : 0,
       duration: DEFAULT_ANIMATE_TIME,
       useNativeDriver: false,
-    }).start(this.onAnimatedEnd.bind(this));
-  }
+    }).start(onAnimatedEnd);
+  }, [visible, fadeAnim, onAnimatedEnd]);
 
-  onAnimatedEnd() {
-    if (!this.props.visible) {
-      this.setState({ overlayStyle: styles.emptyOverlay });
-    }
-  }
-
-  render() {
-    return (
-      <Animated.View style={[this.state.overlayStyle, { opacity: this.state.fadeAnim }]}>
-        {this.props.children}
-      </Animated.View>
-    );
-  }
-}
+  return <Animated.View style={[overlayStyle, { opacity: fadeAnim }]}>{children}</Animated.View>;
+};
 
 export default Overlay;

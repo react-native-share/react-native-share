@@ -8,28 +8,18 @@ export interface SheetProps {
   visible: boolean;
 }
 
-interface State {
-  bottom: Animated.Value;
-}
+const Sheet: React.FC<React.PropsWithChildren<SheetProps>> = ({ visible, children }) => {
+  const [bottom] = React.useState(new Animated.Value(DEFAULT_BOTTOM));
 
-class Sheet extends React.Component<SheetProps, State> {
-  state = {
-    bottom: new Animated.Value(DEFAULT_BOTTOM),
-  };
-
-  UNSAFE_componentWillReceiveProps(newProps: SheetProps) {
-    return Animated.timing(this.state.bottom, {
-      toValue: newProps.visible ? 0 : DEFAULT_BOTTOM,
+  React.useEffect(() => {
+    return Animated.timing(bottom, {
+      toValue: visible ? 0 : DEFAULT_BOTTOM,
       duration: DEFAULT_ANIMATE_TIME,
       useNativeDriver: false,
     }).start();
-  }
+  }, [visible, bottom]);
 
-  render() {
-    return (
-      <Animated.View style={{ bottom: this.state.bottom }}>{this.props.children}</Animated.View>
-    );
-  }
-}
+  return <Animated.View style={{ bottom }}>{children}</Animated.View>;
+};
 
 export default Sheet;
