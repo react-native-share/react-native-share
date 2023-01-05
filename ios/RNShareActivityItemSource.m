@@ -197,7 +197,7 @@
         }
     }
     
-    return nil;
+    return activityType;
 }
 
 + (nullable id)objectForActivityType:(UIActivityType)activityType inDictionary:(nonnull NSDictionary *)dictionary {
