@@ -47,6 +47,15 @@ RCT_EXPORT_MODULE();
             [documentInteractionController presentOpenInMenuFromRect:CGRectZero inView:[[[[[UIApplication sharedApplication] delegate] window] rootViewController] view] animated:YES];
             NSLog(@"Done whatsapp movie");
             successCallback(@[@true, @""]);
+        } else if ([options[@"url"] rangeOfString:@".mp3"].location != NSNotFound) {
+            NSLog(@"Sending whatsapp movie");
+            documentInteractionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:options[@"url"]]];
+            documentInteractionController.UTI = @"net.whatsapp.audio";
+            documentInteractionController.delegate = self;
+            
+            [documentInteractionController presentOpenInMenuFromRect:CGRectZero inView:[[[[[UIApplication sharedApplication] delegate] window] rootViewController] view] animated:YES];
+            NSLog(@"Done whatsapp movie");
+            successCallback(@[@true, @""]);
         } else if ([options[@"url"] rangeOfString:@"png"].location != NSNotFound || [options[@"url"] rangeOfString:@"jpeg"].location != NSNotFound || [options[@"url"] rangeOfString:@"jpg"].location != NSNotFound || [options[@"url"] rangeOfString:@"gif"].location != NSNotFound) {
             UIImage * image;
             NSURL *imageURL = [RCTConvert NSURL:options[@"url"]];
