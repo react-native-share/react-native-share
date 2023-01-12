@@ -198,7 +198,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
                         [items addObject: filePath];
                     }
                 } else if (fileName) {
-                    NSURL *filePath = [RNShareUtils getPathFromFileName:filename with:data];
+                    NSURL *filePath = [RNShareUtils getPathFromFileName:fileName with:data];
                     if (filePath) {
                         [items addObject: filePath];
                     }
