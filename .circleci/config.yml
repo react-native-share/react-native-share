@@ -124,6 +124,8 @@ workflows:
               only:
                 - main
       - publish-version:
+          context:
+            - SHELL_VARIABLES
           requires:
             - install-dependencies
       - deploy-docs:
