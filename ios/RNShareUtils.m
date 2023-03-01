@@ -47,4 +47,15 @@
     return NULL;
 }
 
+/**
+ Given a filename string and Data, writes a temp file with the filename.
+ */
++(NSURL*)getPathFromFilename:(NSString*)filename with:(NSData*)data {
+    NSString *writePath = [NSTemporaryDirectory() stringByAppendingPathComponent:filename];
+    if ([data writeToFile:writePath atomically:YES]) {
+        return [NSURL fileURLWithPath:writePath];
+    }
+    return NULL;
+}
+
 @end

@@ -55,7 +55,6 @@ const RNShare = {
 
             if (options.filename && !options.filenames) {
               options.filenames = [options.filename];
-              delete options.filename;
             }
           }
 
