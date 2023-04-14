@@ -27,6 +27,17 @@ public class InstagramShare extends SingleShareIntent {
     public void open(ReadableMap options) throws ActivityNotFoundException {
             super.open(options);
 
+            if (!ShareIntent.hasValidKey("type", options)) {
+                Log.e("RNShare", "No type provided");
+                return;
+            }
+            String type = options.getString("type");
+
+            if (type.startsWith("text")) {
+               this.openInstagramIntentChooserForText(chooserTitle);
+                return;
+            }
+
             if (!ShareIntent.hasValidKey("url", options)) {
                 Log.e("RNShare", "No url provided");
                 return;
@@ -39,16 +50,10 @@ public class InstagramShare extends SingleShareIntent {
                 return;
             }
 
-
-            if (!ShareIntent.hasValidKey("type", options)) {
-                Log.e("RNShare", "No type provided");
-                return;
-            }
-            String type = options.getString("type");
             String extension = this.getExtension(type);
             Boolean isImage = type.startsWith("image");
 
-            this.openInstagramIntentChooser(url, chooserTitle, isImage, extension);
+            this.openInstagramIntentChooserForMedia(url, chooserTitle, isImage, extension);
     }
 
     protected void openInstagramUrlScheme(String url) {
@@ -63,7 +68,14 @@ public class InstagramShare extends SingleShareIntent {
             return ext[ext.length -1];
     }
 
-    protected void openInstagramIntentChooser(String url, String chooserTitle, Boolean isImage, String extension) {
+    protected void openInstagramIntentChooserForText(String chooserTitle) {
+            this.getIntent().setPackage(PACKAGE);
+            this.getIntent().setType("text/plain");
+            this.getIntent().setAction(Intent.ACTION_SEND);
+            super.openIntentChooser();
+    }
+
+    protected void openInstagramIntentChooserForMedia(String url, String chooserTitle, Boolean isImage, String extension) {
         Boolean shouldUseInternalStorage = ShareIntent.hasValidKey("useInternalStorage", options) && options.getBoolean("useInternalStorage");
         ShareFile shareFile = isImage 
             ? new ShareFile(url, "image/" + extension, "image", shouldUseInternalStorage, this.reactContext) 

@@ -200,8 +200,11 @@ const App = () => {
 
   const shareToInstagramDirect = async () => {
     const shareOptions = {
-      message: encodeURI('Checkout the great search engine: https://google.com'),
+      message: encodeURI(
+        'Checkout the great search engine: https://google.com',
+      ),
       social: Share.Social.INSTAGRAM,
+      type: 'text/plain',
     };
 
     try {
@@ -219,7 +222,6 @@ const App = () => {
       backgroundImage: images.image1,
       social: Share.Social.INSTAGRAM_STORIES,
       appId: '219376304', //instagram appId
-
     };
 
     try {
