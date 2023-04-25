@@ -18,7 +18,7 @@ npm i react-native-share --save
 
 After that, we need to install the dependencies to use the project on iOS(you can skip this part, if you are using this on Android).
 
-Now run a simple: `npx pod-install` or `cd ios && pod install`. After that, you should be able to use the library on both Platforms, iOS and Android. 
+Now run a simple: `npx pod-install` or `cd ios && pod install`. After that, you should be able to use the library on both Platforms, iOS and Android.
 
 Also, to use this library on iOS you will need:
 
@@ -35,6 +35,31 @@ After that, you will see that the library is now available at your `node_modules
 ```
 
 to your application's `AndroidManifest.xml` file as per the example project.
+
+
+### Adding Queries for Android (Necessary for SDK >= 30)
+
+Android 11 introduces changes related to package visibility.
+These changes affect apps only if they target Android 11.
+For more information on these changes, view the guides about [package visibility on Android](https://developer.android.com/training/package-visibility).
+This change can prevent you to use `Share.shareSingle()` or others!
+
+- In `AndroidManifest.xml` insert the `<queries>` tag.
+
+```
+<manifest package="com.example.game">
+    <queries>
+        <package android:name="com.example.store" />
+        <package android:name="com.example.services" />
+
+        <!--for example, to share via instagram -->
+        <package android:name="com.instagram.android" />
+    </queries>
+    ...
+</manifest>
+```
+**Note:** Don't forget to provide the name of the application you will be sharing your content through. See example above.
+
 
 ## Manual Linking
 
@@ -134,10 +159,10 @@ Follow this to implement your `FileProvider`. If you have any doubt please you f
 
 - Create a `filepaths.xml` under this directory: `android/app/src/main/res/xml`.
 
-    In this file, add the following contents: 
-    
+    In this file, add the following contents:
+
     File: `android/app/src/main/res/xml/filepaths.xml`
-    
+
     ```xml
     <?xml version="1.0" encoding="utf-8"?>
     <paths xmlns:android="http://schemas.android.com/apk/res/android">
@@ -163,27 +188,6 @@ Follow this to implement your `FileProvider`. If you have any doubt please you f
     }
     ```
 
-### Adding Queries for the Android (Necessary for SDK >= 30)
-
-Android 11 introduces changes related to package visibility.
-These changes affect apps only if they target Android 11.
-For more information on these changes, view the guides about [package visibility on Android](https://developer.android.com/training/package-visibility).
-This change can prevent you to use `Share.shareSingle()` or others!
-
-- In `AndroidManifest.xml` insert the `<queries>`.
-
-```
-<manifest package="com.example.game">
-    <queries>
-        <package android:name="com.example.store" />
-        <package android:name="com.example.services" />
-    </queries>
-    ...
-</manifest>
-```
-**Note:** Don't forget change the `android:name` in package for the package id of the app that you will share!
-
-
 ## Older versions
 
 If you need to use a older version of `react-native < 0.60`, then you will need to run a:
@@ -201,6 +205,6 @@ npm i react-native-share@version --save
 You can look at all versions, that we published [here](https://github.com/react-native-community/react-native-share/releases).
 
 
-## react-native 0.59.10 
+## react-native 0.59.10
 
 If you can't update your project to the most recent version of both react-native and react-native-share, please use `1.2.1`. Alternatively you can use [jetifier](https://github.com/mikehardy/jetifier#to-reverse-jetify--convert-node_modules-dependencies-to-support-libraries) running a ```npx jetify -r```.
