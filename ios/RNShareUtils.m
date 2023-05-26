@@ -29,17 +29,21 @@
  Given a base64 string and Data, writes a temp file with a guessed extension from
  the base mime type.
  */
-+(NSURL*)getPathFromBase64:(NSString*)base64String with:(NSData*)data {
++(NSURL*)getPathFromBase64:(NSString*)base64String with:(NSData*)data fileName:(NSString*)name {
     NSString * mimeType = [RNShareUtils getExtensionFromBase64:base64String];
-    
+    NSString * fileName=name;
     // default to png if invalid
     // it was like this originally, should it default
     // to a better file type or no extension at all?
     if(!mimeType){
         mimeType = @"png";
     }
+    //default to file if invalid
+    if(!fileName){
+        fileName=@"file";
+    }
 
-    NSString *pathComponent = [NSString stringWithFormat:@"file.%@", mimeType];
+    NSString *pathComponent = [NSString stringWithFormat:@"%@.%@",fileName, mimeType];
     NSString *writePath = [NSTemporaryDirectory() stringByAppendingPathComponent:pathComponent];
     if ([data writeToFile:writePath atomically:YES]) {
         return [NSURL fileURLWithPath:writePath];

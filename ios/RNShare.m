@@ -193,7 +193,8 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
                     return;
                 }
                 if (saveToFiles) {
-                    NSURL *filePath = [RNShareUtils getPathFromBase64:URL.absoluteString with:data];
+                    NSURL *filePath = [RNShareUtils getPathFromBase64:URL.absoluteString with:data fileName:filename];
+
                     if (filePath) {
                         [items addObject: filePath];
                     }
