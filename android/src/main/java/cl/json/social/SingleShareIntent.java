@@ -11,7 +11,7 @@ import android.net.Uri;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 
-import cl.json.RNShareModule;
+import cl.json.RNShareImpl;
 
 /**
  * Created by disenodosbbcl on 23-07-16.
@@ -79,11 +79,11 @@ public abstract class SingleShareIntent extends ShareIntent {
                 IntentSender sender = TargetChosenReceiver.getSharingSenderIntent(this.reactContext);
                 Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle, sender);
                 chooser.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+                activity.startActivityForResult(chooser, RNShareImpl.SHARE_REQUEST_CODE);
             } else {
                 Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
                 chooser.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+                activity.startActivityForResult(chooser, RNShareImpl.SHARE_REQUEST_CODE);
                 TargetChosenReceiver.sendCallback(true, true, "OK");
             }
         } else {

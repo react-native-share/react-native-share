@@ -125,5 +125,13 @@
       "module",
       "typescript"
     ]
+  },
+  "codegenConfig": {
+    "name": "RNShareSpec",
+    "type": "modules",
+    "jsSrcsDir": "./codegenSpec",
+    "android": {
+      "javaPackageName": "cl.json"
+    }
   }
 }

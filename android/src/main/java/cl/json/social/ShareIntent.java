@@ -25,7 +25,7 @@ import java.util.List;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import cl.json.RNShareModule;
+import cl.json.RNShareImpl;
 import cl.json.ShareFile;
 import cl.json.ShareFiles;
 
@@ -282,12 +282,12 @@ public abstract class ShareIntent {
         if (ShareIntent.hasValidKey("excludedActivityTypes", options)) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 chooser.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, getExcludedComponentArray(options.getArray("excludedActivityTypes")));
-                activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+                activity.startActivityForResult(chooser, RNShareImpl.SHARE_REQUEST_CODE);
             } else {
-                activity.startActivityForResult(excludeChooserIntent(this.getIntent(),options), RNShareModule.SHARE_REQUEST_CODE);
+                activity.startActivityForResult(excludeChooserIntent(this.getIntent(),options), RNShareImpl.SHARE_REQUEST_CODE);
             }
         } else {
-            activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+            activity.startActivityForResult(chooser, RNShareImpl.SHARE_REQUEST_CODE);
         }
 
         if (intentSender == null) {

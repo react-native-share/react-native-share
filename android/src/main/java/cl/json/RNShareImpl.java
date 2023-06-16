@@ -1,21 +1,16 @@
 package cl.json;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.ActivityNotFoundException;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import android.net.Uri;
 
-import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContextBaseJavaModule;
-import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Callback;
-
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 import cl.json.social.EmailShare;
 import cl.json.social.FacebookShare;
@@ -38,12 +33,20 @@ import cl.json.social.MessengerShare;
 import cl.json.social.LinkedinShare;
 import cl.json.social.ViberShare;
 
-public class RNShareModule extends ReactContextBaseJavaModule implements ActivityEventListener {
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import android.util.Log;
+
+public class RNShareImpl implements ActivityEventListener {
+
+    public static final String NAME = "RNShare";
+
+    static ReactApplicationContext RCTContext = null;
 
     public static final int SHARE_REQUEST_CODE = 16845;
-    private final ReactApplicationContext reactContext;
 
-    // removed @Override temporarily just to get it working on different versions of RN
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SHARE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_CANCELED) {
@@ -54,15 +57,12 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
         }
     }
 
-    // removed @Override temporarily just to get it working on different versions of RN
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    public void onNewIntent(Intent intent) {
-
-    }
+    public void onNewIntent(Intent intent) { }
 
     private enum SHARES {
         facebook,
@@ -130,19 +130,11 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
         }
     };
 
-    public RNShareModule(ReactApplicationContext reactContext) {
-        super(reactContext);
-        reactContext.addActivityEventListener(this);
-        this.reactContext = reactContext;
+    public RNShareImpl(ReactApplicationContext reactContext) {
+        RCTContext = reactContext;
+        RCTContext.addActivityEventListener(this);
     }
 
-    @Override
-    public String getName() {
-        return "RNShare";
-    }
-
-    @javax.annotation.Nullable
-    @Override
     public Map<String, Object> getConstants() {
         Map<String, Object> constants = new HashMap<>();
         for (SHARES val : SHARES.values()) {
@@ -151,41 +143,39 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
         return constants;
     }
 
-    @ReactMethod
     public void open(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
         TargetChosenReceiver.registerCallbacks(successCallback, failureCallback);
         try {
-            GenericShare share = new GenericShare(this.reactContext);
+            GenericShare share = new GenericShare(RCTContext);
             share.open(options);
         } catch (ActivityNotFoundException ex) {
-            System.out.println("ERROR " + ex.getMessage());
+            Log.e(NAME,ex.getMessage());
             ex.printStackTrace(System.out);
             TargetChosenReceiver.sendCallback(false, "not_available");
         } catch (Exception e) {
-            System.out.println("ERROR " + e.getMessage());
+            Log.e(NAME,e.getMessage());
             e.printStackTrace(System.out);
             TargetChosenReceiver.sendCallback(false, e.getMessage());
         }
     }
 
-    @ReactMethod
     public void shareSingle(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
-        System.out.println("SHARE SINGLE METHOD");
+        // System.out.println("SHARE SINGLE METHOD");
         TargetChosenReceiver.registerCallbacks(successCallback, failureCallback);
         if (ShareIntent.hasValidKey("social", options)) {
             try {
-                ShareIntent shareClass = SHARES.getShareClass(options.getString("social"), this.reactContext);
+                ShareIntent shareClass = SHARES.getShareClass(options.getString("social"), RCTContext);
                 if (shareClass != null && shareClass instanceof ShareIntent) {
                     shareClass.open(options);
                 } else {
                     throw new ActivityNotFoundException("Invalid share activity");
                 }
             } catch (ActivityNotFoundException ex) {
-                System.out.println("ERROR " + ex.getMessage());
+                Log.e(NAME,ex.getMessage());
                 ex.printStackTrace(System.out);
                 TargetChosenReceiver.sendCallback(false, ex.getMessage());
             } catch (Exception e) {
-                System.out.println("ERROR " + e.getMessage());
+                Log.e(NAME,e.getMessage());
                 e.printStackTrace(System.out);
                 TargetChosenReceiver.sendCallback(false, e.getMessage());
             }
@@ -194,18 +184,16 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
         }
     }
 
-    @ReactMethod
     public void isPackageInstalled(String packagename, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
         try {
-            boolean res = ShareIntent.isPackageInstalled(packagename, this.reactContext);
+            boolean res = ShareIntent.isPackageInstalled(packagename, RCTContext);
             successCallback.invoke(res);
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            Log.e(NAME,e.getMessage());
             failureCallback.invoke(e.getMessage());
         }
     }
 
-    @ReactMethod
     public void isBase64File(String url, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
         try {
             Uri uri = Uri.parse(url);
@@ -216,7 +204,7 @@ public class RNShareModule extends ReactContextBaseJavaModule implements Activit
                 successCallback.invoke(false);
             }
         } catch (Exception e) {
-            System.out.println("ERROR " + e.getMessage());
+            Log.e(NAME,e.getMessage());
             e.printStackTrace(System.out);
             failureCallback.invoke(e.getMessage());
         }
