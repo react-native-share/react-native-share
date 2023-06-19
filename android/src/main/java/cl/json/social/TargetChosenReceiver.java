@@ -10,8 +10,10 @@ import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.os.Build;
 
-import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
 
 /**
  * Receiver to record the chosen component when sharing an Intent.
@@ -23,16 +25,14 @@ public class TargetChosenReceiver extends BroadcastReceiver {
     private static String sTargetChosenReceiveAction;
     private static TargetChosenReceiver sLastRegisteredReceiver;
 
-    private static Callback successCallback;
-    private static Callback failureCallback;
+    private static Promise callback;
 
     public static boolean isSupported() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1;
     }
 
-    public static void registerCallbacks(Callback success, Callback failure) {
-        successCallback = success;
-        failureCallback = failure;
+    public static void registerCallbacks(Promise promise) {
+        callback = promise;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
@@ -73,22 +73,28 @@ public class TargetChosenReceiver extends BroadcastReceiver {
         }
 
         ComponentName target = intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT);
+        WritableMap reply = Arguments.createMap();
+        reply.putBoolean("success", true);
         if (target != null) {
-            sendCallback(true, true, target.flattenToString());
+            reply.putString("message", target.flattenToString());
+            
         } else {
-            sendCallback(true, true, "OK");
+            reply.putString("message", "OK");
         }
+        callbackResolve(reply);
     }
 
-    public static void sendCallback(boolean isSuccess, Object... reply) {
-        if (isSuccess) {
-            if (successCallback != null) {
-                successCallback.invoke(reply);
-            }
-        } else if (failureCallback != null) {
-            failureCallback.invoke(reply);
+    // public static void sendCallback(boolean isSuccess, Object reply) {
+    public static void callbackResolve(Object reply) {
+        if (callback != null) {
+            callback.resolve(reply);
         }
-        successCallback = null;
-        failureCallback = null;
+        callback = null;
+    }
+    public static void callbackReject(String err) {
+        if (callback != null) {
+            callback.reject(err);
+        }
+        callback = null;
     }
 }

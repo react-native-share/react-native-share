@@ -12,8 +12,8 @@
 static UIDocumentInteractionController *documentInteractionController;
 RCT_EXPORT_MODULE();
 - (void)shareSingle:(NSDictionary *)options
-    failureCallback:(RCTResponseErrorBlock)failureCallback
-    successCallback:(RCTResponseSenderBlock)successCallback {
+    reject:(RCTPromiseRejectBlock)reject
+    resolve:(RCTPromiseResolveBlock)resolve {
     
     NSLog(@"Try open view");
     
@@ -35,7 +35,7 @@ RCT_EXPORT_MODULE();
             NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
             
             NSLog(@"%@", errorMessage);
-            return failureCallback(error);
+            return reject(@"com.rnshare",@"Not installed",error);
         }
         
         if ([options[@"url"] rangeOfString:@".wam"].location != NSNotFound || [options[@"url"] rangeOfString:@".mp4"].location != NSNotFound) {
@@ -46,7 +46,7 @@ RCT_EXPORT_MODULE();
             
             [documentInteractionController presentOpenInMenuFromRect:CGRectZero inView:[[[[[UIApplication sharedApplication] delegate] window] rootViewController] view] animated:YES];
             NSLog(@"Done whatsapp movie");
-            successCallback(@[@true, @""]);
+            resolve(@[@true, @""]);
         } else if ([options[@"url"] rangeOfString:@"png"].location != NSNotFound || [options[@"url"] rangeOfString:@"jpeg"].location != NSNotFound || [options[@"url"] rangeOfString:@"jpg"].location != NSNotFound || [options[@"url"] rangeOfString:@"gif"].location != NSNotFound) {
             UIImage * image;
             NSURL *imageURL = [RCTConvert NSURL:options[@"url"]];
@@ -58,7 +58,7 @@ RCT_EXPORT_MODULE();
                                                            error:&error];
                     if (!data) {
                         NSError *error = [NSError errorWithDomain:@"com.rnshare" code:2 userInfo:@{ NSLocalizedDescriptionKey:@"Something went wrong"}];
-                        return failureCallback(error);
+                        return reject(@"com.rnshare",@"Something went wrong",error);
                     }
                     image = [UIImage imageWithData: data];
                     NSString * documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -71,11 +71,11 @@ RCT_EXPORT_MODULE();
                     documentInteractionController.delegate = self;
                     
                     [documentInteractionController presentOpenInMenuFromRect:CGRectZero inView:[[[[[UIApplication sharedApplication] delegate] window] rootViewController] view] animated:YES];
-                    successCallback(@[@true, @""]);
+                    resolve(@[@true, @""]);
                 }
             } else {
                 NSError *error = [NSError errorWithDomain:@"com.rnshare" code:3 userInfo:@{ NSLocalizedDescriptionKey:@"Something went wrong"}];
-                return failureCallback(error);
+                return reject(@"com.rnshare",@"Something went wrong",error);
             }
         } else {
             text = (NSString*)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef) text, NULL,CFSTR("!*'();:@&=+$,/?%#[]"),kCFStringEncodingUTF8));
@@ -85,7 +85,7 @@ RCT_EXPORT_MODULE();
             
             if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
                 [[UIApplication sharedApplication] openURL: whatsappURL];
-                successCallback(@[@true, @""]);
+                resolve(@[@true, @""]);
             }
         }
     }

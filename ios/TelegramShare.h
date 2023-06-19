@@ -18,6 +18,6 @@
 #import <React/RCTUtils.h>
 @interface TelegramShare : NSObject <RCTBridgeModule>
 
-- (void) shareSingle:(NSDictionary *)options failureCallback:(RCTResponseErrorBlock)failureCallback successCallback:(RCTResponseSenderBlock)successCallback;
+- (void) shareSingle:(NSDictionary *)options reject:(RCTPromiseRejectBlock)reject resolve:(RCTPromiseResolveBlock)resolve;
 
 @end

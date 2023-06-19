@@ -15,6 +15,8 @@ import android.content.ComponentName;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -257,7 +259,7 @@ public abstract class ShareIntent {
     protected void openIntentChooser() throws ActivityNotFoundException {
         Activity activity = this.reactContext.getCurrentActivity();
         if (activity == null) {
-            TargetChosenReceiver.sendCallback(false, "Something went wrong");
+            TargetChosenReceiver.callbackReject("Something went wrong");
             return;
         }
         Intent chooser;
@@ -291,7 +293,10 @@ public abstract class ShareIntent {
         }
 
         if (intentSender == null) {
-            TargetChosenReceiver.sendCallback(true, true, "OK");
+            WritableMap reply = Arguments.createMap();
+            reply.putBoolean("success", true);
+            reply.putString("message", "OK");
+            TargetChosenReceiver.callbackResolve(reply);
         }
     }
 

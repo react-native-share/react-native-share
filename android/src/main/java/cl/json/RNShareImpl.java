@@ -7,10 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.net.Uri;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.WritableMap;
 
 import cl.json.social.EmailShare;
 import cl.json.social.FacebookShare;
@@ -50,9 +52,12 @@ public class RNShareImpl implements ActivityEventListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SHARE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_CANCELED) {
-                TargetChosenReceiver.sendCallback(true, false, "CANCELED");
+                WritableMap reply = Arguments.createMap();
+                reply.putBoolean("success", false);
+                reply.putString("message", "CANCELED");
             } else if (resultCode == Activity.RESULT_OK) {
-                TargetChosenReceiver.sendCallback(true, true);
+                WritableMap reply = Arguments.createMap();
+                reply.putBoolean("success", true);
             }
         }
     }
@@ -143,25 +148,26 @@ public class RNShareImpl implements ActivityEventListener {
         return constants;
     }
 
-    public void open(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
-        TargetChosenReceiver.registerCallbacks(successCallback, failureCallback);
+    public void open(ReadableMap options, Promise promise) {
+Log.v(NAME,"open impl");
+        TargetChosenReceiver.registerCallbacks(promise);
         try {
             GenericShare share = new GenericShare(RCTContext);
             share.open(options);
         } catch (ActivityNotFoundException ex) {
             Log.e(NAME,ex.getMessage());
             ex.printStackTrace(System.out);
-            TargetChosenReceiver.sendCallback(false, "not_available");
+            TargetChosenReceiver.callbackReject("not_available");
         } catch (Exception e) {
             Log.e(NAME,e.getMessage());
             e.printStackTrace(System.out);
-            TargetChosenReceiver.sendCallback(false, e.getMessage());
+            TargetChosenReceiver.callbackReject(e.getMessage());
         }
     }
 
-    public void shareSingle(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
-        // System.out.println("SHARE SINGLE METHOD");
-        TargetChosenReceiver.registerCallbacks(successCallback, failureCallback);
+    public void shareSingle(ReadableMap options, Promise promise) {
+Log.v(NAME,"shareSingle impl");
+        TargetChosenReceiver.registerCallbacks(promise);
         if (ShareIntent.hasValidKey("social", options)) {
             try {
                 ShareIntent shareClass = SHARES.getShareClass(options.getString("social"), RCTContext);
@@ -173,40 +179,40 @@ public class RNShareImpl implements ActivityEventListener {
             } catch (ActivityNotFoundException ex) {
                 Log.e(NAME,ex.getMessage());
                 ex.printStackTrace(System.out);
-                TargetChosenReceiver.sendCallback(false, ex.getMessage());
+                TargetChosenReceiver.callbackReject(ex.getMessage());
             } catch (Exception e) {
                 Log.e(NAME,e.getMessage());
                 e.printStackTrace(System.out);
-                TargetChosenReceiver.sendCallback(false, e.getMessage());
+                TargetChosenReceiver.callbackReject(e.getMessage());
             }
         } else {
-            TargetChosenReceiver.sendCallback(false, "key 'social' missing in options");
+            TargetChosenReceiver.callbackReject("key 'social' missing in options");
         }
     }
 
-    public void isPackageInstalled(String packagename, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
+    public void isPackageInstalled(String packagename, Promise promise) {
         try {
             boolean res = ShareIntent.isPackageInstalled(packagename, RCTContext);
-            successCallback.invoke(res);
+            promise.resolve(res);
         } catch (Exception e) {
             Log.e(NAME,e.getMessage());
-            failureCallback.invoke(e.getMessage());
+            promise.reject(e.getMessage());
         }
     }
 
-    public void isBase64File(String url, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
+    public void isBase64File(String url, Promise promise) {
         try {
             Uri uri = Uri.parse(url);
             String scheme = uri.getScheme();
             if ((scheme != null) && scheme.equals("data")) {
-                successCallback.invoke(true);
+                promise.resolve(true);
             } else {
-                successCallback.invoke(false);
+                promise.resolve(false);
             }
         } catch (Exception e) {
             Log.e(NAME,e.getMessage());
             e.printStackTrace(System.out);
-            failureCallback.invoke(e.getMessage());
+            promise.reject(e.getMessage());
         }
     }
 }

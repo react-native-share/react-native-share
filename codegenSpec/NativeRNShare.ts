@@ -3,10 +3,10 @@ import { TurboModuleRegistry } from 'react-native';
 
 export interface Spec extends TurboModule {
     readonly getConstants: () => {};
-    open:(options:Object, failureCallback:() => void, successCallback:() => void) => void;
-    shareSingle:(options:Object, failureCallback:() => void, successCallback:() => void) => void;
-    isPackageInstalled:(packagename:string, failureCallback:() => void, successCallback:() => void) => void;
-    isBase64File:(url:string, failureCallback:() => void, successCallback:() => void) => void;
+    open:(options:Object) => Promise<{success:boolean, message:string}>;
+    shareSingle:(options:Object) => Promise<{success:boolean, message:string}>;
+    isPackageInstalled:(packagename:string) => Promise<boolean>;
+    isBase64File:(url:string) => Promise<boolean>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNShare');

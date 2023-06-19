@@ -7,11 +7,13 @@ import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 
 import java.util.Map;
 
 import cl.json.NativeRNShareSpec;
+
+import android.util.Log;
 
 public class RNShare extends NativeRNShareSpec {
 
@@ -34,22 +36,24 @@ public class RNShare extends NativeRNShareSpec {
     }
     
     @Override
-    public void open(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
-        delegate.open(options,failureCallback,successCallback);
+    public void open(ReadableMap options, Promise promise) {
+Log.v(RNShareImpl.NAME,"open");
+        delegate.open(options,promise);
     }
 
     @Override
-    public void shareSingle(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
-        delegate.shareSingle(options,failureCallback,successCallback);
+    public void shareSingle(ReadableMap options, Promise promise) {
+Log.v(RNShareImpl.NAME,"shareSingle");
+        delegate.shareSingle(options,promise);
     }
 
     @Override
-    public void isPackageInstalled(String packagename, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
-        delegate.isPackageInstalled(packagename,failureCallback,successCallback);
+    public void isPackageInstalled(String packagename, Promise promise) {
+        delegate.isPackageInstalled(packagename,promise);
     }
 
     @Override
-    public void isBase64File(String url, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
-        delegate.isBase64File(url,failureCallback,successCallback);
+    public void isBase64File(String url, Promise promise) {
+        delegate.isBase64File(url,promise);
     }
 }

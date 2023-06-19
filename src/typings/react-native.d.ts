@@ -28,28 +28,20 @@ declare module 'react-native' {
     SHARE_BACKGROUND_AND_STICKER_IMAGE: ShareAsset.BackgroundAndStickerImage;
 
     open(
-      options: ShareOptions,
-      errorCallback: (error: string) => void,
-      successCallback: (success: boolean, message: string) => void,
-    ): Promise<void>;
+      options: ShareOptions
+    ): Promise<{success: boolean, message: string}>;
 
     shareSingle(
-      options: ShareSingleOptions,
-      errorCallback: (error: string) => void,
-      successCallback: (success: boolean, message: string) => void,
-    ): Promise<void>;
+      options: ShareSingleOptions
+    ): Promise<{success: boolean, message: string}>;
 
     isPackageInstalled(
-      packageName: string,
-      errorCallback: (error: string) => void,
-      successCallback: (isInstalled: boolean) => void,
-    ): Promise<void>;
+      packageName: string
+    ): Promise<boolean>;
 
     isBase64File(
-      url: string,
-      errorCallback: (error: string) => void,
-      successCallback: (isBase64: boolean) => void,
-    ): Promise<void>;
+      url: string
+    ): Promise<boolean>;
   }
 
   interface NativeModulesStatic {

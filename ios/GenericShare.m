@@ -11,8 +11,8 @@
 @implementation GenericShare
     RCT_EXPORT_MODULE();
 - (void)shareSingle:(NSDictionary *)options
-    failureCallback:(RCTResponseErrorBlock)failureCallback
-    successCallback:(RCTResponseSenderBlock)successCallback
+    reject:(RCTPromiseRejectBlock)reject
+    resolve:(RCTPromiseResolveBlock)resolve
     serviceType:(NSString*)serviceType
     inAppBaseUrl:(NSString *)inAppBaseUrl {
 
@@ -28,7 +28,7 @@
                                                      options:(NSDataReadingOptions)0
                                                        error:&error];
                 if (!data) {
-                    failureCallback(error);
+                    reject(@"no data",@"no data",error);
                     return;
                 }
                 UIImage *image = [UIImage imageWithData: data];
@@ -47,14 +47,14 @@
 
         UIViewController *ctrl = RCTPresentedViewController();
         [ctrl presentViewController:composeController animated:YES completion:Nil];
-        successCallback(@[@true, @""]);
+        resolve(@[@true, @""]);
       } else {
         NSString *errorMessage = @"Not installed";
         NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
         NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
 
         NSLog(@"%@", errorMessage);
-        failureCallback(error);
+          reject(@"com.rnshare",@"Not installed",error);
 
         NSString *escapedString = [options[@"message"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 

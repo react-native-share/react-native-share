@@ -12,8 +12,8 @@
 @implementation TelegramShare
     RCT_EXPORT_MODULE();
 - (void)shareSingle:(NSDictionary *)options
-    failureCallback:(RCTResponseErrorBlock)failureCallback
-    successCallback:(RCTResponseSenderBlock)successCallback {
+    reject:(RCTPromiseRejectBlock)reject
+    resolve:(RCTPromiseResolveBlock)resolve {
     
     NSString *text = [RCTConvert NSString:options[@"message"]];
     text = (NSString*)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef) text, NULL,CFSTR("!*'();:@&=+$,/?%#[]"),kCFStringEncodingUTF8));
@@ -28,7 +28,7 @@
     
     if ([[UIApplication sharedApplication] canOpenURL: shareURL]) {
         [[UIApplication sharedApplication] openURL: shareURL];
-        successCallback(@[@true, @""]);
+        resolve(@[@true, @""]);
     } else {
         // Cannot open telegram
         NSString *stringURL = @"https://itunes.apple.com/app/telegram-messenger/id686449807";
@@ -41,7 +41,7 @@
         NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
         
         NSLog(@"%@", errorMessage);
-        failureCallback(error);
+        reject(@"Not installed",@"Not installed",error);
     } 
 }
 

@@ -6,7 +6,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 
 import java.util.Map;
 
@@ -31,22 +31,22 @@ public class RNShare extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void open(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
-        delegate.open(options,failureCallback,successCallback);
+    public void open(ReadableMap options, Promise promise) {
+        delegate.open(options,promise);
     }
 
     @ReactMethod
-    public void shareSingle(ReadableMap options, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
-        delegate.shareSingle(options,failureCallback,successCallback);
+    public void shareSingle(ReadableMap options, Promise promise) {
+        delegate.shareSingle(options,promise);
     }
 
     @ReactMethod
-    public void isPackageInstalled(String packagename, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
-        delegate.isPackageInstalled(packagename,failureCallback,successCallback);
+    public void isPackageInstalled(String packagename, Promise promise) {
+        delegate.isPackageInstalled(packagename,promise);
     }
 
     @ReactMethod
-    public void isBase64File(String url, @Nullable Callback failureCallback, @Nullable Callback successCallback) {
-        delegate.isBase64File(url,failureCallback,successCallback);
+    public void isBase64File(String url, Promise promise) {
+        delegate.isBase64File(url,promise);
     }
 }

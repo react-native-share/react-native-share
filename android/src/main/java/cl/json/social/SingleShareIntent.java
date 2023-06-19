@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.net.Uri;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
 
 import cl.json.RNShareImpl;
 
@@ -67,7 +69,7 @@ public abstract class SingleShareIntent extends ShareIntent {
         if (this.options.hasKey("forceDialog") && this.options.getBoolean("forceDialog")) {
             Activity activity = this.reactContext.getCurrentActivity();
             if (activity == null) {
-                TargetChosenReceiver.sendCallback(false, "Something went wrong");
+                TargetChosenReceiver.callbackReject("Something went wrong");
                 return;
             }
             if (options != null) {
@@ -84,12 +86,19 @@ public abstract class SingleShareIntent extends ShareIntent {
                 Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
                 chooser.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 activity.startActivityForResult(chooser, RNShareImpl.SHARE_REQUEST_CODE);
-                TargetChosenReceiver.sendCallback(true, true, "OK");
+
+                WritableMap reply = Arguments.createMap();
+                reply.putBoolean("success", true);
+                reply.putString("message", "OK");
+                TargetChosenReceiver.callbackResolve(reply);
             }
         } else {
             this.getIntent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             this.reactContext.startActivity(this.getIntent());
-            TargetChosenReceiver.sendCallback(true, true, this.getIntent().getPackage());
+            WritableMap reply = Arguments.createMap();
+            reply.putBoolean("success", true);
+            reply.putString("message", this.getIntent().getPackage());
+            TargetChosenReceiver.callbackResolve(reply);
         }
     }
 }
