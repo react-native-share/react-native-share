@@ -149,7 +149,6 @@ public class RNShareImpl implements ActivityEventListener {
     }
 
     public void open(ReadableMap options, Promise promise) {
-Log.v(NAME,"open impl");
         TargetChosenReceiver.registerCallbacks(promise);
         try {
             GenericShare share = new GenericShare(RCTContext);
@@ -166,7 +165,6 @@ Log.v(NAME,"open impl");
     }
 
     public void shareSingle(ReadableMap options, Promise promise) {
-Log.v(NAME,"shareSingle impl");
         TargetChosenReceiver.registerCallbacks(promise);
         if (ShareIntent.hasValidKey("social", options)) {
             try {

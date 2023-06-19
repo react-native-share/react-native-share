@@ -13,8 +13,6 @@ import java.util.Map;
 
 import cl.json.NativeRNShareSpec;
 
-import android.util.Log;
-
 public class RNShare extends NativeRNShareSpec {
 
     private final RNShareImpl delegate;
@@ -37,13 +35,11 @@ public class RNShare extends NativeRNShareSpec {
     
     @Override
     public void open(ReadableMap options, Promise promise) {
-Log.v(RNShareImpl.NAME,"open");
         delegate.open(options,promise);
     }
 
     @Override
     public void shareSingle(ReadableMap options, Promise promise) {
-Log.v(RNShareImpl.NAME,"shareSingle");
         delegate.shareSingle(options,promise);
     }
 

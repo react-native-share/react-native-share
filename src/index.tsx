@@ -45,7 +45,6 @@ const RNShare = {
   },
 
   open(options: ShareOptions): Promise<ShareOpenResult | never> {
-console.log('NativeRNShare.open() 1 ',options);
     return new Promise((resolve, reject) => {
       requireAndAskPermissions(options)
         .then(() => {
@@ -60,7 +59,6 @@ console.log('NativeRNShare.open() 1 ',options);
               options.filenames = [options.filename];
             }
           }
-console.log('NativeRNShare.open() 2 ',options);
           NativeRNShare.open(options)
             .then(({success, message})=>{
               if (success) {
@@ -84,7 +82,6 @@ console.log('NativeRNShare.open() 2 ',options);
   },
 
   shareSingle(options: ShareSingleOptions): Promise<ShareSingleResult | never> {
-console.log('NativeRNShare.shareSingle() 1 ',options);
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
       return new Promise((resolve, reject) => {
         requireAndAskPermissions(options)
@@ -99,7 +96,6 @@ console.log('NativeRNShare.shareSingle() 1 ',options);
                 message: 'Instagram Story share requires an appId based on Meta policy.',
               });
             }
-console.log('NativeRNShare.shareSingle() 2 ',options);
             NativeRNShare.shareSingle(options)
               .then(({success, message}) => {
                 return resolve({
