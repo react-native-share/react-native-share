@@ -99,6 +99,10 @@ RCT_EXPORT_MODULE()
   };
 }
 
+- (NSDictionary*) getConstants {
+  return [self constantsToExport];
+}
+
 RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)
@@ -336,7 +340,6 @@ RCT_EXPORT_METHOD(isPackageInstalled:(NSString *)packagename
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
     if (resolveBlock) {
-        // resolveBlock(@[@(YES), @"com.apple.DocumentsApp"]);
         resolveBlock(@{
             @"success": @(YES),
             @"message": @"com.apple.DocumentsApp"
@@ -347,10 +350,6 @@ RCT_EXPORT_METHOD(isPackageInstalled:(NSString *)packagename
 # pragma mark - New Architecture
 
 #if RCT_NEW_ARCH_ENABLED
-
-// - (facebook::react::ModuleConstants<JS::NativePermissionsModule::Constants::Builder>)getConstants {
-//   return [self constantsToExport];
-// }
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params

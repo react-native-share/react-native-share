@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 
-import NativeRNShare from "../codegenSpec/NativeRNShare";
+import NativeRNShare from '../codegenSpec/NativeRNShare';
 
 import Overlay from './components/Overlay';
 import Sheet from './components/Sheet';
@@ -25,23 +25,23 @@ const RNShare = {
   Sheet,
 
   Social: {
-    FACEBOOK: NativeRNShare.FACEBOOK || Social.Facebook,
-    FACEBOOK_STORIES: NativeRNShare.FACEBOOKSTORIES || Social.FacebookStories,
-    PAGESMANAGER: NativeRNShare.PAGESMANAGER || Social.Pagesmanager,
-    TWITTER: NativeRNShare.TWITTER || Social.Twitter,
-    WHATSAPP: NativeRNShare.WHATSAPP || Social.Whatsapp,
-    WHATSAPPBUSINESS: NativeRNShare.WHATSAPPBUSINESS || Social.Whatsappbusiness,
-    INSTAGRAM: NativeRNShare.INSTAGRAM || Social.Instagram,
-    INSTAGRAM_STORIES: NativeRNShare.INSTAGRAMSTORIES || Social.InstagramStories,
-    GOOGLEPLUS: NativeRNShare.GOOGLEPLUS || Social.Googleplus,
-    EMAIL: NativeRNShare.EMAIL || Social.Email,
-    PINTEREST: NativeRNShare.PINTEREST || Social.Pinterest,
-    LINKEDIN: NativeRNShare.LINKEDIN || Social.Linkedin,
-    SMS: NativeRNShare.SMS || Social.Sms,
-    TELEGRAM: NativeRNShare.TELEGRAM || Social.Telegram,
-    MESSENGER: NativeRNShare.MESSENGER || Social.Messenger,
-    SNAPCHAT: NativeRNShare.SNAPCHAT || Social.Snapchat,
-    VIBER: NativeRNShare.VIBER || Social.Viber,
+    FACEBOOK: NativeRNShare.getConstants().FACEBOOK || Social.Facebook,
+    FACEBOOK_STORIES: NativeRNShare.getConstants().FACEBOOKSTORIES || Social.FacebookStories,
+    PAGESMANAGER: NativeRNShare.getConstants().PAGESMANAGER || Social.Pagesmanager,
+    TWITTER: NativeRNShare.getConstants().TWITTER || Social.Twitter,
+    WHATSAPP: NativeRNShare.getConstants().WHATSAPP || Social.Whatsapp,
+    WHATSAPPBUSINESS: NativeRNShare.getConstants().WHATSAPPBUSINESS || Social.Whatsappbusiness,
+    INSTAGRAM: NativeRNShare.getConstants().INSTAGRAM || Social.Instagram,
+    INSTAGRAM_STORIES: NativeRNShare.getConstants().INSTAGRAMSTORIES || Social.InstagramStories,
+    GOOGLEPLUS: NativeRNShare.getConstants().GOOGLEPLUS || Social.Googleplus,
+    EMAIL: NativeRNShare.getConstants().EMAIL || Social.Email,
+    PINTEREST: NativeRNShare.getConstants().PINTEREST || Social.Pinterest,
+    LINKEDIN: NativeRNShare.getConstants().LINKEDIN || Social.Linkedin,
+    SMS: NativeRNShare.getConstants().SMS || Social.Sms,
+    TELEGRAM: NativeRNShare.getConstants().TELEGRAM || Social.Telegram,
+    MESSENGER: NativeRNShare.getConstants().MESSENGER || Social.Messenger,
+    SNAPCHAT: NativeRNShare.getConstants().SNAPCHAT || Social.Snapchat,
+    VIBER: NativeRNShare.getConstants().VIBER || Social.Viber,
   },
 
   open(options: ShareOptions): Promise<ShareOpenResult | never> {
@@ -59,23 +59,22 @@ const RNShare = {
               options.filenames = [options.filename];
             }
           }
-          NativeRNShare.open(options)
-            .then(({success, message})=>{
-              if (success) {
-                return resolve({
-                  success,
-                  message,
-                });
-              } else if (options.failOnCancel === false) {
-                return resolve({
-                  dismissedAction: true,
-                  success,
-                  message,
-                });
-              } else {
-                reject(new Error('User did not share'));
-              }
-            });
+          NativeRNShare.open(options).then((ret: { success: boolean; message: string }) => {
+            if (ret.success) {
+              return resolve({
+                success: ret.success,
+                message: ret.message,
+              });
+            } else if (options.failOnCancel === false) {
+              return resolve({
+                dismissedAction: true,
+                success: ret.success,
+                message: ret.message,
+              });
+            } else {
+              reject(new Error('User did not share'));
+            }
+          });
         })
         .catch((e: unknown) => reject(e));
     });
@@ -97,10 +96,10 @@ const RNShare = {
               });
             }
             NativeRNShare.shareSingle(options)
-              .then(({success, message}) => {
+              .then((ret: { success: boolean; message: string }) => {
                 return resolve({
-                  success: Boolean(success),
-                  message,
+                  success: Boolean(ret.success),
+                  message: ret.message,
                 });
               })
               .catch((e: unknown) => reject(e));
@@ -116,7 +115,7 @@ const RNShare = {
     if (Platform.OS === 'android') {
       return new Promise((resolve, reject) => {
         NativeRNShare.isPackageInstalled(packageName)
-          .then((isInstalled)=>{
+          .then((isInstalled: boolean) => {
             return resolve({
               isInstalled,
               message: 'Package is Installed',

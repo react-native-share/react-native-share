@@ -39,7 +39,7 @@
         NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
         
         NSLog(@"%@", errorMessage);
-        reject(@"Not installed",@"Not installed",error);
+        reject(errorMessage,errorMessage,error);
     } 
 }
 
