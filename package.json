@@ -36,7 +36,7 @@
     "@semantic-release/npm": "^7.0.6",
     "@semantic-release/release-notes-generator": "^9.0.1",
     "@types/react": "16.14.5",
-    "@types/react-native": "0.63.2",
+    "@types/react-native": "0.68.15",
     "eslint": "^7.24.0",
     "eslint-config-satya164": "3.1.10",
     "husky": "4.3.0",
@@ -78,7 +78,7 @@
     "start": "react-native start",
     "start:android": "react-native run-android",
     "start:ios": "react-native run-ios --project-path example/ios",
-    "lint": "eslint \"src/**/*.{js,ts,tsx}\" --max-warnings=0",
+    "lint": "eslint \"src/**/*.{js,ts,tsx}\" \"codegenSpec/**/*.{js,ts,tsx}\" --max-warnings=0",
     "typescript": "tsc --noEmit",
     "validate": "yarn lint && yarn typescript",
     "ci:publish": "npx semantic-release",
@@ -125,5 +125,13 @@
       "module",
       "typescript"
     ]
+  },
+  "codegenConfig": {
+    "name": "RNShareSpec",
+    "type": "modules",
+    "jsSrcsDir": "./codegenSpec",
+    "android": {
+      "javaPackageName": "cl.json"
+    }
   }
 }

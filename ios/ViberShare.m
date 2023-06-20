@@ -10,8 +10,8 @@
 @implementation ViberShare
     RCT_EXPORT_MODULE();
 - (void)shareSingle:(NSDictionary *)options
-    failureCallback:(RCTResponseErrorBlock)failureCallback
-    successCallback:(RCTResponseSenderBlock)successCallback {
+    reject:(RCTPromiseRejectBlock)reject
+    resolve:(RCTPromiseResolveBlock)resolve {
     
     NSString *text = [RCTConvert NSString:options[@"message"]];
     text = (NSString*)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef) text, NULL,CFSTR("!*'();:@&=+$,/?%#[]"),kCFStringEncodingUTF8));
@@ -26,7 +26,7 @@
     
     if ([[UIApplication sharedApplication] canOpenURL: shareURL]) {
         [[UIApplication sharedApplication] openURL: shareURL];
-        successCallback(@[@true, @""]);
+        resolve(@[@true, @""]);
     } else {
         // Cannot open viber
         NSString *stringURL = @"https://apps.apple.com/app/viber-messenger-chats-calls/id382617920";
@@ -39,7 +39,7 @@
         NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
         
         NSLog(@"%@", errorMessage);
-        failureCallback(error);
+        reject(errorMessage,errorMessage,error);
     } 
 }
 

@@ -23,10 +23,14 @@
 #import "RNShareActivityItemSource.h"
 #import "RNShareUtils.h"
 
+#if RCT_NEW_ARCH_ENABLED
+#import <RNShareSpec/RNShareSpec.h>
+#endif
+
 @implementation RNShare
 
-RCTResponseErrorBlock rejectBlock;
-RCTResponseSenderBlock resolveBlock;
+RCTPromiseRejectBlock rejectBlock;
+RCTPromiseResolveBlock resolveBlock;
 
 // we need this since this controller
 // may implement a delegate and could be garbage collected
@@ -95,9 +99,13 @@ RCT_EXPORT_MODULE()
   };
 }
 
+- (NSDictionary*) getConstants {
+  return [self constantsToExport];
+}
+
 RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
-                  failureCallback:(RCTResponseErrorBlock)failureCallback
-                  successCallback:(RCTResponseSenderBlock)successCallback)
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
 {
     NSString *social = [RCTConvert NSString:options[@"social"]];
     if (social) {
@@ -105,13 +113,13 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
         if([social isEqualToString:@"facebook"]) {
             NSLog(@"TRY OPEN FACEBOOK");
             GenericShare *shareCtl = [[GenericShare alloc] init];
-            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback serviceType: SLServiceTypeFacebook inAppBaseUrl:@"fb://"];
+            [shareCtl shareSingle:options reject: reject resolve: resolve serviceType: SLServiceTypeFacebook inAppBaseUrl:@"fb://"];
         } else if([social isEqualToString:@"facebookstories"]) {
             NSString *appId = [RCTConvert NSString:options[@"appId"]];
             if (appId) {
                 NSLog(@"TRY OPEN FACEBOOK STORIES");
                 FacebookStories *shareCtl = [[FacebookStories alloc] init];
-                [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+                [shareCtl shareSingle:options reject: reject resolve: resolve];
             } else {
                 RCTLogError(@"key 'appId' missing in options");
                 return;
@@ -119,42 +127,42 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
         } else if([social isEqualToString:@"twitter"]) {
             NSLog(@"TRY OPEN Twitter");
             GenericShare *shareCtl = [[GenericShare alloc] init];
-            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback serviceType: SLServiceTypeTwitter inAppBaseUrl:@"twitter://"];
+            [shareCtl shareSingle:options reject: reject resolve: resolve serviceType: SLServiceTypeTwitter inAppBaseUrl:@"twitter://"];
         } else if([social isEqualToString:@"googleplus"]) {
             NSLog(@"TRY OPEN google plus");
             GooglePlusShare *shareCtl = [[GooglePlusShare alloc] init];
-            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+            [shareCtl shareSingle:options reject: reject resolve: resolve];
         } else if([social isEqualToString:@"whatsapp"]) {
             NSLog(@"TRY OPEN whatsapp");
             WhatsAppShare *shareCtl = [[WhatsAppShare alloc] init];
-            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+            [shareCtl shareSingle:options reject: reject resolve: resolve];
         } else if([social isEqualToString:@"instagram"]) {
             NSLog(@"TRY OPEN instagram");
             InstagramShare *shareCtl = [[InstagramShare alloc] init];
             if([self isImageMimeType:options[@"url"]]) {// Condition to handle image
-                [shareCtl shareSingleImage:options failureCallback: failureCallback successCallback: successCallback];
+                [shareCtl shareSingleImage:options reject: reject resolve: resolve];
             } else {
-                [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+                [shareCtl shareSingle:options reject: reject resolve: resolve];
             }
         } else if([social isEqualToString:@"instagramstories"]) {
             NSLog(@"TRY OPEN instagram-stories");
             InstagramStories *shareCtl = [[InstagramStories alloc] init];
-            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+            [shareCtl shareSingle:options reject: reject resolve: resolve];
          } else if([social isEqualToString:@"telegram"]) {
             NSLog(@"TRY OPEN telegram");
             TelegramShare *shareCtl = [[TelegramShare alloc] init];
-            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+            [shareCtl shareSingle:options reject: reject resolve: resolve];
         } else if([social isEqualToString:@"email"]) {
             NSLog(@"TRY OPEN email");
-            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+            [shareCtl shareSingle:options reject: reject resolve: resolve];
         } else if([social isEqualToString:@"viber"]) {
             NSLog(@"TRY OPEN viber");
             ViberShare *shareCtl = [[ViberShare alloc] init];
-            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+            [shareCtl shareSingle:options reject: reject resolve: resolve];
         } else if([social isEqualToString:@"messenger"]) {
             NSLog(@"TRY OPEN messenger");
             MessengerShare *shareCtl = [[MessengerShare alloc] init];
-            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+            [shareCtl shareSingle:options reject: reject resolve: resolve];
         }
     } else {
         RCTLogError(@"key 'social' missing in options");
@@ -163,8 +171,8 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
 }
 
 RCT_EXPORT_METHOD(open:(NSDictionary *)options
-                  failureCallback:(RCTResponseErrorBlock)failureCallback
-                  successCallback:(RCTResponseSenderBlock)successCallback)
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
 {
     if (RCTRunningInAppExtension()) {
         RCTLogError(@"Unable to show action sheet from app extension");
@@ -189,7 +197,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
                                                      options:(NSDataReadingOptions)0
                                                        error:&error];
                 if (!data) {
-                    failureCallback(error);
+                    reject(@"no data",@"no data",error);
                     return;
                 }
                 if (saveToFiles) {
@@ -236,8 +244,8 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
             return;
         }
         if (@available(iOS 11.0, macCatalyst 13.1, *)) {
-            resolveBlock = successCallback;
-            rejectBlock = failureCallback;
+            resolveBlock = resolve;
+            rejectBlock = reject;
             UIDocumentPickerViewController *documentPicker = nil;
             if (@available(iOS 15.0, macCatalyst 15.0, *)) {
                 documentPicker = [[UIDocumentPickerViewController alloc] initForExportingURLs:urls asCopy:YES];
@@ -276,9 +284,12 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
 
         
         if (activityError) {
-            failureCallback(activityError);
+            reject(@"error",@"activityError",activityError);
         } else {
-            successCallback(@[@(completed), RCTNullIfNil(activityType)]);
+            resolve(@{
+                @"success": @(completed),
+                @"message": (RCTNullIfNil(activityType) ?: @"")
+            });
         }
         
         // clear the completion handler to prevent cycles
@@ -300,17 +311,52 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
     shareController.view.tintColor = [RCTConvert UIColor:options[@"tintColor"]];
 }
 
+
+RCT_EXPORT_METHOD(isBase64File:(NSString *)url
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+    NSError *err = [NSError errorWithDomain:@"NOT IMPLEMENTED" code: 500
+        userInfo:@{NSLocalizedDescriptionKey:@"isBase64File is not implemented for iOS"}];
+    reject(@"NOT IMPLEMENTED",@"NOT IMPLEMENTED",err);
+}
+
+
+RCT_EXPORT_METHOD(isPackageInstalled:(NSString *)packagename
+    resolve:(RCTPromiseResolveBlock)resolve
+    reject:(RCTPromiseRejectBlock)reject)
+{
+    NSError *err = [NSError errorWithDomain:@"NOT IMPLEMENTED" code: 500
+        userInfo:@{NSLocalizedDescriptionKey:@"isPackageInstalled is not implemented for iOS"}];
+    reject(@"NOT IMPLEMENTED",@"NOT IMPLEMENTED",err);
+}
+
 - (void)documentPickerWasCancelled:(UIDocumentPickerViewController *)controller {
     if (rejectBlock) {
         NSError *error = [NSError errorWithDomain:@"CANCELLED" code: 500 userInfo:@{NSLocalizedDescriptionKey:@"PICKER_WAS_CANCELLED"}];
-        rejectBlock(error);
+        rejectBlock(@"CANCELLED",@"CANCELLED",error);
     }
 }
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
     if (resolveBlock) {
-        resolveBlock(@[@(YES), @"com.apple.DocumentsApp"]);
+        resolveBlock(@{
+            @"success": @(YES),
+            @"message": @"com.apple.DocumentsApp"
+        });
     }
 }
+
+# pragma mark - New Architecture
+
+#if RCT_NEW_ARCH_ENABLED
+
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
+    (const facebook::react::ObjCTurboModule::InitParams &)params
+{
+    return std::make_shared<facebook::react::NativeRNShareSpecJSI>(params);
+}
+
+#endif
 
 @end

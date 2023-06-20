@@ -1,4 +1,6 @@
-import { NativeModules, Platform, PermissionsAndroid } from 'react-native';
+import { Platform, PermissionsAndroid } from 'react-native';
+
+import NativeRNShare from '../../codegenSpec/NativeRNShare';
 
 import { ShareOptions } from '../types';
 
@@ -17,15 +19,13 @@ const requireAndAskPermissions = async (
         urls.map(
           (url) =>
             new Promise((resolve, reject) => {
-              NativeModules.RNShare.isBase64File(
-                url,
-                (error) => {
-                  reject(error);
-                },
-                (isBase64) => {
+              NativeRNShare.isBase64File(url)
+                .then((isBase64: boolean) => {
                   resolve(isBase64);
-                },
-              );
+                })
+                .catch((error: Error) => {
+                  reject(error);
+                });
             }),
         ),
       );
