@@ -42,11 +42,11 @@
     "husky": "4.3.0",
     "lint-staged": "10.3.0",
     "metro-config": "^0.66.2",
-    "metro-react-native-babel-preset": "0.67.0",
+    "metro-react-native-babel-preset": "^0.66.2",
     "pre-commit": "1.2.2",
     "prettier": "^2.2.1",
     "react": "17.0.2",
-    "react-native": "0.68.7",
+    "react-native": "0.66.4",
     "react-native-builder-bob": "^0.18.1",
     "react-native-windows": "0.66.4",
     "semantic-release": "^19.0.3",
@@ -133,9 +133,5 @@
     "android": {
       "javaPackageName": "cl.json"
     }
-  },
-  "dependencies": {
-    "add": "^2.0.6",
-    "yarn": "^1.22.19"
   }
 }
