@@ -16,13 +16,14 @@
   "files": [
     "src",
     "lib",
-    "!**/__tests__",
-    "!**/__fixtures__",
-    "!**/__mocks__",
     "android",
     "ios",
     "windows",
-    "RNShare.podspec"
+    "codegenSpec",
+    "RNShare.podspec",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__"
   ],
   "devDependencies": {
     "@babel/core": "^7.12.9",
