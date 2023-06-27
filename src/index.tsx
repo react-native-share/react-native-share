@@ -74,7 +74,7 @@ const RNShare = {
             } else {
               reject(new Error('User did not share'));
             }
-          });
+          }).catch((e: unknown) => reject(e));
         })
         .catch((e: unknown) => reject(e));
     });
