@@ -16,13 +16,13 @@
 RCT_EXPORT_MODULE();
 
 - (void)shareSingle:(NSDictionary *)options
-    failureCallback:(RCTResponseErrorBlock)failureCallback
-    successCallback:(RCTResponseSenderBlock)successCallback {
+    reject:(RCTPromiseRejectBlock)reject
+    resolve:(RCTPromiseResolveBlock)resolve {
 
     NSURL *urlScheme = [NSURL URLWithString:@"facebook-stories://share"];
     if (![[UIApplication sharedApplication] canOpenURL:urlScheme]) {
         NSError* error = [self fallbackFacebook];
-        failureCallback(error);
+        reject(@"cannot open URL",@"cannot open URL",error);
         return;
     }
 
@@ -80,7 +80,7 @@ RCT_EXPORT_MODULE();
     [[UIPasteboard generalPasteboard] setItems:pasteboardItems options:pasteboardOptions];
     [[UIApplication sharedApplication] openURL:urlScheme options:@{} completionHandler:nil];
 
-    successCallback(@[@true, @""]);
+    resolve(@[@true, @""]);
 }
 
 - (NSError*)fallbackFacebook {

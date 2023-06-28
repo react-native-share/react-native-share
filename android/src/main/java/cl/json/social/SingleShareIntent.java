@@ -8,10 +8,12 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.net.Uri;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
 
-import cl.json.RNShareModule;
+import cl.json.RNShareImpl;
 
 /**
  * Created by disenodosbbcl on 23-07-16.
@@ -67,7 +69,7 @@ public abstract class SingleShareIntent extends ShareIntent {
         if (this.options.hasKey("forceDialog") && this.options.getBoolean("forceDialog")) {
             Activity activity = this.reactContext.getCurrentActivity();
             if (activity == null) {
-                TargetChosenReceiver.sendCallback(false, "Something went wrong");
+                TargetChosenReceiver.callbackReject("Something went wrong");
                 return;
             }
             if (options != null) {
@@ -79,17 +81,24 @@ public abstract class SingleShareIntent extends ShareIntent {
                 IntentSender sender = TargetChosenReceiver.getSharingSenderIntent(this.reactContext);
                 Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle, sender);
                 chooser.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+                activity.startActivityForResult(chooser, RNShareImpl.SHARE_REQUEST_CODE);
             } else {
                 Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
                 chooser.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
-                TargetChosenReceiver.sendCallback(true, true, "OK");
+                activity.startActivityForResult(chooser, RNShareImpl.SHARE_REQUEST_CODE);
+
+                WritableMap reply = Arguments.createMap();
+                reply.putBoolean("success", true);
+                reply.putString("message", "OK");
+                TargetChosenReceiver.callbackResolve(reply);
             }
         } else {
             this.getIntent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             this.reactContext.startActivity(this.getIntent());
-            TargetChosenReceiver.sendCallback(true, true, this.getIntent().getPackage());
+            WritableMap reply = Arguments.createMap();
+            reply.putBoolean("success", true);
+            reply.putString("message", this.getIntent().getPackage());
+            TargetChosenReceiver.callbackResolve(reply);
         }
     }
 }

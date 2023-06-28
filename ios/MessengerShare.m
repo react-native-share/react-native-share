@@ -5,7 +5,7 @@
 @implementation MessengerShare
 RCT_EXPORT_MODULE();
 
-- (void)shareSingle:(NSDictionary *)options failureCallback:(RCTResponseErrorBlock)failureCallback successCallback:(RCTResponseSenderBlock)successCallback {
+- (void)shareSingle:(NSDictionary *)options reject:(RCTPromiseRejectBlock)reject resolve:(RCTPromiseResolveBlock)resolve {
 
   if ([options objectForKey:@"url"] && [options objectForKey:@"url"] != [NSNull null]) {
 
@@ -15,7 +15,7 @@ RCT_EXPORT_MODULE();
     if ([[UIApplication sharedApplication] canOpenURL:url]) {
       [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 
-      successCallback(@[@true, @""]);
+      resolve(@[@true, @""]);
     } else {
       // Cannot open Messenger
       NSString *contentLinkString = @"https://apps.apple.com/us/app/messenger/id454638411";
@@ -27,7 +27,7 @@ RCT_EXPORT_MODULE();
       NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
 
       NSLog(@"%@", errorMessage);
-      failureCallback(error);
+      reject(@"Not installed",@"Not installed",error);
     }
   }
 }

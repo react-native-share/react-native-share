@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  react-native: react-native-community/react-native@6.1.0
+  react-native: react-native-community/react-native@7.1.1
 
 commands:
   checkout-attach-workspace:
@@ -15,7 +15,7 @@ jobs:
   install-dependencies:
     executor:
       name: react-native/linux_js
-      node_version: '16'
+      node_version: '16.15'
     working_directory: ~/app
     steps:
       - checkout
@@ -50,7 +50,7 @@ jobs:
     steps:
       - checkout
       - react-native/setup_macos_executor:
-          node_version: '16'
+          node_version: '16.15'
       - run: yarn install --frozen-lockfile --non-interactive
       - react-native/pod_install:
           pod_install_directory: ./example/ios
@@ -63,7 +63,7 @@ jobs:
   publish-version:
     executor: 
       name: react-native/linux_js
-      node_version: '16'
+      node_version: '16.15'
     working_directory: ~/app
     steps:
       - checkout-attach-workspace
@@ -74,7 +74,7 @@ jobs:
   deploy-docs:
     executor: 
       name: react-native/linux_js
-      node_version: '16'
+      node_version: '16.15'
     working_directory: ~/app
     steps:
       - checkout-attach-workspace

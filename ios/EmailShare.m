@@ -14,8 +14,8 @@
 
 
 - (void)shareSingle:(NSDictionary *)options
-    failureCallback:(RCTResponseErrorBlock)failureCallback
-    successCallback:(RCTResponseSenderBlock)successCallback {
+    reject:(RCTPromiseRejectBlock)reject
+    resolve:(RCTPromiseResolveBlock)resolve {
 
     NSLog(@"Try open view");
 
@@ -30,7 +30,7 @@
             NSString *errorMessage = @"Mail services are not available.";
             NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
             NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
-            failureCallback(error);
+            reject(@"com.rnshare",@"Mail services are not available.",error);
            return;
         }
         
@@ -67,7 +67,7 @@
                                                             options:(NSDataReadingOptions)0
                                                             error:&error];
                         if (!data) {
-                            failureCallback(error);
+                            reject(@"no data",@"no data",error);
                             return;
                         }
 
@@ -131,7 +131,7 @@
             // on the finish delegate.
             // For now, call it here for consistency with
             // GenericShare.shareSingle
-            successCallback(@[@true, @""]);
+            resolve(@[@true, @""]);
         });
     }
 }

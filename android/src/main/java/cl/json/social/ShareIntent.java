@@ -15,6 +15,8 @@ import android.content.ComponentName;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -25,7 +27,7 @@ import java.util.List;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import cl.json.RNShareModule;
+import cl.json.RNShareImpl;
 import cl.json.ShareFile;
 import cl.json.ShareFiles;
 
@@ -257,7 +259,7 @@ public abstract class ShareIntent {
     protected void openIntentChooser() throws ActivityNotFoundException {
         Activity activity = this.reactContext.getCurrentActivity();
         if (activity == null) {
-            TargetChosenReceiver.sendCallback(false, "Something went wrong");
+            TargetChosenReceiver.callbackReject("Something went wrong");
             return;
         }
         Intent chooser;
@@ -282,16 +284,19 @@ public abstract class ShareIntent {
         if (ShareIntent.hasValidKey("excludedActivityTypes", options)) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 chooser.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, getExcludedComponentArray(options.getArray("excludedActivityTypes")));
-                activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+                activity.startActivityForResult(chooser, RNShareImpl.SHARE_REQUEST_CODE);
             } else {
-                activity.startActivityForResult(excludeChooserIntent(this.getIntent(),options), RNShareModule.SHARE_REQUEST_CODE);
+                activity.startActivityForResult(excludeChooserIntent(this.getIntent(),options), RNShareImpl.SHARE_REQUEST_CODE);
             }
         } else {
-            activity.startActivityForResult(chooser, RNShareModule.SHARE_REQUEST_CODE);
+            activity.startActivityForResult(chooser, RNShareImpl.SHARE_REQUEST_CODE);
         }
 
         if (intentSender == null) {
-            TargetChosenReceiver.sendCallback(true, true, "OK");
+            WritableMap reply = Arguments.createMap();
+            reply.putBoolean("success", true);
+            reply.putString("message", "OK");
+            TargetChosenReceiver.callbackResolve(reply);
         }
     }
 

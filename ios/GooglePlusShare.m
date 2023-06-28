@@ -11,8 +11,8 @@
 @implementation GooglePlusShare
     RCT_EXPORT_MODULE();
 - (void)shareSingle:(NSDictionary *)options
-    failureCallback:(RCTResponseErrorBlock)failureCallback
-    successCallback:(RCTResponseSenderBlock)successCallback {
+    reject:(RCTPromiseRejectBlock)reject
+    resolve:(RCTPromiseResolveBlock)resolve {
 
     NSLog(@"Try open view");
 
@@ -22,7 +22,7 @@
 
         if ([[UIApplication sharedApplication] canOpenURL: gplusURL]) {
             [[UIApplication sharedApplication] openURL:gplusURL];
-            successCallback(@[@true, @""]);
+            resolve(@[@true, @""]);
         } else {
             // Cannot open gplus
             NSString *errorMessage = @"Not installed";
@@ -30,7 +30,7 @@
             NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
 
             NSLog(errorMessage);
-            failureCallback(error);
+            reject(@"com.rnshare",errorMessage,error);
         }
     }
 }

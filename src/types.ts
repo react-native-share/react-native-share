@@ -50,6 +50,7 @@ export interface ActivityItemSource {
 }
 
 interface BaseShareSingleOptions {
+  appId?: string;
   urls?: string[];
   url?: string;
   type?: string;

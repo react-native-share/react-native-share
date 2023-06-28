@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
 
 import cl.json.ShareFile;
 
@@ -107,7 +109,11 @@ public class InstagramShare extends SingleShareIntent {
         Activity activity = this.reactContext.getCurrentActivity();
         activity.grantUriPermission(PACKAGE, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         this.reactContext.startActivity(chooserIntent);
-        TargetChosenReceiver.sendCallback(true, true, this.getIntent().getPackage());
+
+        WritableMap reply = Arguments.createMap();
+        reply.putBoolean("success", true);
+        reply.putString("message", this.getIntent().getPackage());
+        TargetChosenReceiver.callbackResolve(reply);
     }
 
     @Override
