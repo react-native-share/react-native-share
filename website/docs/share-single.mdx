@@ -110,7 +110,8 @@ const shareOptions = {
     backgroundBottomColor: '#fefefe',
     backgroundTopColor: '#906df4',
     attributionURL: 'http://deep-link-to-app', //in beta
-    social: Share.Social.INSTAGRAM_STORIES
+    social: Share.Social.INSTAGRAM_STORIES,
+    appId: 'your_fb_app_id' // required since  Jan 2023 (see: https://developers.facebook.com/docs/instagram/sharing-to-stories/#sharing-to-stories)
 };
 
 Share.shareSingle(shareOptions);
@@ -119,6 +120,7 @@ Share.shareSingle(shareOptions);
 
 | Name  | Type     | Description | Optional |
 | :---- | :------: | :--- | :--- |
+| appId | string   | (required) facebook app ID  | ❗️required
 | backgroundImage | string   | URL you want to share | ✅
 | stickerImage | string   | URL you want to share | ✅
 | backgroundBottomColor | string   | default #837DF4 | ✅
