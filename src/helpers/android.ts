@@ -5,8 +5,9 @@ import { getAndroidVersion } from './platform';
 
 export async function checkAndroidPermissionsForUrls(urls: string[]) {
   // Reference: https://github.com/react-native-share/react-native-share/pull/871
-  const hasBase64File = (await Promise.all(urls.map(NativeRNShare.isBase64File))).includes(true);
-  if (hasBase64File) await checkExternalStoragePermission();
+  if ((await Promise.all(urls.map(NativeRNShare.isBase64File))).includes(true)) {
+    await checkExternalStoragePermission();
+  }
 }
 
 async function checkExternalStoragePermission() {
