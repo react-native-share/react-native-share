@@ -4,11 +4,9 @@ import NativeRNShare from '../../codegenSpec/NativeRNShare';
 import { getAndroidVersion } from './platform';
 
 export async function checkAndroidPermissionsForUrls(urls: string[]) {
-  // Check permissions for base64 files
   // Reference: https://github.com/react-native-share/react-native-share/pull/871
-  if ((await Promise.all(urls.map(NativeRNShare.isBase64File))).includes(true)) {
-    await checkExternalStoragePermission();
-  }
+  const hasBase64File = (await Promise.all(urls.map(NativeRNShare.isBase64File))).includes(true);
+  if (hasBase64File) await checkExternalStoragePermission();
 }
 
 async function checkExternalStoragePermission() {

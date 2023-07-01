@@ -55,7 +55,7 @@ const RNShare = {
       throw new Error('User did not share');
     }
 
-    // Is it safe to upgrade typescript?
+    // Concern: Is it safe to upgrade typescript?
     // TODO: replace "as" with "satifies" when we upgrade to Typescript 4.9 or greater
     return result as ShareOpenResult;
   },
@@ -63,7 +63,7 @@ const RNShare = {
   async shareSingle(options: ShareSingleOptions) {
     if (!isAndroid() && !isIOS()) throw new Error('Not implemented');
 
-    // Do we need this check? Typescript should warn the user if they don't provide the correct options
+    // Concern: Do we need this check? Typescript should warn the user if they don't provide the correct options
     if (options.social === RNShare.Social.INSTAGRAM_STORIES && !options.appId) {
       throw new Error('To share to Instagram Stories you need to provide appId');
     }
@@ -75,7 +75,7 @@ const RNShare = {
     const { success, message } = await NativeRNShare.shareSingle(options);
 
     return {
-      // Why do we need to covert success to boolean? A comment would be insightful
+      // Concern: Why do we need to covert success to boolean? A comment would be insightful
       success: Boolean(success),
       message,
     } as ShareSingleResult; // TODO: replace "as" with "satifies" when we upgrade to Typescript 4.9 or greater
