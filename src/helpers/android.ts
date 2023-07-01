@@ -21,7 +21,7 @@ async function checkExternalStoragePermission() {
         throw new Error('Write Permission not available');
       }
     } else {
-      // What should we do in this situation? Is this even possible?
+      // Concern: What should we do in this situation? Is this even possible?
     }
   }
 }
