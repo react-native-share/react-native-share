@@ -21,8 +21,6 @@ async function checkExternalStoragePermission() {
       if (result !== PermissionsAndroid.RESULTS.GRANTED) {
         throw new Error('Write Permission not available');
       }
-    } else {
-      // Concern: What should we do in this situation? Is this even possible?
     }
   }
 }

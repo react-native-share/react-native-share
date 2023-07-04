@@ -16,7 +16,7 @@ import {
   ShareSingleResult,
 } from './types';
 import { isAndroid, isIOS } from './helpers/platform';
-import { normalizeShareOpenOptions, normalizeSingeShareOptions } from './helpers/options';
+import { normalizeShareOpenOptions, normalizeSingleShareOptions } from './helpers/options';
 
 const RNShare = {
   Button,
@@ -49,36 +49,35 @@ const RNShare = {
 
     options = normalizeShareOpenOptions(options);
 
-    const result = await NativeRNShare.open(options);
+    const result: ShareOpenResult = await NativeRNShare.open(options);
 
     if (!result.success && options.failOnCancel === false) {
       throw new Error('User did not share');
     }
 
-    // Concern: Is it safe to upgrade typescript?
-    // TODO: replace "as" with "satifies" when we upgrade to Typescript 4.9 or greater
-    return result as ShareOpenResult;
+    return result;
   },
 
   async shareSingle(options: ShareSingleOptions) {
     if (!isAndroid() && !isIOS()) throw new Error('Not implemented');
 
-    // Concern: Do we need this check? Typescript should warn the user if they don't provide the correct options
     if (options.social === RNShare.Social.INSTAGRAM_STORIES && !options.appId) {
       throw new Error('To share to Instagram Stories you need to provide appId');
     }
 
     await checkPermissions(options);
 
-    options = normalizeSingeShareOptions(options);
+    options = normalizeSingleShareOptions(options);
 
     const { success, message } = await NativeRNShare.shareSingle(options);
 
-    return {
+    const result: ShareSingleResult = {
       // Concern: Why do we need to covert success to boolean? A comment would be insightful
       success: Boolean(success),
       message,
-    } as ShareSingleResult; // TODO: replace "as" with "satifies" when we upgrade to Typescript 4.9 or greater
+    };
+
+    return result;
   },
 
   async isPackageInstalled(packageName: string) {
@@ -86,10 +85,12 @@ const RNShare = {
 
     const isInstalled = await NativeRNShare.isPackageInstalled(packageName);
 
-    return {
+    const result: IsPackageInstalledResult = {
       isInstalled,
       message: 'Package is Installed',
-    } as IsPackageInstalledResult; // TODO: replace "as" with "satifies" when we upgrade to Typescript 4.9 or greater
+    };
+
+    return result;
   },
 } as const;
 

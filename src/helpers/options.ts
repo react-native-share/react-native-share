@@ -20,7 +20,7 @@ export function normalizeShareOpenOptions({ ...options }: ShareOptions) {
   return options;
 }
 
-export function normalizeSingeShareOptions({ ...options }: ShareSingleOptions) {
+export function normalizeSingleShareOptions({ ...options }: ShareSingleOptions) {
   if (options.url) options.urls = [options.url];
   return options;
 }
