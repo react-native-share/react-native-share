@@ -59,22 +59,24 @@ const RNShare = {
               options.filenames = [options.filename];
             }
           }
-          NativeRNShare.open(options).then((ret: { success: boolean; message: string }) => {
-            if (ret.success) {
-              return resolve({
-                success: ret.success,
-                message: ret.message,
-              });
-            } else if (options.failOnCancel === false) {
-              return resolve({
-                dismissedAction: true,
-                success: ret.success,
-                message: ret.message,
-              });
-            } else {
-              reject(new Error('User did not share'));
-            }
-          });
+          NativeRNShare.open(options)
+            .then((ret: { success: boolean; message: string }) => {
+              if (ret.success) {
+                return resolve({
+                  success: ret.success,
+                  message: ret.message,
+                });
+              } else if (options.failOnCancel === false) {
+                return resolve({
+                  dismissedAction: true,
+                  success: ret.success,
+                  message: ret.message,
+                });
+              } else {
+                reject(new Error('User did not share'));
+              }
+            })
+            .catch((e: unknown) => reject(e));
         })
         .catch((e: unknown) => reject(e));
     });
