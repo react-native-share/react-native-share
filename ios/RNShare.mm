@@ -187,7 +187,9 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
     BOOL saveToFiles = [RCTConvert BOOL:options[@"saveToFiles"]];
     NSString *filename = [RCTConvert NSString:options[@"filename"]];
 
+    NSArray *filenamesArray = options[@"filenames"];
     NSArray *urlsArray = options[@"urls"];
+    
     for (int i=0; i<urlsArray.count; i++) {
         NSURL *URL = [RCTConvert NSURL:urlsArray[i]];
         if (URL) {
@@ -200,8 +202,23 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
                     reject(@"no data",@"no data",error);
                     return;
                 }
+                
+                //name get from array of filenames
+                @try {
+                    NSString *fileNameByIndex = [RCTConvert NSString:filenamesArray[i]];
+                    if(fileNameByIndex.length>0){
+                        //replace filename with name get by index
+                        filename=fileNameByIndex;
+                    }
+                }
+                @catch (NSException * e) {
+                        RCTLogError(@"Exception get filename from finames array: %@", e);
+                }
+
                 if (saveToFiles) {
-                    NSURL *filePath = [RNShareUtils getPathFromBase64:URL.absoluteString with:data];
+
+                    NSURL *filePath = [RNShareUtils getPathFromBase64:URL.absoluteString with:data fileName:filename];
+
                     if (filePath) {
                         [items addObject: filePath];
                     }
