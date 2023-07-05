@@ -1,22 +1,22 @@
-import { Platform } from 'react-native';
-
 import NativeRNShare from '../codegenSpec/NativeRNShare';
 
 import Overlay from './components/Overlay';
 import Sheet from './components/Sheet';
 import Button from './components/Button';
 import ShareSheet from './components/ShareSheet';
-import requireAndAskPermissions from './helpers/requireAndAskPermissions';
+import checkPermissions from './helpers/checkPermissions';
 import {
   Social,
   IsPackageInstalledResult,
   ActivityType,
-  ShareOpenResult,
   ShareAsset,
+  ShareOpenResult,
   ShareOptions,
   ShareSingleOptions,
   ShareSingleResult,
 } from './types';
+import { isAndroid, isIOS } from './helpers/platform';
+import { normalizeShareOpenOptions, normalizeSingleShareOptions } from './helpers/options';
 
 const RNShare = {
   Button,
@@ -44,90 +44,53 @@ const RNShare = {
     VIBER: NativeRNShare.getConstants().VIBER || Social.Viber,
   },
 
-  open(options: ShareOptions): Promise<ShareOpenResult | never> {
-    return new Promise((resolve, reject) => {
-      requireAndAskPermissions(options)
-        .then(() => {
-          if (Platform.OS === 'ios' && options.url && !options.urls) {
-            // Backward compatibility with { Share } from react-native
-            const url = options.url;
-            delete options.url;
+  async open(options: ShareOptions) {
+    await checkPermissions(options);
 
-            options.urls = [url];
+    options = normalizeShareOpenOptions(options);
 
-            if (options.filename && !options.filenames) {
-              options.filenames = [options.filename];
-            }
-          }
-          NativeRNShare.open(options)
-            .then((ret: { success: boolean; message: string }) => {
-              if (ret.success) {
-                return resolve({
-                  success: ret.success,
-                  message: ret.message,
-                });
-              } else if (options.failOnCancel === false) {
-                return resolve({
-                  dismissedAction: true,
-                  success: ret.success,
-                  message: ret.message,
-                });
-              } else {
-                reject(new Error('User did not share'));
-              }
-            })
-            .catch((e: unknown) => reject(e));
-        })
-        .catch((e: unknown) => reject(e));
-    });
+    const result: ShareOpenResult = await NativeRNShare.open(options);
+
+    if (!result.success && options.failOnCancel === false) {
+      throw new Error('User did not share');
+    }
+
+    return result;
   },
 
-  shareSingle(options: ShareSingleOptions): Promise<ShareSingleResult | never> {
-    if (Platform.OS === 'ios' || Platform.OS === 'android') {
-      return new Promise((resolve, reject) => {
-        requireAndAskPermissions(options)
-          .then(() => {
-            if (options.url) {
-              options.urls = [options.url];
-            }
+  async shareSingle(options: ShareSingleOptions) {
+    if (!isAndroid() && !isIOS()) throw new Error('Not implemented');
 
-            if (options.social === RNShare.Social.INSTAGRAM_STORIES && !options.appId) {
-              return reject({
-                success: false,
-                message: 'Instagram Story share requires an appId based on Meta policy.',
-              });
-            }
-            NativeRNShare.shareSingle(options)
-              .then((ret: { success: boolean; message: string }) => {
-                return resolve({
-                  success: Boolean(ret.success),
-                  message: ret.message,
-                });
-              })
-              .catch((e: unknown) => reject(e));
-          })
-          .catch((e: unknown) => reject(e));
-      });
-    } else {
-      throw new Error('Not implemented');
+    if (options.social === RNShare.Social.INSTAGRAM_STORIES && !options.appId) {
+      throw new Error('To share to Instagram Stories you need to provide appId');
     }
+
+    await checkPermissions(options);
+
+    options = normalizeSingleShareOptions(options);
+
+    const { success, message } = await NativeRNShare.shareSingle(options);
+
+    const result: ShareSingleResult = {
+      // Concern: Why do we need to covert success to boolean? A comment would be insightful
+      success: Boolean(success),
+      message,
+    };
+
+    return result;
   },
 
-  isPackageInstalled(packageName: string): Promise<IsPackageInstalledResult | never> {
-    if (Platform.OS === 'android') {
-      return new Promise((resolve, reject) => {
-        NativeRNShare.isPackageInstalled(packageName)
-          .then((isInstalled: boolean) => {
-            return resolve({
-              isInstalled,
-              message: 'Package is Installed',
-            });
-          })
-          .catch((e: unknown) => reject(e));
-      });
-    } else {
-      throw new Error('Not implemented');
-    }
+  async isPackageInstalled(packageName: string) {
+    if (!isAndroid()) throw new Error('Not implemented');
+
+    const isInstalled = await NativeRNShare.isPackageInstalled(packageName);
+
+    const result: IsPackageInstalledResult = {
+      isInstalled,
+      message: 'Package is Installed',
+    };
+
+    return result;
   },
 } as const;
 
