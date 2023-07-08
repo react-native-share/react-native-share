@@ -52,16 +52,16 @@ const RNShare = {
     const result: ShareOpenResult = await NativeRNShare.open(options);
 
     if (!result.success) {
-      if (options.failOnCancel === false) {
-        const dismissedResult: ShareOpenResult = {
-          dismissedAction: true,
-          success: result.success,
-          message: result.message,
-        };
-        return dismissedResult;
-      } else {
+      if (options.failOnCancel) {
         throw new Error('User did not share');
       }
+
+      const dismissedResult: ShareOpenResult = {
+        dismissedAction: true,
+        success: result.success,
+        message: result.message,
+      };
+      return dismissedResult;
     }
 
     return result;

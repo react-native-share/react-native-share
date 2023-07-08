@@ -15,6 +15,8 @@ export function normalizeShareOpenOptions({ ...options }: ShareOptions) {
     }
   }
 
+  options.failOnCancel = options.failOnCancel ?? true;
+
   return options;
 }
 
