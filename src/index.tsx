@@ -51,8 +51,17 @@ const RNShare = {
 
     const result: ShareOpenResult = await NativeRNShare.open(options);
 
-    if (!result.success && options.failOnCancel === false) {
-      throw new Error('User did not share');
+    if (!result.success) {
+      if (options.failOnCancel) {
+        throw new Error('User did not share');
+      }
+
+      const dismissedResult: ShareOpenResult = {
+        dismissedAction: true,
+        success: result.success,
+        message: result.message,
+      };
+      return dismissedResult;
     }
 
     return result;
@@ -72,7 +81,6 @@ const RNShare = {
     const { success, message } = await NativeRNShare.shareSingle(options);
 
     const result: ShareSingleResult = {
-      // Concern: Why do we need to covert success to boolean? A comment would be insightful
       success: Boolean(success),
       message,
     };
