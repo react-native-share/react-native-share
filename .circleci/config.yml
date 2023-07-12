@@ -80,6 +80,7 @@ jobs:
       - checkout-attach-workspace
       - run:
           name: Deploying new docs-version
+          no_output_timeout: 30m
           command: |
             git config --global user.email "${GH_EMAIL}@users.noreply.github.com"
             git config --global user.name "${GH_NAME}"
