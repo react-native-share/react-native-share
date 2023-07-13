@@ -29,7 +29,7 @@ public class RNShare extends NativeRNShareSpec {
     }
     
     @Override
-    public Map<String, Object> getConstants() {
+    public Map<String, Object> getTypedExportedConstants() {
         return delegate.getConstants();
     }
     
