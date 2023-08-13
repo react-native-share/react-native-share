@@ -19,7 +19,5 @@
 @interface LinkedinShare : NSObject <RCTBridgeModule>
 
 - (void) shareSingle:(NSDictionary *)options reject:(RCTPromiseRejectBlock)reject resolve:(RCTPromiseResolveBlock)resolve;
-- (void)shareSingleImage:(NSDictionary *)options
-         reject:(RCTPromiseRejectBlock)reject
-         resolve:(RCTPromiseResolveBlock)resolve;
+
 @end
