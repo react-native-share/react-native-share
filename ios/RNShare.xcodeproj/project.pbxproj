@@ -10,6 +10,7 @@
 		6513A53928AF109A00F0AE09 /* MessengerShare.m in Sources */ = {isa = PBXBuildFile; fileRef = 6513A53828AF109A00F0AE09 /* MessengerShare.m */; };
 		65B4E1BA28AF0DC800D905B8 /* RNShareUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 65B4E1B928AF0DC800D905B8 /* RNShareUtils.m */; };
 		6D697F8423A86EBC00F754A1 /* RNShareActivityItemSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D697F8323A86EBC00F754A1 /* RNShareActivityItemSource.m */; };
+		962C1A3C2A8A714D0046A9E0 /* SmsShare.m in Sources */ = {isa = PBXBuildFile; fileRef = 962C1A3B2A8A714D0046A9E0 /* SmsShare.m */; };
 		B33C22851D441713006BCD98 /* GenericShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B33C22841D441713006BCD98 /* GenericShare.m */; };
 		B33C22891D4419E8006BCD98 /* WhatsAppShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B33C22881D4419E8006BCD98 /* WhatsAppShare.m */; };
 		B33C228B1D442577006BCD98 /* EmailShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B33C228A1D442576006BCD98 /* EmailShare.m */; };
@@ -40,6 +41,8 @@
 		65B4E1B928AF0DC800D905B8 /* RNShareUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNShareUtils.m; sourceTree = "<group>"; };
 		6D697F8223A86EBC00F754A1 /* RNShareActivityItemSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNShareActivityItemSource.h; sourceTree = "<group>"; };
 		6D697F8323A86EBC00F754A1 /* RNShareActivityItemSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNShareActivityItemSource.m; sourceTree = "<group>"; };
+		962C1A3A2A8A71400046A9E0 /* SmsShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SmsShare.h; sourceTree = "<group>"; };
+		962C1A3B2A8A714D0046A9E0 /* SmsShare.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SmsShare.m; sourceTree = "<group>"; };
 		B33C22841D441713006BCD98 /* GenericShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenericShare.m; sourceTree = "<group>"; };
 		B33C22861D441723006BCD98 /* GenericShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GenericShare.h; sourceTree = "<group>"; };
 		B33C22871D4419DA006BCD98 /* WhatsAppShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhatsAppShare.h; sourceTree = "<group>"; };
@@ -110,6 +113,8 @@
 				65B4E1B928AF0DC800D905B8 /* RNShareUtils.m */,
 				B33C22871D4419DA006BCD98 /* WhatsAppShare.h */,
 				B33C22881D4419E8006BCD98 /* WhatsAppShare.m */,
+				962C1A3A2A8A71400046A9E0 /* SmsShare.h */,
+				962C1A3B2A8A714D0046A9E0 /* SmsShare.m */,
 			);
 			name = social;
 			sourceTree = "<group>";
@@ -178,6 +183,7 @@
 				B3EEE48E1D4844E7008422B6 /* GooglePlusShare.m in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* RNShare.m in Sources */,
 				B33C22891D4419E8006BCD98 /* WhatsAppShare.m in Sources */,
+				962C1A3C2A8A714D0046A9E0 /* SmsShare.m in Sources */,
 				B33C228B1D442577006BCD98 /* EmailShare.m in Sources */,
 				FCC7BB4F221457EF00E1EA39 /* InstagramStories.m in Sources */,
 				6513A53928AF109A00F0AE09 /* MessengerShare.m in Sources */,
