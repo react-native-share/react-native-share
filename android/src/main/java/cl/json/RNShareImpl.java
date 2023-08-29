@@ -55,13 +55,16 @@ public class RNShareImpl implements ActivityEventListener {
                 WritableMap reply = Arguments.createMap();
                 reply.putBoolean("success", false);
                 reply.putString("message", "CANCELED");
+                TargetChosenReceiver.callbackResolve(reply);
             } else if (resultCode == Activity.RESULT_OK) {
                 WritableMap reply = Arguments.createMap();
                 reply.putBoolean("success", true);
+                TargetChosenReceiver.callbackResolve(reply);
             }
         }
     }
-
+    
+    @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         onActivityResult(requestCode, resultCode, data);
     }
