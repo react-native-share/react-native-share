@@ -16,6 +16,7 @@ import {
   Text,
   View,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 
 import Share from 'react-native-share';
@@ -62,8 +63,8 @@ const App = () => {
     const shareOptions = {
       title: 'Share file',
       message: 'Simple share with message',
-      url: 'https://google.com'
-    }
+      url: 'https://google.com',
+    };
 
     try {
       const ShareResponse = await Share.open(shareOptions);
@@ -73,7 +74,7 @@ const App = () => {
       console.log('Error =>', error);
       setResult('error: '.concat(getErrorString(error)));
     }
-  }
+  };
 
   /**
    * This functions share multiple images that
@@ -359,9 +360,11 @@ const App = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.welcome}>Welcome to React Native Share Example!</Text>
-      <ScrollView contentContainerStyle={styles.optionsRow}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Text style={styles.welcome}>
+          Welcome to React Native Share Example!
+        </Text>
         <View style={styles.button}>
           <Button onPress={shareUrlWithMessage} title="Share Simple Url" />
         </View>
@@ -370,6 +373,18 @@ const App = () => {
         </View>
         <View style={styles.button}>
           <Button onPress={shareSingleImage} title="Share Single Image" />
+        </View>
+        <View style={styles.withInputContainer}>
+          <TextInput
+            placeholder="Recipient"
+            onChangeText={setRecipient}
+            value={recipient}
+            style={styles.textInput}
+            keyboardType="number-pad"
+          />
+          <View>
+            <Button onPress={shareSms} title="Share via SMS" />
+          </View>
         </View>
         <View style={styles.button}>
           <Button onPress={shareEmailImage} title="Share Social: Email" />
@@ -413,18 +428,6 @@ const App = () => {
             </View>
             <View style={styles.withInputContainer}>
               <TextInput
-                placeholder="Recipient"
-                onChangeText={setRecipient}
-                value={recipient}
-                style={styles.textInput}
-                keyboardType="number-pad"
-              />
-              <View>
-                <Button onPress={shareSms} title="Share Social: SMS" />
-              </View>
-            </View>
-            <View style={styles.withInputContainer}>
-              <TextInput
                 placeholder="Search for a Package"
                 onChangeText={setPackageSearch}
                 value={packageSearch}
@@ -442,7 +445,7 @@ const App = () => {
         <Text style={styles.resultTitle}>Result</Text>
         <Text style={styles.result}>{result}</Text>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -476,7 +479,7 @@ const styles = StyleSheet.create({
   },
   optionsRow: {
     justifyContent: 'space-between',
-    width: '80%'
+    width: '80%',
   },
   withInputContainer: {
     alignItems: 'center',
