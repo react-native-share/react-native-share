@@ -15,6 +15,7 @@ import {
   StyleSheet,
   Text,
   View,
+  ScrollView,
 } from 'react-native';
 
 import Share from 'react-native-share';
@@ -55,6 +56,26 @@ const App = () => {
   }
 
   /**
+   * Basic share with url & message
+   */
+  const shareUrlWithMessage = async () => {
+    const shareOptions = {
+      title: 'Share file',
+      message: 'Simple share with message',
+      url: 'https://google.com'
+    }
+
+    try {
+      const ShareResponse = await Share.open(shareOptions);
+      console.log('Result =>', ShareResponse);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  }
+
+  /**
    * This functions share multiple images that
    * you send as the urls param
    */
@@ -78,7 +99,7 @@ const App = () => {
   };
 
   /**
-   * This functions share a image passed using the
+   * This function share an image passed using the
    * url param
    */
   const shareEmailImage = async () => {
@@ -120,7 +141,7 @@ const App = () => {
   };
 
   /**
-   * This functions share a image passed using the
+   * This function share an image passed using the
    * url param
    */
   const shareSingleImage = async () => {
@@ -340,7 +361,10 @@ const App = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>Welcome to React Native Share Example!</Text>
-      <View style={styles.optionsRow}>
+      <ScrollView contentContainerStyle={styles.optionsRow}>
+        <View style={styles.button}>
+          <Button onPress={shareUrlWithMessage} title="Share Simple Url" />
+        </View>
         <View style={styles.button}>
           <Button onPress={shareMultipleImages} title="Share Multiple Images" />
         </View>
@@ -417,7 +441,7 @@ const App = () => {
         )}
         <Text style={styles.resultTitle}>Result</Text>
         <Text style={styles.result}>{result}</Text>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -452,6 +476,7 @@ const styles = StyleSheet.create({
   },
   optionsRow: {
     justifyContent: 'space-between',
+    width: '80%'
   },
   withInputContainer: {
     alignItems: 'center',
