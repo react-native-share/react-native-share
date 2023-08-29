@@ -14,7 +14,8 @@ import {
   TextInput,
   StyleSheet,
   Text,
-  View, ScrollView,
+  View,
+  ScrollView,
 } from 'react-native';
 
 import Share from 'react-native-share';
