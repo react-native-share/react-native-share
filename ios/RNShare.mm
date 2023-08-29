@@ -94,7 +94,7 @@ RCT_EXPORT_MODULE()
     @"EMAIL": @"email",
     @"MESSENGER": @"messanger",
     @"VIBER": @"viber",
-
+    @"SMS": @"sms",
     @"SHARE_BACKGROUND_IMAGE": @"shareBackgroundImage",
     @"SHARE_BACKGROUND_VIDEO": @"shareBackgroundVideo",
     @"SHARE_STICKER_IMAGE": @"shareStickerImage",
