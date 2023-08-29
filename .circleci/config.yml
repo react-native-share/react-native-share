@@ -45,7 +45,7 @@ jobs:
 
   ios_build:
     macos:
-      xcode: 13.2.1
+      xcode: 13.4.1
     working_directory: ~/app
     steps:
       - checkout
