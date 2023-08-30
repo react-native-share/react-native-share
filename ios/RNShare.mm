@@ -20,6 +20,7 @@
 #import "TelegramShare.h"
 #import "ViberShare.h"
 #import "MessengerShare.h"
+#import "SmsShare.h"
 #import "RNShareActivityItemSource.h"
 #import "RNShareUtils.h"
 
@@ -36,6 +37,7 @@ RCTPromiseResolveBlock resolveBlock;
 // may implement a delegate and could be garbage collected
 // before it is called
 EmailShare *shareCtl;
+SmsShare *smsShareCtl;
 
 - (dispatch_queue_t)methodQueue
 {
@@ -51,6 +53,7 @@ EmailShare *shareCtl;
 {
     if ((self = [super init])) {
         shareCtl = [[EmailShare alloc] init];
+        smsShareCtl = [[SmsShare alloc] init];
     }
     return self;
 }
@@ -91,7 +94,7 @@ RCT_EXPORT_MODULE()
     @"EMAIL": @"email",
     @"MESSENGER": @"messanger",
     @"VIBER": @"viber",
-
+    @"SMS": @"sms",
     @"SHARE_BACKGROUND_IMAGE": @"shareBackgroundImage",
     @"SHARE_BACKGROUND_VIDEO": @"shareBackgroundVideo",
     @"SHARE_STICKER_IMAGE": @"shareStickerImage",
@@ -163,6 +166,9 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             NSLog(@"TRY OPEN messenger");
             MessengerShare *shareCtl = [[MessengerShare alloc] init];
             [shareCtl shareSingle:options reject: reject resolve: resolve];
+        } else if([social isEqualToString:@"sms"]) {
+            NSLog(@"TRY OPEN sms");
+            [smsShareCtl shareSingle:options reject: reject resolve: resolve];
         }
     } else {
         RCTLogError(@"key 'social' missing in options");
