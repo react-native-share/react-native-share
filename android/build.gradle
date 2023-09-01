@@ -27,6 +27,7 @@ if (isNewArchitectureEnabled()) {
 }
 
 android {
+    namespace = "cl.json"
     compileSdkVersion safeExtGet('compileSdkVersion', 28)
     defaultConfig {
         minSdkVersion safeExtGet('minSdkVersion', 16)
