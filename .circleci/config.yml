@@ -71,22 +71,6 @@ jobs:
           name: Publish New Version
           command: yarn ci:publish
 
-  deploy-docs:
-    executor: 
-      name: react-native/linux_js
-      node_version: '16.20'
-    working_directory: ~/app
-    steps:
-      - checkout-attach-workspace
-      - run:
-          name: Deploying new docs-version
-          no_output_timeout: 30m
-          command: |
-            git config --global user.email "${GH_EMAIL}@users.noreply.github.com"
-            git config --global user.name "${GH_NAME}"
-            echo "machine github.com login $GH_NAME password $GH_TOKEN" > ~/.netrc
-            cd website && yarn install && CUSTOM_COMMIT_MESSAGE="[skip ci]" GIT_USER=${GH_NAME} yarn deploy
-
 workflows:
   version: 2
 
@@ -129,8 +113,3 @@ workflows:
             - SHELL_VARIABLES
           requires:
             - install-dependencies
-      - deploy-docs:
-          filters:
-            branches:
-              only:
-                - main
