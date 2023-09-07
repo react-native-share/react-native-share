@@ -8,7 +8,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    defaults:
+          run:
+            working-directory: website
     steps:
       - uses: actions/checkout@v4
         with:
@@ -19,9 +21,11 @@ jobs:
           node-version: 18
           cache: yarn
       - name: Install dependencies
-        run: cd website && yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile
       - name: Build website
-        run: cd website && yarn build
+        run: yarn build
+      - run: ls -la
+      - run: pwd
       - name: Deploy to GitHub Pages 
         uses: peaceiris/actions-gh-pages@v3
         with:
