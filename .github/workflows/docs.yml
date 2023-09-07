@@ -8,6 +8,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+          run:
+            working-directory: website
     steps:
       - uses: actions/checkout@v4
         with:
@@ -17,15 +20,14 @@ jobs:
         with:
           node-version: 18
           cache: yarn
-      - run: cd website
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - run: cd website
       - name: Build website
         run: yarn build
-      - run: cd website
+      - run: ls -la
+      - run: pwd
       - name: Deploy to GitHub Pages 
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./website/build
+          publish_dir: ./build
