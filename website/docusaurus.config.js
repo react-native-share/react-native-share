@@ -2,7 +2,7 @@ module.exports = {
   title: 'React Native Share',
   tagline: 'Share simple data between applications',
   url: 'https://react-native-community.github.io',
-  baseUrl: '/react-native-share/',
+  baseUrl: 'react-native-share',
   favicon: 'img/community.png',
   organizationName: 'react-native-share',
   projectName: 'react-native-share',
