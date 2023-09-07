@@ -4,7 +4,7 @@ module.exports = {
   url: 'https://react-native-community.github.io/',
   baseUrl: '/react-native-share/',
   favicon: 'img/community.png',
-  organizationName: 'react-native-community',
+  organizationName: 'react-native-share',
   projectName: 'react-native-share',
   scripts: [
     'https://buttons.github.io/buttons.js',
