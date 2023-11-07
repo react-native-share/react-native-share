@@ -1,11 +1,12 @@
 module.exports = {
   title: 'React Native Share',
   tagline: 'Share simple data between applications',
-  url: 'https://react-native-community.github.io/react-native-share/',
-  baseUrl: '/react-native-share/',
+  url: 'https://react-native-community.github.io',
+  baseUrl: 'react-native-share',
   favicon: 'img/community.png',
-  organizationName: 'react-native-community',
+  organizationName: 'react-native-share',
   projectName: 'react-native-share',
+  trailingSlash: false,
   scripts: [
     'https://buttons.github.io/buttons.js',
     'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js',
@@ -114,3 +115,4 @@ module.exports = {
     ],
   ],
 };
+
