@@ -46,7 +46,11 @@ public class TargetChosenReceiver extends BroadcastReceiver {
                 context.unregisterReceiver(sLastRegisteredReceiver);
             }
             sLastRegisteredReceiver = new TargetChosenReceiver();
-            context.registerReceiver(sLastRegisteredReceiver, new IntentFilter(sTargetChosenReceiveAction));
+            if (Build.VERSION.SDK_INT >= 34 && context.getApplicationInfo().targetSdkVersion >= 34) {
+                context.registerReceiver(sLastRegisteredReceiver, new IntentFilter(sTargetChosenReceiveAction), Context.RECEIVER_EXPORTED);
+            } else {
+                context.registerReceiver(sLastRegisteredReceiver, new IntentFilter(sTargetChosenReceiveAction));
+            }
         }
 
         Intent intent = new Intent(sTargetChosenReceiveAction);
