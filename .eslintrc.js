@@ -3,6 +3,7 @@ module.exports = {
 
   rules: {
     'react-native/no-color-literals': 'off',
+    '@typescript-eslint/ban-types': 'off',
 
     'prettier/prettier': [
       'error',

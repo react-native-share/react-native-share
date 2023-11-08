@@ -1,21 +1,55 @@
 version: 2.1
 
+
 orbs:
   react-native: react-native-community/react-native@7.1.1
 
+
+executors:
+
+  android_executor:
+    parameters:
+      resource-class:
+        default: medium
+        type: string
+      working-directory:
+        default: ~/app
+        type: string
+    docker:
+      - image: cimg/android:2023.09.1-node
+    resource_class: <<parameters.resource-class>>
+    working_directory: <<parameters.working-directory>>
+
+  ios_executor:
+    parameters:
+      resource-class:
+        default: macos.x86.medium.gen2
+        type: string
+      working-directory:
+        default: ~/app
+        type: string
+    macos:
+      xcode: '15.0.0'
+    resource_class: <<parameters.resource-class>>
+    working_directory: <<parameters.working-directory>>
+
+
 commands:
-  checkout-attach-workspace:
+
+  checkout_attach_workspace:
     description: 'Checkout and attach workspace'
     steps:
       - checkout
       - attach_workspace:
           at: ~/app
 
+
 jobs:
-  install-dependencies:
+
+  install_dependencies:
     executor:
       name: react-native/linux_js
-      node_version: '16.20'
+      node_version: '18.17.1'
     working_directory: ~/app
     steps:
       - checkout
@@ -29,87 +63,123 @@ jobs:
     executor: react-native/linux_js
     working_directory: ~/app
     steps:
-      - checkout-attach-workspace
+      - checkout_attach_workspace
       - run:
           name: Lint
           command: yarn lint
 
-  validate-typescript:
+  validate_typescript:
     executor: react-native/linux_js
     working_directory: ~/app
     steps:
-      - checkout-attach-workspace
+      - checkout_attach_workspace
       - run:
           name: Typescript
           command: yarn typescript
+  
+  android_build:
+    executor: android_executor
+    parameters:
+      project_path:
+        default: ./example/android
+        type: string
+    steps:
+      - checkout_attach_workspace
+      - react-native/yarn_install
+      - react-native/android_build:
+          project_path: <<parameters.project_path>>
+      - persist_to_workspace:
+          paths:
+            - <<parameters.project_path>>/app/build/outputs/apk
+          root: .
+      - store_artifacts:
+          path: <<parameters.project_path>>/app/build/outputs/apk
 
   ios_build:
-    macos:
-      xcode: 13.4.1
-    working_directory: ~/app
+    executor: ios_executor
+    parameters:
+      pod_install_directory:
+        default: ./example/ios
+        type: string
     steps:
-      - checkout
+      - checkout_attach_workspace
       - react-native/setup_macos_executor:
-          node_version: '16.20'
-      - run: yarn install --frozen-lockfile --non-interactive
-      - react-native/pod_install:
-          pod_install_directory: ./example/ios
+          node_version: '18.17.1'
+      - react-native/yarn_install
+      - restore_cache:
+          keys:
+            - >-
+              {{ .Environment.CACHE_VERSION }}-cache-pods-{{ checksum
+              "<<parameters.pod_install_directory>>/Podfile.lock" }}
+            - '{{ .Environment.CACHE_VERSION }}-cache-pods'
+      - run:
+          name: Install CocoaPods
+          command: cd ./example/ios && bundle install && bundle exec pod install && cd -
+      - save_cache:
+          key: >-
+            {{ .Environment.CACHE_VERSION }}-cache-pods-{{ checksum
+            "<<parameters.pod_install_directory>>/Podfile.lock" }}
+          paths:
+            - <<parameters.pod_install_directory>>/Pods
       - react-native/ios_build:
           project_path: ./example/ios/Example.xcworkspace
           project_type: workspace
           scheme: example
-          device: iPhone 11
+          device: iPhone 15
 
-  publish-version:
-    executor: 
+  publish_version:
+    executor:
       name: react-native/linux_js
-      node_version: '16.20'
+      node_version: '18.17.1'
     working_directory: ~/app
     steps:
-      - checkout-attach-workspace
+      - checkout_attach_workspace
       - run:
           name: Publish New Version
           command: yarn ci:publish
 
+
 workflows:
-  version: 2
 
   build-lint-app:
     jobs:
-      - install-dependencies:
-          filters:
-            branches:
-              ignore:
-                - main
-      - react-native/android_build:
-          checkout: true
-          project_path: ./example/android
-          workspace_root: ~/app
-          filters:
-            branches:
-              ignore:
-                - main
-      - ios_build:
+      - install_dependencies:
           filters:
             branches:
               ignore:
                 - main
       - lint:
           requires:
-            - install-dependencies
-      - validate-typescript:
+            - install_dependencies
+      - validate_typescript:
           requires:
-            - install-dependencies
+            - install_dependencies
+      - android_build:
+          filters:
+            branches:
+              ignore:
+                - main
+          requires:
+            - lint
+            - validate_typescript
+      - ios_build:
+          filters:
+            branches:
+              ignore:
+                - main
+          requires:
+            - lint
+            - validate_typescript
 
   release:
     jobs:
-      - install-dependencies:
+      - install_dependencies:
           filters:
             branches:
               only:
                 - main
-      - publish-version:
+      - publish_version:
           context:
             - SHELL_VARIABLES
           requires:
-            - install-dependencies
+            - install_dependencies
