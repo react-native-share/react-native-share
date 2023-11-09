@@ -28,10 +28,10 @@ if (isNewArchitectureEnabled()) {
 
 android {
     namespace = "cl.json"
-    compileSdkVersion safeExtGet('compileSdkVersion', 28)
+    compileSdkVersion safeExtGet('compileSdkVersion', 34)
     defaultConfig {
         minSdkVersion safeExtGet('minSdkVersion', 16)
-        targetSdkVersion safeExtGet('targetSdkVersion', 28)
+        targetSdkVersion safeExtGet('targetSdkVersion', 34)
     }
     lintOptions {
         abortOnError false
