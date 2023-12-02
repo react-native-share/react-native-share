@@ -9,7 +9,7 @@
 #endif
 
 #if RCT_NEW_ARCH_ENABLED
-#import <React-Codegen/RNShareSpec/RNShareSpec.h>
+#import <RNShareSpec/RNShareSpec.h>
 #endif
 
 @interface RNShare : NSObject <RCTBridgeModule, UIDocumentPickerDelegate>
