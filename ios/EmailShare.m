@@ -46,9 +46,10 @@
             subject = [RCTConvert NSString:options[@"subject"]];
         }
 
-        message = [RCTConvert NSString:options[@"message"]];
-        
-        [mc setToRecipients:@[email]];
+        message = [RCTConvert NSString:options[@"email"]];
+        NSArray *emailArray = [message componentsSeparatedByString:@","];
+
+        [mc setToRecipients: emailArray];
         [mc setSubject:subject];
         [mc setMessageBody:message isHTML:NO];
         
