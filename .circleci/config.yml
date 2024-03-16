@@ -109,8 +109,8 @@ jobs:
           detox: false
       - react-native/yarn_install
       - run:
-        name: Install Detox
-        command: npm install detox-cli --global
+          name: Install Detox
+          command: npm install detox-cli --global
       - restore_cache:
           keys:
             - >-
