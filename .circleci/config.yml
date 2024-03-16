@@ -105,7 +105,12 @@ jobs:
       - checkout_attach_workspace
       - react-native/setup_macos_executor:
           node_version: '18.17.1'
+          android: false
+          detox: false
       - react-native/yarn_install
+      - run:
+        name: Install Detox
+        command: npm install detox-cli --global
       - restore_cache:
           keys:
             - >-
