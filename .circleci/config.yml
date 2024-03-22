@@ -2,7 +2,7 @@ version: 2.1
 
 
 orbs:
-  react-native: react-native-community/react-native@7.1.1
+  react-native: react-native-community/react-native@7.4.0
 
 
 executors:
@@ -105,7 +105,12 @@ jobs:
       - checkout_attach_workspace
       - react-native/setup_macos_executor:
           node_version: '18.17.1'
+          android: false
+          detox: false
       - react-native/yarn_install
+      - run:
+          name: Install Detox
+          command: npm install detox-cli --global
       - restore_cache:
           keys:
             - >-
