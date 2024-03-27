@@ -28,6 +28,7 @@ import cl.json.social.WhatsAppShare;
 import cl.json.social.WhatsAppBusinessShare;
 import cl.json.social.InstagramShare;
 import cl.json.social.InstagramStoriesShare;
+import cl.json.social.InstagramReelsShare;
 import cl.json.social.PinterestShare;
 import cl.json.social.SnapChatShare;
 import cl.json.social.SMSShare;
@@ -81,6 +82,7 @@ public class RNShareImpl implements ActivityEventListener {
         whatsapp,
         whatsappbusiness,
         instagram,
+        instagramreels,
         instagramstories,
         googleplus,
         email,
@@ -114,6 +116,8 @@ public class RNShareImpl implements ActivityEventListener {
                     return new InstagramShare(reactContext);
                 case instagramstories:
                     return new InstagramStoriesShare(reactContext);
+                case instagramreels:
+                    return new InstagramReelsShare(reactContext);
                 case googleplus:
                     return new GooglePlusShare(reactContext);
                 case email:

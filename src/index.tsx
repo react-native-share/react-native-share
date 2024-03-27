@@ -33,6 +33,7 @@ const RNShare = {
     WHATSAPPBUSINESS: NativeRNShare.getConstants().WHATSAPPBUSINESS || Social.Whatsappbusiness,
     INSTAGRAM: NativeRNShare.getConstants().INSTAGRAM || Social.Instagram,
     INSTAGRAM_STORIES: NativeRNShare.getConstants().INSTAGRAMSTORIES || Social.InstagramStories,
+    INSTAGRAM_REELS: NativeRNShare.getConstants().INSTAGRAMREELS || Social.InstagramReels,
     GOOGLEPLUS: NativeRNShare.getConstants().GOOGLEPLUS || Social.Googleplus,
     EMAIL: NativeRNShare.getConstants().EMAIL || Social.Email,
     PINTEREST: NativeRNShare.getConstants().PINTEREST || Social.Pinterest,

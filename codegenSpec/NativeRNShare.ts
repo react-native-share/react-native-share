@@ -10,6 +10,7 @@ export interface Spec extends TurboModule {
     WHATSAPP?: string;
     INSTAGRAM?: string;
     INSTAGRAMSTORIES?: string;
+    INSTAGRAMREELS?: string;
     TELEGRAM?: string;
     EMAIL?: string;
     MESSENGER?: string;

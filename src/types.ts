@@ -6,6 +6,7 @@ export enum Social {
   Whatsapp = 'whatsapp',
   Whatsappbusiness = 'whatsappbusiness',
   Instagram = 'instagram',
+  InstagramReels = 'instagramreels',
   InstagramStories = 'instagramstories',
   Googleplus = 'googleplus',
   Email = 'email',
@@ -73,6 +74,12 @@ interface BaseSocialStoriesShareSingleOptions extends Omit<BaseShareSingleOption
   backgroundVideo?: string;
 }
 
+export interface InstagramReelsShareSingleOptions extends BaseSocialStoriesShareSingleOptions {
+  social: Social.InstagramReels;
+  appId: string;
+  backgroundVideo: string;
+}
+
 export interface InstagramStoriesShareSingleOptions extends BaseSocialStoriesShareSingleOptions {
   social: Social.InstagramStories;
   appId: string;
@@ -85,6 +92,7 @@ export interface FacebookStoriesShareSingleOptions extends BaseSocialStoriesShar
 
 export type ShareSingleOptions =
   | BaseShareSingleOptions
+  | InstagramReelsShareSingleOptions
   | InstagramStoriesShareSingleOptions
   | FacebookStoriesShareSingleOptions;
 

@@ -485,7 +485,9 @@ PODS:
     - React-jsi (= 0.72.6)
     - React-logger (= 0.72.6)
     - React-perflogger (= 0.72.6)
-  - RNShare (9.4.1):
+  - rn-fetch-blob (0.12.0):
+    - React-Core
+  - RNShare (10.0.2):
     - React-Core
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
@@ -555,6 +557,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../../node_modules/react-native/ReactCommon`)
+  - rn-fetch-blob (from `../../node_modules/rn-fetch-blob`)
   - RNShare (from `../..`)
   - Yoga (from `../../node_modules/react-native/ReactCommon/yoga`)
 
@@ -653,6 +656,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../../node_modules/react-native/ReactCommon"
+  rn-fetch-blob:
+    :path: "../../node_modules/rn-fetch-blob"
   RNShare:
     :path: "../.."
   Yoga:
@@ -709,11 +714,12 @@ SPEC CHECKSUMS:
   React-runtimescheduler: f23e337008403341177fc52ee4ca94e442c17ede
   React-utils: fa59c9a3375fb6f4aeb66714fd3f7f76b43a9f16
   ReactCommon: dd03c17275c200496f346af93a7b94c53f3093a4
-  RNShare: 32e97adc8d8c97d4a26bcdd3c45516882184f8b6
+  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
+  RNShare: 859ff710211285676b0bcedd156c12437ea1d564
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: b76f1acfda8212aa16b7e26bcce3983230c82603
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
 PODFILE CHECKSUM: 90be020bf55058ddd450ae593af00b72ed3379ce
 
-COCOAPODS: 1.14.2
+COCOAPODS: 1.14.3

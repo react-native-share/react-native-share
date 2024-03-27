@@ -14,6 +14,7 @@
 #import "WhatsAppShare.h"
 #import "InstagramShare.h"
 #import "InstagramStories.h"
+#import "InstagramReels.h"
 #import "FacebookStories.h"
 #import "GooglePlusShare.h"
 #import "EmailShare.h"
@@ -90,6 +91,7 @@ RCT_EXPORT_MODULE()
     @"WHATSAPP": @"whatsapp",
     @"INSTAGRAM": @"instagram",
     @"INSTAGRAMSTORIES": @"instagramstories",
+    @"INSTAGRAMREELS": @"instagramreels",
     @"TELEGRAM": @"telegram",
     @"EMAIL": @"email",
     @"MESSENGER": @"messenger",
@@ -150,6 +152,10 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
         } else if([social isEqualToString:@"instagramstories"]) {
             NSLog(@"TRY OPEN instagram-stories");
             InstagramStories *shareCtl = [[InstagramStories alloc] init];
+            [shareCtl shareSingle:options reject: reject resolve: resolve];
+         } else if([social isEqualToString:@"instagramreels"]) {
+            NSLog(@"TRY OPEN instagram-reels");
+            InstagramReels *shareCtl = [[InstagramReels alloc] init];
             [shareCtl shareSingle:options reject: reject resolve: resolve];
          } else if([social isEqualToString:@"telegram"]) {
             NSLog(@"TRY OPEN telegram");
