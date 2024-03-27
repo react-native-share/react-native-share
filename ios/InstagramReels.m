@@ -18,7 +18,7 @@ RCT_EXPORT_MODULE();
     reject:(RCTPromiseRejectBlock)reject
     resolve:(RCTPromiseResolveBlock)resolve {
     
-    NSURL *urlScheme = [NSURL URLWithString:[NSString stringWithFormat:@"instagram-reels://share?source_application=%@", options[@"appId"]]];
+    NSURL *urlScheme = [NSURL URLWithString: @"instagram-reels://share"];
     if (![[UIApplication sharedApplication] canOpenURL:urlScheme]) {
         NSError* error = [self fallbackInstagram];
         reject(@"cannot open URL",@"cannot open URL",error);
@@ -41,6 +41,7 @@ RCT_EXPORT_MODULE();
         [items setObject: video forKey: @"com.instagram.sharedSticker.backgroundVideo"];
     }
 
+    [items setObject: options[@"appId"] forKey: @"com.instagram.sharedSticker.appID"];
     // Putting dictionary of options inside an array
     NSArray *pasteboardItems = @[items];
 
