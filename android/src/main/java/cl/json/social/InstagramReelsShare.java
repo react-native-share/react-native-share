@@ -15,12 +15,12 @@ import com.facebook.react.bridge.ReadableMap;
 /**
  * Created by Vladimir Stalmakov on 01-06-20.
  */
-public class InstagramReelShare extends SingleShareIntent {
+public class InstagramReelsShare extends SingleShareIntent {
 
     private static final String PACKAGE = "com.instagram.android";
     private static final String PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=com.instagram.android";
 
-    public InstagramReelShare(ReactApplicationContext reactContext) {
+    public InstagramReelsShare(ReactApplicationContext reactContext) {
         super(reactContext);
         this.setIntent(new Intent("com.instagram.share.ADD_TO_REEL"));
     }
@@ -60,12 +60,16 @@ public class InstagramReelShare extends SingleShareIntent {
             TargetChosenReceiver.callbackReject("Something went wrong");
             return;
         }
-
-        this.intent.putExtra("source_application", options.getString("appId"));
+        this.intent.setPackage("com.instagram.android");
+        this.intent.putExtra("com.instagram.platform.extra.APPLICATION_ID", options.getString("appId"));
 
         Boolean hasBackgroundAsset = this.hasValidKey("backgroundImage", options)
                 || this.hasValidKey("backgroundVideo", options);
 
+        Boolean useInternalStorage = false;
+        if (this.hasValidKey("useInternalStorage", options)) {
+            useInternalStorage = options.getBoolean("useInternalStorage");
+        }
         if (hasBackgroundAsset) {
             String backgroundFileName = "";
             String backgroundType = "image/jpeg";
@@ -76,11 +80,16 @@ public class InstagramReelShare extends SingleShareIntent {
                 backgroundFileName = options.getString("backgroundVideo");
                 backgroundType = "video/*";
             }
+            
 
             ShareFile backgroundAsset = new ShareFile(backgroundFileName, backgroundType, "background", useInternalStorage, this.reactContext);
 
             this.intent.setDataAndType(backgroundAsset.getURI(), backgroundAsset.getType());
+            this.intent.putExtra(Intent.EXTRA_STREAM, backgroundAsset.getURI());
+
+            // this.intent.setDataAndType(backgroundAsset.getURI(), backgroundAsset.getType());
             this.intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            activity.grantUriPermission(InstagramReelsShare.PACKAGE, backgroundAsset.getURI(), Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
 
         if (this.hasValidKey("stickerImage", options)) {
@@ -91,8 +100,12 @@ public class InstagramReelShare extends SingleShareIntent {
             }
 
             this.intent.putExtra("interactive_asset_uri", stickerAsset.getURI());
-            activity.grantUriPermission(InstagramReelShare.PACKAGE, stickerAsset.getURI(),
+            activity.grantUriPermission(InstagramReelsShare.PACKAGE, stickerAsset.getURI(),
                     Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        // Verify that the activity resolves the intent and start it
+        if (activity.getPackageManager().resolveActivity(intent, 0) != null) {
+            activity.startActivityForResult(intent, 0);
         }
     }
 }
