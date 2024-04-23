@@ -34,6 +34,7 @@ import cl.json.social.SMSShare;
 import cl.json.social.MessengerShare;
 import cl.json.social.LinkedinShare;
 import cl.json.social.ViberShare;
+import cl.json.social.DiscordShare;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -90,7 +91,8 @@ public class RNShareImpl implements ActivityEventListener {
         sms,
         linkedin,
         telegram,
-        viber;
+        viber,
+        discord;
 
 
         public static ShareIntent getShareClass(String social, ReactApplicationContext reactContext) {
@@ -132,6 +134,8 @@ public class RNShareImpl implements ActivityEventListener {
                     return new TelegramShare(reactContext);
                 case viber:
                     return new ViberShare(reactContext);
+                case discord:
+                    return new DiscordShare(reactContext);
                 default:
                     return null;
             }
