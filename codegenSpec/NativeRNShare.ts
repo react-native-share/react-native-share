@@ -25,6 +25,7 @@ export interface Spec extends TurboModule {
     SHARE_BACKGROUND_AND_STICKER_IMAGE?: string;
     SMS?: string;
     GENERIC?: string;
+    DISCORD?: string;
   };
   open: (options: Object) => Promise<{ success: boolean; message: string }>;
   shareSingle: (options: Object) => Promise<{ success: boolean; message: string }>;

@@ -343,6 +343,23 @@ const App = () => {
     }
   };
 
+  const shareToDiscord = async () => {
+    const shareOptions = {
+      message: 'Example Discord',
+      url: 'https://google.com',
+      social: Share.Social.DISCORD,
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
   const sharePdfBase64 = async () => {
     const shareOptions = {
       title: '',
@@ -412,6 +429,9 @@ const App = () => {
         </View>
         <View style={styles.button}>
           <Button onPress={shareToWhatsApp} title="Share to WhatsApp" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareToDiscord} title="Share to Discord" />
         </View>
         <View style={styles.button}>
           <Button onPress={shareEmailImages} title="Share to Email" />
