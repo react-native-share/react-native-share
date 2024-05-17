@@ -1,4 +1,4 @@
-import NativeRNShare from '../codegenSpec/NativeRNShare';
+import NativeRNShare from './codegenSpec/NativeRNShare';
 
 import Overlay from './components/Overlay';
 import Sheet from './components/Sheet';

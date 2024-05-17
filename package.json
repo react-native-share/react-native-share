@@ -12,14 +12,13 @@
   "main": "lib/commonjs/index.js",
   "react-native": "src/index.tsx",
   "module": "lib/module/index.js",
-  "types": "lib/typescript/src/index.d.ts",
+  "types": "lib/typescript/index.d.ts",
   "files": [
     "src",
     "lib",
     "android",
     "ios",
     "windows",
-    "codegenSpec",
     "RNShare.podspec",
     "!**/__tests__",
     "!**/__fixtures__",
@@ -89,7 +88,7 @@
     "start": "react-native start",
     "start:android": "react-native run-android",
     "start:ios": "react-native run-ios",
-    "lint": "eslint \"src/**/*.{js,ts,tsx}\" \"codegenSpec/**/*.{js,ts,tsx}\" --max-warnings=0",
+    "lint": "eslint \"src/**/*.{js,ts,tsx}\"  --max-warnings=0",
     "typescript": "tsc --noEmit",
     "validate": "yarn lint && yarn typescript",
     "ci:publish": "npx semantic-release",
@@ -140,7 +139,7 @@
   "codegenConfig": {
     "name": "RNShareSpec",
     "type": "modules",
-    "jsSrcsDir": "./codegenSpec",
+    "jsSrcsDir": "./src/codegenSpec",
     "android": {
       "javaPackageName": "cl.json"
     }

@@ -1,6 +1,6 @@
 import { PermissionsAndroid } from 'react-native';
 
-import NativeRNShare from '../../codegenSpec/NativeRNShare';
+import NativeRNShare from '../codegenSpec/NativeRNShare';
 import { getAndroidVersion } from './platform';
 
 export async function checkAndroidPermissionsForUrls(urls: string[]) {
