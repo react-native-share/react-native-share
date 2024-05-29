@@ -57,7 +57,8 @@
     "react-native-windows": "^0.72.19",
     "react-test-renderer": "^18.2.0",
     "semantic-release": "^22.0.7",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "react-native-fs": "^2.20.0"
   },
   "resolutions": {
     "eslint-plugin-prettier": "5.0.1"

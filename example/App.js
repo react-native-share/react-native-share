@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Alert,
   Button,
@@ -20,15 +20,36 @@ import {
 } from 'react-native';
 
 import Share from 'react-native-share';
+import * as RNFS from 'react-native-fs';
 
 import images from './images/imagesBase64';
 import pdfBase64 from './images/pdfBase64';
 import {video} from './videos/videoBase64';
 
+const LOCAL_PDF_FILE_NAME = 'pdf-test.pdf';
+const LOCAL_PDF_TEST_FILE_PATH = `${RNFS.DocumentDirectoryPath}/${LOCAL_PDF_FILE_NAME}`;
+
+const downloadPDF = async () => {
+  try {
+    const options = {
+      fromUrl: 'https://www.orimi.com/pdf-test.pdf',
+      toFile: LOCAL_PDF_TEST_FILE_PATH,
+    };
+
+    const response = await RNFS.downloadFile(options).promise;
+  } catch (error) {
+    console.error('Error downloading file:', error);
+  }
+};
+
 const App = () => {
   const [packageSearch, setPackageSearch] = useState<string>('');
   const [recipient, setRecipient] = useState<string>('');
   const [result, setResult] = useState<string>('');
+
+  useEffect(() => {
+    downloadPDF();
+  }, []);
 
   /**
    * You can use the method isPackageInstalled to find if a package is installed.
@@ -70,6 +91,35 @@ const App = () => {
       const ShareResponse = await Share.open(shareOptions);
       console.log('Result =>', ShareResponse);
       setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
+  /**
+   * Share pdf
+   */
+  const shareLocalPDF = async () => {
+    const downloadDir = RNFS.DocumentDirectoryPath;
+
+    try {
+      const files = await RNFS.readdir(downloadDir);
+
+      const file = files.find(file => file.includes(LOCAL_PDF_FILE_NAME));
+      if (file) {
+        const filePath = `${downloadDir}/${file}`;
+        console.log('File URL:', filePath);
+        const shareOptions = {
+          title: 'PDF file',
+          message: 'PDF file',
+          url: LOCAL_PDF_TEST_FILE_PATH,
+        };
+
+        const ShareResponse = await Share.open(shareOptions);
+        console.log('Result =>', ShareResponse);
+        setResult(JSON.stringify(ShareResponse, null, 2));
+      }
     } catch (error) {
       console.log('Error =>', error);
       setResult('error: '.concat(getErrorString(error)));
@@ -390,6 +440,9 @@ const App = () => {
         </View>
         <View style={styles.button}>
           <Button onPress={shareSingleImage} title="Share Single Image" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareLocalPDF} title="Share Local PDF" />
         </View>
         <View style={styles.withInputContainer}>
           <TextInput
