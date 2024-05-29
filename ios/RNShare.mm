@@ -23,6 +23,7 @@
 #import "SmsShare.h"
 #import "DiscordShare.h"
 #import "RNShareActivityItemSource.h"
+#import "RNQuickLookActivity.h"
 #import "RNShareUtils.h"
 
 #if RCT_NEW_ARCH_ENABLED
@@ -287,7 +288,10 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
         }
     }
 
-    UIActivityViewController *shareController = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];
+    RNQuickLookActivity *quickLookActivity = [[RNQuickLookActivity alloc] init];
+    NSArray *applicationActivities = @[quickLookActivity];
+
+    UIActivityViewController *shareController = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:applicationActivities];
 
     NSString *subject = [RCTConvert NSString:options[@"subject"]];
     if (subject) {
