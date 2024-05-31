@@ -2,7 +2,7 @@
 
 @interface RNQuickLookActivity ()
 
-@property (nonatomic, strong) UIDocumentInteractionController *documentInteractionController;
+@property (nonatomic, strong) QLPreviewController *previewController;
 
 @end
 
@@ -20,53 +20,50 @@
     if (@available(iOS 13.0, *)) {
         return [UIImage systemImageNamed:@"eye"];
     } else {
-        return [UIImage imageNamed:@"eye"];
+        return [UIImage imageNamed:@"visible"];
     }
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {
-    NSSet *quickLookExtensions = [NSSet setWithArray:@[@"pdf", @"doc", @"docx", @"xls", @"xlsx", @"ppt", @"pptx", @"jpg", @"jpeg", @"png", @"gif", @"txt", @"rtf", @"html", @"htm", @"key", @"numbers", @"pages"]];
-    
     for (id item in activityItems) {
         if ([item isKindOfClass:[NSURL class]]) {
             NSURL *url = (NSURL *)item;
-            
-            if ([url isFileURL]) {
-                NSString *extension = [[url pathExtension] lowercaseString];
-                if ([quickLookExtensions containsObject:extension]) {
-                    self.fileURL = url;
-                    return YES;
-                }
+            if ([url isFileURL] && [QLPreviewController canPreviewItem:url]) {
+                self.fileURL = url;
+                return YES;
             }
         }
     }
     return NO;
 }
 
-
 - (void)prepareWithActivityItems:(NSArray *)activityItems {
+    // No additional preparation needed
 }
 
-- (void)performActivity {
+- (UIViewController *)activityViewController {
     if (self.fileURL && [[NSFileManager defaultManager] fileExistsAtPath:[self.fileURL path]]) {
-        self.documentInteractionController = [UIDocumentInteractionController interactionControllerWithURL:self.fileURL];
-        self.documentInteractionController.delegate = self;
-
-        if (![self.documentInteractionController presentPreviewAnimated:YES]) {
-            [self activityDidFinish:NO];
-        }
-    } else {
-        [self activityDidFinish:NO];
+        self.previewController = [[QLPreviewController alloc] init];
+        self.previewController.dataSource = self;
+        self.previewController.delegate = self;
+        return self.previewController;
     }
+    return nil;
 }
 
-#pragma mark - UIDocumentInteractionControllerDelegate
+#pragma mark - QLPreviewControllerDataSource
 
-- (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
-    return [UIApplication sharedApplication].keyWindow.rootViewController;
+- (NSInteger)numberOfPreviewItemsInPreviewController:(QLPreviewController *)controller {
+    return 1;
 }
 
-- (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
+- (id<QLPreviewItem>)previewController:(QLPreviewController *)controller previewItemAtIndex:(NSInteger)index {
+    return self.fileURL;
+}
+
+#pragma mark - QLPreviewControllerDelegate
+
+- (void)previewControllerDidDismiss:(QLPreviewController *)controller {
     [self activityDidFinish:YES];
 }
 
