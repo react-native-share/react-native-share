@@ -193,6 +193,13 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
 
     NSMutableArray<id> *items = [NSMutableArray array];
     NSString *message = [RCTConvert NSString:options[@"message"]];
+    // Gmail set the first item to the Subject 
+    NSString *GmailSubject = [RCTConvert NSString:options[@"subject"]];
+    
+    if (GmailSubject) {
+        [items addObject:GmailSubject];
+    }
+    
     if (message) {
         [items addObject:message];
     }
