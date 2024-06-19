@@ -29,7 +29,7 @@ resolve:(RCTPromiseResolveBlock)resolve {
         return;
     }
     
-    if(![self isWhatsAppavailable]) {
+    if(![self isWhatsAppAvailable]) {
         [self handleError:@"Not Installed" code:1 rejectFn:reject];
         return;
     }
@@ -114,7 +114,7 @@ resolve:(RCTPromiseResolveBlock)resolve {
 
 
 -(MessageType)getMessageType: (NSString *)url {
-  NSArray *imageExtensions = @[@".png", @".jpeg",@".jpg",@".gif"];
+  NSArray *imageExtensions = @[@"png", @"jpeg",@"jpg",@"gif"];
   if([self isMediaType:url mediaExtensions: imageExtensions]){
     return MessageTypeImage;
   }
@@ -136,7 +136,7 @@ resolve:(RCTPromiseResolveBlock)resolve {
   return FALSE;
 }
 
--(BOOL)isWhatsAppavailable {
+-(BOOL)isWhatsAppAvailable {
   if([[UIApplication sharedApplication] canOpenURL: [NSURL URLWithString:@"whatsapp://app"]]) {
     NSLog(@"WhastApp installed");
     return true;
