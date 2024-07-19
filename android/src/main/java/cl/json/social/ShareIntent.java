@@ -1,5 +1,7 @@
 package cl.json.social;
 
+import static android.util.Log.d;
+
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -11,7 +13,9 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 import android.content.pm.ResolveInfo;
 import android.content.ComponentName;
+import android.webkit.URLUtil;
 
+import com.facebook.common.util.UriUtil;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -121,16 +125,22 @@ public abstract class ShareIntent {
             message = options.getString("message");
         }
 
-        String socialType  = "";
+        String socialType = "";
         if (ShareIntent.hasValidKey("social", options)) {
             socialType = options.getString("social");
         }
 
         if (socialType.equals("sms")) {
             String recipient = options.getString("recipient");
+            String smsImage = options.getString("url");
+            boolean isValidLocalFileUri = UriUtil.isLocalFileUri(Uri.parse(smsImage));
 
-            if (!recipient.isEmpty()) {
+            if (recipient != null && !recipient.isEmpty()) {
                 this.getIntent().putExtra("address", recipient);
+            }
+
+            if(smsImage != null && !smsImage.isEmpty() && isValidLocalFileUri) {
+                this.getIntent().putExtra(Intent.EXTRA_STREAM, smsImage);
             }
         }
 
