@@ -292,6 +292,25 @@ const App = () => {
     }
   };
 
+  const shareSmsWithImage = async () => {
+    const shareOptions = {
+      title: '',
+      social: Share.Social.SMS,
+      recipient,
+      message: 'Example SMS with Image',
+      url: "file://uri_to_local_file"
+    };
+
+    try {
+      const ShareResponse = await Share.shareSingle(shareOptions);
+      console.log('Response =>', ShareResponse);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  }
+
   const shareToTelegram = async () => {
     const shareOptions = {
       message: 'Example Telegram',
