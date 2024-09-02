@@ -26,7 +26,7 @@
 #import "RNShareUtils.h"
 
 #if RCT_NEW_ARCH_ENABLED
-#import <RNShareSpec.h>
+#import "RNShareSpec.h"
 #endif
 
 @implementation RNShare
