@@ -107,7 +107,7 @@ resolve:(RCTPromiseResolveBlock)resolve {
   NSURL * whatsappURL = [NSURL URLWithString:urlWhats];
   
   if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
-      [[UIApplication sharedApplication] openURL: whatsappURL];
+      [[UIApplication sharedApplication] openURL:whatsappURL options:@{} completionHandler:nil];
       resolve(@[@true, @""]);
   }
 }
@@ -144,7 +144,7 @@ resolve:(RCTPromiseResolveBlock)resolve {
       // Cannot open whatsapp
       NSString *appStoreStringURL = @"https://itunes.apple.com/app/whatsapp-messenger/id310633997";
       NSURL *appStoreURL = [NSURL URLWithString:appStoreStringURL];
-      [[UIApplication sharedApplication] openURL:appStoreURL];
+      [[UIApplication sharedApplication] openURL:appStoreURL options:@{} completionHandler:nil];
       return false;
   }
 }

@@ -84,7 +84,7 @@ RCT_EXPORT_MODULE();
     // Cannot open instagram
     NSString *stringURL = @"https://itunes.apple.com/app/instagram/id389801252";
     NSURL *url = [NSURL URLWithString:stringURL];
-    [[UIApplication sharedApplication] openURL:url];
+    [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 
     NSString *errorMessage = @"Not installed";
     NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
