@@ -21,7 +21,7 @@
         NSURL *gplusURL = [NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 
         if ([[UIApplication sharedApplication] canOpenURL: gplusURL]) {
-            [[UIApplication sharedApplication] openURL:gplusURL];
+            [[UIApplication sharedApplication] openURL:gplusURL options:@{} completionHandler:nil];
             resolve(@[@true, @""]);
         } else {
             // Cannot open gplus
