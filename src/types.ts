@@ -73,7 +73,7 @@ interface BaseSocialStoriesShareSingleOptions extends Omit<BaseShareSingleOption
   attributionURL?: string;
   backgroundVideo?: string;
   linkUrl?: string;
-  linkTitle?: string;
+  linkText?: string;
 }
 
 export interface InstagramStoriesShareSingleOptions extends BaseSocialStoriesShareSingleOptions {
