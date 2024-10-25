@@ -67,6 +67,16 @@ RCT_EXPORT_MODULE();
     }
     [items setObject: backgroundBottomColor forKey: @"com.instagram.sharedSticker.backgroundBottomColor"];
 
+    if(![options[@"linkUrl"] isEqual:[NSNull null]] && options[@"linkUrl"] != nil) {
+        NSString *linkURL = [RCTConvert NSString:options[@"linkUrl"]];
+        [items setObject: linkURL forKey: @"com.instagram.sharedSticker.linkURL"];
+    }
+
+    if(![options[@"linkText"] isEqual:[NSNull null]] && options[@"linkText"] != nil) {
+        NSString *linkText = [RCTConvert NSString:options[@"linkText"]];
+        [items setObject: linkText forKey: @"com.instagram.sharedSticker.linkText"];
+    }
+
     // Putting dictionary of options inside an array
     NSArray *pasteboardItems = @[items];
 
