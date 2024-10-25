@@ -72,7 +72,17 @@ RCT_EXPORT_MODULE();
         backgroundBottomColor = @"#837DF4";
     }
     [items setObject: backgroundBottomColor forKey: @"com.instagram.sharedSticker.backgroundBottomColor"];
-    
+
+    if(![options[@"linkUrl"] isEqual:[NSNull null]] && options[@"linkUrl"] != nil) {
+        NSString *linkURL = [RCTConvert NSString:options[@"linkUrl"]];
+        [items setObject: linkURL forKey: @"com.instagram.sharedSticker.linkURL"];
+    }
+
+    if(![options[@"linkText"] isEqual:[NSNull null]] && options[@"linkText"] != nil) {
+        NSString *linkText = [RCTConvert NSString:options[@"linkText"]];
+        [items setObject: linkText forKey: @"com.instagram.sharedSticker.linkText"];
+    }
+
     if(![options[@"backgroundVideo"] isEqual:[NSNull null]] && options[@"backgroundVideo"] != nil) {
         NSURL *backgroundVideoURL = [RCTConvert NSURL:options[@"backgroundVideo"]];
         NSString *urlString = backgroundVideoURL.absoluteString;
