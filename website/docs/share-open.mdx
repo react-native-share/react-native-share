@@ -133,6 +133,23 @@ const options = Platform.select({
           icon: icon,
         },
       },
+      {
+        // For using custom icon using Base64 image data instead of default text icon.
+        placeholderItem: {
+          type: 'url',
+          content: icon,
+        },
+        item: {
+          default: {
+            type: 'text',
+            content: `${message} ${url}`,
+          },
+        },
+        linkMetadata: {
+          title: message,
+          base64Icon: icon,
+        },
+      },
     ],
   },
   default: {
@@ -197,6 +214,7 @@ Also you can use `default` in order to specify default behavior.
 | image          | string | (optional) A URL of the file corresponding to a representative image for the URL.        |
 | remoteVideoUrl | string | (optional) A remote URL corresponding to a representative video for the URL.             |
 | video          | string | (optional) A URL of the file corresponding to a representative video for the URL.        |
+| base64Icon     | string | (optional) To display icon using Base64 image data.                                      |
 
 ## LSApplicationQueriesSchemes (iOS only)
 
