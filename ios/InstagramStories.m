@@ -8,11 +8,23 @@
 
 // import RCTLog
 #import <React/RCTLog.h>
+#import <Photos/Photos.h>
 
 #import "InstagramStories.h"
 
 @implementation InstagramStories
 RCT_EXPORT_MODULE();
+
+- (void)openInstagramWithItems:(NSDictionary *)items urlScheme:(NSURL *)urlScheme resolve:(RCTPromiseResolveBlock)resolve {
+    // Putting dictionary of options inside an array
+    NSArray *pasteboardItems = @[items];
+    NSDictionary *pasteboardOptions = @{UIPasteboardOptionExpirationDate : [[NSDate date] dateByAddingTimeInterval:60 * 5]};
+    
+    [[UIPasteboard generalPasteboard] setItems:pasteboardItems options:pasteboardOptions];
+    [[UIApplication sharedApplication] openURL:urlScheme options:@{} completionHandler:nil];
+    
+    resolve(@[@true, @""]);
+}
 
 - (void)shareSingle:(NSDictionary *)options
     reject:(RCTPromiseRejectBlock)reject
@@ -40,12 +52,6 @@ RCT_EXPORT_MODULE();
         [items setObject: UIImagePNGRepresentation(image) forKey: @"com.instagram.sharedSticker.stickerImage"];
     }
 
-    if(![options[@"backgroundVideo"] isEqual:[NSNull null]] && options[@"backgroundVideo"] != nil) {
-        NSURL *backgroundVideoURL = [RCTConvert NSURL:options[@"backgroundVideo"]];
-        NSData *video = [NSData dataWithContentsOfURL:backgroundVideoURL];
-        [items setObject: video forKey: @"com.instagram.sharedSticker.backgroundVideo"];
-    }
-
     if(![options[@"attributionURL"] isEqual:[NSNull null]] && options[@"attributionURL"] != nil) {
         NSString *attrURL = [RCTConvert NSString:options[@"attributionURL"]];
         [items setObject: attrURL forKey: @"com.instagram.sharedSticker.contentURL"];
@@ -66,18 +72,57 @@ RCT_EXPORT_MODULE();
         backgroundBottomColor = @"#837DF4";
     }
     [items setObject: backgroundBottomColor forKey: @"com.instagram.sharedSticker.backgroundBottomColor"];
+    
+    if(![options[@"backgroundVideo"] isEqual:[NSNull null]] && options[@"backgroundVideo"] != nil) {
+        NSURL *backgroundVideoURL = [RCTConvert NSURL:options[@"backgroundVideo"]];
+        NSString *urlString = backgroundVideoURL.absoluteString;
+        NSURLComponents *components = [[NSURLComponents alloc] initWithString:urlString];
+        NSString *assetId = nil;
 
-    // Putting dictionary of options inside an array
-    NSArray *pasteboardItems = @[items];
+        // Get asset ID from URL
+        for (NSURLQueryItem *item in components.queryItems) {
+           if ([item.name isEqualToString:@"id"]) {
+               assetId = item.value;
+               break;
+           }
+        }
 
-    // Prepare options to instagram
-    NSDictionary *pasteboardOptions = @{UIPasteboardOptionExpirationDate : [[NSDate date] dateByAddingTimeInterval:60 * 5]};
-
-    // This call is iOS 10+, can use 'setItems' depending on what versions you support
-    [[UIPasteboard generalPasteboard] setItems:pasteboardItems options:pasteboardOptions];
-    [[UIApplication sharedApplication] openURL:urlScheme options:@{} completionHandler:nil];
-
-    resolve(@[@true, @""]);
+        if (assetId) {
+           // Fetch the asset
+           PHFetchResult *fetchResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil];
+           PHAsset *asset = fetchResult.firstObject;
+           
+           if (asset) {
+               PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
+               options.networkAccessAllowed = YES;
+               options.deliveryMode = PHVideoRequestOptionsDeliveryModeHighQualityFormat;
+               
+               [[PHImageManager defaultManager] requestAVAssetForVideo:asset
+                                                             options:options
+                                                       resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+                   if ([avAsset isKindOfClass:[AVURLAsset class]]) {
+                       AVURLAsset *urlAsset = (AVURLAsset *)avAsset;
+                       NSData *video = [NSData dataWithContentsOfURL:urlAsset.URL];
+                       
+                       dispatch_async(dispatch_get_main_queue(), ^{
+                           if (video) {
+                               [items setObject:video forKey:@"com.instagram.sharedSticker.backgroundVideo"];
+                               [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
+                           } else {
+                               NSLog(@"Failed to convert video asset to NSData");
+                               [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
+                           }
+                       });
+                   }
+               }];
+           } else {
+               NSLog(@"Could not find asset with ID: %@", assetId);
+               [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
+           }
+        }
+    } else {
+        [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
+    }
 }
 
 - (NSError*)fallbackInstagram {
