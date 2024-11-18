@@ -102,6 +102,39 @@
     return nil;
 }
 
++ (UIImage *)adjustedForShareSheetPreviewIconProvider:(UIImage *)image {
+    UIColor *replaceTransparencyWithColor = [UIColor whiteColor]; // Change as required
+    CGFloat minimumSize = 40.0;  // Points
+
+    UIGraphicsImageRendererFormat *format = [[UIGraphicsImageRendererFormat alloc] init];
+    format.opaque = YES;
+    format.scale = image.scale;
+
+    CGFloat imageWidth = image.size.width;
+    CGFloat imageHeight = image.size.height;
+    CGFloat imageLargestDimension = MAX(imageWidth, imageHeight);
+    CGFloat deviceScale = [UIScreen mainScreen].scale;
+    CGFloat resizeFactor = (minimumSize * deviceScale) / (imageLargestDimension * image.scale);
+
+    CGSize size;
+    if (resizeFactor > 1.0) {
+        size = CGSizeMake(imageWidth * resizeFactor, imageHeight * resizeFactor);
+    } else {
+        size = image.size;
+    }
+
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:size format:format];
+
+    UIImage *modifiedImage = [renderer imageWithActions:^(UIGraphicsImageRendererContext *context) {
+        CGSize contextSize = context.format.bounds.size;
+        [replaceTransparencyWithColor setFill];
+        [context fillRect:CGRectMake(0, 0, contextSize.width, contextSize.height)];
+        [image drawInRect:CGRectMake(0, 0, contextSize.width, contextSize.height)];
+    }];
+
+    return modifiedImage;
+}
+
 #ifdef __IPHONE_13_0
 + (nullable LPLinkMetadata *)linkMetadataFromDictionary:(NSDictionary *)dictionary API_AVAILABLE(ios(13.0)) {
     if (dictionary) {
@@ -109,10 +142,30 @@
         linkMetadata.originalURL = [RCTConvert NSURL:dictionary[@"originalUrl"]];
         linkMetadata.URL = [RCTConvert NSURL:dictionary[@"url"]];
         linkMetadata.title = [RCTConvert NSString:dictionary[@"title"]];
-        NSURL *iconURL = [RCTConvert NSURL:dictionary[@"icon"]];
-        if (iconURL) {
-            linkMetadata.iconProvider = [[NSItemProvider alloc] initWithContentsOfURL:iconURL];
+        
+        // Handle base64Icon
+        NSString *base64Icon = [RCTConvert NSString:dictionary[@"base64Icon"]];
+        if (base64Icon) {
+            // Remove data URI prefix if present
+            if ([base64Icon containsString:@"base64,"]) {
+                base64Icon = [[base64Icon componentsSeparatedByString:@"base64,"] lastObject];
+            }
+
+            NSData *imageData = [[NSData alloc] initWithBase64EncodedString:base64Icon options:NSDataBase64DecodingIgnoreUnknownCharacters];
+            UIImage *image = [UIImage imageWithData:imageData];
+
+            if (image) {
+                // Assign to iconProvider
+                linkMetadata.iconProvider = [[NSItemProvider alloc] initWithObject:[self adjustedForShareSheetPreviewIconProvider:image]];
+            }
+        } else {
+            // Existing icon handling
+            NSURL *iconURL = [RCTConvert NSURL:dictionary[@"icon"]];
+            if (iconURL) {
+                linkMetadata.iconProvider = [[NSItemProvider alloc] initWithContentsOfURL:iconURL];
+            }
         }
+        
         NSURL *imageURL = [RCTConvert NSURL:dictionary[@"image"]];
         if (imageURL) {
             linkMetadata.imageProvider = [[NSItemProvider alloc] initWithContentsOfURL:imageURL];
