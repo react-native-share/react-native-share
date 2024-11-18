@@ -83,6 +83,14 @@ public class InstagramStoriesShare extends SingleShareIntent {
             useInternalStorage = options.getBoolean("useInternalStorage");
         }
 
+        if (this.hasValidKey("linkUrl", options)) {
+            this.intent.putExtra("link_url", options.getString("linkUrl"));
+        }
+
+        if (this.hasValidKey("linkText", options)) {
+            this.intent.putExtra("link_text", options.getString("linkText"));
+        }
+
         Boolean hasBackgroundAsset = this.hasValidKey("backgroundImage", options)
                 || this.hasValidKey("backgroundVideo", options);
 

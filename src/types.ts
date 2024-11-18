@@ -72,6 +72,8 @@ interface BaseSocialStoriesShareSingleOptions extends Omit<BaseShareSingleOption
   backgroundTopColor?: string;
   attributionURL?: string;
   backgroundVideo?: string;
+  linkUrl?: string;
+  linkText?: string;
 }
 
 export interface InstagramStoriesShareSingleOptions extends BaseSocialStoriesShareSingleOptions {
