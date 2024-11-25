@@ -62,7 +62,9 @@
     "typescript": "^5.2.2"
   },
   "resolutions": {
-    "eslint-plugin-prettier": "5.0.1"
+    "eslint-plugin-prettier": "5.0.1",
+    "wrap-ansi": "7.0.0",
+    "string-width": "4.1.0"
   },
   "keywords": [
     "react-native",
