@@ -70,10 +70,9 @@ const withInfoPlist = (config: ExportedConfig, props: WithSocialShareProps) => {
       ...config.ios,
       infoPlist: {
         ...config.ios?.infoPlist,
-        LSApplicationQueriesSchemes: {
-          ...config.ios?.infoPlist?.LSApplicationQueriesSchemes,
-          ...props?.ios,
-        },
+        LSApplicationQueriesSchemes: config.ios?.infoPlist?.LSApplicationQueriesSchemes
+          ? [...config.ios.infoPlist.LSApplicationQueriesSchemes, ...props.ios]
+          : props.ios,
       },
     },
   };
