@@ -22,7 +22,9 @@
     "RNShare.podspec",
     "!**/__tests__",
     "!**/__fixtures__",
-    "!**/__mocks__"
+    "!**/__mocks__",
+    "app.plugin.js",
+    "plugin"
   ],
   "devDependencies": {
     "@babel/core": "^7.23.3",
