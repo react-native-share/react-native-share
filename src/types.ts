@@ -34,6 +34,7 @@ export interface LinkMetadata {
   image?: string;
   remoteVideoUrl?: string;
   video?: string;
+  base64Icon?: string;
 }
 
 export interface ActivityItem {
