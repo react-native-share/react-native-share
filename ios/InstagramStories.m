@@ -19,17 +19,17 @@ RCT_EXPORT_MODULE();
     // Putting dictionary of options inside an array
     NSArray *pasteboardItems = @[items];
     NSDictionary *pasteboardOptions = @{UIPasteboardOptionExpirationDate : [[NSDate date] dateByAddingTimeInterval:60 * 5]};
-    
+
     [[UIPasteboard generalPasteboard] setItems:pasteboardItems options:pasteboardOptions];
     [[UIApplication sharedApplication] openURL:urlScheme options:@{} completionHandler:nil];
-    
+
     resolve(@[@true, @""]);
 }
 
 - (void)shareSingle:(NSDictionary *)options
     reject:(RCTPromiseRejectBlock)reject
     resolve:(RCTPromiseResolveBlock)resolve {
-    
+
     NSURL *urlScheme = [NSURL URLWithString:[NSString stringWithFormat:@"instagram-stories://share?source_application=%@", options[@"appId"]]];
     if (![[UIApplication sharedApplication] canOpenURL:urlScheme]) {
         NSError* error = [self fallbackInstagram];
@@ -85,50 +85,63 @@ RCT_EXPORT_MODULE();
 
     if(![options[@"backgroundVideo"] isEqual:[NSNull null]] && options[@"backgroundVideo"] != nil) {
         NSURL *backgroundVideoURL = [RCTConvert NSURL:options[@"backgroundVideo"]];
-        NSString *urlString = backgroundVideoURL.absoluteString;
-        NSURLComponents *components = [[NSURLComponents alloc] initWithString:urlString];
-        NSString *assetId = nil;
 
-        // Get asset ID from URL
-        for (NSURLQueryItem *item in components.queryItems) {
-           if ([item.name isEqualToString:@"id"]) {
-               assetId = item.value;
-               break;
-           }
-        }
+        if ([backgroundVideoURL.scheme isEqualToString:@"file"]) {
+            // Handle local file
+            NSData *videoData = [NSData dataWithContentsOfURL:backgroundVideoURL];
+            if (videoData) {
+                [items setObject:videoData forKey:@"com.instagram.sharedSticker.backgroundVideo"];
+                [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
+            } else {
+                NSLog(@"Failed to read local video file");
+                [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
+            }
+        } else {
+            NSString *urlString = backgroundVideoURL.absoluteString;
+            NSURLComponents *components = [[NSURLComponents alloc] initWithString:urlString];
+            NSString *assetId = nil;
 
-        if (assetId) {
-           // Fetch the asset
-           PHFetchResult *fetchResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil];
-           PHAsset *asset = fetchResult.firstObject;
-           
-           if (asset) {
-               PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
-               options.networkAccessAllowed = YES;
-               options.deliveryMode = PHVideoRequestOptionsDeliveryModeHighQualityFormat;
-               
-               [[PHImageManager defaultManager] requestAVAssetForVideo:asset
-                                                             options:options
-                                                       resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-                   if ([avAsset isKindOfClass:[AVURLAsset class]]) {
-                       AVURLAsset *urlAsset = (AVURLAsset *)avAsset;
-                       NSData *video = [NSData dataWithContentsOfURL:urlAsset.URL];
-                       
-                       dispatch_async(dispatch_get_main_queue(), ^{
-                           if (video) {
-                               [items setObject:video forKey:@"com.instagram.sharedSticker.backgroundVideo"];
-                               [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
-                           } else {
-                               NSLog(@"Failed to convert video asset to NSData");
-                               [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
-                           }
-                       });
-                   }
-               }];
-           } else {
-               NSLog(@"Could not find asset with ID: %@", assetId);
-               [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
-           }
+            // Get asset ID from URL
+            for (NSURLQueryItem *item in components.queryItems) {
+                if ([item.name isEqualToString:@"id"]) {
+                    assetId = item.value;
+                    break;
+                }
+            }
+
+            if (assetId) {
+                // Fetch the asset
+                PHFetchResult *fetchResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil];
+                PHAsset *asset = fetchResult.firstObject;
+
+                if (asset) {
+                    PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
+                    options.networkAccessAllowed = YES;
+                    options.deliveryMode = PHVideoRequestOptionsDeliveryModeHighQualityFormat;
+
+                    [[PHImageManager defaultManager] requestAVAssetForVideo:asset
+                                                                    options:options
+                                                            resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+                        if ([avAsset isKindOfClass:[AVURLAsset class]]) {
+                            AVURLAsset *urlAsset = (AVURLAsset *)avAsset;
+                            NSData *video = [NSData dataWithContentsOfURL:urlAsset.URL];
+
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                if (video) {
+                                    [items setObject:video forKey:@"com.instagram.sharedSticker.backgroundVideo"];
+                                    [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
+                                } else {
+                                    NSLog(@"Failed to convert video asset to NSData");
+                                    [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
+                                }
+                            });
+                        }
+                    }];
+                } else {
+                    NSLog(@"Could not find asset with ID: %@", assetId);
+                    [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
+                }
+            }
         }
     } else {
         [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
