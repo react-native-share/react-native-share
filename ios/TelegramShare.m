@@ -27,7 +27,7 @@
     NSURL * shareURL = [NSURL URLWithString:urlTelegram];
     
     if ([[UIApplication sharedApplication] canOpenURL: shareURL]) {
-        [[UIApplication sharedApplication] openURL: shareURL];
+       [[UIApplication sharedApplication] openURL:shareURL options:@{} completionHandler:^(BOOL success) {}];
         resolve(@[@true, @""]);
     } else {
         // Cannot open telegram
