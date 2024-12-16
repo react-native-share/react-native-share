@@ -33,7 +33,8 @@ Configure you `app.config.ts` or `app.json` to use the permissions needed by the
           "com.instagram.android",
           "com.twitter.android",
           "com.zhiliaoapp.musically",
-        ]
+        ],
+        "enableBase64ShareAndroid": true
       }
     ]
   ]
@@ -61,6 +62,12 @@ Configure you `app.config.ts` or `app.json` to use the permissions needed by the
   <package android:name="com.twitter.android" />
   <package android:name="com.zhiliaoapp.musically" />
 </queries>
+```
+
+`enableBase64ShareAndroid` will take care of adding the permission to the AndroidManifest.xml.
+
+```xml
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 ```
 
 And prebuild the project with `expo prebuild`.
