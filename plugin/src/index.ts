@@ -68,7 +68,7 @@ const withAndroidManifestService = (config: ExportedConfig, props: WithSocialSha
 */
 const getIOSQuerySchemes = (config: ExportedConfig): Array<string> => {
   return Array.isArray(config.ios?.infoPlist?.LSApplicationQueriesSchemes)
-    ? config.ios.infoPlist.LSApplicationQueriesSchemes
+    ? config?.ios.infoPlist?.LSApplicationQueriesSchemes ?? []
     : [];
 }
 
