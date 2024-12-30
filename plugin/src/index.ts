@@ -63,6 +63,15 @@ const withAndroidManifestService = (config: ExportedConfig, props: WithSocialSha
   });
 };
 
+/**
+* Handles for edge case when LSApplicationQueriesSchemes is an object or undefined.
+*/
+const getIOSQuerySchemes = (config: ExportedConfig): Array<string> => {
+  return Array.isArray(config.ios?.infoPlist?.LSApplicationQueriesSchemes)
+    ? config.ios?.infoPlist?.LSApplicationQueriesSchemes ?? []
+    : [];
+}
+
 const withInfoPlist = (config: ExportedConfig, props: WithSocialShareProps) => {
   return {
     ...config,
@@ -70,9 +79,7 @@ const withInfoPlist = (config: ExportedConfig, props: WithSocialShareProps) => {
       ...config.ios,
       infoPlist: {
         ...config.ios?.infoPlist,
-        LSApplicationQueriesSchemes: config.ios?.infoPlist?.LSApplicationQueriesSchemes
-          ? [...config.ios.infoPlist.LSApplicationQueriesSchemes, ...props.ios]
-          : props.ios,
+        LSApplicationQueriesSchemes: [...getIOSQuerySchemes(config), ...props?.ios ?? []]
       },
     },
   };
