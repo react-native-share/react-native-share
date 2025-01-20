@@ -2,13 +2,13 @@ import { ExportedConfig } from '@expo/config-plugins';
 import { withBuildProperties } from 'expo-build-properties';
 
 /**
-* Handles for edge case when LSApplicationQueriesSchemes is an object or undefined.
-*/
-const getIOSQuerySchemes = (config: ExportedConfig): Array<string> => {
+ * Handles for edge case when LSApplicationQueriesSchemes is an object or undefined.
+ */
+const getIOSQuerySchemes = (config: ExportedConfig): string[] => {
   return Array.isArray(config.ios?.infoPlist?.LSApplicationQueriesSchemes)
     ? config.ios?.infoPlist?.LSApplicationQueriesSchemes ?? []
     : [];
-}
+};
 
 export default (
   config: ExportedConfig,
@@ -26,8 +26,10 @@ export default (
         ...(props.enableBase64ShareAndroid
           ? {
               permissions: [
-                ...(config.android?.permissions ?? []),
-                'android.permission.WRITE_EXTERNAL_STORAGE',
+                ...new Set([
+                  ...(config.android?.permissions ?? []),
+                  'android.permission.WRITE_EXTERNAL_STORAGE',
+                ]),
               ],
             }
           : {}),
@@ -36,7 +38,7 @@ export default (
         ...config.ios,
         infoPlist: {
           ...config.ios?.infoPlist,
-          LSApplicationQueriesSchemes: [...getIOSQuerySchemes(config), ...props?.ios ?? []]
+          LSApplicationQueriesSchemes: [...getIOSQuerySchemes(config), ...(props?.ios ?? [])],
         },
       },
     },
