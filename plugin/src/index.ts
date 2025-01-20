@@ -1,6 +1,15 @@
 import { ExportedConfig } from '@expo/config-plugins';
 import { withBuildProperties } from 'expo-build-properties';
 
+/**
+* Handles for edge case when LSApplicationQueriesSchemes is an object or undefined.
+*/
+const getIOSQuerySchemes = (config: ExportedConfig): Array<string> => {
+  return Array.isArray(config.ios?.infoPlist?.LSApplicationQueriesSchemes)
+    ? config.ios?.infoPlist?.LSApplicationQueriesSchemes ?? []
+    : [];
+}
+
 export default (
   config: ExportedConfig,
   props: {
@@ -27,10 +36,7 @@ export default (
         ...config.ios,
         infoPlist: {
           ...config.ios?.infoPlist,
-          LSApplicationQueriesSchemes: [
-            ...(config.ios?.infoPlist?.LSApplicationQueriesSchemes ?? []),
-            ...(props.ios ?? []),
-          ],
+          LSApplicationQueriesSchemes: [...getIOSQuerySchemes(config), ...props?.ios ?? []]
         },
       },
     },
