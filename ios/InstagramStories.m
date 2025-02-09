@@ -31,11 +31,6 @@ RCT_EXPORT_MODULE();
     resolve:(RCTPromiseResolveBlock)resolve {
     
     NSURL *urlScheme = [NSURL URLWithString:[NSString stringWithFormat:@"instagram-stories://share?source_application=%@", options[@"appId"]]];
-    if (![[UIApplication sharedApplication] canOpenURL:urlScheme]) {
-        NSError* error = [self fallbackInstagram];
-        reject(@"cannot open URL",@"cannot open URL",error);
-        return;
-    }
 
     // Create dictionary of assets and attribution
     NSMutableDictionary *items = [NSMutableDictionary dictionary];
@@ -44,6 +39,13 @@ RCT_EXPORT_MODULE();
         NSURL *backgroundImageURL = [RCTConvert NSURL:options[@"backgroundImage"]];
         UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:backgroundImageURL]];
         [items setObject: UIImagePNGRepresentation(image) forKey: @"com.instagram.sharedSticker.backgroundImage"];
+    }
+
+    if(options[@"backgroundVideo"]) {
+        NSString *videoPath = [RCTConvert NSString:options[@"backgroundVideo"]];
+        NSURL *videoURL = [NSURL URLWithString:videoPath];
+        NSData *videoData = [NSData dataWithContentsOfURL:videoURL];
+        [items setObject:videoData forKey:@"com.instagram.sharedSticker.backgroundVideo"];
     }
 
     if(![options[@"stickerImage"] isEqual:[NSNull null]] && options[@"stickerImage"] != nil) {
@@ -83,56 +85,7 @@ RCT_EXPORT_MODULE();
         [items setObject: linkText forKey: @"com.instagram.sharedSticker.linkText"];
     }
 
-    if(![options[@"backgroundVideo"] isEqual:[NSNull null]] && options[@"backgroundVideo"] != nil) {
-        NSURL *backgroundVideoURL = [RCTConvert NSURL:options[@"backgroundVideo"]];
-        NSString *urlString = backgroundVideoURL.absoluteString;
-        NSURLComponents *components = [[NSURLComponents alloc] initWithString:urlString];
-        NSString *assetId = nil;
-
-        // Get asset ID from URL
-        for (NSURLQueryItem *item in components.queryItems) {
-           if ([item.name isEqualToString:@"id"]) {
-               assetId = item.value;
-               break;
-           }
-        }
-
-        if (assetId) {
-           // Fetch the asset
-           PHFetchResult *fetchResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil];
-           PHAsset *asset = fetchResult.firstObject;
-           
-           if (asset) {
-               PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
-               options.networkAccessAllowed = YES;
-               options.deliveryMode = PHVideoRequestOptionsDeliveryModeHighQualityFormat;
-               
-               [[PHImageManager defaultManager] requestAVAssetForVideo:asset
-                                                             options:options
-                                                       resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-                   if ([avAsset isKindOfClass:[AVURLAsset class]]) {
-                       AVURLAsset *urlAsset = (AVURLAsset *)avAsset;
-                       NSData *video = [NSData dataWithContentsOfURL:urlAsset.URL];
-                       
-                       dispatch_async(dispatch_get_main_queue(), ^{
-                           if (video) {
-                               [items setObject:video forKey:@"com.instagram.sharedSticker.backgroundVideo"];
-                               [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
-                           } else {
-                               NSLog(@"Failed to convert video asset to NSData");
-                               [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
-                           }
-                       });
-                   }
-               }];
-           } else {
-               NSLog(@"Could not find asset with ID: %@", assetId);
-               [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
-           }
-        }
-    } else {
-        [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
-    }
+    [self openInstagramWithItems:items urlScheme:urlScheme resolve:resolve];
 }
 
 - (NSError*)fallbackInstagram {
