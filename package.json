@@ -62,7 +62,9 @@
     "react-native-windows": "^0.72.19",
     "react-test-renderer": "^18.2.0",
     "semantic-release": "^22.0.7",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0"
   },
   "resolutions": {
     "eslint-plugin-prettier": "5.0.1",
@@ -92,6 +94,7 @@
   },
   "readmeFilename": "README.md",
   "scripts": {
+    "postinstall": "patch-package",
     "start": "react-native start",
     "start:android": "react-native run-android",
     "start:ios": "react-native run-ios",
@@ -154,5 +157,6 @@
   },
   "engines": {
     "node": ">=16"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
