@@ -34,9 +34,9 @@ const ShareSheet: React.FC<React.PropsWithChildren<ShareSheetProps>> = ({
   }, [visible, onCancel]);
 
   React.useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', backButtonHandler);
+    const subscription = BackHandler.addEventListener('hardwareBackPress', backButtonHandler);
     return () => {
-      BackHandler.removeEventListener('hardwareBackPress', backButtonHandler);
+      subscription.remove();
     };
   }, [backButtonHandler]);
 
