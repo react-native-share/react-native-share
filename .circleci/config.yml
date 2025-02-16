@@ -108,6 +108,9 @@ jobs:
           android: false
           detox: false
       - react-native/yarn_install
+      - run: 
+          name: Patch example app
+          command: npm run patch:example:app
       - run:
           name: Install Detox
           command: npm install detox-cli --global

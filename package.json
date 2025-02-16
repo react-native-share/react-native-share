@@ -94,7 +94,7 @@
   },
   "readmeFilename": "README.md",
   "scripts": {
-    "postinstall": "patch-package",
+    "patch:example:app": "patch-package",
     "start": "react-native start",
     "start:android": "react-native run-android",
     "start:ios": "react-native run-ios",
