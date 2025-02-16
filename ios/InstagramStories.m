@@ -31,11 +31,6 @@ RCT_EXPORT_MODULE();
     resolve:(RCTPromiseResolveBlock)resolve {
 
     NSURL *urlScheme = [NSURL URLWithString:[NSString stringWithFormat:@"instagram-stories://share?source_application=%@", options[@"appId"]]];
-    if (![[UIApplication sharedApplication] canOpenURL:urlScheme]) {
-        NSError* error = [self fallbackInstagram];
-        reject(@"cannot open URL",@"cannot open URL",error);
-        return;
-    }
 
     // Create dictionary of assets and attribution
     NSMutableDictionary *items = [NSMutableDictionary dictionary];
