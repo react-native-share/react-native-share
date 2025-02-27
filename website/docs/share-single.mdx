@@ -3,7 +3,7 @@ id: share-single
 title: Share.shareSingle
 ---
 
-The shareSingle() method allows a user to share a premade message via a single prechosen social medium. In other words, code specifies both the message that will be sent and the social medium through which the message will be sent. The user chooses only to whom the message is sent. This shared message may contain text, one or more files, or both.
+The `shareSingle()` method allows a user to share a premade message via a single prechosen social medium. In other words, code specifies both the message that will be sent and the social medium through which the message will be sent. The user chooses only to whom the message is sent. This shared message may contain text, one or more files, or both.
 
 Open the share dialog with the specific application. This returns a promise similar to `Share.open`, keep in mind that you will need to handle the same response when the user cancel/dismiss.
 
@@ -99,7 +99,7 @@ You can pass the option that will be handled by the native code, similar to `Sha
 
 ### Share Instagram Stories
 
-These values can be used when you are calling the method `Share.single` passing the attributes that you need (You can combine these attributes, Story will use properties that you pass).
+These values can be used when you are calling the method `Share.shareSingle` passing the attributes that you need (You can combine these attributes, Story will use properties that you pass).
 
 ```js
 import Share from 'react-native-share';
@@ -202,7 +202,7 @@ https://developers.facebook.com/docs/instagram/sharing-to-feed/
 
 ### Static Values for Facebook Stories
 
-These values can be used when you are calling the method `Share.single` passing the attributes that you need (You can combine these attributes, Story will use properties that you pass).
+These values can be used when you are calling the method `Share.shareSingle` passing the attributes that you need (You can combine these attributes, Story will use properties that you pass).
 
 ```javascript
 import Share from 'react-native-share';
