@@ -17,7 +17,7 @@
     inAppBaseUrl:(NSString *)inAppBaseUrl {
 
     NSLog(@"Try open view");
-    if([serviceType isEqualToString:@"com.apple.social.twitter"]) {
+    if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:inAppBaseUrl]]) {
         SLComposeViewController *composeController = [SLComposeViewController  composeViewControllerForServiceType:serviceType];
 
         NSURL *URL = [RCTConvert NSURL:options[@"url"]];
