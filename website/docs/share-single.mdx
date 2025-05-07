@@ -142,8 +142,28 @@ await Share.shareSingle({
     });
 ```
 
-**Note:** Your app's user must accept "All Photos" when prompted about photo permissions otherwise they may get a "Something went wrong" error.
-
+**Warning!**
+To be able to use this feature, your app's user must accept "All Photos" when prompted about photo permissions,
+but first you need to add following permissions to your `Info.plist`:
+```xml
+<key>NSPhotoLibraryUsageDescription</key>
+<string>This app requires access to the photo library to save and share images on Instagram.</string>
+<key>NSPhotoLibraryAddUsageDescription</key>
+<string>This app requires access to the photo library to save and share images on Instagram.</string>
+```
+Or if you're using expo you can add them to `app.json` / `app.config.ts`:
+```typescript
+expo: {
+    ios: {
+        infoPlist: {
+            NSPhotoLibraryUsageDescription:
+              'This app requires access to the photo library to save and share images on Instagram',
+            NSPhotoLibraryAddUsageDescription:
+              'This app requires access to the photo library to save and share images on Instagram.',
+        },
+    }
+}
+```
 
 ### Share remote videos to Instagram
 Instagram tries to select **the very last file of the cameraroll** so you have to save videos to the cameraroll in case you want to share them to Instagram.
@@ -175,7 +195,7 @@ By default IG opens New post view with Camera View. There you can find also stor
 import Share from 'react-native-share';
 
 const shareOptions = {
-    url: 'instagram://camera', 
+    url: 'instagram://camera',
     social: Share.Social.INSTAGRAM
 };
 
@@ -187,14 +207,14 @@ Share.shareSingle(shareOptions);
 import Share from 'react-native-share';
 
 const shareOptions = {
-    url: 'instagram://share', 
+    url: 'instagram://share',
     social: Share.Social.INSTAGRAM
 };
 
 Share.shareSingle(shareOptions);
 ```
 
-URL patterns like `instagram://` can be used on Android, but works different then documented for IOS 
+URL patterns like `instagram://` can be used on Android, but works different then documented for IOS
 https://developers.facebook.com/docs/instagram/sharing-to-feed/
 
 
