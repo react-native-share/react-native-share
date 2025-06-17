@@ -18,6 +18,7 @@
 #import "GooglePlusShare.h"
 #import "EmailShare.h"
 #import "TelegramShare.h"
+#import "TwitterShare.h"
 #import "ViberShare.h"
 #import "MessengerShare.h"
 #import "SmsShare.h"
@@ -153,9 +154,13 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             NSLog(@"TRY OPEN instagram-stories");
             InstagramStories *shareCtl = [[InstagramStories alloc] init];
             [shareCtl shareSingle:options reject: reject resolve: resolve];
-         } else if([social isEqualToString:@"telegram"]) {
+        } else if([social isEqualToString:@"telegram"]) {
             NSLog(@"TRY OPEN telegram");
             TelegramShare *shareCtl = [[TelegramShare alloc] init];
+            [shareCtl shareSingle:options reject: reject resolve: resolve];
+        } else if([social isEqualToString:@"twitter"]) {
+            NSLog(@"TRY OPEN twitter");
+            TwitterShare *shareCtl = [[TwitterShare alloc] init];
             [shareCtl shareSingle:options reject: reject resolve: resolve];
         } else if([social isEqualToString:@"email"]) {
             NSLog(@"TRY OPEN email");
