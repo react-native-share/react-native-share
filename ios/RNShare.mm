@@ -290,10 +290,18 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
             [controller presentViewController:documentPicker animated:YES completion:nil];
             return;
         }
-    }
-
+    }    
+    
     UIActivityViewController *shareController = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];
 
+    BOOL disableOverlay = [RCTConvert BOOL:options[@"disableOverlay"]];
+    
+    if (@available(iOS 15.0, *)) {
+        if (disableOverlay == true) {
+                shareController.sheetPresentationController.largestUndimmedDetentIdentifier = UISheetPresentationControllerDetentIdentifierLarge;
+        }
+    }
+    
     NSString *subject = [RCTConvert NSString:options[@"subject"]];
     if (subject) {
         [shareController setValue:subject forKey:@"subject"];
