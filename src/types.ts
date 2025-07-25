@@ -109,6 +109,8 @@ export interface ShareOptions {
   saveToFiles?: boolean;
   activityItemSources?: ActivityItemSource[];
   isNewTask?: boolean;
+  /** iOS Only */
+  disableOverlay?: boolean;
 }
 
 export type ActivityType =
