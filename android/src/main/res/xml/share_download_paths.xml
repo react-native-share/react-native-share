@@ -2,5 +2,4 @@
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
     <external-path name="rnshare1" path="Download/" />
     <cache-path name="rnshare2" path="/" />
-    <root-path name="rnshare_sdcard" path="." />
 </paths>
