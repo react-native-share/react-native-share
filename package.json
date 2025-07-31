@@ -98,7 +98,7 @@
     "start": "react-native start",
     "start:android": "react-native run-android",
     "start:ios": "react-native run-ios",
-    "lint": "eslint \"src/**/*.{js,ts,tsx}\"  --max-warnings=0",
+    "lint": "eslint \"src/**/*.{js,ts,tsx}\" \"plugin/src/**/*.{js,ts,tsx}\" --max-warnings=0",
     "typescript": "tsc --noEmit",
     "build:expo-plugin": "tsc --project ./plugin/tsconfig.json",
     "validate": "yarn lint && yarn typescript",
