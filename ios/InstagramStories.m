@@ -71,11 +71,27 @@ RCT_EXPORT_MODULE();
     if(![options[@"linkUrl"] isEqual:[NSNull null]] && options[@"linkUrl"] != nil) {
         NSString *linkURL = [RCTConvert NSString:options[@"linkUrl"]];
         [items setObject: linkURL forKey: @"com.instagram.sharedSticker.linkURL"];
+        // Add general pasteboard representations so user can paste the link inside IG
+        @try {
+            if (linkURL != nil) {
+                [items setObject: linkURL forKey:@"public.utf8-plain-text"];
+                NSURL *nsurl = [NSURL URLWithString:linkURL];
+                if (nsurl) {
+                    [items setObject: nsurl forKey:@"public.url"];
+                }
+            }
+        } @catch (NSException *exception) {}
     }
 
     if(![options[@"linkText"] isEqual:[NSNull null]] && options[@"linkText"] != nil) {
         NSString *linkText = [RCTConvert NSString:options[@"linkText"]];
         [items setObject: linkText forKey: @"com.instagram.sharedSticker.linkText"];
+        // Also mirror linkText to plain text if no explicit linkUrl provided
+        @try {
+            if (![items objectForKey:@"public.utf8-plain-text"] && linkText) {
+                [items setObject: linkText forKey:@"public.utf8-plain-text"];
+            }
+        } @catch (NSException *exception) {}
     }
 
     if(![options[@"backgroundVideo"] isEqual:[NSNull null]] && options[@"backgroundVideo"] != nil) {
