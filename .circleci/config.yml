@@ -29,7 +29,7 @@ executors:
         default: ~/app
         type: string
     macos:
-      xcode: '26.0.1'
+      xcode: '16.4.0'
     resource_class: <<parameters.resource-class>>
     working_directory: <<parameters.working-directory>>
 
