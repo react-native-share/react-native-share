@@ -23,13 +23,13 @@ executors:
   ios_executor:
     parameters:
       resource-class:
-        default: macos.m1.medium.gen1
+        default: m4pro.medium
         type: string
       working-directory:
         default: ~/app
         type: string
     macos:
-      xcode: '15.0.0'
+      xcode: '26.0.1'
     resource_class: <<parameters.resource-class>>
     working_directory: <<parameters.working-directory>>
 
