@@ -25,14 +25,14 @@
     NSURL * shareURL = [NSURL URLWithString:urlViber];
     
     if ([[UIApplication sharedApplication] canOpenURL: shareURL]) {
-        [[UIApplication sharedApplication] openURL: shareURL];
+        [[UIApplication sharedApplication] openURL: shareURL options:@{} completionHandler:nil];
         resolve(@[@true, @""]);
     } else {
         // Cannot open viber
         NSString *stringURL = @"https://apps.apple.com/app/viber-messenger-chats-calls/id382617920";
         NSURL *url = [NSURL URLWithString:stringURL];
         
-        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {}];
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
         
         NSString *errorMessage = @"Not installed";
         NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
