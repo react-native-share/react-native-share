@@ -27,14 +27,14 @@
     NSURL * shareURL = [NSURL URLWithString:urlTelegram];
     
     if ([[UIApplication sharedApplication] canOpenURL: shareURL]) {
-        [[UIApplication sharedApplication] openURL: shareURL];
+        [[UIApplication sharedApplication] openURL: shareURL options:@{} completionHandler:nil];
         resolve(@[@true, @""]);
     } else {
         // Cannot open telegram
         NSString *stringURL = @"https://itunes.apple.com/app/telegram-messenger/id686449807";
         NSURL *url = [NSURL URLWithString:stringURL];
         
-        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {}];
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
         
         NSString *errorMessage = @"Not installed";
         NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
