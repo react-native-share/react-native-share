@@ -1,0 +1,70 @@
+name: Release
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    install_dependencies:
+        name: Install Dependencies
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  persist-credentials: false
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "18.17.1"
+                  cache: "yarn"
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Cache node_modules
+              uses: actions/cache/save@v3
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+
+    publish_version:
+        name: Publish New Version
+        runs-on: ubuntu-latest
+        needs: install_dependencies
+        permissions:
+            contents: write
+            issues: write
+            pull-requests: write
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  persist-credentials: false
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "18.17.1"
+
+            - name: Restore node_modules cache
+              uses: actions/cache/restore@v3
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Build package
+              run: yarn prepare
+
+            - name: Publish to npm
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+              run: yarn ci:publish

@@ -1,0 +1,192 @@
+name: CI
+
+on:
+    push:
+        branches-ignore:
+            - main
+    pull_request:
+        branches-ignore:
+            - main
+
+jobs:
+    install_dependencies:
+        name: Install Dependencies
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "18.17.1"
+                  cache: "yarn"
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Cache node_modules
+              uses: actions/cache/save@v3
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+
+    lint:
+        name: Lint
+        runs-on: ubuntu-latest
+        needs: install_dependencies
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "18.17.1"
+
+            - name: Restore node_modules cache
+              uses: actions/cache/restore@v3
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+
+            - name: Run lint
+              run: yarn lint
+
+    validate_typescript:
+        name: Validate TypeScript
+        runs-on: ubuntu-latest
+        needs: install_dependencies
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "18.17.1"
+
+            - name: Restore node_modules cache
+              uses: actions/cache/restore@v3
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+
+            - name: Run TypeScript validation
+              run: yarn typescript
+
+    android_build:
+        name: Android Build
+        runs-on: ubuntu-latest
+        needs: [lint, validate_typescript]
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "18.17.1"
+
+            - name: Restore node_modules cache
+              uses: actions/cache/restore@v3
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+
+            - name: Setup Java
+              uses: actions/setup-java@v4
+              with:
+                  distribution: "temurin"
+                  java-version: "17"
+
+            - name: Setup Android SDK
+              uses: android-actions/setup-android@v3
+
+            - name: Cache Gradle
+              uses: actions/cache@v3
+              with:
+                  path: |
+                      ~/.gradle/caches
+                      ~/.gradle/wrapper
+                  key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+                  restore-keys: |
+                      ${{ runner.os }}-gradle-
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Build Android
+              working-directory: ./example/android
+              run: ./gradlew assembleRelease --no-daemon
+
+            - name: Upload APK artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: app-release
+                  path: ./example/android/app/build/outputs/apk/release/*.apk
+
+    ios_build:
+        name: iOS Build
+        runs-on: macos-14
+        needs: [lint, validate_typescript]
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "18.17.1"
+
+            - name: Restore node_modules cache
+              uses: actions/cache/restore@v3
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-modules-
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Patch example app
+              run: npm run patch:example:app
+
+            - name: Setup Ruby
+              uses: ruby/setup-ruby@v1
+              with:
+                  ruby-version: "3.0"
+                  bundler-cache: true
+                  working-directory: ./example/ios
+
+            - name: Cache CocoaPods
+              uses: actions/cache@v3
+              with:
+                  path: ./example/ios/Pods
+                  key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pods-
+
+            - name: Install CocoaPods
+              working-directory: ./example/ios
+              run: |
+                  bundle install
+                  bundle exec pod install
+
+            - name: Select Xcode version
+              run: sudo xcode-select -s /Applications/Xcode_15.0.app/Contents/Developer
+
+            - name: Install Detox CLI
+              run: npm install -g detox-cli
+
+            - name: Build iOS
+              working-directory: ./example/ios
+              run: |
+                  xcodebuild -workspace Example.xcworkspace \
+                    -scheme example \
+                    -configuration Release \
+                    -sdk iphonesimulator \
+                    -derivedDataPath build \
+                    -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
+                    build
