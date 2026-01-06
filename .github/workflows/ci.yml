@@ -119,7 +119,7 @@ jobs:
           bundle exec pod install
 
       - name: Select Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_15.0.app/Contents/Developer
+        run: sudo xcode-select -s /Applications/Xcode_16.4.0.app/Contents/Developer
 
       - name: Install Detox CLI
         run: npm install -g detox-cli
