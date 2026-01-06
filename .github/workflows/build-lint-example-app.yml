@@ -1,4 +1,4 @@
-name: CI
+name: "Lint, Type check and build example app"
 
 on:
   push:
