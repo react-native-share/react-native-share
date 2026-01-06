@@ -81,6 +81,9 @@ jobs:
     name: iOS Build
     runs-on: macos-15
     needs: lint_and_typecheck
+    env:
+      SIMULATOR_NAME: "iPhone 16e"
+      SIMULATOR_OS: "18.6"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -132,5 +135,5 @@ jobs:
             -configuration Release \
             -sdk iphonesimulator \
             -derivedDataPath build \
-            -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
+            -destination "platform=iOS Simulator,name=${{ env.SIMULATOR_NAME }},OS=${{ env.SIMULATOR_OS }}" \
             build
