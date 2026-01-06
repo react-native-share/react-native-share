@@ -29,7 +29,7 @@ executors:
         default: ~/app
         type: string
     macos:
-      xcode: '15.0.0'
+      xcode: '16.4.0'
     resource_class: <<parameters.resource-class>>
     working_directory: <<parameters.working-directory>>
 
@@ -134,6 +134,8 @@ jobs:
           project_type: workspace
           scheme: example
           device: iPhone 15
+          device_id: 806B986E-57CD-44D3-AD30-501D30F3E884
+          device_os: '17.5'
 
   publish_version:
     executor:
