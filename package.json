@@ -4,10 +4,10 @@
   "version": "12.2.1",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/react-native-community/react-native-share.git"
+    "url": "git+https://github.com/react-native-share/react-native-share.git"
   },
   "bugs": {
-    "url": "https://github.com/react-native-community/react-native-share/issues"
+    "url": "https://github.com/react-native-share/react-native-share/issues"
   },
   "main": "lib/commonjs/index.js",
   "react-native": "src/index.tsx",
