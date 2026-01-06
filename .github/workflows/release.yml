@@ -13,6 +13,7 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
+      id-token: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -35,5 +36,4 @@ jobs:
       - name: Publish to npm
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: yarn ci:publish
+        run: yarn ci:publish --provenance
