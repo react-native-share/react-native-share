@@ -35,5 +35,5 @@ jobs:
 
       - name: Publish to npm
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: yarn ci:publish --provenance
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn ci:publish
