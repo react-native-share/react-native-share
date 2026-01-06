@@ -69,7 +69,7 @@ jobs:
 
       - name: Build Android
         working-directory: ./example
-        run: cd android && ./gradlew assembleRelease --no-daemon
+        run: ls -la && cd android && ls -la && ./gradlew assembleDebug --no-daemon
 
   ios_build:
     name: iOS Build
@@ -126,7 +126,7 @@ jobs:
         run: |
           xcodebuild -workspace Example.xcworkspace \
             -scheme example \
-            -configuration Release \
+            -configuration Debug \
             -sdk iphonesimulator \
             -derivedDataPath build \
             -destination "platform=iOS Simulator,name=${{ env.SIMULATOR_NAME }},OS=${{ env.SIMULATOR_OS }}" \
