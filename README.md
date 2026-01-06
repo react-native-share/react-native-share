@@ -102,7 +102,7 @@ Share.open(options)
     console.log(res);
   })
   .catch((err) => {
-    err && console.log(err);
+    console.log(err);
   });
 ```
 
