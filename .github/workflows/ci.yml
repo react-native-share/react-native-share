@@ -68,14 +68,8 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build Android
-        working-directory: ./example/android
-        run: ./gradlew assembleRelease --no-daemon
-
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-release
-          path: ./example/android/app/build/outputs/apk/release/*.apk
+        working-directory: ./example
+        run: cd android && ./gradlew assembleRelease --no-daemon
 
   ios_build:
     name: iOS Build
