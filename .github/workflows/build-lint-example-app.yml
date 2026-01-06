@@ -8,6 +8,10 @@ on:
     branches-ignore:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint_and_typecheck:
     name: Lint & TypeScript
