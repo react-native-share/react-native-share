@@ -69,7 +69,7 @@ jobs:
 
       - name: Build Android
         working-directory: ./example
-        run: ls -la && cd android && ls -la && ./gradlew assembleDebug --no-daemon
+        run: cd android && ./gradlew assembleDebug --no-daemon
 
   ios_build:
     name: iOS Build
