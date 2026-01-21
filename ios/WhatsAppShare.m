@@ -11,7 +11,8 @@
 typedef NS_ENUM(NSInteger, MessageType) {
   MessageTypeImage,
   MessageTypeVideo,
-  MessageTypeText
+  MessageTypeText,
+  MessageTypeAudio
 };
 
 @implementation WhatsAppShare
@@ -43,6 +44,10 @@ resolve:(RCTPromiseResolveBlock)resolve {
         
       case MessageTypeVideo:
         [self tryToSendVideo: options resolve:resolve reject:reject];
+        break;
+
+      case MessageTypeAudio:
+        [self tryToSendAudio:options resolve:resolve reject:reject];
         break;
         
       default:
@@ -93,6 +98,16 @@ resolve:(RCTPromiseResolveBlock)resolve {
   resolve(@[@true, @""]);
 }
 
+- (void)tryToSendAudio:(NSDictionary *)options
+               resolve:(RCTPromiseResolveBlock)resolve
+               reject:(RCTPromiseRejectBlock)reject {
+
+  NSLog(@"Sending whatsapp audio");
+  [self shareMedia:options[@"url"] documentUTI:@"net.whatsapp.audio"];
+  NSLog(@"Done whatsapp audio");
+  resolve(@[ @true, @"" ]);
+}
+
 -(void)tryToSendText:(NSDictionary *)options
              resolve:(RCTPromiseResolveBlock)resolve
              reject:(RCTPromiseRejectBlock)reject {
@@ -122,6 +137,11 @@ resolve:(RCTPromiseResolveBlock)resolve {
   NSArray *videoExtensions = @[@".wam", @".mp4"];
   if([self isMediaType:url mediaExtensions:videoExtensions]){
     return MessageTypeVideo;
+  }
+
+  NSArray *audioExtensions = @[@".mp3", @".aac", @".ogg", @".wav", @".m4a"];
+  if ([self isMediaType:url mediaExtensions:audioExtensions]) {
+    return MessageTypeAudio;
   }
   
   return MessageTypeText;
