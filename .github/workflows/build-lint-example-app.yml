@@ -5,6 +5,7 @@ on:
     branches-ignore:
       - main
   pull_request:
+    branches: 
       - main
 
 concurrency:
