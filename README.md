@@ -1,4 +1,5 @@
-# react-native-share [![react-native-share](https://circleci.com/gh/react-native-share/react-native-share.svg?style=svg)](https://app.circleci.com/pipelines/github/react-native-share/react-native-share) [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+# react-native-share ![example workflow](https://github.com/react-native-share/react-native-share/actions/workflows/release.yml/badge.svg)
+ [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 React Native Share, is a simple tool for sharing messages and files with other apps.
 
