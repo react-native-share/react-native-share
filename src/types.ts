@@ -64,6 +64,8 @@ interface BaseShareSingleOptions {
   recipient?: string;
   social: Exclude<Social, Social.FacebookStories | Social.InstagramStories>;
   forceDialog?: boolean;
+  /** Android Only: Store the temporary file in the internal storage cache */
+  useInternalStorage?: boolean;
 }
 
 interface BaseSocialStoriesShareSingleOptions extends Omit<BaseShareSingleOptions, 'social'> {
@@ -111,6 +113,8 @@ export interface ShareOptions {
   isNewTask?: boolean;
   /** iOS Only */
   disableOverlay?: boolean;
+  /** Android Only: Store the temporary file in the internal storage cache */
+  useInternalStorage?: boolean;
 }
 
 export type ActivityType =
