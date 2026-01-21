@@ -72,8 +72,8 @@ resolve:(RCTPromiseResolveBlock)resolve {
         }
       
         image = [UIImage imageWithData: data];
-        NSString * documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-        NSString * filePath = [documentsPath stringByAppendingPathComponent:@"/whatsAppTmp.wai"];
+        NSString *tempPath = NSTemporaryDirectory();
+        NSString *filePath = [tempPath stringByAppendingPathComponent:@"image.jpg"];
         
         [UIImageJPEGRepresentation(image, 1.0) writeToFile:filePath atomically:YES];
       
