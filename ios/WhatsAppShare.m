@@ -113,7 +113,9 @@ resolve:(RCTPromiseResolveBlock)resolve {
              reject:(RCTPromiseRejectBlock)reject {
   
   NSString *text = [RCTConvert NSString:options[@"message"]];
-  text = [text stringByAppendingString: [@" " stringByAppendingString: options[@"url"]] ];
+  if (options[@"url"] && options[@"url"] != [NSNull null]) {
+    text = [text stringByAppendingString: [@" " stringByAppendingString: options[@"url"]] ];
+  }
   NSString *whatsAppNumber = [RCTConvert NSString:options[@"whatsAppNumber"]];
   
   text = (NSString*)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef) text, NULL,CFSTR("!*'();:@&=+$,/?%#[]"),kCFStringEncodingUTF8));
@@ -129,6 +131,16 @@ resolve:(RCTPromiseResolveBlock)resolve {
 
 
 -(MessageType)getMessageType: (NSString *)url {
+  if (!url || url.length == 0) {
+    return MessageTypeText;
+  }
+  NSURL *parsed = [NSURL URLWithString:url];
+  NSString *scheme = parsed.scheme.lowercaseString;
+  BOOL isFileOrData = scheme && ([scheme isEqualToString:@"file"] || [scheme isEqualToString:@"data"]);
+  BOOL isAbsolutePath = [url hasPrefix:@"/"];
+  if (!isFileOrData && !isAbsolutePath) {
+    return MessageTypeText;
+  }
   NSArray *imageExtensions = @[@"png", @"jpeg",@"jpg",@"gif"];
   if([self isMediaType:url mediaExtensions: imageExtensions]){
     return MessageTypeImage;
