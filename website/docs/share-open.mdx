@@ -60,14 +60,32 @@ When sharing a `base64` file, you will need to follow the format below:
 
 `url: "data:<data_type>/<file_extension>;base64,<base64_data>"`
 
-**Note:** If your application requires the ability to share `base64` files on Android, you need to add
+### Android Configuration
+
+**⚠️ Important for Android API 30+ (Android 11+):**
+
+For apps targeting Android API 30 or higher, you **must** use the `useInternalStorage: true` option when sharing base64 files. This is the recommended approach for all modern Android apps.
+
+```js
+Share.open({
+  url: 'data:image/png;base64,<base64_data>',
+  useInternalStorage: true, // Required for Android API 30+
+});
+```
+
+**Note for Android API 29 and below (deprecated):**
+
+If your application still targets Android API 29 or lower, you can add the following permission to your `AndroidManifest.xml`:
 
 ```xml
-<!-- required for react-native-share base64 sharing -->
+<!-- Only works on Android API 29 (Android 10) and below - DEPRECATED -->
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 ```
 
-to your application's `AndroidManifest.xml` file as per the example project.
+However, please note that:
+- This permission does nothing on Android API 30+ (Android 11+)
+- Google Play Store requires apps to target at least API 34 as of current policies
+- Using `useInternalStorage: true` is the recommended solution for all apps
 
 ## Sharing a file directly
 
