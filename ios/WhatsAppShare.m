@@ -197,12 +197,65 @@ resolve:(RCTPromiseResolveBlock)resolve {
   return FALSE;
 }
 
+-(UIView *)presentationView {
+  UIWindow *window = nil;
+
+  if (@available(iOS 13.0, *)) {
+    for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
+      if (![scene isKindOfClass:[UIWindowScene class]]) {
+        continue;
+      }
+      UIWindowScene *windowScene = (UIWindowScene *)scene;
+      if (windowScene.activationState != UISceneActivationStateForegroundActive) {
+        continue;
+      }
+      for (UIWindow *candidate in windowScene.windows) {
+        if (candidate.isKeyWindow) {
+          window = candidate;
+          break;
+        }
+      }
+      if (window != nil) {
+        break;
+      }
+    }
+  }
+
+  if (window == nil) {
+    for (UIWindow *candidate in UIApplication.sharedApplication.windows) {
+      if (candidate.isKeyWindow) {
+        window = candidate;
+        break;
+      }
+    }
+  }
+
+  if (window == nil) {
+    window = UIApplication.sharedApplication.windows.firstObject;
+  }
+
+  UIViewController *viewController = window.rootViewController;
+  if (viewController == nil) {
+    return nil;
+  }
+  while (viewController.presentedViewController != nil) {
+    viewController = viewController.presentedViewController;
+  }
+
+  return viewController.view;
+}
+
 -(void)shareMedia:(NSString *)stringURL documentUTI:(NSString *)documentUTI {
   NSURL *filePath = [NSURL fileURLWithPath:stringURL];
   documentInteractionController = [UIDocumentInteractionController interactionControllerWithURL:filePath];
   documentInteractionController.UTI = documentUTI;
   documentInteractionController.delegate = self;
-  [documentInteractionController presentOpenInMenuFromRect:CGRectZero inView:[[[[[UIApplication sharedApplication] delegate] window] rootViewController] view] animated:YES];
+  UIView *view = [self presentationView];
+  if (view == nil) {
+    NSLog(@"Unable to find a presentation view for WhatsApp share");
+    return;
+  }
+  [documentInteractionController presentOpenInMenuFromRect:view.bounds inView:view animated:YES];
 }
 
 @end
