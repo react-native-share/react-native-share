@@ -16,14 +16,17 @@
     NSDictionary *subjectDictionary;
     NSDictionary *dataTypeIdentifierDictionary;
     NSDictionary *thumbnailImageDictionary;
+    void (^fetchCompletion)(void);
 #ifdef __IPHONE_13_0
     LPLinkMetadata *linkMetadata API_AVAILABLE(ios(13.0));
 #endif
 }
 
-- (instancetype)initWithOptions:(NSDictionary *)options {
+- (instancetype)initWithOptions:(NSDictionary *)options
+                     completion:(void (^)(void))completion {
     self = [super init];
     if (self) {
+        fetchCompletion = completion;
         placeholderItem = [RNShareActivityItemSource itemFromDictionary:options[@"placeholderItem"]];
 
 #ifdef __IPHONE_13_0
@@ -32,8 +35,14 @@
             if ([placeholderItem isKindOfClass:NSURL.class] && ![RNShareActivityItemSource isURLSchemeData:placeholderItem]) {
                 NSURL *URL = placeholderItem;
                 [self fetchMetadataForURL:URL];
+            } else {
+                [self _invokeAndClearCompletion];
             }
+        } else {
+            [self _invokeAndClearCompletion];
         }
+#else
+        [self _invokeAndClearCompletion];
 #endif
 
         itemDictionary = options[@"item"];
@@ -49,26 +58,38 @@
     if (@available(iOS 13.0, *)) {
         LPMetadataProvider *metadataProvider = [[LPMetadataProvider alloc] init];
         [metadataProvider startFetchingMetadataForURL:URL completionHandler:^(LPLinkMetadata * _Nullable metadata, NSError * _Nullable error) {
-            if (!self->linkMetadata) {
-                self->linkMetadata = metadata;
-            } else {
-                self->linkMetadata.originalURL = metadata.originalURL;
-                self->linkMetadata.URL = metadata.URL;
-                if(!self->linkMetadata.title) {
-                    self->linkMetadata.title = metadata.title;
-                }
-                self->linkMetadata.imageProvider = metadata.imageProvider;
-                if (self->linkMetadata.imageProvider) {
-                    self->linkMetadata.iconProvider = self->linkMetadata.imageProvider;
+            if (metadata) {
+                if (!self->linkMetadata) {
+                    self->linkMetadata = metadata;
                 } else {
-                    self->linkMetadata.iconProvider = metadata.iconProvider;
+                    self->linkMetadata.originalURL = metadata.originalURL;
+                    self->linkMetadata.URL = metadata.URL;
+                    if(!self->linkMetadata.title) {
+                        self->linkMetadata.title = metadata.title;
+                    }
+                    self->linkMetadata.imageProvider = metadata.imageProvider;
+                    if (self->linkMetadata.imageProvider) {
+                        self->linkMetadata.iconProvider = self->linkMetadata.imageProvider;
+                    } else {
+                        self->linkMetadata.iconProvider = metadata.iconProvider;
+                    }
+                    self->linkMetadata.remoteVideoURL = metadata.remoteVideoURL;
+                    self->linkMetadata.videoProvider = metadata.videoProvider;
                 }
-                self->linkMetadata.remoteVideoURL = metadata.remoteVideoURL;
-                self->linkMetadata.videoProvider = metadata.videoProvider;
             }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self _invokeAndClearCompletion];
+            });
         }];
     }
 #endif
+}
+
+- (void)_invokeAndClearCompletion {
+    if (fetchCompletion) {
+        fetchCompletion();
+        fetchCompletion = nil;
+    }
 }
 
 #pragma mark - Utilities
@@ -276,16 +297,7 @@
 - (nullable id)activityViewController:(nonnull UIActivityViewController *)activityViewController itemForActivityType:(nullable UIActivityType)activityType {
     if (itemDictionary) {
         NSDictionary *options = [RNShareActivityItemSource objectForActivityType:activityType inDictionary:itemDictionary];
-        id item = [RNShareActivityItemSource itemFromDictionary:options];
-
-        if (@available(iOS 13.0, *)) {
-            if ([item isKindOfClass:NSURL.class] && ![RNShareActivityItemSource isURLSchemeData:item]) {
-                NSURL *URL = item;
-                [self fetchMetadataForURL:URL];
-            }
-        }
-
-        return item;
+        return [RNShareActivityItemSource itemFromDictionary:options];
     }
     return nil;
 }

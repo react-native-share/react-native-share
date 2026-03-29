@@ -254,14 +254,9 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
     }
 
     NSArray *activityItemSources = options[@"activityItemSources"];
-    if (activityItemSources) {
-        [activityItemSources enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            RNShareActivityItemSource *activityItemSource = [[RNShareActivityItemSource alloc] initWithOptions:obj];
-            [items addObject:activityItemSource];
-        }];
-    }
+    BOOL hasActivityItemSources = activityItemSources != nil && activityItemSources.count > 0;
 
-    if (items.count == 0) {
+    if (items.count == 0 && !hasActivityItemSources) {
         RCTLogError(@"No `url` or `message` to share");
         return;
     }
@@ -290,67 +285,21 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
             [controller presentViewController:documentPicker animated:YES completion:nil];
             return;
         }
-    }    
-    
-    UIActivityViewController *shareController = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];
-
-    BOOL disableOverlay = [RCTConvert BOOL:options[@"disableOverlay"]];
-    
-    if (@available(iOS 15.0, *)) {
-        if (disableOverlay == true) {
-                shareController.sheetPresentationController.largestUndimmedDetentIdentifier = UISheetPresentationControllerDetentIdentifierLarge;
-        }
-    }
-    
-    NSString *subject = [RCTConvert NSString:options[@"subject"]];
-    if (subject) {
-        [shareController setValue:subject forKey:@"subject"];
     }
 
-    NSArray *excludedActivityTypes = [RCTConvert NSStringArray:options[@"excludedActivityTypes"]];
-    if (excludedActivityTypes) {
-        shareController.excludedActivityTypes = excludedActivityTypes;
+    if (hasActivityItemSources) {
+        [self _fetchMetadataAndPresentShareController:items
+                                              options:options
+                                           controller:controller
+                                              resolve:resolve
+                                               reject:reject];
+    } else {
+        [self _presentShareController:items
+                              options:options
+                           controller:controller
+                              resolve:resolve
+                               reject:reject];
     }
-
-    __weak UIActivityViewController* weakShareController = shareController;
-    shareController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, __unused NSArray *returnedItems, NSError *activityError) {
-        
-        // always dismiss since this may be called from cancelled shares
-        // but the share menu would remain open, and our callback would fire again on close
-        if(weakShareController){
-            // closing activity view controller
-            [weakShareController dismissViewControllerAnimated:true completion:nil];
-        } else {
-            [controller dismissViewControllerAnimated:true completion:nil];
-        }
-
-        
-        if (activityError) {
-            reject(@"error",@"activityError",activityError);
-        } else {
-            resolve(@{
-                @"success": @(completed),
-                @"message": (RCTNullIfNil(activityType) ?: @"")
-            });
-        }
-        
-        // clear the completion handler to prevent cycles
-        if(weakShareController){
-            weakShareController.completionWithItemsHandler = nil;
-        }
-    };
-
-    shareController.modalPresentationStyle = UIModalPresentationPopover;
-    NSNumber *anchorViewTag = [RCTConvert NSNumber:options[@"anchor"]];
-    if (!anchorViewTag) {
-        shareController.popoverPresentationController.permittedArrowDirections = 0;
-    }
-    shareController.popoverPresentationController.sourceView = controller.view;
-    shareController.popoverPresentationController.sourceRect = [self sourceRectInView:controller.view anchorViewTag:anchorViewTag];
-
-    [controller presentViewController:shareController animated:YES completion:nil];
-
-    shareController.view.tintColor = [RCTConvert UIColor:options[@"tintColor"]];
 }
 
 
@@ -387,6 +336,100 @@ RCT_EXPORT_METHOD(isPackageInstalled:(NSString *)packagename
             @"message": @"com.apple.DocumentsApp"
         });
     }
+}
+
+#pragma mark - Share Controller
+
+- (void)_presentShareController:(NSArray *)items
+                        options:(NSDictionary *)options
+                     controller:(UIViewController *)controller
+                        resolve:(RCTPromiseResolveBlock)resolve
+                         reject:(RCTPromiseRejectBlock)reject
+{
+    UIActivityViewController *shareController = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];
+
+    BOOL disableOverlay = [RCTConvert BOOL:options[@"disableOverlay"]];
+    if (@available(iOS 15.0, *)) {
+        if (disableOverlay == true) {
+            shareController.sheetPresentationController.largestUndimmedDetentIdentifier = UISheetPresentationControllerDetentIdentifierLarge;
+        }
+    }
+
+    NSString *subject = [RCTConvert NSString:options[@"subject"]];
+    if (subject) {
+        [shareController setValue:subject forKey:@"subject"];
+    }
+
+    NSArray *excludedActivityTypes = [RCTConvert NSStringArray:options[@"excludedActivityTypes"]];
+    if (excludedActivityTypes) {
+        shareController.excludedActivityTypes = excludedActivityTypes;
+    }
+
+    __weak UIActivityViewController* weakShareController = shareController;
+    shareController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, __unused NSArray *returnedItems, NSError *activityError) {
+        // always dismiss since this may be called from cancelled shares
+        // but the share menu would remain open, and our callback would fire again on close
+        if(weakShareController){
+            // closing activity view controller
+            [weakShareController dismissViewControllerAnimated:true completion:nil];
+        } else {
+            [controller dismissViewControllerAnimated:true completion:nil];
+        }
+
+        if (activityError) {
+            reject(@"error",@"activityError",activityError);
+        } else {
+            resolve(@{
+                @"success": @(completed),
+                @"message": (RCTNullIfNil(activityType) ?: @"")
+            });
+        }
+
+        // clear the completion handler to prevent cycles
+        if(weakShareController){
+            weakShareController.completionWithItemsHandler = nil;
+        }
+    };
+
+    shareController.modalPresentationStyle = UIModalPresentationPopover;
+    NSNumber *anchorViewTag = [RCTConvert NSNumber:options[@"anchor"]];
+    if (!anchorViewTag) {
+        shareController.popoverPresentationController.permittedArrowDirections = 0;
+    }
+    shareController.popoverPresentationController.sourceView = controller.view;
+    shareController.popoverPresentationController.sourceRect = [self sourceRectInView:controller.view
+                                                                        anchorViewTag:anchorViewTag];
+
+    [controller presentViewController:shareController animated:YES completion:nil];
+    shareController.view.tintColor = [RCTConvert UIColor:options[@"tintColor"]];
+}
+
+- (void)_fetchMetadataAndPresentShareController:(NSMutableArray *)items
+                                        options:(NSDictionary *)options
+                                     controller:(UIViewController *)controller
+                                        resolve:(RCTPromiseResolveBlock)resolve
+                                         reject:(RCTPromiseRejectBlock)reject
+{
+    NSArray *activityItemSources = options[@"activityItemSources"];
+    __block NSInteger pendingFetches = activityItemSources.count;
+    __weak RNShare *weakSelf = self;
+
+    [activityItemSources enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        RNShareActivityItemSource *activityItemSource = [[RNShareActivityItemSource alloc] initWithOptions:obj
+                                                                                                completion:^{
+            pendingFetches--;
+            if (pendingFetches == 0) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf _presentShareController:items
+                                              options:options
+                                           controller:controller
+                                              resolve:resolve
+                                               reject:reject];
+                });
+            }
+        }];
+        [items addObject:activityItemSource];
+    }];
 }
 
 # pragma mark - New Architecture
