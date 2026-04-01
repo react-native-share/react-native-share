@@ -145,10 +145,7 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
         } else if([social isEqualToString:@"instagram"]) {
             NSLog(@"TRY OPEN instagram");
             InstagramShare *shareCtl = [[InstagramShare alloc] init];
-            NSString *urlStr = options[@"url"];
-            NSURL *urlObj = urlStr ? [NSURL URLWithString:urlStr] : nil;
-            BOOL isImage = [self isImageMimeType:urlStr] || urlObj.isFileURL;
-            if(isImage) {// Condition to handle image (base64 data URI or file URL)
+            if([self isImageMimeType:options[@"url"]]) {// Condition to handle image
                 [shareCtl shareSingleImage:options reject: reject resolve: resolve];
             } else {
                 [shareCtl shareSingle:options reject: reject resolve: resolve];

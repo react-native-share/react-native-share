@@ -30,7 +30,7 @@
         mc.messageComposeDelegate = self;
 
         NSMutableArray *recipients = [[NSMutableArray alloc] init];
-        if (![recipient  isEqual: @""]) {
+        if (recipient && ![recipient isEqual: @""]) {
             [recipients addObject:recipient];
         }
         mc.recipients = recipients;
@@ -66,8 +66,7 @@
                                                        error:&error];
                 if (data) {
                     NSString *filename = URL.lastPathComponent ?: @"file";
-                    NSString *mimeType = options[@"type"] ?: @"application/octet-stream";
-                    [mc addAttachmentData:data typeIdentifier:mimeType filename:filename];
+                    [mc addAttachmentData:data typeIdentifier:@"public.image" filename:filename];
                 }
             } else {
                 // if not a file, just append URL to message
