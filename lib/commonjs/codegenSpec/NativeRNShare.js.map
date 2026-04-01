@@ -1,0 +1,1 @@
+{"version":3,"names":["_reactNative","require","_default","exports","default","TurboModuleRegistry","getEnforcing"],"sourceRoot":"../../../src","sources":["codegenSpec/NativeRNShare.ts"],"mappings":";;;;;;AACA,IAAAA,YAAA,GAAAC,OAAA;AAAmD,IAAAC,QAAA,GAAAC,OAAA,CAAAC,OAAA,GAkCpCC,gCAAmB,CAACC,YAAY,CAAO,SAAS,CAAC"}
