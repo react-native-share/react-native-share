@@ -127,25 +127,26 @@
         _mChangeRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
         placeholder = _mChangeRequest.placeholderForCreatedAsset;
     } completionHandler:^(BOOL success, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (success) {
+                NSURL *instagramURL = [NSURL URLWithString:[NSString stringWithFormat:@"instagram://library?LocalIdentifier=\%@", [placeholder localIdentifier]]];
 
-        if (success) {
-            NSURL *instagramURL = [NSURL URLWithString:[NSString stringWithFormat:@"instagram://library?LocalIdentifier=\%@", [placeholder localIdentifier]]];
-
-            if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
-                if (@available(iOS 10.0, *)) {
-                    [[UIApplication sharedApplication] openURL:instagramURL options:@{} completionHandler:NULL];
-                }
-                if (resolve != NULL) {
-                    resolve(@[@true, @""]);
+                if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
+                    if (@available(iOS 10.0, *)) {
+                        [[UIApplication sharedApplication] openURL:instagramURL options:@{} completionHandler:NULL];
+                    }
+                    if (resolve != NULL) {
+                        resolve(@[@true, @""]);
+                    }
                 }
             }
-        }
-        else {
-            //Error while writing
-            if (reject != NULL) {
-                reject(@"com.rnshare",@"error",error);
+            else {
+                //Error while writing
+                if (reject != NULL) {
+                    reject(@"com.rnshare",@"error",error);
+                }
             }
-        }
+        });
     }];
 }
 
