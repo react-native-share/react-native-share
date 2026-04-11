@@ -77,6 +77,33 @@ const App = () => {
   };
 
   /**
+   * Share url with activityItemSources for custom link metadata
+   */
+  const shareUrlWithMetadata = async () => {
+    const url = 'https://github.com/react-native-share/react-native-share';
+    const shareOptions = {
+      url,
+      activityItemSources: [
+        {
+          placeholderItem: { type: 'url', content: url },
+          item: { default: { type: 'url', content: url } },
+          linkMetadata: { title: 'A Custom Share Title' }
+        }
+      ],
+      failOnCancel: false
+    };
+
+    try {
+      const ShareResponse = await Share.open(shareOptions);
+      console.log('Result =>', ShareResponse);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
+
+  /**
    * This functions share multiple images that
    * you send as the urls param
    */
@@ -401,6 +428,9 @@ const App = () => {
         </Text>
         <View style={styles.button}>
           <Button onPress={shareUrlWithMessage} title="Share Simple Url" />
+        </View>
+        <View style={styles.button}>
+          <Button onPress={shareUrlWithMetadata} title="Share Url with Metadata" />
         </View>
         <View style={styles.button}>
           <Button onPress={shareMultipleImages} title="Share Multiple Images" />
