@@ -87,7 +87,7 @@ jobs:
     needs: lint_and_typecheck
     env:
       SIMULATOR_NAME: "iPhone 16"
-      SIMULATOR_OS: "18.5"
+      SIMULATOR_OS: "18.6"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
