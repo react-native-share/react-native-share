@@ -8102,12 +8102,12 @@ __metadata:
   linkType: hard
 
 "launch-editor@npm:^2.6.0":
-  version: 2.6.0
-  resolution: "launch-editor@npm:2.6.0"
+  version: 2.14.1
+  resolution: "launch-editor@npm:2.14.1"
   dependencies:
-    picocolors: "npm:^1.0.0"
-    shell-quote: "npm:^1.7.3"
-  checksum: 10c0/4802b9569d8a1d477f8279a994094b415d89eb39dadbc568193bc366d64ac13827c8860539ee336fa6135a06596a9b8c8265cebac35c3fa36a2214d0eea38890
+    picocolors: "npm:^1.1.1"
+    shell-quote: "npm:^1.8.4"
+  checksum: 10c0/bb0ab182086afaf1c391abd38d6fc9d5391cb43d0c2da1d96176f79e9995635cdf34dcfd8df3f756bb82d7bbbb7d37014d5eb312f337350889c0cff92db53dab
   languageName: node
   linkType: hard
 
@@ -11893,6 +11893,13 @@ __metadata:
   version: 1.8.1
   resolution: "shell-quote@npm:1.8.1"
   checksum: 10c0/8cec6fd827bad74d0a49347057d40dfea1e01f12a6123bf82c4649f3ef152fc2bc6d6176e6376bffcd205d9d0ccb4f1f9acae889384d20baff92186f01ea455a
+  languageName: node
+  linkType: hard
+
+"shell-quote@npm:^1.8.4":
+  version: 1.8.4
+  resolution: "shell-quote@npm:1.8.4"
+  checksum: 10c0/86c93678bc394cb81f5ddcdc87df9c95d279ef9652775cd1cd1eed361404169a8d8cbaacaeed232ab09919e36ee1e5363863570390d78571f8c22b7f6312fb40
   languageName: node
   linkType: hard
 
