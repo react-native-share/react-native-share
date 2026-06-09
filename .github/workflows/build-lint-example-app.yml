@@ -5,7 +5,7 @@ on:
     branches-ignore:
       - main
   pull_request:
-    branches: 
+    branches:
       - main
 
 concurrency:
@@ -20,6 +20,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -27,7 +30,7 @@ jobs:
           cache: "yarn"
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Run lint
         run: yarn lint
@@ -42,6 +45,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -69,7 +75,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Build Android
         working-directory: ./example
@@ -86,6 +92,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -93,7 +102,7 @@ jobs:
           cache: "yarn"
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Patch example app
         run: npm run patch:example:app

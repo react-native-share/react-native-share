@@ -54,6 +54,8 @@
     "lint-staged": "^15.0.2",
     "metro-config": "^0.80.0",
     "metro-react-native-babel-preset": "^0.77.0",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "pre-commit": "^1.2.2",
     "prettier": "^3.0.3",
     "react": "^18.2.0",
@@ -62,9 +64,7 @@
     "react-native-windows": "^0.72.19",
     "react-test-renderer": "^18.2.0",
     "semantic-release": "^24.0.0",
-    "typescript": "^5.2.2",
-    "patch-package": "^8.0.0",
-    "postinstall-postinstall": "^2.1.0"
+    "typescript": "^5.2.2"
   },
   "resolutions": {
     "eslint-plugin-prettier": "5.0.1",
@@ -164,5 +164,5 @@
   "engines": {
     "node": ">=16"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "yarn@4.16.0"
 }
