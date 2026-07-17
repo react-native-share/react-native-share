@@ -79,7 +79,7 @@ resolve:(RCTPromiseResolveBlock)resolve {
       
         [self shareMedia:filePath documentUTI:@"net.whatsapp.image"];
       
-        resolve(@[@true, @""]);
+        resolve(@{@"success": @(YES), @"message": @""});
     }
 
   }else {
@@ -95,7 +95,7 @@ resolve:(RCTPromiseResolveBlock)resolve {
   NSLog(@"Sending whatsapp movie");
   [self shareMedia:options[@"url"] documentUTI:@"net.whatsapp.movie"];
   NSLog(@"Done whatsapp movie");
-  resolve(@[@true, @""]);
+  resolve(@{@"success": @(YES), @"message": @""});
 }
 
 - (void)tryToSendAudio:(NSDictionary *)options
@@ -105,7 +105,7 @@ resolve:(RCTPromiseResolveBlock)resolve {
   NSLog(@"Sending whatsapp audio");
   [self shareMedia:options[@"url"] documentUTI:@"net.whatsapp.audio"];
   NSLog(@"Done whatsapp audio");
-  resolve(@[ @true, @"" ]);
+  resolve(@{@"success": @(YES), @"message": @""});
 }
 
 -(void)tryToSendText:(NSDictionary *)options
@@ -125,7 +125,7 @@ resolve:(RCTPromiseResolveBlock)resolve {
   
   if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
       [[UIApplication sharedApplication] openURL:whatsappURL options:@{} completionHandler:nil];
-      resolve(@[@true, @""]);
+      resolve(@{@"success": @(YES), @"message": @""});
   }
 }
 

@@ -98,7 +98,7 @@
                 }
             } else {
                 if (self.resolve) {
-                    self.resolve(@[@(result == MessageComposeResultSent), @""]);
+                    self.resolve(@{@"success": @(result == MessageComposeResultSent), @"message": @""});
                 }
             }
             self.resolve = nil;

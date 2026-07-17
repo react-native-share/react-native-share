@@ -22,7 +22,7 @@
     
     if ([[UIApplication sharedApplication] canOpenURL: shareURL]) {
         [[UIApplication sharedApplication] openURL: shareURL];
-        resolve(@[@true, @""]);
+        resolve(@{@"success": @(YES), @"message": @""});
     } else {
         NSString *stringURL = @"https://apps.apple.com/us/app/discord-chat-talk-hangout/id985746746";
         NSURL *url = [NSURL URLWithString:stringURL];

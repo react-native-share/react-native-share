@@ -22,7 +22,7 @@
 
         if ([[UIApplication sharedApplication] canOpenURL: gplusURL]) {
             [[UIApplication sharedApplication] openURL:gplusURL options:@{} completionHandler:nil];
-            resolve(@[@true, @""]);
+            resolve(@{@"success": @(YES), @"message": @""});
         } else {
             // Cannot open gplus
             NSString *errorMessage = @"Not installed";
