@@ -5,17 +5,42 @@ title: UI Components
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-TODO:
+`ShareSheet`, `Button`, `Overlay` and `Sheet` are optional React Native UI components, available as named exports or on the default `Share` export. They do not launch native sharing themselves: call `Share.open` or `Share.shareSingle` from your button handler.
 
-- Write docs about the `components` exported [here](https://github.com/react-native-community/react-native-share/tree/5299d95aab25bfba6815e0f5455876897ed8ddc6/components) and [here](https://github.com/react-native-community/react-native-share/blob/5299d95aab25bfba6815e0f5455876897ed8ddc6/index.js#L50-L82)
+```jsx
+import Share, { ShareSheet, Button } from 'react-native-share';
+
+<ShareSheet
+  visible={shareSheetVisible}
+  onCancel={() => setShareSheetVisible(false)}
+  cancelAccessibilityLabel="Close sharing options"
+>
+  <Button iconSrc={shareIcon} onPress={handleShare}>
+    Share link
+  </Button>
+</ShareSheet>
+```
+
+Your `handleShare` callback should handle the sharing promise and close the sheet at the appropriate time for your flow.
+
+| Component | Props |
+| --- | --- |
+| `ShareSheet` | Required `visible` and `onCancel`; optional `style`, `overlayStyle` and `cancelAccessibilityLabel` (defaults to `Cancel sharing`). |
+| `Button` | Required `onPress`, `iconSrc` and text children; optional `buttonStyle` and `textStyle`. |
+| `Overlay` / `Sheet` | Required `visible`; render content as children. |
+
+The sheet handles Android Back while visible and exposes an accessibility escape action. Localize `cancelAccessibilityLabel` for your app. Hidden content does not accept touches or appear in the accessibility tree. Buttons expose their role and grow with their text instead of imposing a fixed height.
+
+The overlay fades while the sheet slides using native-driven animations. Interrupting or unmounting stops the previous animation; a stale closing animation cannot hide a reopened overlay. With the system's reduced-motion setting enabled, the slide is immediate and the overlay retains its fade. Motion stays disabled while the initial preference is unknown.
+
+These are in-tree views, not a native `Modal`. The hosting screen remains responsible for focus placement/restoration, keyboard access, and any additional modal isolation it needs. Verify the complete screen with your supported assistive technologies.
 
 ## How it looks
 
 ### Android
 
-<img alt="Demo Android UI Component" src={useBaseUrl('img/assets-docs/android-component-250x.gif')} />
+<a href={useBaseUrl('img/assets-docs/android-component-250x.gif')}>Open the animated Android component demonstration</a>
 
 ### iOS
 
-<img alt="Demo iOS UI Component" src={useBaseUrl('img/assets-docs/ios-component-250x.gif')} />
-
+<a href={useBaseUrl('img/assets-docs/ios-component-250x.gif')}>Open the animated iOS component demonstration</a>
