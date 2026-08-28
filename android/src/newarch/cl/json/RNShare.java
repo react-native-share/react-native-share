@@ -22,6 +22,12 @@ public class RNShare extends NativeRNShareSpec {
         delegate = new RNShareImpl(reactContext);
     }
 
+    @Override
+    public void invalidate() {
+        delegate.invalidate();
+        super.invalidate();
+    }
+
     @NonNull
     @Override
     public String getName() {

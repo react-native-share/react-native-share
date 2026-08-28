@@ -62,30 +62,28 @@ When sharing a `base64` file, you will need to follow the format below:
 
 ### Android Configuration
 
-**⚠️ Important for Android API 30+ (Android 11+):**
+Base64 attachments are written to app-specific cache storage and shared through a `FileProvider` URI. The default external-cache `Download` directory and internal cache are both configured in the library's provider paths. Android 4.4 (API 19) and newer do not require storage permission for these app-specific directories; see [Android's app-specific storage documentation](https://developer.android.com/training/data-storage/app-specific#external-access-permissions).
 
-For apps targeting Android API 30 or higher, you **must** use the `useInternalStorage: true` option when sharing base64 files. This is the recommended approach for all modern Android apps.
+Use `useInternalStorage: true` to explicitly select internal cache:
 
 ```js
 Share.open({
   url: 'data:image/png;base64,<base64_data>',
-  useInternalStorage: true, // Required for Android API 30+
+  useInternalStorage: true,
 });
 ```
 
-**Note for Android API 29 and below (deprecated):**
-
-If your application still targets Android API 29 or lower, you can add the following permission to your `AndroidManifest.xml`:
+Only legacy devices below API 19 require `WRITE_EXTERNAL_STORAGE` when using external cache:
 
 ```xml
-<!-- Only works on Android API 29 (Android 10) and below - DEPRECATED -->
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18" />
 ```
 
-However, please note that:
-- This permission does nothing on Android API 30+ (Android 11+)
-- Google Play Store requires apps to target at least API 34 as of current policies
-- Using `useInternalStorage: true` is the recommended solution for all apps
+This does not grant access to arbitrary files owned by other apps. For those, obtain a readable `content://` URI through the appropriate provider or picker. The library preserves content URIs instead of trying to convert them into filesystem paths.
+
+Custom attachment names must be file names, not paths. Each base64 attachment gets an isolated cache directory, so repeated names do not overwrite another attachment. Preparation failures reject the share instead of silently dropping files.
+
+Android allows one pending share request at a time. Wait for the returned promise before starting another; an overlapping request rejects with `EINPROGRESS` without replacing the first request. Chooser callbacks and activity results belong to their originating request and React context, and receivers are released when the request completes or the module is invalidated.
 
 ## Sharing a file directly
 

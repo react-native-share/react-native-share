@@ -21,15 +21,14 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import cl.json.RNShareImpl;
 import cl.json.ShareFile;
 import cl.json.ShareFiles;
 
@@ -39,15 +38,18 @@ import cl.json.ShareFiles;
 public abstract class ShareIntent {
 
     protected final ReactApplicationContext reactContext;
+    protected final TargetChosenReceiver shareRequest;
     protected Intent intent;
     protected String chooserTitle = "Share";
     protected ShareFile fileShare;
+    protected Uri fileUri;
     protected ReadableMap options;
     protected ShareFile stickerAsset;
     protected ShareFile backgroundAsset;
 
     public ShareIntent(ReactApplicationContext reactContext) {
         this.reactContext = reactContext;
+        this.shareRequest = TargetChosenReceiver.getCurrentRequest(reactContext);
         this.setIntent(new Intent(android.content.Intent.ACTION_SEND));
         this.getIntent().setType("text/plain");
     }
@@ -56,6 +58,7 @@ public abstract class ShareIntent {
         List<Intent> targetedShareIntents = new ArrayList<Intent>();
         List<HashMap<String, String>> intentMetaInfo = new ArrayList<HashMap<String, String>>();
         Intent chooserIntent;
+        HashSet<String> excludedPackages = getExcludedPackages(options.getArray("excludedActivityTypes"));
 
         Intent dummy = new Intent(prototype.getAction());
         dummy.setType(prototype.getType());
@@ -63,7 +66,7 @@ public abstract class ShareIntent {
 
         if (!resInfo.isEmpty()) {
             for (ResolveInfo resolveInfo : resInfo) {
-                if (resolveInfo.activityInfo == null || options.getArray("excludedActivityTypes").toString().contains(resolveInfo.activityInfo.packageName))
+                if (resolveInfo.activityInfo == null || excludedPackages.contains(resolveInfo.activityInfo.packageName))
                     continue;
 
                 HashMap<String, String> info = new HashMap<String, String>();
@@ -90,13 +93,16 @@ public abstract class ShareIntent {
                     targetedShareIntents.add(targetedShareIntent);
                 }
 
-                chooserIntent = Intent.createChooser(targetedShareIntents.remove(targetedShareIntents.size() - 1), "share");
+                Intent target = targetedShareIntents.remove(targetedShareIntents.size() - 1);
+                chooserIntent = TargetChosenReceiver.isSupported()
+                        ? Intent.createChooser(target, chooserTitle, shareRequest.getSharingSenderIntent())
+                        : Intent.createChooser(target, chooserTitle);
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
                 return chooserIntent;
             }
         }
 
-        return Intent.createChooser(prototype, "Share");
+        throw new ActivityNotFoundException("No share targets remain after exclusions");
     }
 
     public void open(ReadableMap options) throws ActivityNotFoundException {
@@ -128,7 +134,7 @@ public abstract class ShareIntent {
             socialType = options.getString("social");
         }
 
-        if (socialType.equals("sms")) {
+        if (socialType.equals("sms") && hasValidKey("recipient", options)) {
             String recipient = options.getString("recipient");
 
             if (!recipient.isEmpty()) {
@@ -152,11 +158,15 @@ public abstract class ShareIntent {
             }
         }
 
-        if (ShareIntent.hasValidKey("urls", options)) {
+        if (ShareIntent.hasValidKey("urls", options) && options.getArray("urls").size() > 0) {
 
             ShareFiles fileShare = getFileShares(options);
             if (fileShare.isFile()) {
                 ArrayList<Uri> uriFile = fileShare.getURI();
+                if (uriFile.isEmpty()) {
+                    throw new IllegalArgumentException("No files to share");
+                }
+                if (uriFile.size() == 1) this.fileUri = uriFile.get(0);
 
                 ClipData clip = new ClipData(new ClipDescription("Files", new String[]{fileShare.getType()}), new ClipData.Item(uriFile.get(0)));
 
@@ -183,6 +193,10 @@ public abstract class ShareIntent {
             this.fileShare = getFileShare(options);
             if (this.fileShare.isFile()) {
                 Uri uriFile = this.fileShare.getURI();
+                if (uriFile == null) {
+                    throw new IllegalArgumentException("Unable to prepare the shared file URI");
+                }
+                this.fileUri = uriFile;
                 ClipData clip = ClipData.newUri(this.reactContext.getContentResolver(), "File", uriFile);
                 this.getIntent().setType(this.fileShare.getType());
                 this.getIntent().setClipData(clip);
@@ -242,7 +256,7 @@ public abstract class ShareIntent {
 
     protected static String urlEncode(String param) {
         try {
-            return URLEncoder.encode(param, "UTF-8");
+            return URLEncoder.encode(param == null ? "" : param, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("URLEncoder.encode() failed for " + param);
         }
@@ -252,9 +266,9 @@ public abstract class ShareIntent {
         PackageManager pm = this.reactContext.getPackageManager();
 
         List<ResolveInfo> resInfo = pm.queryIntentActivities(intent, 0);
-        Intent[] extraIntents = new Intent[resInfo.size()];
-        for (int i = 0; i < resInfo.size(); i++) {
-            ResolveInfo ri = resInfo.get(i);
+        ArrayList<Intent> extraIntents = new ArrayList<>(resInfo.size());
+        for (ResolveInfo ri : resInfo) {
+            if (ri.activityInfo == null) continue;
             String packageName = ri.activityInfo.packageName;
 
             Intent newIntent = new Intent();
@@ -262,33 +276,33 @@ public abstract class ShareIntent {
             newIntent.setAction(Intent.ACTION_VIEW);
             newIntent.setDataAndType(uri, intent.getType());
             newIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            extraIntents[i] = new Intent(newIntent);
+            extraIntents.add(newIntent);
         }
 
-        return extraIntents;
+        return extraIntents.toArray(new Intent[0]);
     }
 
     protected void openIntentChooser() throws ActivityNotFoundException {
         Activity activity = this.reactContext.getCurrentActivity();
         if (activity == null) {
-            TargetChosenReceiver.callbackReject("Something went wrong");
+            shareRequest.callbackReject("Something went wrong");
             return;
         }
         Intent chooser;
         IntentSender intentSender = null;
         if (TargetChosenReceiver.isSupported()) {
-            intentSender = TargetChosenReceiver.getSharingSenderIntent(this.reactContext);
+            intentSender = shareRequest.getSharingSenderIntent();
             chooser = Intent.createChooser(this.getIntent(), this.chooserTitle, intentSender);
         } else {
             chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
         }
         chooser.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
-        if (ShareIntent.hasValidKey("showAppsToView", options) && ShareIntent.hasValidKey("url", options)) {
+        if (ShareIntent.hasValidKey("showAppsToView", options) && options.getBoolean("showAppsToView") && fileUri != null) {
             Intent viewIntent = new Intent(Intent.ACTION_VIEW);
-            viewIntent.setType(this.fileShare.getType());
+            viewIntent.setType(this.getIntent().getType());
 
-            Intent[] viewIntents = this.getIntentsToViewFile(viewIntent, this.fileShare.getURI());
+            Intent[] viewIntents = this.getIntentsToViewFile(viewIntent, fileUri);
 
             chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, viewIntents);
         }
@@ -296,26 +310,27 @@ public abstract class ShareIntent {
         if (ShareIntent.hasValidKey("excludedActivityTypes", options)) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 chooser.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, getExcludedComponentArray(options.getArray("excludedActivityTypes")));
-                activity.startActivityForResult(chooser, RNShareImpl.SHARE_REQUEST_CODE);
+                activity.startActivityForResult(chooser, shareRequest.getRequestCode());
             } else {
-                activity.startActivityForResult(excludeChooserIntent(this.getIntent(),options), RNShareImpl.SHARE_REQUEST_CODE);
+                activity.startActivityForResult(excludeChooserIntent(this.getIntent(),options), shareRequest.getRequestCode());
             }
         } else {
-            activity.startActivityForResult(chooser, RNShareImpl.SHARE_REQUEST_CODE);
+            activity.startActivityForResult(chooser, shareRequest.getRequestCode());
         }
 
         if (intentSender == null) {
             WritableMap reply = Arguments.createMap();
             reply.putBoolean("success", true);
             reply.putString("message", "OK");
-            TargetChosenReceiver.callbackResolve(reply);
+            shareRequest.callbackResolve(reply);
         }
     }
 
     public static boolean isPackageInstalled(String packagename, Context context) {
+        if (packagename == null) return false;
         PackageManager pm = context.getPackageManager();
         try {
-            pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
+            pm.getPackageInfo(packagename, 0);
             return true;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
@@ -351,15 +366,23 @@ public abstract class ShareIntent {
         Intent dummy = new Intent(getIntent().getAction());
         dummy.setType(getIntent().getType());
         List<ComponentName> componentNameList = new ArrayList<>();
+        HashSet<String> excludedPackages = getExcludedPackages(excludeActivityTypes);
         List<ResolveInfo> resInfoList = this.reactContext.getPackageManager().queryIntentActivities(dummy, 0);
-        for (int index = 0; index < excludeActivityTypes.size(); index++) {
-            String packageName = excludeActivityTypes.getString(index);
-            for(ResolveInfo resInfo : resInfoList) {
-                if(resInfo.activityInfo.packageName.equals(packageName)) {
-                    componentNameList.add(new ComponentName(resInfo.activityInfo.packageName, resInfo.activityInfo.name));
-                }
+        for (ResolveInfo resInfo : resInfoList) {
+            if (resInfo.activityInfo != null && excludedPackages.contains(resInfo.activityInfo.packageName)) {
+                componentNameList.add(new ComponentName(resInfo.activityInfo.packageName, resInfo.activityInfo.name));
             }
         }
         return componentNameList.toArray(new ComponentName[]{});
+    }
+
+    private static HashSet<String> getExcludedPackages(ReadableArray activityTypes) {
+        HashSet<String> packages = new HashSet<>();
+        if (activityTypes != null) {
+            for (int i = 0; i < activityTypes.size(); i++) {
+                packages.add(activityTypes.getString(i));
+            }
+        }
+        return packages;
     }
 }

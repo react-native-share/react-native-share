@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Created by disenodosbbcl on 22-07-16.
@@ -19,58 +20,42 @@ public class ShareFile {
     public static final int BASE_64_DATA_LENGTH = 5; // `data:`
     public static final int BASE_64_DATA_OFFSET = 8; // `;base64,`
     private final ReactApplicationContext reactContext;
-    private String url;
-    private Uri uri;
+    private final Uri uri;
     private String type;
-    private String filename;
-    private Boolean useInternalStorage;
+    private final String filename;
+    private final Boolean useInternalStorage;
+    private boolean filenameIncludesExtension;
+    private Uri sharedUri;
 
-    public ShareFile(String url, String type, String filename, Boolean useInternalStorage, ReactApplicationContext reactContext){
+    public ShareFile(String url, String type, String filename, Boolean useInternalStorage, ReactApplicationContext reactContext) {
         this(url, filename, useInternalStorage, reactContext);
         this.type = type;
     }
 
-    public ShareFile(String url, String filename, Boolean useInternalStorage, ReactApplicationContext reactContext){
-        this.url = url;
-        this.uri = Uri.parse(this.url);
+    public ShareFile(String url, String filename, Boolean useInternalStorage, ReactApplicationContext reactContext) {
+        this.uri = Uri.parse(url);
         this.filename = filename;
         this.useInternalStorage = useInternalStorage;
         this.reactContext = reactContext;
     }
-    /**
-     * Obtain mime type from URL
-     * @param url {@link String}
-     * @return {@link String} mime type
-     */
-    private String getMimeType(String url) {
-        String type = null;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-        if (extension != null) {
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-        }
-        return type;
+
+    ShareFile(String url, String type, String filename, Boolean useInternalStorage, ReactApplicationContext reactContext, boolean filenameIncludesExtension) {
+        this(url, type, filename, useInternalStorage, reactContext);
+        this.filenameIncludesExtension = filenameIncludesExtension;
     }
-    /**
-     * Return an if the url is a file (local or base64)l
-     * @return {@link boolean}
-     */
+
     public boolean isFile() {
         return this.isBase64File() || this.isLocalFile();
     }
 
     private boolean isBase64File() {
-        String scheme = uri.getScheme();
-        if((scheme != null) && uri.getScheme().equals("data")) {
-            StringBuilder type = new StringBuilder();
-            char[] parts = this.uri.toString().substring(BASE_64_DATA_LENGTH).toCharArray();
-            for (char part : parts) {
-                if (part == ';') {
-                    break;
-                }
-                type.append(part);
+        if ("data".equals(uri.getScheme())) {
+            String value = uri.toString();
+            int separator = value.indexOf(';', BASE_64_DATA_LENGTH);
+            if (separator < 0 || value.indexOf(";base64,", separator) < 0) {
+                throw new IllegalArgumentException("Invalid base64 data URI");
             }
-
-            this.type = type.toString();
+            this.type = separator == BASE_64_DATA_LENGTH ? "text/plain" : value.substring(BASE_64_DATA_LENGTH, separator);
             return true;
         }
         return false;
@@ -78,74 +63,72 @@ public class ShareFile {
 
     private boolean isLocalFile() {
         String scheme = uri.getScheme();
-        if((scheme != null) && (uri.getScheme().equals("content") || uri.getScheme().equals("file"))) {
-            // type is already set
-            if (this.type != null) {
-                return true;
-            }
-            // try to get mimetype from uri
-            this.type = this.getMimeType(uri.toString());
-
-            // try resolving the file and get the mimetype
-            if(this.type == null) {
-              String realPath = this.getRealPathFromURI(uri);
-              if (realPath != null) {
-                  this.type = this.getMimeType(realPath);
-              } else {
-                  return false;
-              }
-            }
-
-            if(this.type == null) {
-              this.type = "*/*";
-            }
-
-            return true;
+        if (!"content".equals(scheme) && !"file".equals(scheme)) {
+            return false;
         }
-        return false;
-    }
-    public String getType() {
+        if (this.type == null && "content".equals(scheme)) {
+            this.type = reactContext.getContentResolver().getType(uri);
+        }
         if (this.type == null) {
-           return "*/*";
+            String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
+            this.type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         }
-        return this.type;
+        if (this.type == null) {
+            this.type = "*/*";
+        }
+        return true;
     }
-    private String getRealPathFromURI(Uri contentUri) {
-        String result = RNSharePathUtil.getRealPathFromURI(this.reactContext,  contentUri, this.useInternalStorage);
-        return result;
+
+    public String getType() {
+        return this.type == null ? "*/*" : this.type;
     }
+
     public Uri getURI() {
+        if (sharedUri != null) return sharedUri;
 
-        final MimeTypeMap mime = MimeTypeMap.getSingleton();
-        String extension = mime.getExtensionFromMimeType(getType());
+        if (this.isBase64File()) {
+            String value = uri.toString();
+            String encoded = value.substring(value.indexOf(";base64,") + BASE_64_DATA_OFFSET);
+            // Decode before opening a file, so invalid data cannot leak a stream.
+            byte[] data = Base64.decode(encoded, Base64.DEFAULT);
+            String name = filename == null ? "file" : filename;
+            if (name.isEmpty() || name.equals(".") || name.equals("..") || name.contains("/") || name.contains("\\")) {
+                throw new IllegalArgumentException("Filename must be a non-empty file name without directory separators");
+            }
+            if (filename == null || !filenameIncludesExtension) {
+                String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(getType());
+                if (extension != null) name += "." + extension;
+            }
 
-        if(this.isBase64File()) {
-            String encodedImg = this.uri.toString().substring(BASE_64_DATA_LENGTH + this.type.length() + BASE_64_DATA_OFFSET);
-            String filename = this.filename != null ? this.filename : System.nanoTime() + "";
+            File cacheDir = Boolean.TRUE.equals(useInternalStorage) ? reactContext.getCacheDir() : reactContext.getExternalCacheDir();
+            if (cacheDir == null) cacheDir = reactContext.getCacheDir();
+            File downloads = new File(cacheDir, Environment.DIRECTORY_DOWNLOADS);
+            // Each attachment owns its directory, even when display names are identical.
+            File dir = new File(downloads, UUID.randomUUID().toString());
+            File file = new File(dir, name);
             try {
-                File cacheDir = this.useInternalStorage ? this.reactContext.getCacheDir() : this.reactContext.getExternalCacheDir();
-                File dir = new File(cacheDir, Environment.DIRECTORY_DOWNLOADS);
-                if (!dir.exists() && !dir.mkdirs()) {
-                    throw new IOException("mkdirs failed on " + dir.getAbsolutePath());
+                if (!dir.mkdirs()) {
+                    throw new IOException("Unable to create the share cache directory");
                 }
-                File file = new File(dir, filename + "." + extension);
-                final FileOutputStream fos = new FileOutputStream(file);
-                fos.write(Base64.decode(encodedImg, Base64.DEFAULT));
-                fos.flush();
-                fos.close();
-                return RNSharePathUtil.compatUriFromFile(reactContext, file);
-
+                try (FileOutputStream stream = new FileOutputStream(file)) {
+                    stream.write(data);
+                }
+                sharedUri = RNSharePathUtil.compatUriFromFile(reactContext, file);
+                if (sharedUri == null) {
+                    throw new IOException("Unable to create a content URI for the shared file");
+                }
             } catch (IOException e) {
-                e.printStackTrace();
+                file.delete();
+                dir.delete();
+                throw new IllegalStateException("Unable to prepare the shared file", e);
             }
-        } else if(this.isLocalFile()) {
-            Uri uri = Uri.parse(this.url);
-            if (uri.getPath() == null) {
-                return null;
+        } else if (this.isLocalFile()) {
+            if ("content".equals(uri.getScheme())) {
+                sharedUri = uri;
+            } else if (uri.getPath() != null) {
+                sharedUri = RNSharePathUtil.compatUriFromFile(reactContext, new File(uri.getPath()));
             }
-            return RNSharePathUtil.compatUriFromFile(reactContext, new File(uri.getPath()));
         }
-
-        return null;
+        return sharedUri;
     }
 }

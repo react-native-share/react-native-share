@@ -1,6 +1,7 @@
 package cl.json.social;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -15,90 +16,147 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 
-/**
- * Receiver to record the chosen component when sharing an Intent.
- */
+import java.util.UUID;
+
+/** Owns one share request, its chooser receiver, and its promise. */
 public class TargetChosenReceiver extends BroadcastReceiver {
     private static final String EXTRA_RECEIVER_TOKEN = "receiver_token";
     private static final Object LOCK = new Object();
+    private static TargetChosenReceiver activeRequest;
+    private static int nextRequestCode = 16845;
 
-    private static String sTargetChosenReceiveAction;
-    private static TargetChosenReceiver sLastRegisteredReceiver;
+    private final ReactContext reactContext;
+    private final Context applicationContext;
+    private final int requestCode;
+    private final String token = UUID.randomUUID().toString();
+    private Promise callback;
+    private PendingIntent pendingIntent;
+    private boolean registered;
 
-    private static Promise callback;
+    private TargetChosenReceiver(Promise callback, ReactContext context, int requestCode) {
+        this.callback = callback;
+        this.reactContext = context;
+        this.applicationContext = context.getApplicationContext();
+        this.requestCode = requestCode;
+    }
 
     public static boolean isSupported() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1;
     }
 
-    public static void registerCallbacks(Promise promise) {
-        callback = promise;
+    public static TargetChosenReceiver registerCallbacks(Promise promise, ReactContext context) {
+        synchronized (LOCK) {
+            if (activeRequest == null) {
+                activeRequest = new TargetChosenReceiver(promise, context, nextRequestCode);
+                nextRequestCode = nextRequestCode == 65535 ? 16845 : nextRequestCode + 1;
+                return activeRequest;
+            }
+        }
+        promise.reject("EINPROGRESS", "A share request is already in progress");
+        return null;
+    }
+
+    public static TargetChosenReceiver getCurrentRequest(ReactContext context) {
+        synchronized (LOCK) {
+            if (activeRequest == null || activeRequest.reactContext != context) {
+                throw new IllegalStateException("No active share request for this context");
+            }
+            return activeRequest;
+        }
+    }
+
+    public int getRequestCode() {
+        return requestCode;
+    }
+
+    public boolean isActive() {
+        synchronized (LOCK) {
+            return callback != null;
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-    public static IntentSender getSharingSenderIntent(ReactContext reactContext) {
+    public IntentSender getSharingSenderIntent() {
         synchronized (LOCK) {
-            if (sTargetChosenReceiveAction == null) {
-                sTargetChosenReceiveAction = reactContext.getPackageName() + "/" + TargetChosenReceiver.class.getName() + "_ACTION";
-            }
-            Context context = reactContext.getApplicationContext();
-            if (sLastRegisteredReceiver != null) {
-                context.unregisterReceiver(sLastRegisteredReceiver);
-            }
-            sLastRegisteredReceiver = new TargetChosenReceiver();
-            if (Build.VERSION.SDK_INT >= 34 && context.getApplicationInfo().targetSdkVersion >= 34) {
-                context.registerReceiver(sLastRegisteredReceiver, new IntentFilter(sTargetChosenReceiveAction), Context.RECEIVER_EXPORTED);
+            if (callback == null) throw new IllegalStateException("Share request has already completed");
+            if (pendingIntent != null) return pendingIntent.getIntentSender();
+            String action = reactContext.getPackageName() + "/" + TargetChosenReceiver.class.getName() + "_ACTION";
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                applicationContext.registerReceiver(this, new IntentFilter(action), Context.RECEIVER_NOT_EXPORTED);
             } else {
-                context.registerReceiver(sLastRegisteredReceiver, new IntentFilter(sTargetChosenReceiveAction));
+                applicationContext.registerReceiver(this, new IntentFilter(action));
             }
+            registered = true;
+            // A package-scoped broadcast reaches this dynamically registered receiver.
+            // It must be mutable so the chooser can fill in EXTRA_CHOSEN_COMPONENT.
+            Intent intent = new Intent(action).setPackage(reactContext.getPackageName());
+            intent.putExtra(EXTRA_RECEIVER_TOKEN, token);
+            int flags = PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) flags |= PendingIntent.FLAG_MUTABLE;
+            pendingIntent = PendingIntent.getBroadcast(reactContext, requestCode, intent, flags);
+            return pendingIntent.getIntentSender();
         }
-
-        Intent intent = new Intent(sTargetChosenReceiveAction);
-        intent.setPackage(reactContext.getPackageName());
-        intent.setClass(reactContext.getApplicationContext(), TargetChosenReceiver.class);
-        intent.putExtra(EXTRA_RECEIVER_TOKEN, sLastRegisteredReceiver.hashCode());
-        final PendingIntent callback = PendingIntent.getBroadcast(reactContext, 0, intent,
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ?
-                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE :
-                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
-
-        return callback.getIntentSender();
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         synchronized (LOCK) {
-            if (sLastRegisteredReceiver != this) return;
-            context.getApplicationContext().unregisterReceiver(sLastRegisteredReceiver);
-            sLastRegisteredReceiver = null;
+            if (activeRequest != this || !token.equals(intent.getStringExtra(EXTRA_RECEIVER_TOKEN))) return;
         }
-        if (!intent.hasExtra(EXTRA_RECEIVER_TOKEN) || intent.getIntExtra(EXTRA_RECEIVER_TOKEN, 0) != this.hashCode()) {
-            return;
-        }
-
         ComponentName target = intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT);
         WritableMap reply = Arguments.createMap();
         reply.putBoolean("success", true);
-        if (target != null) {
-            reply.putString("message", target.flattenToString());
-            
-        } else {
-            reply.putString("message", "OK");
-        }
+        reply.putString("message", target == null ? "OK" : target.flattenToString());
         callbackResolve(reply);
     }
 
-    // public static void sendCallback(boolean isSuccess, Object reply) {
-    public static void callbackResolve(Object reply) {
-        if (callback != null) {
-            callback.resolve(reply);
+    public static void onActivityResult(ReactContext context, int requestCode, int resultCode) {
+        TargetChosenReceiver request;
+        synchronized (LOCK) {
+            request = activeRequest;
+            if (request == null || request.reactContext != context || request.requestCode != requestCode) return;
         }
-        callback = null;
+        if (resultCode == Activity.RESULT_CANCELED || resultCode == Activity.RESULT_OK) {
+            WritableMap reply = Arguments.createMap();
+            reply.putBoolean("success", resultCode == Activity.RESULT_OK);
+            reply.putString("message", resultCode == Activity.RESULT_OK ? "OK" : "CANCELED");
+            request.callbackResolve(reply);
+        }
     }
-    public static void callbackReject(String err) {
-        if (callback != null) {
-            callback.reject(err);
+
+    public static void invalidate(ReactContext context) {
+        TargetChosenReceiver request;
+        synchronized (LOCK) {
+            request = activeRequest;
+            if (request == null || request.reactContext != context) return;
         }
-        callback = null;
+        request.callbackReject("Share module was invalidated");
+    }
+
+    private Promise takeCallback() {
+        synchronized (LOCK) {
+            Promise promise = callback;
+            callback = null;
+            if (activeRequest == this) activeRequest = null;
+            if (registered) {
+                registered = false;
+                applicationContext.unregisterReceiver(this);
+            }
+            if (pendingIntent != null) {
+                pendingIntent.cancel();
+                pendingIntent = null;
+            }
+            return promise;
+        }
+    }
+
+    public void callbackResolve(Object reply) {
+        Promise promise = takeCallback();
+        if (promise != null) promise.resolve(reply);
+    }
+
+    public void callbackReject(String error) {
+        Promise promise = takeCallback();
+        if (promise != null) promise.reject(error);
     }
 }

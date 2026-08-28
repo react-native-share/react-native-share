@@ -20,6 +20,12 @@ public class RNShare extends ReactContextBaseJavaModule {
     }
 
     @Override
+    public void invalidate() {
+        delegate.invalidate();
+        super.invalidate();
+    }
+
+    @Override
     public String getName() {
         return RNShareImpl.NAME;
     }
