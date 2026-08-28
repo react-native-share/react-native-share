@@ -2,7 +2,6 @@ import React from 'react';
 import classnames from 'classnames';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
-import Head from '@docusaurus/Head';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
@@ -33,7 +32,7 @@ function Feature({ imageUrl, title, description }) {
     <div className={classnames('col col--4', styles.feature)}>
       {imgUrl && (
         <div className="text--center">
-          <img className={styles.featureImage} src={imgUrl} alt={title} />
+          <img className={styles.featureImage} src={imgUrl} alt="" width="200" height="200" />
         </div>
       )}
       <h3>{title}</h3>
@@ -47,12 +46,6 @@ function Home() {
   const { siteConfig = {} } = context;
   return (
     <>
-      <Head>
-        <meta property="og:description" content="react-native-share" />
-        <meta charSet="utf-8" />
-        <title>react-native-share</title>
-        <link rel="canonical" href="https://react-native-community.github.io/react-native-share/" />
-      </Head>
       <Layout title={`Docs of ${siteConfig.projectName} 📤`} description={siteConfig.tagline}>
         <header className={classnames('hero hero--primary', styles.heroBanner)}>
           <div className="container">

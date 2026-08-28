@@ -65,7 +65,7 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Cache Gradle
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
@@ -115,7 +115,7 @@ jobs:
           working-directory: ./example/ios
 
       - name: Cache CocoaPods
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ./example/ios/Pods
           key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
@@ -131,13 +131,10 @@ jobs:
       - name: Select Xcode version
         run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
 
-      - name: Install Detox CLI
-        run: npm install -g detox-cli
-
       - name: Build iOS
         working-directory: ./example/ios
         run: |
-          xcodebuild -workspace Example.xcworkspace \
+          xcodebuild -workspace example.xcworkspace \
             -scheme example \
             -configuration Debug \
             -sdk iphonesimulator \
