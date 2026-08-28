@@ -32,6 +32,20 @@
     return mimeType.length == 0 ? @"text/plain" : mimeType;
 }
 
++(NSString*)getMimeTypeFromExtension:(NSString*)extension {
+    if (extension.length == 0) return nil;
+#if __has_include(<UniformTypeIdentifiers/UniformTypeIdentifiers.h>)
+    if (@available(iOS 14.0, macCatalyst 14.0, macOS 11.0, *)) {
+        return [UTType typeWithFilenameExtension:extension].preferredMIMEType;
+    }
+#endif
+    CFStringRef identifier = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)extension, NULL);
+    if (identifier == NULL) return nil;
+    NSString *mimeType = CFBridgingRelease(UTTypeCopyPreferredTagWithClass(identifier, kUTTagClassMIMEType));
+    CFRelease(identifier);
+    return mimeType;
+}
+
 +(NSString*)getExtensionFromBase64:(NSString*)base64String {
     NSString *mimeType = [self getMimeTypeFromBase64:base64String];
     if (!mimeType) return nil;
@@ -77,7 +91,10 @@
         fileName=@"file";
     }
 
-    NSString *pathComponent = [NSString stringWithFormat:@"%@.%@",fileName, mimeType];
+    NSString *safeName = fileName.length > 0 ? fileName : @"file";
+    NSString *pathComponent = safeName.pathExtension.length > 0
+        ? safeName
+        : [safeName stringByAppendingPathExtension:mimeType ?: @"bin"];
     return [self getPathFromFilename:pathComponent with:data];
 }
 
