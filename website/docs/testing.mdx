@@ -3,10 +3,21 @@ id: testing
 title: Testing
 ---
 
-To mock when using Jest, add the bellow code on your `__mock__` directory:
+To mock the default API in a Jest setup file:
 
 ```js
 jest.mock('react-native-share', () => ({
-  default: jest.fn(),
+  __esModule: true,
+  default: {
+    open: jest.fn().mockResolvedValue({ success: true, message: '' }),
+    shareSingle: jest.fn().mockResolvedValue({ success: true, message: '' }),
+    isPackageInstalled: jest.fn().mockResolvedValue({ isInstalled: false, message: 'Package is not Installed' }),
+    Social: { EMAIL: 'email', WHATSAPP: 'whatsapp', INSTAGRAM: 'instagram' },
+  },
 }));
 ```
+
+Include the social constants your component uses. Configure a mock rejection to
+exercise failures and a cancelled `open` response to exercise cancellation.
+If using a manual mock instead, export this object from
+`__mocks__/react-native-share.js` and call `jest.mock('react-native-share')`.

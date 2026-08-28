@@ -1,24 +1,18 @@
 module.exports = {
   title: 'React Native Share',
   tagline: 'Share simple data between applications',
-  url: 'https://react-native-community.github.io',
-  baseUrl: 'react-native-share',
-  favicon: 'img/community.png',
+  url: 'https://react-native-share.github.io',
+  baseUrl: '/react-native-share/',
+  favicon: 'img/react.svg',
   organizationName: 'react-native-share',
   projectName: 'react-native-share',
   trailingSlash: false,
-  scripts: [
-    'https://buttons.github.io/buttons.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js',
-    '/js/code-block-buttons.js',
-  ],
-  stylesheets: ['/css/code-block-buttons.css'],
   themeConfig: {
     navbar: {
       title: 'React Native Share',
       logo: {
-        alt: 'react-native-community logo',
-        src: 'img/community.png',
+        alt: 'React Native Share',
+        src: 'img/react.svg',
       },
       items: [
         {
@@ -34,7 +28,7 @@ module.exports = {
           position: 'left',
         },
         {
-          href: 'https://github.com/react-native-community/react-native-share',
+          href: 'https://github.com/react-native-share/react-native-share',
           label: 'GitHub',
           position: 'right',
         },
@@ -55,7 +49,7 @@ module.exports = {
               to: 'docs/share-open/',
             },
             {
-              label: 'Share.single',
+              label: 'Share.shareSingle',
               to: 'docs/share-single/',
             },
             {
@@ -85,7 +79,7 @@ module.exports = {
             },
             {
               label: 'Issues',
-              href: 'https://github.com/react-native-community/react-native-share/issues',
+              href: 'https://github.com/react-native-share/react-native-share/issues',
             },
             {
               label: 'Twitter',
@@ -104,9 +98,8 @@ module.exports = {
         docs: {
           // It is recommended to set document id as docs home page (`docs/` path).
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
           editUrl:
-            'https://github.com/react-native-community/react-native-share/edit/master/website/',
+            'https://github.com/react-native-share/react-native-share/edit/main/website/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -115,4 +108,3 @@ module.exports = {
     ],
   ],
 };
-

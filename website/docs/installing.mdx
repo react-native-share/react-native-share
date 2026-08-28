@@ -23,13 +23,13 @@ Configure you `app.config.ts` or `app.json` to use the permissions needed by the
           "fb",
           "instagram",
           "twitter",
-          "tiktoksharesdk",
+          "tiktoksharesdk"
         ],
         "android": [
           "com.facebook.katana",
           "com.instagram.android",
           "com.twitter.android",
-          "com.zhiliaoapp.musically",
+          "com.zhiliaoapp.musically"
         ]
       }
     ]
@@ -88,14 +88,11 @@ Also, to use this library on iOS you will need:
 
 After that, you will see that the library is now available at your `node_modules`.
 
-**Note:** If your application requires the ability to share `base64` files on Android, you need to add
-
-```xml
-<!-- required for react-native-share base64 sharing -->
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-```
-
-to your application's `AndroidManifest.xml` file as per the example project.
+**Note:** Base64 attachments are prepared in app-specific cache storage. Android 4.4
+(API 19) and later do not require storage permissions for these directories; do not
+request `WRITE_EXTERNAL_STORAGE` just to share base64 data. Reading a source file
+outside your app's storage may still require access granted by its provider.
+See [app-specific storage](https://developer.android.com/training/data-storage/app-specific).
 
 
 ### Adding Queries for Android (Necessary for SDK >= 30)
@@ -178,13 +175,11 @@ If you want to share Whatsapp, Mailto or some applications on iOS, you should wr
 
 ### Windows Install
 
-[Read it! :D](https://github.com/ReactWindows/react-native)
-
-1. `yarn add react-native-share`
-2. In Visual Studio add the `RNShare.sln` in `node_modules/react-native-share/windows/RNShare.sln` folder to their solution, reference from their app.
-2. Open up your `MainPage.cs` app
-  - Add `using Cl.Json.RNShare;` to the usings at the top of the file
-  - Add `new RNSharePackage()` to the `List<IReactPackage>` returned by the `Packages` method
+The included Windows implementation uses a legacy callback-based native `open`
+method, while the current JavaScript API expects a promise. Windows compatibility
+needs validation before use; the former C# `RNSharePackage` instructions do not
+match the included C++/WinRT package provider. Android and iOS installation steps
+above do not establish Windows support.
 
 ### Adding your implementation of FileProvider
 
