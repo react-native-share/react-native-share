@@ -6,9 +6,8 @@
  * @flow
  */
 
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
-  Alert,
   Button,
   Platform,
   TextInput,
@@ -29,6 +28,32 @@ const App = () => {
   const [packageSearch, setPackageSearch] = useState<string>('');
   const [recipient, setRecipient] = useState<string>('');
   const [result, setResult] = useState<string>('');
+  const [busy, setBusy] = useState(false);
+  const mounted = useRef(true);
+  const running = useRef(false);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+
+  async function runAction(operation) {
+    if (!mounted.current || running.current) return;
+    running.current = true;
+    setBusy(true);
+    setResult('Working…');
+    try {
+      const response = await operation();
+      if (mounted.current) setResult(JSON.stringify(response, null, 2));
+    } catch (error) {
+      if (mounted.current) setResult('error: '.concat(getErrorString(error)));
+    } finally {
+      running.current = false;
+      if (mounted.current) setBusy(false);
+    }
+  }
 
   /**
    * You can use the method isPackageInstalled to find if a package is installed.
@@ -36,12 +61,12 @@ const App = () => {
    * Only works on Android.
    */
   const checkIfPackageIsInstalled = async () => {
-    const {isInstalled} = await Share.isPackageInstalled(packageSearch);
-
-    Alert.alert(
-      `Package: ${packageSearch}`,
-      `${isInstalled ? 'Installed' : 'Not Installed'}`,
-    );
+    await runAction(async () => {
+      const packageName = packageSearch.trim();
+      if (!packageName) throw new Error('Enter a package name');
+      const {isInstalled} = await Share.isPackageInstalled(packageName);
+      return {packageName, isInstalled};
+    });
   };
 
   function getErrorString(error, defaultValue) {
@@ -66,14 +91,7 @@ const App = () => {
       url: 'https://google.com',
     };
 
-    try {
-      const ShareResponse = await Share.open(shareOptions);
-      console.log('Result =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.open(shareOptions));
   };
 
   /**
@@ -85,22 +103,15 @@ const App = () => {
       url,
       activityItemSources: [
         {
-          placeholderItem: { type: 'url', content: url },
-          item: { default: { type: 'url', content: url } },
-          linkMetadata: { title: 'A Custom Share Title' }
-        }
+          placeholderItem: {type: 'url', content: url},
+          item: {default: {type: 'url', content: url}},
+          linkMetadata: {title: 'A Custom Share Title'},
+        },
       ],
-      failOnCancel: false
+      failOnCancel: false,
     };
 
-    try {
-      const ShareResponse = await Share.open(shareOptions);
-      console.log('Result =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.open(shareOptions));
   };
 
   /**
@@ -116,14 +127,7 @@ const App = () => {
 
     // If you want, you can use a try catch, to parse
     // the share response. If the user cancels, etc.
-    try {
-      const ShareResponse = await Share.open(shareOptions);
-      console.log('Result =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.open(shareOptions));
   };
 
   /**
@@ -139,14 +143,7 @@ const App = () => {
       urls: [images.image1, images.image2],
     };
 
-    try {
-      const ShareResponse = await Share.open(shareOptions);
-      console.log('Result =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.open(shareOptions));
   };
 
   const shareEmailImages = async () => {
@@ -158,14 +155,7 @@ const App = () => {
       urls: [images.image1, images.image2],
     };
 
-    try {
-      const ShareResponse = await Share.shareSingle(shareOptions);
-      console.log('Response =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.shareSingle(shareOptions));
   };
 
   /**
@@ -179,14 +169,7 @@ const App = () => {
       failOnCancel: false,
     };
 
-    try {
-      const ShareResponse = await Share.open(shareOptions);
-      console.log('Result =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.open(shareOptions));
   };
 
   /**
@@ -203,14 +186,7 @@ const App = () => {
 
     // If you want, you can use a try catch, to parse
     // the share response. If the user cancels, etc.
-    try {
-      const ShareResponse = await Share.open(shareOptions);
-      console.log('Result =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.open(shareOptions));
   };
 
   const shareVideoToInstagram = async () => {
@@ -221,13 +197,7 @@ const App = () => {
       social: Share.Social.INSTAGRAM,
     };
 
-    try {
-      const ShareResponse = await Share.shareSingle(shareOptions);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.shareSingle(shareOptions));
   };
 
   const shareImageToInstagram = async () => {
@@ -238,31 +208,17 @@ const App = () => {
       social: Share.Social.INSTAGRAM,
     };
 
-    try {
-      const ShareResponse = await Share.shareSingle(shareOptions);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.shareSingle(shareOptions));
   };
 
   const shareToInstagramDirect = async () => {
     const shareOptions = {
-      message: encodeURI(
-        'Checkout the great search engine: https://google.com',
-      ),
+      message: 'Checkout the great search engine: https://google.com',
       social: Share.Social.INSTAGRAM,
       type: 'text/plain',
     };
 
-    try {
-      const ShareResponse = await Share.shareSingle(shareOptions);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.shareSingle(shareOptions));
   };
 
   const shareToInstagramStory = async () => {
@@ -273,14 +229,7 @@ const App = () => {
       appId: '219376304', //instagram appId
     };
 
-    try {
-      const ShareResponse = await Share.shareSingle(shareOptions);
-      console.log('Response =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.shareSingle(shareOptions));
   };
 
   const shareToFacebookStory = async () => {
@@ -291,14 +240,7 @@ const App = () => {
       appId: '219376304', //facebook appId
     };
 
-    try {
-      const ShareResponse = await Share.shareSingle(shareOptions);
-      console.log('Response =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.shareSingle(shareOptions));
   };
 
   const shareSms = async () => {
@@ -309,14 +251,7 @@ const App = () => {
       message: 'Example SMS',
     };
 
-    try {
-      const ShareResponse = await Share.shareSingle(shareOptions);
-      console.log('Response =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.shareSingle(shareOptions));
   };
 
   const shareToTelegram = async () => {
@@ -326,14 +261,7 @@ const App = () => {
       social: Share.Social.TELEGRAM,
     };
 
-    try {
-      const ShareResponse = await Share.shareSingle(shareOptions);
-      console.log('Response =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.shareSingle(shareOptions));
   };
 
   const shareToTwitter = async () => {
@@ -343,14 +271,7 @@ const App = () => {
       social: Share.Social.TWITTER,
     };
 
-    try {
-      const ShareResponse = await Share.shareSingle(shareOptions);
-      console.log('Response =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.shareSingle(shareOptions));
   };
 
   const shareToGooglePlus = async () => {
@@ -360,14 +281,7 @@ const App = () => {
       social: Share.Social.GOOGLEPLUS,
     };
 
-    try {
-      const ShareResponse = await Share.shareSingle(shareOptions);
-      console.log('Response =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.shareSingle(shareOptions));
   };
 
   const shareToWhatsApp = async () => {
@@ -377,14 +291,7 @@ const App = () => {
       social: Share.Social.WHATSAPP,
     };
 
-    try {
-      const ShareResponse = await Share.shareSingle(shareOptions);
-      console.log('Response =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.shareSingle(shareOptions));
   };
 
   const shareToDiscord = async () => {
@@ -394,14 +301,7 @@ const App = () => {
       social: Share.Social.DISCORD,
     };
 
-    try {
-      const ShareResponse = await Share.shareSingle(shareOptions);
-      console.log('Response =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.shareSingle(shareOptions));
   };
 
   const sharePdfBase64 = async () => {
@@ -410,14 +310,7 @@ const App = () => {
       url: pdfBase64,
     };
 
-    try {
-      const ShareResponse = await Share.open(shareOptions);
-      console.log('Result =>', ShareResponse);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('sharePdfBase64 Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
+    await runAction(() => Share.open(shareOptions));
   };
 
   return (
@@ -427,84 +320,163 @@ const App = () => {
           Welcome to React Native Share Example!
         </Text>
         <View style={styles.button}>
-          <Button onPress={shareUrlWithMessage} title="Share Simple Url" />
+          <Button
+            disabled={busy}
+            onPress={shareUrlWithMessage}
+            title="Share Simple Url"
+          />
         </View>
         <View style={styles.button}>
-          <Button onPress={shareUrlWithMetadata} title="Share Url with Metadata" />
+          <Button
+            disabled={busy}
+            onPress={shareUrlWithMetadata}
+            title="Share Url with Metadata"
+          />
         </View>
         <View style={styles.button}>
-          <Button onPress={shareMultipleImages} title="Share Multiple Images" />
+          <Button
+            disabled={busy}
+            onPress={shareMultipleImages}
+            title="Share Multiple Images"
+          />
         </View>
         <View style={styles.button}>
-          <Button onPress={shareSingleImage} title="Share Single Image" />
+          <Button
+            disabled={busy}
+            onPress={shareSingleImage}
+            title="Share Single Image"
+          />
         </View>
         <View style={styles.withInputContainer}>
           <TextInput
+            editable={!busy}
             placeholder="Recipient"
+            accessibilityLabel="SMS recipient"
             onChangeText={setRecipient}
             value={recipient}
             style={styles.textInput}
-            keyboardType="number-pad"
+            keyboardType="phone-pad"
           />
           <View>
-            <Button onPress={shareSms} title="Share via SMS" />
+            <Button disabled={busy} onPress={shareSms} title="Share via SMS" />
           </View>
         </View>
         <View style={styles.button}>
-          <Button onPress={shareEmailImage} title="Share Social: Email" />
+          <Button
+            disabled={busy}
+            onPress={shareEmailImage}
+            title="Share Social: Email"
+          />
         </View>
         <View style={styles.button}>
-          <Button onPress={shareVideoToInstagram} title="Share Video to IG" />
+          <Button
+            disabled={busy}
+            onPress={shareVideoToInstagram}
+            title="Share Video to IG"
+          />
         </View>
         <View style={styles.button}>
-          <Button onPress={shareImageToInstagram} title="Share Image to IG" />
+          <Button
+            disabled={busy}
+            onPress={shareImageToInstagram}
+            title="Share Image to IG"
+          />
         </View>
         <View style={styles.button}>
-          <Button onPress={shareToInstagramStory} title="Share to IG Story" />
+          <Button
+            disabled={busy}
+            onPress={shareToInstagramStory}
+            title="Share to IG Story"
+          />
         </View>
         <View style={styles.button}>
-          <Button onPress={shareToInstagramDirect} title="Share to IG Direct" />
+          <Button
+            disabled={busy}
+            onPress={shareToInstagramDirect}
+            title="Share to IG Direct"
+          />
         </View>
         <View style={styles.button}>
-          <Button onPress={shareToFacebookStory} title="Share to FB Story" />
+          <Button
+            disabled={busy}
+            onPress={shareToFacebookStory}
+            title="Share to FB Story"
+          />
         </View>
         <View style={styles.button}>
-          <Button onPress={shareToTelegram} title="Share to Telegram" />
+          <Button
+            disabled={busy}
+            onPress={shareToTelegram}
+            title="Share to Telegram"
+          />
         </View>
         <View style={styles.button}>
-          <Button onPress={shareToTwitter} title="Share to Twitter" />
+          <Button
+            disabled={busy}
+            onPress={shareToTwitter}
+            title="Share to Twitter"
+          />
         </View>
         <View style={styles.button}>
-          <Button onPress={shareToGooglePlus} title="Share to Google Plus" />
+          <Button
+            disabled={busy}
+            onPress={shareToGooglePlus}
+            title="Share to Google Plus"
+          />
         </View>
         <View style={styles.button}>
-          <Button onPress={shareToWhatsApp} title="Share to WhatsApp" />
+          <Button
+            disabled={busy}
+            onPress={shareToWhatsApp}
+            title="Share to WhatsApp"
+          />
         </View>
         <View style={styles.button}>
-          <Button onPress={shareToDiscord} title="Share to Discord" />
+          <Button
+            disabled={busy}
+            onPress={shareToDiscord}
+            title="Share to Discord"
+          />
         </View>
         <View style={styles.button}>
-          <Button onPress={shareEmailImages} title="Share to Email" />
+          <Button
+            disabled={busy}
+            onPress={shareEmailImages}
+            title="Share to Email"
+          />
         </View>
         {Platform.OS === 'ios' && (
           <View style={styles.button}>
-            <Button onPress={shareToFiles} title="Share To Files" />
+            <Button
+              disabled={busy}
+              onPress={shareToFiles}
+              title="Share To Files"
+            />
           </View>
         )}
         {Platform.OS === 'android' && (
           <>
             <View style={styles.button}>
-              <Button onPress={sharePdfBase64} title="Share Base64'd PDF url" />
+              <Button
+                disabled={busy}
+                onPress={sharePdfBase64}
+                title="Share Base64'd PDF url"
+              />
             </View>
             <View style={styles.withInputContainer}>
               <TextInput
+                editable={!busy}
                 placeholder="Search for a Package"
+                accessibilityLabel="Android package name"
+                autoCapitalize="none"
+                autoCorrect={false}
                 onChangeText={setPackageSearch}
                 value={packageSearch}
                 style={styles.textInput}
               />
               <View>
                 <Button
+                  disabled={busy}
                   onPress={checkIfPackageIsInstalled}
                   title="Check Package"
                 />
@@ -513,7 +485,9 @@ const App = () => {
           </>
         )}
         <Text style={styles.resultTitle}>Result</Text>
-        <Text style={styles.result}>{result}</Text>
+        <Text style={styles.result} accessibilityLiveRegion="polite">
+          {result}
+        </Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -546,10 +520,6 @@ const styles = StyleSheet.create({
   result: {
     fontSize: 14,
     margin: 10,
-  },
-  optionsRow: {
-    justifyContent: 'space-between',
-    width: '80%',
   },
   withInputContainer: {
     alignItems: 'center',
