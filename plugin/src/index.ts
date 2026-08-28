@@ -1,29 +1,4 @@
-import * as fs from 'fs';
-
-import { ExportedConfig } from '@expo/config-plugins';
-import { withBuildProperties } from 'expo-build-properties';
-
-/**
- * Handles for edge case when LSApplicationQueriesSchemes is an object or undefined.
- */
-const getIOSQuerySchemes = (config: ExportedConfig): string[] => {
-  return Array.isArray(config.ios?.infoPlist?.LSApplicationQueriesSchemes)
-    ? config.ios?.infoPlist?.LSApplicationQueriesSchemes ?? []
-    : [];
-};
-
-/**
- * Currently there are noway to get manifest queries config directly
- * So we parse AndroidManifest.xml to get the queries packages.
- */
-export function getManifestQueriesPackagesSync(manifestPath: string): string[] {
-  if (!fs.existsSync(manifestPath)) return [];
-  const xml = fs.readFileSync(manifestPath, 'utf8');
-  const queriesSection = xml.match(/<queries>[\s\S]*?<\/queries>/);
-  if (!queriesSection) return [];
-  const matches = [...queriesSection[0].matchAll(/<package[^>]*android:name="([^"]+)"[^>]*\/>/g)];
-  return matches.map((m) => m[1]);
-}
+import { ExportedConfig, withAndroidManifest } from '@expo/config-plugins';
 
 export default (
   config: ExportedConfig,
@@ -31,33 +6,11 @@ export default (
     enableBase64ShareAndroid?: boolean;
     android?: string[];
     ios?: string[];
-  },
-) => {
-  let manifestPath = './android/app/src/main/AndroidManifest.xml';
-  if (config.android?.publishManifestPath) {
-    manifestPath = config.android.publishManifestPath;
-  }
-  const currentManifestQueries = getManifestQueriesPackagesSync(manifestPath);
-  const updatedManifestQueries = (props.android ?? []).filter(
-    (p) => !currentManifestQueries.includes(p),
-  );
+  } = {},
+): ExportedConfig => {
+  const currentSchemes = config.ios?.infoPlist?.LSApplicationQueriesSchemes;
 
-  const propConfig = {
-    android: {},
-  };
-
-  /**
-   * manifestQueries.package = [] would crashes the prebuild
-   */
-  if (updatedManifestQueries.length > 0) {
-    propConfig.android = {
-      manifestQueries: {
-        package: updatedManifestQueries,
-      },
-    };
-  }
-
-  return withBuildProperties(
+  return withAndroidManifest(
     {
       ...config,
       android: {
@@ -77,10 +30,33 @@ export default (
         ...config.ios,
         infoPlist: {
           ...config.ios?.infoPlist,
-          LSApplicationQueriesSchemes: [...getIOSQuerySchemes(config), ...(props?.ios ?? [])],
+          LSApplicationQueriesSchemes: [
+            ...new Set([
+              ...(Array.isArray(currentSchemes) ? currentSchemes : []),
+              ...(props.ios ?? []),
+            ]),
+          ],
         },
       },
     },
-    propConfig,
+    (modConfig) => {
+      if (!props.android?.length) return modConfig;
+
+      const queries = (modConfig.modResults.manifest.queries ??= []);
+      const packages = new Set(
+        queries.flatMap((query) => (query.package ?? []).map((item) => item.$['android:name'])),
+      );
+      if (!queries.length) queries.push({});
+
+      for (const packageName of props.android) {
+        if (!packages.has(packageName)) {
+          (queries[0].package ??= []).push({
+            $: { 'android:name': packageName },
+          });
+          packages.add(packageName);
+        }
+      }
+      return modConfig;
+    },
   );
 };
