@@ -64,19 +64,21 @@ RCT_EXPORT_MODULE();
         NSURL *URL = [url hasPrefix:@"/"] ? [NSURL fileURLWithPath:url] : [RCTConvert NSURL:url];
         BOOL isData = [URL.scheme.lowercaseString isEqualToString:@"data"];
         NSURL *preparedURL = nil;
-        if (type == MessageTypeImage) {
-            NSData *data = URL ? [NSData dataWithContentsOfURL:URL] : nil;
-            UIImage *image = data ? [UIImage imageWithData:data] : nil;
-            NSData *jpeg = image ? UIImageJPEGRepresentation(image, 1.0) : nil;
-            if (jpeg) preparedURL = [RNShareUtils getPathFromFilename:@"image.jpg" with:jpeg];
-        } else if (isData) {
+        if (isData) {
             NSData *data = [NSData dataWithContentsOfURL:URL];
-            NSString *extension = [RNShareUtils getExtensionFromBase64:url] ?: (type == MessageTypeVideo ? @"mp4" : @"mp3");
-            if (data) preparedURL = [RNShareUtils getPathFromFilename:[@"file" stringByAppendingPathExtension:extension] with:data];
+            BOOL validImage = type != MessageTypeImage || [UIImage imageWithData:data] != nil;
+            NSString *fallbackExtension = type == MessageTypeImage ? @"jpg" : type == MessageTypeVideo ? @"mp4" : @"mp3";
+            NSString *extension = [RNShareUtils getExtensionFromBase64:url] ?: fallbackExtension;
+            if (data && validImage) {
+                preparedURL = [RNShareUtils getPathFromFilename:[@"file" stringByAppendingPathExtension:extension] with:data];
+            }
         } else if (URL.isFileURL) {
             BOOL directory = NO;
             NSFileManager *manager = NSFileManager.defaultManager;
-            if ([manager fileExistsAtPath:URL.path isDirectory:&directory] && !directory && [manager isReadableFileAtPath:URL.path]) {
+            BOOL readable = [manager fileExistsAtPath:URL.path isDirectory:&directory]
+                && !directory
+                && [manager isReadableFileAtPath:URL.path];
+            if (readable && (type != MessageTypeImage || [UIImage imageWithContentsOfFile:URL.path] != nil)) {
                 preparedURL = URL;
             }
         }
