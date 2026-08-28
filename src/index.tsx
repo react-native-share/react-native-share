@@ -18,6 +18,8 @@ import {
 import { isAndroid, isIOS } from './helpers/platform';
 import { normalizeShareOpenOptions, normalizeSingleShareOptions } from './helpers/options';
 
+const constants = NativeRNShare.getConstants();
+
 const RNShare = {
   Button,
   ShareSheet,
@@ -25,24 +27,24 @@ const RNShare = {
   Sheet,
 
   Social: {
-    FACEBOOK: NativeRNShare.getConstants().FACEBOOK || Social.Facebook,
-    FACEBOOK_STORIES: NativeRNShare.getConstants().FACEBOOKSTORIES || Social.FacebookStories,
-    PAGESMANAGER: NativeRNShare.getConstants().PAGESMANAGER || Social.Pagesmanager,
-    TWITTER: NativeRNShare.getConstants().TWITTER || Social.Twitter,
-    WHATSAPP: NativeRNShare.getConstants().WHATSAPP || Social.Whatsapp,
-    WHATSAPPBUSINESS: NativeRNShare.getConstants().WHATSAPPBUSINESS || Social.Whatsappbusiness,
-    INSTAGRAM: NativeRNShare.getConstants().INSTAGRAM || Social.Instagram,
-    INSTAGRAM_STORIES: NativeRNShare.getConstants().INSTAGRAMSTORIES || Social.InstagramStories,
-    GOOGLEPLUS: NativeRNShare.getConstants().GOOGLEPLUS || Social.Googleplus,
-    EMAIL: NativeRNShare.getConstants().EMAIL || Social.Email,
-    PINTEREST: NativeRNShare.getConstants().PINTEREST || Social.Pinterest,
-    LINKEDIN: NativeRNShare.getConstants().LINKEDIN || Social.Linkedin,
-    SMS: NativeRNShare.getConstants().SMS || Social.Sms,
-    TELEGRAM: NativeRNShare.getConstants().TELEGRAM || Social.Telegram,
-    MESSENGER: NativeRNShare.getConstants().MESSENGER || Social.Messenger,
-    SNAPCHAT: NativeRNShare.getConstants().SNAPCHAT || Social.Snapchat,
-    VIBER: NativeRNShare.getConstants().VIBER || Social.Viber,
-    DISCORD: NativeRNShare.getConstants().DISCORD || Social.Discord,
+    FACEBOOK: constants.FACEBOOK || Social.Facebook,
+    FACEBOOK_STORIES: constants.FACEBOOKSTORIES || Social.FacebookStories,
+    PAGESMANAGER: constants.PAGESMANAGER || Social.Pagesmanager,
+    TWITTER: constants.TWITTER || Social.Twitter,
+    WHATSAPP: constants.WHATSAPP || Social.Whatsapp,
+    WHATSAPPBUSINESS: constants.WHATSAPPBUSINESS || Social.Whatsappbusiness,
+    INSTAGRAM: constants.INSTAGRAM || Social.Instagram,
+    INSTAGRAM_STORIES: constants.INSTAGRAMSTORIES || Social.InstagramStories,
+    GOOGLEPLUS: constants.GOOGLEPLUS || Social.Googleplus,
+    EMAIL: constants.EMAIL || Social.Email,
+    PINTEREST: constants.PINTEREST || Social.Pinterest,
+    LINKEDIN: constants.LINKEDIN || Social.Linkedin,
+    SMS: constants.SMS || Social.Sms,
+    TELEGRAM: constants.TELEGRAM || Social.Telegram,
+    MESSENGER: constants.MESSENGER || Social.Messenger,
+    SNAPCHAT: constants.SNAPCHAT || Social.Snapchat,
+    VIBER: constants.VIBER || Social.Viber,
+    DISCORD: constants.DISCORD || Social.Discord,
   },
 
   async open(options: ShareOptions) {
