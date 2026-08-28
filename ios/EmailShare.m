@@ -46,8 +46,10 @@
                 reject(@"no data", @"no data", error);
                 return;
             }
-            NSString *mime = isDataScheme ? [RNShareUtils getMimeTypeFromBase64:URL.absoluteString] : nil;
             NSString *extension = isDataScheme ? [RNShareUtils getExtensionFromBase64:URL.absoluteString] : URL.pathExtension;
+            NSString *mime = isDataScheme
+                ? [RNShareUtils getMimeTypeFromBase64:URL.absoluteString]
+                : [RNShareUtils getMimeTypeFromExtension:extension];
             NSString *filename = URL.isFileURL ? URL.lastPathComponent : @"file";
             if (urls.count == 1) {
                 NSString *customType = [RCTConvert NSString:options[@"type"]];
