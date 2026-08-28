@@ -1,6 +1,5 @@
 #import "DiscordShare.h"
-#import <AVFoundation/AVFoundation.h>
-@import Photos;
+#import "RNShareUtils.h"
 
 @implementation DiscordShare
     RCT_EXPORT_MODULE();
@@ -8,21 +7,24 @@
     reject:(RCTPromiseRejectBlock)reject
     resolve:(RCTPromiseResolveBlock)resolve {
     
-    NSString *text = [RCTConvert NSString:options[@"message"]];
-    text = (NSString*)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef) text, NULL,CFSTR("!*'();:@&=+$,/?%#[]"),kCFStringEncodingUTF8));
-    
+    NSString *text = [RCTConvert NSString:options[@"message"]] ?: @"";
     NSString *url = [RCTConvert NSString:options[@"url"]];
-    
-    NSString *discordMsg = [NSString stringWithFormat:@"discord://message?text=%@", text];
-    NSString *discordMsgUrl = [NSString stringWithFormat:@"discord://message?text=%@&url%@", text, url];
+    if (text.length == 0 && url.length == 0) {
+        reject(@"EINVAL", @"A message or URL is required", nil);
+        return;
+    }
+    NSMutableArray *queryItems = [NSMutableArray arrayWithObject:[NSURLQueryItem queryItemWithName:@"text" value:text]];
+    if (url.length > 0) [queryItems addObject:[NSURLQueryItem queryItemWithName:@"url" value:url]];
+    NSURL *shareURL = [RNShareUtils URLWithString:@"discord://message" queryItems:queryItems];
 
-    NSString * urlDiscord = url ? discordMsgUrl : discordMsg;
-    NSURL * shareURL = [NSURL URLWithString:urlDiscord];
-    
-    
     if ([[UIApplication sharedApplication] canOpenURL: shareURL]) {
-        [[UIApplication sharedApplication] openURL: shareURL];
-        resolve(@[@true, @""]);
+        [[UIApplication sharedApplication] openURL:shareURL options:@{} completionHandler:^(BOOL success) {
+            if (success) {
+                resolve(@[@true, @""]);
+            } else {
+                reject(@"EUNAVAILABLE", @"Unable to open share target", nil);
+            }
+        }];
     } else {
         NSString *stringURL = @"https://apps.apple.com/us/app/discord-chat-talk-hangout/id985746746";
         NSURL *url = [NSURL URLWithString:stringURL];

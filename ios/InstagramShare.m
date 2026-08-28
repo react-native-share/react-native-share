@@ -6,156 +6,126 @@
 //
 
 #import "InstagramShare.h"
-#import <AVFoundation/AVFoundation.h>
-@import Photos;
+#import "RNShareUtils.h"
+#import <Photos/Photos.h>
 
 @implementation InstagramShare
-    RCT_EXPORT_MODULE();
+RCT_EXPORT_MODULE();
+
 - (void)shareSingle:(NSDictionary *)options
-    reject:(RCTPromiseRejectBlock)reject
-    resolve:(RCTPromiseResolveBlock)resolve {
-
-    NSLog(@"Try open view");
-
-    NSURL * shareURL;
-    float videoDurationSeconds = 0.0f;
-    NSString* url = options[@"url"];
-    if (url) {
-        NSURL * fileURL = [NSURL URLWithString: options[@"url"]];
-        AVURLAsset* videoAsset = [AVURLAsset URLAssetWithURL:fileURL options:nil];
-        CMTime videoDuration = videoAsset.duration;
-        float videoDurationSeconds = CMTimeGetSeconds(videoDuration);
-
-        NSLog(@"Video duration: %f seconds for file %@", videoDurationSeconds, videoAsset.URL.absoluteString);
+            reject:(RCTPromiseRejectBlock)reject
+           resolve:(RCTPromiseResolveBlock)resolve {
+    NSString *url = [RCTConvert NSString:options[@"url"]];
+    NSURL *shareURL;
+    if (url.length > 0) {
+        NSString *identifier = [url hasPrefix:@"ph://"] ? [url substringFromIndex:5] : url;
+        shareURL = [RNShareUtils URLWithString:@"instagram://library" queryItems:@[[NSURLQueryItem queryItemWithName:@"LocalIdentifier" value:identifier]]];
     } else {
-        //this will send message directly to instagram DM with plain text
-        shareURL = [NSURL URLWithString:[NSString stringWithFormat:@"instagram://sharesheet?text=%@", options[@"message"]]];
+        NSString *message = [RCTConvert NSString:options[@"message"]];
+        if (message.length == 0) {
+            reject(@"EINVAL", @"A message or URL is required", nil);
+            return;
+        }
+        shareURL = [RNShareUtils URLWithString:@"instagram://sharesheet" queryItems:@[[NSURLQueryItem queryItemWithName:@"text" value:message]]];
     }
-
-    if (shareURL) {
-        NSLog(@"url is already available, no need to do anything");
-    } else if (videoDurationSeconds <= 60.0f) {
-        // Instagram doesn't allow sharing videos longer than 60 seconds on iOS anymore. (next button is not responding, trim is unavailable)
-        NSString *phIdentifier= [options[@"url"] stringByReplacingOccurrencesOfString:@"ph://" withString:@""];
-        NSString * urlString = [NSString stringWithFormat:@"instagram://library?LocalIdentifier=%@", phIdentifier];
-        shareURL = [NSURL URLWithString:urlString];
-    } else {
-        shareURL = [NSURL URLWithString:@"instagram://camera"];
-    }
-
-    if ([[UIApplication sharedApplication] canOpenURL: shareURL]) {
-        [[UIApplication sharedApplication] openURL:shareURL options:@{} completionHandler:nil];
-        resolve(@[@true, @""]);
-    } else {
-        // Cannot open instagram
-        NSString *stringURL = @"https://itunes.apple.com/app/instagram/id389801252";
-        NSURL *url = [NSURL URLWithString:stringURL];
-
-        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {}];
-
-        NSString *errorMessage = @"Not installed";
-        NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
-        NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
-
-        NSLog(@"%@", errorMessage);
-        reject(@"com.rnshare",@"Not installed",error);
-    }
+    [self openInstagramURL:shareURL reject:reject resolve:resolve];
 }
 
-- (void)shareSingleImage:(NSDictionary *)options
-         reject:(RCTPromiseRejectBlock)reject
-         resolve:(RCTPromiseResolveBlock)resolve {
-
-    UIImage *image;
-    NSURL *imageURL = [RCTConvert NSURL:options[@"url"]];
-    if (imageURL) {
-        if (imageURL.fileURL || [imageURL.scheme.lowercaseString isEqualToString:@"data"]) {
-            NSError *error;
-            NSData *data = [NSData dataWithContentsOfURL:imageURL
-                                                 options:(NSDataReadingOptions)0
-                                                   error:&error];
-            if (!data) {
-                reject(@"com.rnshare",@"no data",error);
-                return;
-            }
-            image = [UIImage imageWithData: data];
-            [self savePictureAndOpenInstagram: image
-                              reject: reject
-                              resolve: resolve];
-        }
-    } else {
-        [[UIApplication sharedApplication] openURL: [NSURL URLWithString:@"instagram://camera"] options:@{} completionHandler:nil];
-        resolve(@[@true, @""]);
-    }
-}
-
--(void)savePictureAndOpenInstagram:(UIImage *)base64Image
-                   reject:(RCTPromiseRejectBlock)reject
-                   resolve:(RCTPromiseResolveBlock)resolve {
-
-    // Check for photo library permissions
-    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
-    if (status == PHAuthorizationStatusNotDetermined) {
-        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus newStatus) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (newStatus == PHAuthorizationStatusAuthorized) {
-                    [self savePictureAndOpenInstagram:base64Image reject:reject resolve:resolve];
-                } else {
-                    if (reject != NULL) {
-                        reject(@"com.rnshare", @"Photo library access denied by user", nil);
-                    }
-                }
-            });
-        }];
-        return;
-    } else if (status != PHAuthorizationStatusAuthorized) {
-
-        if (reject != NULL) {
-            reject(@"com.rnshare", @"Photo library access not authorized", nil);
-        }
+- (void)openInstagramURL:(NSURL *)URL
+                 reject:(RCTPromiseRejectBlock)reject
+                resolve:(RCTPromiseResolveBlock)resolve {
+    if (![[UIApplication sharedApplication] canOpenURL:URL]) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/app/instagram/id389801252"] options:@{} completionHandler:nil];
+        reject(@"com.rnshare", @"Not installed", nil);
         return;
     }
-
-    NSURL *URL = [self fileURLWithTemporaryImageData:UIImageJPEGRepresentation(base64Image, 0.9)];
-    __block PHAssetChangeRequest *_mChangeRequest = nil;
-    __block PHObjectPlaceholder *placeholder;
-
-    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-
-        NSData *pngData = [NSData dataWithContentsOfURL:URL];
-        UIImage *image = [UIImage imageWithData:pngData];
-        _mChangeRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
-        placeholder = _mChangeRequest.placeholderForCreatedAsset;
-    } completionHandler:^(BOOL success, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (success) {
-                NSURL *instagramURL = [NSURL URLWithString:[NSString stringWithFormat:@"instagram://library?LocalIdentifier=\%@", [placeholder localIdentifier]]];
-
-                if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
-                    if (@available(iOS 10.0, *)) {
-                        [[UIApplication sharedApplication] openURL:instagramURL options:@{} completionHandler:NULL];
-                    }
-                    if (resolve != NULL) {
-                        resolve(@[@true, @""]);
-                    }
-                }
-            }
-            else {
-                //Error while writing
-                if (reject != NULL) {
-                    reject(@"com.rnshare",@"error",error);
-                }
-            }
-        });
+    [[UIApplication sharedApplication] openURL:URL options:@{} completionHandler:^(BOOL success) {
+        if (success) {
+            resolve(@[@true, @""]);
+        } else {
+            reject(@"EUNAVAILABLE", @"Unable to open Instagram", nil);
+        }
     }];
 }
 
-- (NSURL *)fileURLWithTemporaryImageData:(NSData *)data {
-    NSString *writePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"instagram.ig"];
-    if (![data writeToFile:writePath atomically:YES]) {
-        return nil;
+- (void)shareSingleImage:(NSDictionary *)options
+                 reject:(RCTPromiseRejectBlock)reject
+                resolve:(RCTPromiseResolveBlock)resolve {
+    NSURL *imageURL = [RCTConvert NSURL:options[@"url"]];
+    if (!imageURL) {
+        [self openInstagramURL:[NSURL URLWithString:@"instagram://camera"] reject:reject resolve:resolve];
+        return;
     }
-    return [NSURL fileURLWithPath:writePath];
+    if (!imageURL.isFileURL && ![imageURL.scheme.lowercaseString isEqualToString:@"data"]) {
+        reject(@"EINVAL", @"Instagram images must use a file or data URL", nil);
+        return;
+    }
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        NSError *error;
+        NSData *data = [NSData dataWithContentsOfURL:imageURL options:0 error:&error];
+        UIImage *image = data ? [UIImage imageWithData:data] : nil;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (!image) {
+                reject(@"com.rnshare", @"Unable to decode image", error);
+                return;
+            }
+            [self savePictureAndOpenInstagram:image reject:reject resolve:resolve];
+        });
+    });
+}
+
+- (void)savePictureAndOpenInstagram:(UIImage *)image
+                            reject:(RCTPromiseRejectBlock)reject
+                           resolve:(RCTPromiseResolveBlock)resolve {
+    if (!image) {
+        reject(@"com.rnshare", @"Unable to decode image", nil);
+        return;
+    }
+    if (![[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"instagram://library"]]) {
+        reject(@"com.rnshare", @"Not installed", nil);
+        return;
+    }
+
+    PHAuthorizationStatus status;
+    if (@available(iOS 14.0, *)) {
+        status = [PHPhotoLibrary authorizationStatusForAccessLevel:PHAccessLevelReadWrite];
+    } else {
+        status = [PHPhotoLibrary authorizationStatus];
+    }
+    if (status == PHAuthorizationStatusNotDetermined) {
+        void (^completion)(PHAuthorizationStatus) = ^(__unused PHAuthorizationStatus newStatus) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self savePictureAndOpenInstagram:image reject:reject resolve:resolve];
+            });
+        };
+        if (@available(iOS 14.0, *)) {
+            [PHPhotoLibrary requestAuthorizationForAccessLevel:PHAccessLevelReadWrite handler:completion];
+        } else {
+            [PHPhotoLibrary requestAuthorization:completion];
+        }
+        return;
+    }
+    BOOL authorized = status == PHAuthorizationStatusAuthorized;
+    if (@available(iOS 14.0, *)) authorized = authorized || status == PHAuthorizationStatusLimited;
+    if (!authorized) {
+        reject(@"com.rnshare", @"Photo library access not authorized", nil);
+        return;
+    }
+
+    __block NSString *identifier;
+    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+        PHAssetChangeRequest *request = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
+        identifier = request.placeholderForCreatedAsset.localIdentifier;
+    } completionHandler:^(BOOL success, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (!success || identifier.length == 0) {
+                reject(@"com.rnshare", @"Unable to save image to Photos", error);
+                return;
+            }
+            NSURL *URL = [RNShareUtils URLWithString:@"instagram://library" queryItems:@[[NSURLQueryItem queryItemWithName:@"LocalIdentifier" value:identifier]]];
+            [self openInstagramURL:URL reject:reject resolve:resolve];
+        });
+    }];
 }
 
 @end

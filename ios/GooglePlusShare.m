@@ -7,6 +7,7 @@
 //
 
 #import "GooglePlusShare.h"
+#import "RNShareUtils.h"
 
 @implementation GooglePlusShare
     RCT_EXPORT_MODULE();
@@ -14,25 +15,30 @@
     reject:(RCTPromiseRejectBlock)reject
     resolve:(RCTPromiseResolveBlock)resolve {
 
-    NSLog(@"Try open view");
-
-    if ([options objectForKey:@"url"] && [options objectForKey:@"url"] != [NSNull null]) {
-        NSString *url = [NSString stringWithFormat:@"https://plus.google.com/share?url=%@", options[@"url"]];
-        NSURL *gplusURL = [NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        NSString *link = [RCTConvert NSString:options[@"url"]];
+        if (link.length == 0) {
+            reject(@"EINVAL", @"A URL is required", nil);
+            return;
+        }
+        NSURL *gplusURL = [RNShareUtils URLWithString:@"https://plus.google.com/share" queryItems:@[[NSURLQueryItem queryItemWithName:@"url" value:link]]];
 
         if ([[UIApplication sharedApplication] canOpenURL: gplusURL]) {
-            [[UIApplication sharedApplication] openURL:gplusURL options:@{} completionHandler:nil];
-            resolve(@[@true, @""]);
+            [[UIApplication sharedApplication] openURL:gplusURL options:@{} completionHandler:^(BOOL success) {
+                if (success) {
+                    resolve(@[@true, @""]);
+                } else {
+                    reject(@"EUNAVAILABLE", @"Unable to open share target", nil);
+                }
+            }];
         } else {
             // Cannot open gplus
             NSString *errorMessage = @"Not installed";
             NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
             NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
 
-            NSLog(errorMessage);
+            NSLog(@"%@", errorMessage);
             reject(@"com.rnshare",errorMessage,error);
         }
-    }
 }
 
 

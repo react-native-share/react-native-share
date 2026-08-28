@@ -20,5 +20,5 @@
 #import <React/RCTUtils.h>
 @interface FacebookStories : NSObject <RCTBridgeModule>
 
-- (void *) shareSingle:(NSDictionary *)options reject:(RCTPromiseRejectBlock)reject resolve:(RCTPromiseResolveBlock)resolve;
+- (void) shareSingle:(NSDictionary *)options reject:(RCTPromiseRejectBlock)reject resolve:(RCTPromiseResolveBlock)resolve;
 @end

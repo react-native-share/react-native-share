@@ -1,108 +1,88 @@
 #import "SmsShare.h"
 #import "RNShareUtils.h"
 
-
-@implementation SmsShare
-
+@implementation SmsShare {
+    MFMessageComposeViewController *activeController;
+}
 
 - (void)shareSingle:(NSDictionary *)options
-    reject:(RCTPromiseRejectBlock)reject
-    resolve:(RCTPromiseResolveBlock)resolve {
+            reject:(RCTPromiseRejectBlock)reject
+           resolve:(RCTPromiseResolveBlock)resolve {
+    if (activeController) {
+        reject(@"EINPROGRESS", @"An SMS composer is already open", nil);
+        return;
+    }
+    NSString *message = [RCTConvert NSString:options[@"message"]] ?: @"";
+    NSString *recipient = [RCTConvert NSString:options[@"recipient"]];
+    NSURL *URL = [RCTConvert NSURL:options[@"url"]];
+    if (message.length == 0 && !URL) {
+        reject(@"EINVAL", @"A message or URL is required", nil);
+        return;
+    }
+    if (![MFMessageComposeViewController canSendText]) {
+        reject(@"com.rnshare", @"SMS services are not available.", nil);
+        return;
+    }
 
-    if ([options objectForKey:@"message"] && [options objectForKey:@"message"] != [NSNull null]) {
+    MFMessageComposeViewController *mc = [[MFMessageComposeViewController alloc] init];
+    mc.messageComposeDelegate = self;
+    mc.recipients = recipient.length > 0 ? @[recipient] : @[];
 
-        NSString *message = [RCTConvert NSString:options[@"message"]];
-        NSString *recipient = [RCTConvert NSString:options[@"recipient"]];
+    if (URL) {
+        BOOL isDataScheme = [URL.scheme.lowercaseString isEqualToString:@"data"];
+        if (isDataScheme || URL.isFileURL) {
+            NSError *error;
+            NSData *data = [NSData dataWithContentsOfURL:URL options:0 error:&error];
+            if (!data) {
+                reject(@"com.rnshare", @"No data", error);
+                return;
+            }
+            NSString *extension = isDataScheme ? [RNShareUtils getExtensionFromBase64:URL.absoluteString] : URL.pathExtension;
+            NSString *filename = URL.isFileURL ? URL.lastPathComponent : (extension.length > 0 ? [@"file" stringByAppendingPathExtension:extension] : @"file");
+            NSString *identifier = [RNShareUtils getTypeIdentifierFromExtension:extension];
+            if (![mc addAttachmentData:data typeIdentifier:identifier filename:filename]) {
+                reject(@"com.rnshare", @"Unable to attach file to SMS", nil);
+                return;
+            }
+        } else {
+            NSString *url = [RCTConvert NSString:options[@"url"]];
+            message = message.length > 0 ? [NSString stringWithFormat:@"%@ %@", message, url] : url;
+        }
+    }
+    mc.body = message;
+    activeController = mc;
+    self.resolve = resolve;
+    self.reject = reject;
 
-        if (![MFMessageComposeViewController canSendText]) {
-            NSString *errorMessage = @"Sms services is not available.";
-            NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
-            NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
-            reject(@"com.rnshare", errorMessage, error);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *controller = RCTPresentedViewController();
+        if (!controller) {
+            self.resolve = nil;
+            self.reject = nil;
+            activeController = nil;
+            reject(@"EUNAVAILABLE", @"No view controller available to present SMS", nil);
             return;
         }
-
-        // Store callbacks for use in delegate
-        self.resolve = resolve;
-        self.reject = reject;
-
-        MFMessageComposeViewController *mc = [[MFMessageComposeViewController alloc] init];
-        mc.messageComposeDelegate = self;
-
-        NSMutableArray *recipients = [[NSMutableArray alloc] init];
-        if (recipient && ![recipient isEqual: @""]) {
-            [recipients addObject:recipient];
-        }
-        mc.recipients = recipients;
-        mc.body = message;
-
-        NSURL *URL = [RCTConvert NSURL:options[@"url"]];
-        if (URL) {
-            BOOL isDataScheme = [URL.scheme.lowercaseString isEqualToString:@"data"];
-
-            // Only handling data scheme urls here. To handle the case of URL.isFileURL
-            // one could add a case similar to the process in EmailShare.m
-            if (isDataScheme) {
-                NSError *error;
-                NSData *data = [NSData dataWithContentsOfURL:URL
-                                                     options:(NSDataReadingOptions)0
-                                                       error:&error];
-                if (!data) {
-                    self.resolve = nil;
-                    self.reject = nil;
-                    reject(@"com.rnshare", @"No data", error);
-                    return;
-                }
-
-                NSURL *filePath = [RNShareUtils getPathFromBase64:URL.absoluteString with:data fileName:@"file"];
-                if (filePath) {
-                    // public.image typeIdentifier works for both images and files
-                    [mc addAttachmentData:data typeIdentifier:@"public.image" filename:filePath.absoluteString];
-                }
-            } else if (URL.isFileURL) {
-                NSError *error;
-                NSData *data = [NSData dataWithContentsOfURL:URL
-                                                     options:(NSDataReadingOptions)0
-                                                       error:&error];
-                if (data) {
-                    NSString *filename = URL.lastPathComponent ?: @"file";
-                    [mc addAttachmentData:data typeIdentifier:@"public.image" filename:filename];
-                }
-            } else {
-                // if not a file, just append URL to message
-                NSString *urlString = [RCTConvert NSString:options[@"url"]];
-                message = [message stringByAppendingString: [@" " stringByAppendingString:  urlString]];
-                [mc setBody:message];
-            }
-        }
-
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIViewController *ctrl = RCTPresentedViewController();
-            [ctrl presentViewController:mc animated:YES completion:NULL];
-        });
-    }
+        [controller presentViewController:mc animated:YES completion:nil];
+    });
 }
 
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller
-                 didFinishWithResult:(MessageComposeResult)result {
+                didFinishWithResult:(MessageComposeResult)result {
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIViewController *ctrl = RCTPresentedViewController();
-        [ctrl dismissViewControllerAnimated:YES completion:^{
+        if (controller != activeController || !self.resolve) return;
+        RCTPromiseResolveBlock resolve = self.resolve;
+        RCTPromiseRejectBlock reject = self.reject;
+        self.resolve = nil;
+        self.reject = nil;
+        controller.messageComposeDelegate = nil;
+        [controller dismissViewControllerAnimated:YES completion:^{
+            activeController = nil;
             if (result == MessageComposeResultFailed) {
-                if (self.reject) {
-                    NSString *errorMessage = @"Failed to send SMS.";
-                    NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
-                    NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
-                    self.reject(@"com.rnshare", errorMessage, error);
-                }
+                reject(@"com.rnshare", @"Failed to send SMS.", nil);
             } else {
-                if (self.resolve) {
-                    self.resolve(@[@(result == MessageComposeResultSent), @""]);
-                }
+                resolve(@[@(result == MessageComposeResultSent), @""]);
             }
-            self.resolve = nil;
-            self.reject = nil;
         }];
     });
 }

@@ -6,8 +6,7 @@
 //
 
 #import "TelegramShare.h"
-#import <AVFoundation/AVFoundation.h>
-@import Photos;
+#import "RNShareUtils.h"
 
 @implementation TelegramShare
     RCT_EXPORT_MODULE();
@@ -15,20 +14,24 @@
     reject:(RCTPromiseRejectBlock)reject
     resolve:(RCTPromiseResolveBlock)resolve {
     
-    NSString *text = [RCTConvert NSString:options[@"message"]];
-    text = (NSString*)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef) text, NULL,CFSTR("!*'();:@&=+$,/?%#[]"),kCFStringEncodingUTF8));
-    
+    NSString *text = [RCTConvert NSString:options[@"message"]] ?: @"";
     NSString *url = [RCTConvert NSString:options[@"url"]];
+    if (text.length == 0 && url.length == 0) {
+        reject(@"EINVAL", @"A message or URL is required", nil);
+        return;
+    }
+    NSMutableArray *queryItems = [NSMutableArray arrayWithObject:[NSURLQueryItem queryItemWithName:@"text" value:text]];
+    if (url.length > 0) [queryItems addObject:[NSURLQueryItem queryItemWithName:@"url" value:url]];
+    NSURL *shareURL = [RNShareUtils URLWithString:url.length > 0 ? @"tg://msg_url" : @"tg://msg" queryItems:queryItems];
 
-    NSString *telegramMsg = [NSString stringWithFormat:@"tg://msg?text=%@", text];
-    NSString *telegramMsgUrl = [NSString stringWithFormat:@"tg://msg_url?text=%@&url=%@", text, url];
-
-    NSString * urlTelegram = url ? telegramMsgUrl : telegramMsg;
-    NSURL * shareURL = [NSURL URLWithString:urlTelegram];
-    
     if ([[UIApplication sharedApplication] canOpenURL: shareURL]) {
-        [[UIApplication sharedApplication] openURL: shareURL options:@{} completionHandler:nil];
-        resolve(@[@true, @""]);
+        [[UIApplication sharedApplication] openURL:shareURL options:@{} completionHandler:^(BOOL success) {
+            if (success) {
+                resolve(@[@true, @""]);
+            } else {
+                reject(@"EUNAVAILABLE", @"Unable to open share target", nil);
+            }
+        }];
     } else {
         // Cannot open telegram
         NSString *stringURL = @"https://itunes.apple.com/app/telegram-messenger/id686449807";

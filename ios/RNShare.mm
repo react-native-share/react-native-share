@@ -18,7 +18,6 @@
 #import "GooglePlusShare.h"
 #import "EmailShare.h"
 #import "TelegramShare.h"
-#import "TwitterShare.h"
 #import "ViberShare.h"
 #import "MessengerShare.h"
 #import "SmsShare.h"
@@ -30,16 +29,15 @@
 #import "RNShareSpec.h"
 #endif
 
-@implementation RNShare
+@implementation RNShare {
+    RCTPromiseResolveBlock documentPickerResolve;
+    UIDocumentPickerViewController *activeDocumentPicker;
 
-RCTPromiseRejectBlock rejectBlock;
-RCTPromiseResolveBlock resolveBlock;
-
-// we need this since this controller
-// may implement a delegate and could be garbage collected
-// before it is called
-EmailShare *shareCtl;
-SmsShare *smsShareCtl;
+    // Keep delegate-backed adapters alive for this module instance.
+    EmailShare *emailShare;
+    SmsShare *smsShare;
+    WhatsAppShare *whatsAppShare;
+}
 
 - (dispatch_queue_t)methodQueue
 {
@@ -54,8 +52,9 @@ SmsShare *smsShareCtl;
 - (id) init
 {
     if ((self = [super init])) {
-        shareCtl = [[EmailShare alloc] init];
-        smsShareCtl = [[SmsShare alloc] init];
+        emailShare = [[EmailShare alloc] init];
+        smsShare = [[SmsShare alloc] init];
+        whatsAppShare = [[WhatsAppShare alloc] init];
     }
     return self;
 }
@@ -65,19 +64,15 @@ SmsShare *smsShareCtl;
 {
     if (anchorViewTag) {
         UIView *anchorView = [self.bridge.uiManager viewForReactTag:anchorViewTag];
-        return [anchorView convertRect:anchorView.bounds toView:sourceView];
-    } else {
-        return (CGRect){sourceView.center, {1, 1}};
+        if (anchorView) {
+            return [anchorView convertRect:anchorView.bounds toView:sourceView];
+        }
     }
+    return CGRectMake(CGRectGetMidX(sourceView.bounds), CGRectGetMidY(sourceView.bounds), 1, 1);
 }
 
 - (BOOL)isImageMimeType:(NSString *)data {
-    NSRange range = [data rangeOfString:@"data:image" options:NSCaseInsensitiveSearch];
-    if (data && range.location != NSNotFound) {
-        return true;
-    } else {
-        return false;
-    }
+    return data.length >= 11 && [data compare:@"data:image/" options:NSCaseInsensitiveSearch range:NSMakeRange(0, 11)] == NSOrderedSame;
 }
 
 RCT_EXPORT_MODULE()
@@ -122,12 +117,12 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             [shareCtl shareSingle:options reject: reject resolve: resolve serviceType: SLServiceTypeFacebook inAppBaseUrl:@"fb://"];
         } else if([social isEqualToString:@"facebookstories"]) {
             NSString *appId = [RCTConvert NSString:options[@"appId"]];
-            if (appId) {
+            if (appId.length > 0) {
                 NSLog(@"TRY OPEN FACEBOOK STORIES");
                 FacebookStories *shareCtl = [[FacebookStories alloc] init];
                 [shareCtl shareSingle:options reject: reject resolve: resolve];
             } else {
-                RCTLogError(@"key 'appId' missing in options");
+                reject(@"EINVAL", @"key 'appId' missing in options", nil);
                 return;
             }
         } else if([social isEqualToString:@"twitter"]) {
@@ -140,12 +135,11 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             [shareCtl shareSingle:options reject: reject resolve: resolve];
         } else if([social isEqualToString:@"whatsapp"]) {
             NSLog(@"TRY OPEN whatsapp");
-            WhatsAppShare *shareCtl = [[WhatsAppShare alloc] init];
-            [shareCtl shareSingle:options reject: reject resolve: resolve];
+            [whatsAppShare shareSingle:options reject: reject resolve: resolve];
         } else if([social isEqualToString:@"instagram"]) {
             NSLog(@"TRY OPEN instagram");
             InstagramShare *shareCtl = [[InstagramShare alloc] init];
-            if([self isImageMimeType:options[@"url"]]) {// Condition to handle image
+            if([self isImageMimeType:[RCTConvert NSString:options[@"url"]]]) {// Condition to handle image
                 [shareCtl shareSingleImage:options reject: reject resolve: resolve];
             } else {
                 [shareCtl shareSingle:options reject: reject resolve: resolve];
@@ -158,13 +152,9 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             NSLog(@"TRY OPEN telegram");
             TelegramShare *shareCtl = [[TelegramShare alloc] init];
             [shareCtl shareSingle:options reject: reject resolve: resolve];
-        } else if([social isEqualToString:@"twitter"]) {
-            NSLog(@"TRY OPEN twitter");
-            TwitterShare *shareCtl = [[TwitterShare alloc] init];
-            [shareCtl shareSingle:options reject: reject resolve: resolve];
         } else if([social isEqualToString:@"email"]) {
             NSLog(@"TRY OPEN email");
-            [shareCtl shareSingle:options reject: reject resolve: resolve];
+            [emailShare shareSingle:options reject: reject resolve: resolve];
         } else if([social isEqualToString:@"viber"]) {
             NSLog(@"TRY OPEN viber");
             ViberShare *shareCtl = [[ViberShare alloc] init];
@@ -175,14 +165,16 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
             [shareCtl shareSingle:options reject: reject resolve: resolve];
         } else if([social isEqualToString:@"sms"]) {
             NSLog(@"TRY OPEN sms");
-            [smsShareCtl shareSingle:options reject: reject resolve: resolve];
+            [smsShare shareSingle:options reject: reject resolve: resolve];
         } else if([social isEqualToString:@"discord"]) {
             NSLog(@"TRY OPEN discord");
             DiscordShare *shareCtl = [[DiscordShare alloc] init];
             [shareCtl shareSingle:options reject: reject resolve: resolve];
+        } else {
+            reject(@"EINVAL", @"Unsupported social target", nil);
         }
     } else {
-        RCTLogError(@"key 'social' missing in options");
+        reject(@"EINVAL", @"key 'social' missing in options", nil);
         return;
     }
 }
@@ -192,7 +184,7 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
                   reject:(RCTPromiseRejectBlock)reject)
 {
     if (RCTRunningInAppExtension()) {
-        RCTLogError(@"Unable to show action sheet from app extension");
+        reject(@"EUNAVAILABLE", @"Unable to show action sheet from app extension", nil);
         return;
     }
 
@@ -202,10 +194,14 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
         [items addObject:message];
     }
     BOOL saveToFiles = [RCTConvert BOOL:options[@"saveToFiles"]];
+    if (saveToFiles && activeDocumentPicker) {
+        reject(@"EINPROGRESS", @"A Files export is already in progress", nil);
+        return;
+    }
     NSString *filename = [RCTConvert NSString:options[@"filename"]];
 
-    NSArray *filenamesArray = options[@"filenames"];
-    NSArray *urlsArray = options[@"urls"];
+    NSArray *filenamesArray = [RCTConvert NSStringArray:options[@"filenames"]];
+    NSArray *urlsArray = [RCTConvert NSArray:options[@"urls"]];
     
     for (int i=0; i<urlsArray.count; i++) {
         NSURL *URL = [RCTConvert NSURL:urlsArray[i]];
@@ -220,30 +216,20 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
                     return;
                 }
                 
-                //name get from array of filenames
-                @try {
-                    NSString *fileNameByIndex = [RCTConvert NSString:filenamesArray[i]];
-                    if(fileNameByIndex.length>0){
-                        //replace filename with name get by index
-                        filename=fileNameByIndex;
-                    }
-                }
-                @catch (NSException * e) {
-                        RCTLogError(@"Exception get filename from finames array: %@", e);
+                NSString *itemFilename = filename;
+                if (i < filenamesArray.count && [filenamesArray[i] length] > 0) {
+                    itemFilename = filenamesArray[i];
                 }
 
-                if (saveToFiles) {
-
-                    NSURL *filePath = [RNShareUtils getPathFromBase64:URL.absoluteString with:data fileName:filename];
-
-                    if (filePath) {
-                        [items addObject: filePath];
+                if (saveToFiles || itemFilename.length > 0) {
+                    NSURL *filePath = saveToFiles
+                        ? [RNShareUtils getPathFromBase64:URL.absoluteString with:data fileName:itemFilename]
+                        : [RNShareUtils getPathFromFilename:itemFilename with:data];
+                    if (!filePath) {
+                        reject(@"EWRITE", @"Unable to prepare attachment", nil);
+                        return;
                     }
-                } else if (filename.length > 0) {
-                    NSURL *filePath = [RNShareUtils getPathFromFilename:filename with:data];
-                    if (filePath) {
-                        [items addObject: filePath];
-                    }
+                    [items addObject:filePath];
                 } else {
                     [items addObject:data];
                 }
@@ -257,11 +243,15 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
     BOOL hasActivityItemSources = activityItemSources != nil && activityItemSources.count > 0;
 
     if (items.count == 0 && !hasActivityItemSources) {
-        RCTLogError(@"No `url` or `message` to share");
+        reject(@"EINVAL", @"No `url` or `message` to share", nil);
         return;
     }
 
     UIViewController *controller = RCTPresentedViewController();
+    if (!controller) {
+        reject(@"EUNAVAILABLE", @"No view controller available to present the share sheet", nil);
+        return;
+    }
 
     if (saveToFiles) {
         NSArray *urls = [items filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
@@ -269,18 +259,18 @@ RCT_EXPORT_METHOD(open:(NSDictionary *)options
         }]];
 
         if (urls.count == 0) {
-            RCTLogError(@"No `urls` to save in Files");
+            reject(@"EINVAL", @"No `urls` to save in Files", nil);
             return;
         }
         if (@available(iOS 11.0, macCatalyst 13.1, *)) {
-            resolveBlock = resolve;
-            rejectBlock = reject;
             UIDocumentPickerViewController *documentPicker = nil;
             if (@available(iOS 15.0, macCatalyst 15.0, *)) {
                 documentPicker = [[UIDocumentPickerViewController alloc] initForExportingURLs:urls asCopy:YES];
             } else {
                 documentPicker = [[UIDocumentPickerViewController alloc] initWithURLs:urls inMode:UIDocumentPickerModeExportToService];
             }
+            activeDocumentPicker = documentPicker;
+            documentPickerResolve = resolve;
             [documentPicker setDelegate:self];
             [controller presentViewController:documentPicker animated:YES completion:nil];
             return;
@@ -323,19 +313,23 @@ RCT_EXPORT_METHOD(isPackageInstalled:(NSString *)packagename
 }
 
 - (void)documentPickerWasCancelled:(UIDocumentPickerViewController *)controller {
-    if (rejectBlock) {
-        NSError *error = [NSError errorWithDomain:@"CANCELLED" code: 500 userInfo:@{NSLocalizedDescriptionKey:@"PICKER_WAS_CANCELLED"}];
-        rejectBlock(@"CANCELLED",@"CANCELLED",error);
-    }
+    [self completeDocumentPicker:controller success:NO];
 }
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
-    if (resolveBlock) {
-        resolveBlock(@{
-            @"success": @(YES),
-            @"message": @"com.apple.DocumentsApp"
-        });
-    }
+    [self completeDocumentPicker:controller success:YES];
+}
+
+- (void)completeDocumentPicker:(UIDocumentPickerViewController *)controller success:(BOOL)success {
+    if (controller != activeDocumentPicker || !documentPickerResolve) return;
+    RCTPromiseResolveBlock resolve = documentPickerResolve;
+    documentPickerResolve = nil;
+    activeDocumentPicker = nil;
+    controller.delegate = nil;
+    resolve(@{
+        @"success": @(success),
+        @"message": success ? @"com.apple.DocumentsApp" : @"CANCELED"
+    });
 }
 
 #pragma mark - Share Controller
@@ -367,27 +361,20 @@ RCT_EXPORT_METHOD(isPackageInstalled:(NSString *)packagename
 
     __weak UIActivityViewController* weakShareController = shareController;
     shareController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, __unused NSArray *returnedItems, NSError *activityError) {
+        UIActivityViewController *completedController = weakShareController;
+        if (!completedController.completionWithItemsHandler) return;
+        completedController.completionWithItemsHandler = nil;
         // always dismiss since this may be called from cancelled shares
         // but the share menu would remain open, and our callback would fire again on close
-        if(weakShareController){
-            // closing activity view controller
-            [weakShareController dismissViewControllerAnimated:true completion:nil];
-        } else {
-            [controller dismissViewControllerAnimated:true completion:nil];
-        }
+        [completedController dismissViewControllerAnimated:true completion:nil];
 
         if (activityError) {
             reject(@"error",@"activityError",activityError);
         } else {
             resolve(@{
                 @"success": @(completed),
-                @"message": (RCTNullIfNil(activityType) ?: @"")
+                @"message": activityType ?: @""
             });
-        }
-
-        // clear the completion handler to prevent cycles
-        if(weakShareController){
-            weakShareController.completionWithItemsHandler = nil;
         }
     };
 
