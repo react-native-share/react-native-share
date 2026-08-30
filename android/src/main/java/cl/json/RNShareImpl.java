@@ -7,12 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.net.Uri;
 
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Promise;
-import com.facebook.react.bridge.WritableMap;
 
 import cl.json.social.EmailShare;
 import cl.json.social.FacebookShare;
@@ -46,23 +44,10 @@ public class RNShareImpl implements ActivityEventListener {
 
     public static final String NAME = "RNShare";
 
-    static ReactApplicationContext RCTContext = null;
-
-    public static final int SHARE_REQUEST_CODE = 16845;
+    private final ReactApplicationContext RCTContext;
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SHARE_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_CANCELED) {
-                WritableMap reply = Arguments.createMap();
-                reply.putBoolean("success", false);
-                reply.putString("message", "CANCELED");
-                TargetChosenReceiver.callbackResolve(reply);
-            } else if (resultCode == Activity.RESULT_OK) {
-                WritableMap reply = Arguments.createMap();
-                reply.putBoolean("success", true);
-                TargetChosenReceiver.callbackResolve(reply);
-            }
-        }
+        TargetChosenReceiver.onActivityResult(RCTContext, requestCode, resultCode);
     }
     
     @Override
@@ -147,6 +132,11 @@ public class RNShareImpl implements ActivityEventListener {
         RCTContext.addActivityEventListener(this);
     }
 
+    public void invalidate() {
+        RCTContext.removeActivityEventListener(this);
+        TargetChosenReceiver.invalidate(RCTContext);
+    }
+
     public Map<String, Object> getConstants() {
         Map<String, Object> constants = new HashMap<>();
         for (SHARES val : SHARES.values()) {
@@ -156,23 +146,25 @@ public class RNShareImpl implements ActivityEventListener {
     }
 
     public void open(ReadableMap options, Promise promise) {
-        TargetChosenReceiver.registerCallbacks(promise);
+        TargetChosenReceiver request = TargetChosenReceiver.registerCallbacks(promise, RCTContext);
+        if (request == null) return;
         try {
             GenericShare share = new GenericShare(RCTContext);
             share.open(options);
         } catch (ActivityNotFoundException ex) {
             Log.e(NAME,ex.getMessage());
             ex.printStackTrace(System.out);
-            TargetChosenReceiver.callbackReject("not_available");
+            request.callbackReject("not_available");
         } catch (Exception e) {
             Log.e(NAME,e.getMessage());
             e.printStackTrace(System.out);
-            TargetChosenReceiver.callbackReject(e.getMessage());
+            request.callbackReject(e.getMessage());
         }
     }
 
     public void shareSingle(ReadableMap options, Promise promise) {
-        TargetChosenReceiver.registerCallbacks(promise);
+        TargetChosenReceiver request = TargetChosenReceiver.registerCallbacks(promise, RCTContext);
+        if (request == null) return;
         if (ShareIntent.hasValidKey("social", options)) {
             try {
                 ShareIntent shareClass = SHARES.getShareClass(options.getString("social"), RCTContext);
@@ -184,14 +176,14 @@ public class RNShareImpl implements ActivityEventListener {
             } catch (ActivityNotFoundException ex) {
                 Log.e(NAME,ex.getMessage());
                 ex.printStackTrace(System.out);
-                TargetChosenReceiver.callbackReject(ex.getMessage());
+                request.callbackReject(ex.getMessage());
             } catch (Exception e) {
                 Log.e(NAME,e.getMessage());
                 e.printStackTrace(System.out);
-                TargetChosenReceiver.callbackReject(e.getMessage());
+                request.callbackReject(e.getMessage());
             }
         } else {
-            TargetChosenReceiver.callbackReject("key 'social' missing in options");
+            request.callbackReject("key 'social' missing in options");
         }
     }
 

@@ -28,6 +28,10 @@ public class FacebookStoriesShare extends SingleShareIntent {
     @Override
     public void open(ReadableMap options) throws ActivityNotFoundException, IllegalArgumentException {
         super.open(options);
+        if (isFallback) {
+            super.openIntentChooser();
+            return;
+        }
         this.shareStory(options);
         // extra params here
         this.openIntentChooser(options);
@@ -61,8 +65,7 @@ public class FacebookStoriesShare extends SingleShareIntent {
         Activity activity = this.reactContext.getCurrentActivity();
 
         if (activity == null) {
-            TargetChosenReceiver.callbackReject("Something went wrong");
-            return;
+            throw new ActivityNotFoundException("No activity available to share Facebook stories");
         }
 
         this.intent.putExtra("com.facebook.platform.extra.APPLICATION_ID", options.getString("appId"));
@@ -91,17 +94,19 @@ public class FacebookStoriesShare extends SingleShareIntent {
 
         if (hasBackgroundAsset) {
             String backgroundFileName = "";
+            String backgroundType = "image/jpeg";
 
             if (this.hasValidKey("backgroundImage", options)) {
                 backgroundFileName = options.getString("backgroundImage");
             } else if (this.hasValidKey("backgroundVideo", options)) {
                 backgroundFileName = options.getString("backgroundVideo");
+                backgroundType = "video/*";
             }
 
-            ShareFile backgroundAsset = new ShareFile(backgroundFileName, "image/jpeg", "background", useInternalStorage, this.reactContext);
+            ShareFile backgroundAsset = new ShareFile(backgroundFileName, backgroundType, "background", useInternalStorage, this.reactContext);
 
             this.intent.setDataAndType(backgroundAsset.getURI(), backgroundAsset.getType());
-            this.intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            this.intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
 
         if (this.hasValidKey("stickerImage", options)) {
@@ -111,8 +116,9 @@ public class FacebookStoriesShare extends SingleShareIntent {
                 this.intent.setType("image/*");
             }
 
-            this.intent.putExtra("interactive_asset_uri", stickerAsset.getURI());
-            activity.grantUriPermission("com.facebook.katana", stickerAsset.getURI(),
+            Uri stickerUri = stickerAsset.getURI();
+            this.intent.putExtra("interactive_asset_uri", stickerUri);
+            activity.grantUriPermission("com.facebook.katana", stickerUri,
                     Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
     }

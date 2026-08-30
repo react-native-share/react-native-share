@@ -7,13 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 
-import cl.json.RNShareImpl;
 
 /**
  * Created by disenodosbbcl on 23-07-16.
@@ -22,17 +23,17 @@ public abstract class SingleShareIntent extends ShareIntent {
 
     protected String playStoreURL = null;
     protected String appStoreURL = null;
+    protected boolean isFallback;
 
     public SingleShareIntent(ReactApplicationContext reactContext) {
         super(reactContext);
     }
 
     public void open(ReadableMap options) throws ActivityNotFoundException {
-        System.out.println(getPackage());
+        isFallback = false;
         //  check if package is installed
         if (getPackage() != null || getDefaultWebLink() != null || getPlayStoreLink() != null) {
             if (this.isPackageInstalled(getPackage(), reactContext)) {
-                System.out.println("INSTALLED");
                 if (getComponentClass() != null) {
                     ComponentName cn = new ComponentName(getPackage(), getComponentClass());
                     this.getIntent().setComponent(cn);
@@ -42,7 +43,6 @@ public abstract class SingleShareIntent extends ShareIntent {
                 super.open(options);
                 return; // once we open we don't need to continue
             } else {
-                System.out.println("NOT INSTALLED");
                 String url = "";
                 if (getDefaultWebLink() != null) {
                     url = getDefaultWebLink()
@@ -54,7 +54,11 @@ public abstract class SingleShareIntent extends ShareIntent {
                     //  TODO
                 }
                 //  open web intent
-                this.setIntent(new Intent(new Intent("android.intent.action.VIEW", Uri.parse(url))));
+                this.setIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                this.options = options;
+                if (ShareIntent.hasValidKey("title", options)) chooserTitle = options.getString("title");
+                isFallback = true;
+                return;
             }
         }
         //  configure default
@@ -65,11 +69,36 @@ public abstract class SingleShareIntent extends ShareIntent {
         this.openIntentChooser(null);
     }
 
+    protected void openIntentChooserWithConversation(String conversationClass) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(() -> {
+            if (!shareRequest.isActive()) return;
+            Intent conversation = new Intent(getIntent());
+            conversation.setComponent(new ComponentName(getPackage(), conversationClass));
+            conversation.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            try {
+                // Create the recipient's conversation without completing the actual share.
+                reactContext.startActivity(conversation);
+            } catch (ActivityNotFoundException | SecurityException ignored) {
+                // The normal share may still work if this optional activity is unavailable.
+            }
+            // Preserve the short foreground window without blocking the native module thread.
+            handler.postDelayed(() -> {
+                if (!shareRequest.isActive()) return;
+                try {
+                    openIntentChooser();
+                } catch (RuntimeException error) {
+                    shareRequest.callbackReject(error.getMessage());
+                }
+            }, 10);
+        });
+    }
+
     protected void openIntentChooser(ReadableMap options) throws ActivityNotFoundException {
-        if (this.options.hasKey("forceDialog") && this.options.getBoolean("forceDialog")) {
+        if (ShareIntent.hasValidKey("forceDialog", this.options) && this.options.getBoolean("forceDialog")) {
             Activity activity = this.reactContext.getCurrentActivity();
             if (activity == null) {
-                TargetChosenReceiver.callbackReject("Something went wrong");
+                shareRequest.callbackReject("Something went wrong");
                 return;
             }
             if (options != null) {
@@ -78,19 +107,19 @@ public abstract class SingleShareIntent extends ShareIntent {
                 }
             }
             if (TargetChosenReceiver.isSupported()) {
-                IntentSender sender = TargetChosenReceiver.getSharingSenderIntent(this.reactContext);
+                IntentSender sender = shareRequest.getSharingSenderIntent();
                 Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle, sender);
                 chooser.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                activity.startActivityForResult(chooser, RNShareImpl.SHARE_REQUEST_CODE);
+                activity.startActivityForResult(chooser, shareRequest.getRequestCode());
             } else {
                 Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
                 chooser.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                activity.startActivityForResult(chooser, RNShareImpl.SHARE_REQUEST_CODE);
+                activity.startActivityForResult(chooser, shareRequest.getRequestCode());
 
                 WritableMap reply = Arguments.createMap();
                 reply.putBoolean("success", true);
                 reply.putString("message", "OK");
-                TargetChosenReceiver.callbackResolve(reply);
+                shareRequest.callbackResolve(reply);
             }
         } else {
             this.getIntent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -98,7 +127,7 @@ public abstract class SingleShareIntent extends ShareIntent {
             WritableMap reply = Arguments.createMap();
             reply.putBoolean("success", true);
             reply.putString("message", this.getIntent().getPackage());
-            TargetChosenReceiver.callbackResolve(reply);
+            shareRequest.callbackResolve(reply);
         }
     }
 }

@@ -28,6 +28,10 @@ public class InstagramStoriesShare extends SingleShareIntent {
     @Override
     public void open(ReadableMap options) throws ActivityNotFoundException {
         super.open(options);
+        if (isFallback) {
+            super.openIntentChooser();
+            return;
+        }
         this.shareStory(options);
         //  extra params here
         this.openIntentChooser(options);
@@ -57,8 +61,7 @@ public class InstagramStoriesShare extends SingleShareIntent {
         Activity activity = this.reactContext.getCurrentActivity();
 
         if (activity == null) {
-            TargetChosenReceiver.callbackReject("Something went wrong");
-            return;
+            throw new ActivityNotFoundException("No activity available to share Instagram stories");
         }
 
         this.intent.putExtra("source_application", options.getString("appId"));
@@ -108,7 +111,7 @@ public class InstagramStoriesShare extends SingleShareIntent {
             ShareFile backgroundAsset = new ShareFile(backgroundFileName, backgroundType, "background", useInternalStorage, this.reactContext);
 
             this.intent.setDataAndType(backgroundAsset.getURI(), backgroundAsset.getType());
-            this.intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            this.intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
 
         if (this.hasValidKey("stickerImage", options)) {
@@ -118,8 +121,9 @@ public class InstagramStoriesShare extends SingleShareIntent {
                 this.intent.setType("image/*");
             }
 
-            this.intent.putExtra("interactive_asset_uri", stickerAsset.getURI());
-            activity.grantUriPermission(InstagramStoriesShare.PACKAGE, stickerAsset.getURI(),
+            Uri stickerUri = stickerAsset.getURI();
+            this.intent.putExtra("interactive_asset_uri", stickerUri);
+            activity.grantUriPermission(InstagramStoriesShare.PACKAGE, stickerUri,
                     Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
     }
