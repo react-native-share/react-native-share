@@ -63,6 +63,8 @@ repositories {
 }
 
 dependencies {
+    testImplementation 'junit:junit:4.13.2'
+
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'  // From node_modules
 }
