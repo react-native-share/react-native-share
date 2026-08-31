@@ -28,6 +28,10 @@
     if (self) {
         fetchCompletion = completion;
         placeholderItem = [RNShareActivityItemSource itemFromDictionary:options[@"placeholderItem"]];
+        itemDictionary = options[@"item"];
+        subjectDictionary = options[@"subject"];
+        dataTypeIdentifierDictionary = options[@"dataTypeIdentifier"];
+        thumbnailImageDictionary = options[@"thumbnailImage"];
 
 #ifdef __IPHONE_13_0
         if (@available(iOS 13.0, *)) {
@@ -45,10 +49,6 @@
         [self _invokeAndClearCompletion];
 #endif
 
-        itemDictionary = options[@"item"];
-        subjectDictionary = options[@"subject"];
-        dataTypeIdentifierDictionary = options[@"dataTypeIdentifier"];
-        thumbnailImageDictionary = options[@"thumbnailImage"];
     }
     return self;
 }
@@ -62,19 +62,27 @@
                 if (!self->linkMetadata) {
                     self->linkMetadata = metadata;
                 } else {
-                    self->linkMetadata.originalURL = metadata.originalURL;
-                    self->linkMetadata.URL = metadata.URL;
+                    if (!self->linkMetadata.originalURL) {
+                        self->linkMetadata.originalURL = metadata.originalURL;
+                    }
+                    if (!self->linkMetadata.URL) {
+                        self->linkMetadata.URL = metadata.URL;
+                    }
                     if(!self->linkMetadata.title) {
                         self->linkMetadata.title = metadata.title;
                     }
-                    self->linkMetadata.imageProvider = metadata.imageProvider;
-                    if (self->linkMetadata.imageProvider) {
-                        self->linkMetadata.iconProvider = self->linkMetadata.imageProvider;
-                    } else {
-                        self->linkMetadata.iconProvider = metadata.iconProvider;
+                    if (!self->linkMetadata.imageProvider) {
+                        self->linkMetadata.imageProvider = metadata.imageProvider;
                     }
-                    self->linkMetadata.remoteVideoURL = metadata.remoteVideoURL;
-                    self->linkMetadata.videoProvider = metadata.videoProvider;
+                    if (!self->linkMetadata.iconProvider) {
+                        self->linkMetadata.iconProvider = self->linkMetadata.imageProvider ?: metadata.iconProvider;
+                    }
+                    if (!self->linkMetadata.remoteVideoURL) {
+                        self->linkMetadata.remoteVideoURL = metadata.remoteVideoURL;
+                    }
+                    if (!self->linkMetadata.videoProvider) {
+                        self->linkMetadata.videoProvider = metadata.videoProvider;
+                    }
                 }
             }
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -87,8 +95,9 @@
 
 - (void)_invokeAndClearCompletion {
     if (fetchCompletion) {
-        fetchCompletion();
+        void (^completion)(void) = fetchCompletion;
         fetchCompletion = nil;
+        completion();
     }
 }
 
@@ -285,7 +294,8 @@
             return obj;
         }
     }
-    return [dictionary objectForKey:@"default"];
+    id fallback = [dictionary objectForKey:@"default"];
+    return fallback == [NSNull null] ? nil : fallback;
 }
 
 #pragma mark - UIActivityItemSource
