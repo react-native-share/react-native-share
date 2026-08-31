@@ -26,7 +26,7 @@
     
     if ([[UIApplication sharedApplication] canOpenURL: shareURL]) {
         [[UIApplication sharedApplication] openURL: shareURL options:@{} completionHandler:nil];
-        resolve(@[@true, @""]);
+        resolve(@{@"success": @(YES), @"message": @""});
     } else {
         // Cannot open viber
         NSString *stringURL = @"https://apps.apple.com/app/viber-messenger-chats-calls/id382617920";

@@ -15,7 +15,7 @@ RCT_EXPORT_MODULE();
     if ([[UIApplication sharedApplication] canOpenURL:url]) {
       [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 
-      resolve(@[@true, @""]);
+      resolve(@{@"success": @(YES), @"message": @""});
     } else {
       // Cannot open Messenger
       NSString *contentLinkString = @"https://apps.apple.com/us/app/messenger/id454638411";

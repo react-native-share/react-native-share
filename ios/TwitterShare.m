@@ -32,7 +32,7 @@ RCT_EXPORT_MODULE();
 
     if ([[UIApplication sharedApplication] canOpenURL:appUrl]) {
         [[UIApplication sharedApplication] openURL:appUrl options:@{} completionHandler:^(BOOL success) {}];
-        resolve(@[@true, @"opened in twitter app"]);
+        resolve(@{@"success": @(YES), @"message": @"opened in twitter app"});
     } else {
         // Fallback to web intent
         NSString *webUrlString = url ?
@@ -41,7 +41,7 @@ RCT_EXPORT_MODULE();
 
         NSURL *webUrl = [NSURL URLWithString:webUrlString];
         [[UIApplication sharedApplication] openURL:webUrl options:@{} completionHandler:^(BOOL success) {}];
-        resolve(@[@true, @"opened in browser"]);
+        resolve(@{@"success": @(YES), @"message": @"opened in browser"});
     }
 }
 

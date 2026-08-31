@@ -80,7 +80,7 @@ RCT_EXPORT_MODULE();
     [[UIPasteboard generalPasteboard] setItems:pasteboardItems options:pasteboardOptions];
     [[UIApplication sharedApplication] openURL:urlScheme options:@{} completionHandler:nil];
 
-    resolve(@[@true, @""]);
+    resolve(@{@"success": @(YES), @"message": @""});
 }
 
 - (NSError*)fallbackFacebook {

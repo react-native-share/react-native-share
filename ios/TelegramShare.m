@@ -28,7 +28,7 @@
     
     if ([[UIApplication sharedApplication] canOpenURL: shareURL]) {
         [[UIApplication sharedApplication] openURL: shareURL options:@{} completionHandler:nil];
-        resolve(@[@true, @""]);
+        resolve(@{@"success": @(YES), @"message": @""});
     } else {
         // Cannot open telegram
         NSString *stringURL = @"https://itunes.apple.com/app/telegram-messenger/id686449807";

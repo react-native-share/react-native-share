@@ -47,7 +47,7 @@
 
         UIViewController *ctrl = RCTPresentedViewController();
         [ctrl presentViewController:composeController animated:YES completion:Nil];
-        resolve(@[@true, @""]);
+        resolve(@{@"success": @(YES), @"message": @""});
       } else {
         NSString *errorMessage = @"Not installed";
         NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
