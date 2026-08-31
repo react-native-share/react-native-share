@@ -14,6 +14,7 @@ import Sheet from './Sheet';
 export interface ShareSheetProps {
   visible: boolean;
   onCancel: () => void;
+  cancelAccessibilityLabel?: string;
   style?: StyleProp<ViewStyle>;
   overlayStyle?: StyleProp<ViewStyle>;
 }
@@ -23,27 +24,29 @@ const ShareSheet: React.FC<React.PropsWithChildren<ShareSheetProps>> = ({
   overlayStyle = {},
   visible,
   onCancel,
+  cancelAccessibilityLabel = 'Cancel sharing',
   children,
 }) => {
-  const backButtonHandler = React.useCallback(() => {
-    if (visible) {
+  React.useEffect(() => {
+    if (!visible) return;
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
       onCancel();
       return true;
-    }
-    return false;
-  }, [visible, onCancel]);
-
-  React.useEffect(() => {
-    const subscription = BackHandler.addEventListener('hardwareBackPress', backButtonHandler);
+    });
     return () => {
       subscription.remove();
     };
-  }, [backButtonHandler]);
+  }, [visible, onCancel]);
 
   return (
     <Overlay visible={visible}>
-      <View style={[styles.actionSheetContainer, overlayStyle]}>
-        <TouchableOpacity style={styles.button} onPress={onCancel} />
+      <View style={[styles.actionSheetContainer, overlayStyle]} onAccessibilityEscape={onCancel}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={onCancel}
+          accessibilityRole="button"
+          accessibilityLabel={cancelAccessibilityLabel}
+        />
         <Sheet visible={visible}>
           <View style={[styles.buttonContainer, style]}>{children}</View>
         </Sheet>
