@@ -93,6 +93,12 @@ When sharing a local file directly, you can use the following format:
 
 `url: "file://<file_path>"`
 
+### iOS completion and attachment names
+
+`saveToFiles` cancellation follows `failOnCancel`, just like cancellation of the regular share sheet. With `failOnCancel: false`, cancellation resolves with `success: false` and `dismissedAction: true`. An overlapping Files export rejects without replacing the first export's callback.
+
+Missing content, unavailable presentation, and failed attachment preparation reject instead of leaving the promise pending. For base64 attachments, each `filenames` entry applies only to the URL at that index; a missing entry falls back to `filename`, not the previous attachment's name. Custom names must be file names, not paths, and repeated names are isolated in separate temporary directories.
+
 ## ActivityItemSources (iOS only)
 
 In order to share different data according to activities or to customize the share sheet, you can provide the data by using `activityItemSources` .

@@ -1,28 +1,76 @@
 #import "RNShareUtils.h"
+#import <MobileCoreServices/MobileCoreServices.h>
+#if __has_include(<UniformTypeIdentifiers/UniformTypeIdentifiers.h>)
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#endif
 
 
 @implementation RNShareUtils
+
++(NSURL*)URLWithString:(NSString*)url queryItems:(NSArray<NSURLQueryItem*>*)queryItems {
+    NSURLComponents *components = [NSURLComponents componentsWithString:url];
+    components.queryItems = queryItems;
+    // Query-item encoding permits '+', but many target apps decode it as a space.
+    components.percentEncodedQuery = [components.percentEncodedQuery stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"];
+    return components.URL;
+}
 
 
 /**
  Given a base64 string, attempts to return a file extension based on its mime type.
 */
-+(NSString*)getExtensionFromBase64:(NSString*)base64String {
-    NSRange   searchedRange = NSMakeRange(0, [base64String length]);
-    NSString *pattern = @"/[a-zA-Z0-9]+;";
-    NSError  *error = nil;
-
-    NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern: pattern options:0 error:&error];
-    NSArray* matches = [regex matchesInString:base64String options:0 range: searchedRange];
-    
-    NSString *ext = nil;
-    
-    for (NSTextCheckingResult* match in matches) {
-        NSString* matchText = [base64String substringWithRange:[match range]];
-        ext = [matchText substringWithRange:(NSMakeRange(1, matchText.length - 2))];
++(NSString*)getMimeTypeFromBase64:(NSString*)base64String {
+    if (base64String.length < 5 || [base64String compare:@"data:" options:NSCaseInsensitiveSearch range:NSMakeRange(0, 5)] != NSOrderedSame) {
+        return nil;
     }
+    NSRange comma = [base64String rangeOfString:@","];
+    if (comma.location == NSNotFound) return nil;
+    NSRange header = NSMakeRange(5, comma.location - 5);
+    NSRange separator = [base64String rangeOfString:@";" options:0 range:header];
+    NSUInteger end = separator.location == NSNotFound ? comma.location : separator.location;
+    NSString *mimeType = [base64String substringWithRange:NSMakeRange(5, end - 5)];
+    return mimeType.length == 0 ? @"text/plain" : mimeType;
+}
 
-    return ext;
++(NSString*)getMimeTypeFromExtension:(NSString*)extension {
+    if (extension.length == 0) return nil;
+#if __has_include(<UniformTypeIdentifiers/UniformTypeIdentifiers.h>)
+    if (@available(iOS 14.0, macCatalyst 14.0, macOS 11.0, *)) {
+        return [UTType typeWithFilenameExtension:extension].preferredMIMEType;
+    }
+#endif
+    CFStringRef identifier = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)extension, NULL);
+    if (identifier == NULL) return nil;
+    NSString *mimeType = CFBridgingRelease(UTTypeCopyPreferredTagWithClass(identifier, kUTTagClassMIMEType));
+    CFRelease(identifier);
+    return mimeType;
+}
+
++(NSString*)getExtensionFromBase64:(NSString*)base64String {
+    NSString *mimeType = [self getMimeTypeFromBase64:base64String];
+    if (!mimeType) return nil;
+
+#if __has_include(<UniformTypeIdentifiers/UniformTypeIdentifiers.h>)
+    if (@available(iOS 14.0, macCatalyst 14.0, macOS 11.0, *)) {
+        return [UTType typeWithMIMEType:mimeType].preferredFilenameExtension;
+    }
+#endif
+    CFStringRef identifier = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef)mimeType, NULL);
+    if (identifier == NULL) return nil;
+    NSString *extension = CFBridgingRelease(UTTypeCopyPreferredTagWithClass(identifier, kUTTagClassFilenameExtension));
+    CFRelease(identifier);
+    return extension;
+}
+
++(NSString*)getTypeIdentifierFromExtension:(NSString*)extension {
+    if (extension.length == 0) return @"public.data";
+#if __has_include(<UniformTypeIdentifiers/UniformTypeIdentifiers.h>)
+    if (@available(iOS 14.0, macCatalyst 14.0, macOS 11.0, *)) {
+        return [UTType typeWithFilenameExtension:extension].identifier ?: @"public.data";
+    }
+#endif
+    NSString *identifier = CFBridgingRelease(UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)extension, NULL));
+    return identifier ?: @"public.data";
 }
 
 /**
@@ -43,23 +91,31 @@
         fileName=@"file";
     }
 
-    NSString *pathComponent = [NSString stringWithFormat:@"%@.%@",fileName, mimeType];
-    NSString *writePath = [NSTemporaryDirectory() stringByAppendingPathComponent:pathComponent];
-    if ([data writeToFile:writePath atomically:YES]) {
-        return [NSURL fileURLWithPath:writePath];
-    }
-    return NULL;
+    NSString *safeName = fileName.length > 0 ? fileName : @"file";
+    NSString *pathComponent = safeName.pathExtension.length > 0
+        ? safeName
+        : [safeName stringByAppendingPathExtension:mimeType ?: @"bin"];
+    return [self getPathFromFilename:pathComponent with:data];
 }
 
 /**
  Given a filename string and Data, writes a temp file with the filename.
  */
 +(NSURL*)getPathFromFilename:(NSString*)filename with:(NSData*)data {
-    NSString *writePath = [NSTemporaryDirectory() stringByAppendingPathComponent:filename];
-    if ([data writeToFile:writePath atomically:YES]) {
-        return [NSURL fileURLWithPath:writePath];
+    if (data == nil || filename.length == 0 || [filename isEqualToString:@"."] || [filename isEqualToString:@".."] || [filename rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"/\\"]].location != NSNotFound) {
+        return nil;
     }
-    return NULL;
+    NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
+    NSFileManager *manager = NSFileManager.defaultManager;
+    if (![manager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil]) {
+        return nil;
+    }
+    NSString *writePath = [directory stringByAppendingPathComponent:filename];
+    if (![data writeToFile:writePath atomically:YES]) {
+        [manager removeItemAtPath:directory error:nil];
+        return nil;
+    }
+    return [NSURL fileURLWithPath:writePath];
 }
 
 @end

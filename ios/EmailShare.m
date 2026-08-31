@@ -9,138 +9,80 @@
 #import "EmailShare.h"
 #import "RNShareUtils.h"
 
-
 @implementation EmailShare
 
-
 - (void)shareSingle:(NSDictionary *)options
-    reject:(RCTPromiseRejectBlock)reject
-    resolve:(RCTPromiseResolveBlock)resolve {
+            reject:(RCTPromiseRejectBlock)reject
+           resolve:(RCTPromiseResolveBlock)resolve {
+    NSString *message = [RCTConvert NSString:options[@"message"]] ?: @"";
+    NSString *subject = [RCTConvert NSString:options[@"subject"]] ?: @"";
+    NSString *email = [RCTConvert NSString:options[@"email"]];
+    NSArray *urls = [RCTConvert NSArray:options[@"urls"]];
+    if (message.length == 0 && subject.length == 0 && email.length == 0 && urls.count == 0) {
+        reject(@"EINVAL", @"A message, recipient, subject, or attachment is required", nil);
+        return;
+    }
+    if (![MFMailComposeViewController canSendMail]) {
+        reject(@"com.rnshare", @"Mail services are not available.", nil);
+        return;
+    }
 
-    NSLog(@"Try open view");
+    MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+    mc.mailComposeDelegate = self;
+    [mc setToRecipients:email.length > 0 ? @[email] : @[]];
+    [mc setSubject:subject];
 
-    if ([options objectForKey:@"message"] && [options objectForKey:@"message"] != [NSNull null]) {
-
-        NSString *subject = @"";
-        NSString *message = @"";
-        NSString *email = @"";
-        
-        if (![MFMailComposeViewController canSendMail]) {
-            NSLog(@"Mail services are not available.");
-            NSString *errorMessage = @"Mail services are not available.";
-            NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
-            NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
-            reject(@"com.rnshare",@"Mail services are not available.",error);
-           return;
+    for (NSString *url in urls) {
+        NSURL *URL = [RCTConvert NSURL:url];
+        if (!URL) {
+            reject(@"EINVAL", @"Invalid attachment URL", nil);
+            return;
         }
-        
-        MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-        
-        mc.mailComposeDelegate = self;
-
-        if ([options objectForKey:@"email"] && [options objectForKey:@"email"] != [NSNull null]) {
-            email = [RCTConvert NSString:options[@"email"]];
-        }
-
-        if ([options objectForKey:@"subject"] && [options objectForKey:@"subject"] != [NSNull null]) {
-            subject = [RCTConvert NSString:options[@"subject"]];
-        }
-
-        message = [RCTConvert NSString:options[@"message"]];
-        
-        [mc setToRecipients:@[email]];
-        [mc setSubject:subject];
-        [mc setMessageBody:message isHTML:NO];
-        
-        if ([options objectForKey:@"urls"] && [options objectForKey:@"urls"] != [NSNull null]) {
-            NSArray *urlsArray = options[@"urls"];
-
-            for (int i=0; i<urlsArray.count; i++) {
-                NSURL *URL = [RCTConvert NSURL:urlsArray[i]];
-
-                if (URL) {
-                    BOOL isDataScheme = [URL.scheme.lowercaseString isEqualToString:@"data"];
-
-                    if (URL.fileURL || isDataScheme) {
-                        NSError *error;
-                        NSData *data = [NSData dataWithContentsOfURL:URL
-                                                            options:(NSDataReadingOptions)0
-                                                            error:&error];
-                        if (!data) {
-                            reject(@"no data",@"no data",error);
-                            return;
-                        }
-
-                        NSString *mime = @"application/octet-stream";
-                        NSString *filename = @"file";
-
-                        if([options objectForKey:@"type"]){
-                            if(urlsArray.count == 1){
-                                mime = [RCTConvert NSString:options[@"type"]];
-                            } else {
-                                RCTLogWarn(@"key 'type' is ignored when it has more than one url");
-                            }
-                        }
-
-                        if([options objectForKey:@"filename"]){
-                            if(urlsArray.count == 1){
-                                filename = [RCTConvert NSString:options[@"filename"]];
-
-
-                                // add extension just like Android for consistency
-                                // file name should not include extension
-                                if(URL.isFileURL){
-                                    NSString *ext = [[URL.absoluteString componentsSeparatedByString:@"."] lastObject];
-
-                                    filename = [filename stringByAppendingString: [@"." stringByAppendingString:ext]];
-                                }
-                                else if (isDataScheme){
-                                    NSString *ext = [RNShareUtils getExtensionFromBase64: URL.absoluteString];
-
-                                    if(ext){
-                                        filename = [filename stringByAppendingString: [@"." stringByAppendingString:ext]];
-                                    }
-                                }
-                            } else {
-                                RCTLogWarn(@"key 'filename' is ignored when it has more than one url");
-                            }
-                        }
-                        else if(URL.fileURL){
-                            NSArray *parts = [URL.absoluteString componentsSeparatedByString:@"/"];
-                            filename = [parts lastObject];
-                        }
-
-                        [mc addAttachmentData:data mimeType:mime fileName:filename];
-
-                    } else {
-                        // if not a file, just append it to message
-                        message = [message stringByAppendingString: [@" " stringByAppendingString: [RCTConvert NSString:urlsArray[i]]] ];
-                        [mc setMessageBody:message isHTML:NO];
-                    }
+        BOOL isDataScheme = [URL.scheme.lowercaseString isEqualToString:@"data"];
+        if (URL.isFileURL || isDataScheme) {
+            NSError *error;
+            NSData *data = [NSData dataWithContentsOfURL:URL options:0 error:&error];
+            if (!data) {
+                reject(@"no data", @"no data", error);
+                return;
+            }
+            NSString *extension = isDataScheme ? [RNShareUtils getExtensionFromBase64:URL.absoluteString] : URL.pathExtension;
+            NSString *mime = isDataScheme
+                ? [RNShareUtils getMimeTypeFromBase64:URL.absoluteString]
+                : [RNShareUtils getMimeTypeFromExtension:extension];
+            NSString *filename = URL.isFileURL ? URL.lastPathComponent : @"file";
+            if (urls.count == 1) {
+                NSString *customType = [RCTConvert NSString:options[@"type"]];
+                if (customType.length > 0) mime = customType;
+                NSString *customName = [RCTConvert NSString:options[@"filename"]];
+                if (customName.length > 0) {
+                    filename = extension.length > 0 ? [customName stringByAppendingPathExtension:extension] : customName;
                 }
             }
+            [mc addAttachmentData:data mimeType:mime ?: @"application/octet-stream" fileName:filename];
+        } else {
+            message = message.length > 0 ? [NSString stringWithFormat:@"%@ %@", message, url] : url;
         }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIViewController *ctrl = RCTPresentedViewController();
-          
-            // Present mail view controller on screen
-            [ctrl presentViewController:mc animated:YES completion:NULL];
-            
-            // We could fire this either here or
-            // on the finish delegate.
-            // For now, call it here for consistency with
-            // GenericShare.shareSingle
-            resolve(@[@true, @""]);
-        });
     }
+    [mc setMessageBody:message isHTML:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *controller = RCTPresentedViewController();
+        if (!controller) {
+            reject(@"EUNAVAILABLE", @"No view controller available to present email", nil);
+            return;
+        }
+        [controller presentViewController:mc animated:YES completion:^{
+            resolve(@[@true, @""]);
+        }];
+    });
 }
 
--(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(nullable NSError *)error
-{
+- (void)mailComposeController:(MFMailComposeViewController *)controller
+         didFinishWithResult:(MFMailComposeResult)result
+                       error:(nullable NSError *)error {
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIViewController *ctrl = RCTPresentedViewController();
-        [ctrl dismissViewControllerAnimated:YES completion:NULL];
+        controller.mailComposeDelegate = nil;
+        [controller dismissViewControllerAnimated:YES completion:nil];
     });
 }
 

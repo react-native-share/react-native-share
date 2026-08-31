@@ -7,6 +7,7 @@
 //
 
 #import "GenericShare.h"
+#import "RNShareUtils.h"
 
 @implementation GenericShare
     RCT_EXPORT_MODULE();
@@ -16,38 +17,47 @@
     serviceType:(NSString*)serviceType
     inAppBaseUrl:(NSString *)inAppBaseUrl {
 
-    NSLog(@"Try open view");
+    NSString *message = [RCTConvert NSString:options[@"message"]] ?: @"";
+    NSURL *URL = [RCTConvert NSURL:options[@"url"]];
+    if (message.length == 0 && !URL) {
+        reject(@"EINVAL", @"A message or URL is required", nil);
+        return;
+    }
     if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:inAppBaseUrl]]) {
-        SLComposeViewController *composeController = [SLComposeViewController  composeViewControllerForServiceType:serviceType];
-
-        NSURL *URL = [RCTConvert NSURL:options[@"url"]];
-        if (URL) {
-            if (URL.fileURL || [URL.scheme.lowercaseString isEqualToString:@"data"]) {
-                NSError *error;
-                NSData *data = [NSData dataWithContentsOfURL:URL
-                                                     options:(NSDataReadingOptions)0
-                                                       error:&error];
-                if (!data) {
-                    reject(@"no data",@"no data",error);
-                    return;
-                }
-                UIImage *image = [UIImage imageWithData: data];
-                [composeController addImage:image];
-
-            } else {
-                [composeController addURL:URL];
+        BOOL isImage = URL.fileURL || [URL.scheme.lowercaseString isEqualToString:@"data"];
+        void (^present)(UIImage *) = ^(UIImage *image) {
+            UIViewController *ctrl = RCTPresentedViewController();
+            SLComposeViewController *composeController = [SLComposeViewController composeViewControllerForServiceType:serviceType];
+            if (!ctrl || !composeController) {
+                reject(@"EUNAVAILABLE", @"Unable to present share composer", nil);
+                return;
             }
+            if ((isImage && ![composeController addImage:image]) ||
+                (!isImage && URL && ![composeController addURL:URL]) ||
+                (message.length > 0 && ![composeController setInitialText:message])) {
+                reject(@"EINVAL", @"Unable to add content to share composer", nil);
+                return;
+            }
+            [ctrl presentViewController:composeController animated:YES completion:^{
+                resolve(@[@true, @""]);
+            }];
+        };
+        if (isImage) {
+            dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+                NSError *error = nil;
+                NSData *data = [NSData dataWithContentsOfURL:URL options:0 error:&error];
+                UIImage *image = data ? [UIImage imageWithData:data] : nil;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (!image) {
+                        reject(@"EINVAL", @"Unable to read shared image", error);
+                        return;
+                    }
+                    present(image);
+                });
+            });
+        } else {
+            present(nil);
         }
-
-        if ([options objectForKey:@"message"] && [options objectForKey:@"message"] != [NSNull null]) {
-            NSString *text = [RCTConvert NSString:options[@"message"]];
-            [composeController setInitialText:text];
-        }
-
-
-        UIViewController *ctrl = RCTPresentedViewController();
-        [ctrl presentViewController:composeController animated:YES completion:Nil];
-        resolve(@[@true, @""]);
       } else {
         NSString *errorMessage = @"Not installed";
         NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
@@ -56,16 +66,19 @@
         NSLog(@"%@", errorMessage);
           reject(@"com.rnshare",@"Not installed",error);
 
-        NSString *escapedString = [options[@"message"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+        NSString *url = [RCTConvert NSString:options[@"url"]] ?: @"";
 
         if ([options[@"social"] isEqualToString:@"twitter"]) {
-          NSString *URL = [NSString stringWithFormat:@"https://twitter.com/intent/tweet?text=%@&url=%@", escapedString, options[@"url"]];
-          [self openScheme:URL];
+          NSURL *URL = [RNShareUtils URLWithString:@"https://twitter.com/intent/tweet" queryItems:@[
+              [NSURLQueryItem queryItemWithName:@"text" value:message],
+              [NSURLQueryItem queryItemWithName:@"url" value:url]
+          ]];
+          [self openScheme:URL.absoluteString];
         }
 
         if ([options[@"social"] isEqualToString:@"facebook"]) {
-          NSString *URL = [NSString stringWithFormat:@"https://www.facebook.com/sharer/sharer.php?u=%@", options[@"url"]];
-          [self openScheme:URL];
+          NSURL *URL = [RNShareUtils URLWithString:@"https://www.facebook.com/sharer/sharer.php" queryItems:@[[NSURLQueryItem queryItemWithName:@"u" value:url]]];
+          [self openScheme:URL.absoluteString];
         }
 
       }
@@ -78,7 +91,6 @@
           if (@available(iOS 10.0, *)) {
               [application openURL:schemeURL options:@{} completionHandler:nil];
           }
-          NSLog(@"Open %@", schemeURL);
       }
 
   }

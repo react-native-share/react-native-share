@@ -14,7 +14,8 @@ Pod::Spec.new do |s|
 
   s.source_files  = "ios/**/*.{h,m,mm}"
 
-  s.ios.weak_framework = 'LinkPresentation'
+  s.ios.frameworks = 'MobileCoreServices'
+  s.ios.weak_frameworks = 'LinkPresentation', 'UniformTypeIdentifiers'
 
   if defined?(install_modules_dependencies()) != nil
     install_modules_dependencies(s)

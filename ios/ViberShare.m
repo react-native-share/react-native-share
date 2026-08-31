@@ -4,8 +4,7 @@
 //
 
 #import "ViberShare.h"
-#import <AVFoundation/AVFoundation.h>
-@import Photos;
+#import "RNShareUtils.h"
 
 @implementation ViberShare
     RCT_EXPORT_MODULE();
@@ -13,20 +12,23 @@
     reject:(RCTPromiseRejectBlock)reject
     resolve:(RCTPromiseResolveBlock)resolve {
     
-    NSString *text = [RCTConvert NSString:options[@"message"]];
-    text = (NSString*)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef) text, NULL,CFSTR("!*'();:@&=+$,/?%#[]"),kCFStringEncodingUTF8));
-    
+    NSString *text = [RCTConvert NSString:options[@"message"]] ?: @"";
     NSString *url = [RCTConvert NSString:options[@"url"]];
+    if (text.length == 0 && url.length == 0) {
+        reject(@"EINVAL", @"A message or URL is required", nil);
+        return;
+    }
+    if (url.length > 0) text = text.length > 0 ? [NSString stringWithFormat:@"%@ %@", text, url] : url;
+    NSURL *shareURL = [RNShareUtils URLWithString:@"viber://forward" queryItems:@[[NSURLQueryItem queryItemWithName:@"text" value:text]]];
 
-    NSString *viberMsg = [NSString stringWithFormat:@"viber://forward?text=%@", text];
-    NSString *viberMsgUrl = [NSString stringWithFormat:@"viber://forward?text=%@ %@", text, url];
-
-    NSString * urlViber = url ? viberMsgUrl : viberMsg;
-    NSURL * shareURL = [NSURL URLWithString:urlViber];
-    
     if ([[UIApplication sharedApplication] canOpenURL: shareURL]) {
-        [[UIApplication sharedApplication] openURL: shareURL options:@{} completionHandler:nil];
-        resolve(@[@true, @""]);
+        [[UIApplication sharedApplication] openURL:shareURL options:@{} completionHandler:^(BOOL success) {
+            if (success) {
+                resolve(@[@true, @""]);
+            } else {
+                reject(@"EUNAVAILABLE", @"Unable to open share target", nil);
+            }
+        }];
     } else {
         // Cannot open viber
         NSString *stringURL = @"https://apps.apple.com/app/viber-messenger-chats-calls/id382617920";
