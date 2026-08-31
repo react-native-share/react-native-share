@@ -57,11 +57,13 @@ interface BaseShareSingleOptions {
   url?: string;
   type?: string;
   filename?: string;
+  filenames?: string[];
   message?: string;
   title?: string;
   subject?: string;
   email?: string;
   recipient?: string;
+  whatsAppNumber?: string;
   social: Exclude<Social, Social.FacebookStories | Social.InstagramStories>;
   forceDialog?: boolean;
   /** Android Only: Store the temporary file in the internal storage cache */
@@ -113,6 +115,8 @@ export interface ShareOptions {
   isNewTask?: boolean;
   /** iOS Only */
   disableOverlay?: boolean;
+  /** iOS Only: React tag of the view anchoring the iPad popover. */
+  anchor?: number;
   /** Android Only: Store the temporary file in the internal storage cache */
   useInternalStorage?: boolean;
 }

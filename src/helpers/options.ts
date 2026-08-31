@@ -21,6 +21,6 @@ export function normalizeShareOpenOptions({ ...options }: ShareOptions) {
 }
 
 export function normalizeSingleShareOptions({ ...options }: ShareSingleOptions) {
-  if (options.url) options.urls = [options.url];
+  if (options.url && !options.urls) options.urls = [options.url];
   return options;
 }
