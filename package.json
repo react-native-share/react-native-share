@@ -20,6 +20,10 @@
     "ios",
     "windows",
     "RNShare.podspec",
+    "Package.swift",
+    "react-native-spm-prefix.h",
+    "include",
+    "spm-headers",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__",
@@ -164,5 +168,8 @@
   "engines": {
     "node": ">=16"
   },
-  "packageManager": "yarn@4.16.0"
+  "packageManager": "yarn@4.16.0",
+  "swiftpmConfig": {
+    "name": "RNShare"
+  }
 }

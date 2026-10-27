@@ -95,3 +95,6 @@ example/Gemfile.lock
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+# SwiftPM
+.swiftpm/
+.build/
