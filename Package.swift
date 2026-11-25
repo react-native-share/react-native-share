@@ -22,6 +22,25 @@ let unusedRootEntries = try! FileManager.default.contentsOfDirectory(atPath: Con
     .filter { !usedRootEntries.contains($0) }
     .sorted()
 
+// When RN_SHARE_EXCLUDE_INSTAGRAM=1, define RN_SHARE_EXCLUDE_INSTAGRAM so
+// InstagramShare.m compiles without the Photos framework (and without
+// NSPhotoLibraryUsageDescription). SwiftPM evaluates this manifest when the
+// package is resolved, so reset the package caches after changing the
+// variable (see the note above).
+let rnShareCSettings: [CSetting] = {
+    var settings: [CSetting] = [
+        .define("RCT_NEW_ARCH_ENABLED", to: "1"),
+        .headerSearchPath("ios"),
+        .headerSearchPath("spm-headers"),
+        .headerSearchPath("."),
+        .unsafeFlags(["-include", "react-native-spm-prefix.h"]),
+    ]
+    if ProcessInfo.processInfo.environment["RN_SHARE_EXCLUDE_INSTAGRAM"] == "1" {
+        settings.append(.define("RN_SHARE_EXCLUDE_INSTAGRAM", to: "1"))
+    }
+    return settings
+}()
+
 let package = Package(
     name: "RNShare",
     platforms: [.iOS("15.1")],
@@ -45,7 +64,7 @@ let package = Package(
             publicHeadersPath: "include",
             // CocoaPods gets RCT_NEW_ARCH_ENABLED from install_modules_dependencies;
             // without it RNShare compiles as a legacy bridge module.
-            cSettings: [.define("RCT_NEW_ARCH_ENABLED", to: "1"), .headerSearchPath("ios"), .headerSearchPath("spm-headers"), .headerSearchPath("."), .unsafeFlags(["-include", "react-native-spm-prefix.h"])],
+            cSettings: rnShareCSettings,
             cxxSettings: [.define("RCT_NEW_ARCH_ENABLED", to: "1"), .headerSearchPath("ios"), .headerSearchPath("spm-headers"), .headerSearchPath("."), .unsafeFlags(["-include", "react-native-spm-prefix.h"]), .define("DEBUG", .when(configuration: .debug)), .define("NDEBUG", .when(configuration: .release))],
             linkerSettings: [.linkedFramework("UIKit"), .linkedFramework("Foundation"), .linkedFramework("CoreGraphics"), .linkedFramework("LinkPresentation")]
         ),
