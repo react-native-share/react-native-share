@@ -14,6 +14,15 @@ Pod::Spec.new do |s|
 
   s.source_files  = "ios/**/*.{h,m,mm}"
 
+  # Opt out of Instagram sharing at build time (see #1783). Apps that never
+  # share to Instagram can set RN_SHARE_EXCLUDE_INSTAGRAM=1 before running
+  # `pod install`; the flag is then defined for the pod target and
+  # InstagramShare's PHPhotoLibrary calls are compiled out. Instagram
+  # stays included by default.
+  if ENV['RN_SHARE_EXCLUDE_INSTAGRAM'] == '1'
+    s.compiler_flags = '-DRN_SHARE_EXCLUDE_INSTAGRAM=1'
+  end
+
   s.ios.weak_framework = 'LinkPresentation'
 
   if defined?(install_modules_dependencies()) != nil
