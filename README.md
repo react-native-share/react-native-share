@@ -1,5 +1,5 @@
 # react-native-share ![example workflow](https://github.com/react-native-share/react-native-share/actions/workflows/release.yml/badge.svg)
- [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 React Native Share, is a simple tool for sharing messages and files with other apps.
 
@@ -90,6 +90,16 @@ npm i react-native-share --save
 After that, we need to install the dependencies to use the project on iOS(you can skip this part if you are using this on Android).
 
 Now run a simple: `npx pod-install` or `cd ios && pod install`. After that, you should be able to use the library on both Platforms, iOS and Android.
+
+### Opting out of Instagram sharing (iOS)
+
+If your app does not share to Instagram, set `RN_SHARE_EXCLUDE_INSTAGRAM=1` before installing the pods, so the app is built without the Photos framework and does not need `NSPhotoLibraryUsageDescription`:
+
+```shell
+RN_SHARE_EXCLUDE_INSTAGRAM=1 npx pod-install
+```
+
+For SwiftPM, set the same variable before resolving the package, then reset the package caches. Instagram sharing is included by default; with the flag set, sharing to Instagram is rejected at runtime and other share targets are unaffected.
 
 # Usage
 
