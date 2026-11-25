@@ -7,7 +7,9 @@
 
 #import "InstagramShare.h"
 #import <AVFoundation/AVFoundation.h>
+#if !defined(RN_SHARE_EXCLUDE_INSTAGRAM)
 @import Photos;
+#endif
 
 @implementation InstagramShare
     RCT_EXPORT_MODULE();
@@ -92,6 +94,12 @@
 -(void)savePictureAndOpenInstagram:(UIImage *)base64Image
                    reject:(RCTPromiseRejectBlock)reject
                    resolve:(RCTPromiseResolveBlock)resolve {
+#if defined(RN_SHARE_EXCLUDE_INSTAGRAM)
+    if (reject != NULL) {
+        reject(@"com.rnshare", @"Instagram sharing is disabled in this build.", nil);
+    }
+    return;
+#else
 
     // Check for photo library permissions
     PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
@@ -148,6 +156,7 @@
             }
         });
     }];
+#endif
 }
 
 - (NSURL *)fileURLWithTemporaryImageData:(NSData *)data {
